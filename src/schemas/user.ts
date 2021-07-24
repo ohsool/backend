@@ -13,6 +13,6 @@ const UserSchema: Schema = new Schema({
         type: String,
         required: true
     }
-})
+});
 
 export default mongoose.model("Users", UserSchema);
