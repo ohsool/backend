@@ -20,6 +20,14 @@ const CommentSchema: Schema = new Schema({
     like_array: {
         type: Array,
         default: []
+    },
+    tagged_array: {
+        type: Array,
+        default: []
+    },
+    edited: {
+        type: Boolean,
+        default: false
     }
 });
 
