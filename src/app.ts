@@ -6,7 +6,6 @@ import cors from "cors";
 // importing APIs
 import { userRouter } from './routers/user';
 import { commentRouter } from './routers/comment';
-import { albtiRouter } from './routers/albti';
 import { drinkRouter } from './routers/drink';
 import { drinkCategoryRouter } from './routers/drinkCategory';
 
@@ -29,7 +28,6 @@ app.get("/", (req, res) => {
 
 // APIs
 app.use("/api/user", [userRouter]);
-app.use("/api/albti", [albtiRouter]);
 app.use("/api/comment", [commentRouter]);
 app.use("/api/drink", [drinkRouter]);
 app.use("/api/drinkCategory", [drinkCategoryRouter]);
