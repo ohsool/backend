@@ -1,5 +1,6 @@
 import express, { Request, Response, NextFunction, Router, response } from "express";
 import Users from "../schemas/user";
+import { authMiddleware } from "./auth-middleware";
 
 import joi from "joi";
 import jwt from "jsonwebtoken";
@@ -46,6 +47,41 @@ const joiSchema = joi.object({
       } else {
           res.json({ message: "fail", err: error.details[0].message });
       }
+  });
+
+  // login
+  userRouter.post("/auth", async (req, res) => {
+    let { email, password } = req.body;
+
+    const crypted_password = crypto.createHmac("sha256", password).update("¡hellosnail!").digest("hex");
+    const user = await Users.findOne({ email });
+
+    if (user.password != crypted_password) {
+      res.json({ message: "fail" });
+
+      return;
+    }
+
+    const token = jwt.sign({ userId: user._id }, "bananatulip");
+
+    res.json({ message: "message", token });
+  });
+
+  // if the person is logged in
+  userRouter.get("/me", authMiddleware, async (req, res, next) => {
+    if (!res.locals.user) {
+      res.status(401).json({ message: "unidentified user" });
+
+      return;
+    }
+
+    res.json({ message: "success", nickname: res.locals.user.nickname });
   })
+
+  // google login
+  
+
+  // kakao login
+
 
   export { userRouter };
