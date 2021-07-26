@@ -1,12 +1,12 @@
 import mongoose, { Schema, model, mongo } from "mongoose";
 
 const CommentSchema: Schema = new Schema({
-    drink: {
+    drinkId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Drink",
         required: true
     }, 
-    user: {
+    userId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User"
     },

@@ -5,9 +5,9 @@ import moment from 'moment';
 const commentRouter = express.Router();
 
 // 댓글 업로드 auth middleware 추가 필요
-commentRouter.post("/:drink", async(req, res) => {
+commentRouter.post("/:drinkId", async(req, res) => {
     try {
-        const { drink } = req.params;
+        const { drinkId } = req.params;
         const { content } = req.body;
         if (!content) {
             res.status(400).send({
@@ -21,7 +21,7 @@ commentRouter.post("/:drink", async(req, res) => {
         // date 확인 필요 (moment 라이브러리 사용)
         const date = moment().format('YYYY-MM-DD');
     
-        await Comments.create({ drink, userId, content, date });
+        await Comments.create({ drinkId, userId, content, date });
     
         res.json({ message: 'success' });
 
@@ -56,17 +56,17 @@ commentRouter.get('/:drinkId', async (req, res) => {
 });
 
 // 댓글 삭제 auth middleware 추가 필요
-commentRouter.delete('/:drinkId', async (req, res) => {
+commentRouter.delete('/:commentId', async (req, res) => {
     try {     
-        const { drinkId } = req.params;
+        const { commentId } = req.params;
         // drinkId가 없을 시 진행 X
-        if (!drinkId) {
+        if (!commentId) {
             res.status(400).send({
-                message: "drinkId 가 없습니다."
+                message: "commentId 가 없습니다."
             })
             return;
         }
-        await Comments.deleteOne({ drinkId });
+        await Comments.deleteOne({ _id: commentId });
         res.json({ message: 'success' });
             
     } catch (err) {
@@ -78,20 +78,20 @@ commentRouter.delete('/:drinkId', async (req, res) => {
 
 
 // 댓글 수정 auth middleware 추가 필요
-commentRouter.put('/:drinkId', async (req, res) => {
+commentRouter.put('/:commentId', async (req, res) => {
     try {     
-        const { drinkId } = req.params;
+        const { commentId } = req.params;
         const { content } = req.body;
         // drinkId 또는 수정된 내용이 없을 시 진행 X
-        if (!drinkId || !content) {
+        if (!commentId || !content) {
             res.status(400).send({
-                message: "drinkId 또는 content를 확인해주세요."
+                message: "commentId 또는 content를 확인해주세요."
             });
             return;
         };
 
         // 댓글 내용 수정 시 'edited'는 true값으로 변경한다. 
-        await Comments.updateOne({ drinkId }, { $set: { content: content, edited: true } });
+        await Comments.updateOne({ _id: commentId }, { $set: { content: content, edited: true } });
 
         res.json({ message: 'success' });
             
@@ -101,5 +101,47 @@ commentRouter.put('/:drinkId', async (req, res) => {
         });
     };
 });
+
+
+// 댓글 좋아요 auth middleware 추가 필요
+commentRouter.post('/:commentId', async (req, res) => {
+    try {     
+        const { commentId } = req.params;
+        // comment 작성자 가져오기
+        const commentWriter = await Comments.findOne({ _id: commentId })
+
+        if (!commentWriter) {
+            res.status(400).send({
+                message: "commentId 를 확인해주세요."
+            });
+            return;
+        }
+
+        // local stroage 확인 필요
+        // const userId = res.locals.user.userId;
+        const userId = '12345'
+        // 댓글 내용 수정 시 'edited'는 true값으로 변경한다. 
+
+        // '좋아요'를 누른 내역이 있는지 확인
+
+        // 있으면 배열에서 제거
+
+        // 없으면 배열에 추가
+
+
+        await Comments.updateOne(
+            { _id: commentId }, 
+            { $push: { like_array: { userId } } }
+        );
+
+        res.json({ message: 'success' });
+            
+    } catch (err) {
+        res.status(400).send({
+            message: `[댓글 수정] ${err}`
+        });
+    };
+});
+
 
 export { commentRouter };
