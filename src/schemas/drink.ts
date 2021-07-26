@@ -21,7 +21,7 @@ const DrinkSchema: Schema = new Schema({
         type: String,
         required: true
     },
-    category: {
+    categoryId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "DrinkCategory",
         required: true
