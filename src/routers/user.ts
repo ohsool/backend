@@ -26,7 +26,7 @@ const joiSchema = joi.object({
         const existUser = await Users.findOne({ nickname, email });
 
         if (existUser) {
-            res.json({ message: "fail" });
+            res.json({ message: "existed user" });
   
             return;
         }
@@ -43,7 +43,7 @@ const joiSchema = joi.object({
 
           await Users.create({ email, nickname, password: crypted_password });
 
-          res.json({ message: "success" });
+          res.status(201).json({ message: "success" });
       } else {
           res.json({ message: "fail", err: error.details[0].message });
       }
@@ -54,18 +54,38 @@ const joiSchema = joi.object({
     let { email, password } = req.body;
 
     const crypted_password = crypto.createHmac("sha256", password).update("¡hellosnail!").digest("hex");
-    const user = await Users.findOne({ email });
+    try {
+      const user = await Users.findOne({ email });
 
-    if (user.password != crypted_password) {
-      res.json({ message: "fail" });
+      if (user.password != crypted_password) {
+        res.status(401).json({ message: "fail" });
+  
+        return;
+      }
+  
+      const token = jwt.sign({ userId: user._id }, "bananatulip");
+  
+      res.json({ message: "success", token });
+    } catch(err) {
+      res.status(401).json({ message: "fail" });
 
       return;
     }
-
-    const token = jwt.sign({ userId: user._id }, "bananatulip");
-
-    res.json({ message: "message", token });
   });
+
+  // sign out
+  userRouter.delete("/", authMiddleware, async (req, res) => {
+    const userId = res.locals.user._id;
+
+    try {
+      const user = await Users.findOneAndDelete({ _id: userId });
+
+      res.json({ message: "success" });
+    } catch (err) {
+      res.status(401).json({ message: "fail" });
+    }
+
+  })
 
   // if the person is logged in
   userRouter.get("/me", authMiddleware, async (req, res, next) => {
