@@ -35,3 +35,5 @@ app.use("/api/drinkCategory", [drinkCategoryRouter]);
 app.listen(5208, () => {
     console.log("listening at http://localhost:5208");
 })
+
+export { app };
