@@ -12,9 +12,6 @@ beerCrawlingRouter.get("/", async(req, res) => {
 
     for (let i = 0; i < beerCategories.length; i ++) {
         let beerCategory = await BeerCategories.findOne({ name: beerCategories[i] });
-        let name = beerCategory[i]
-
-        let beerObject = { name: [beerCategory._id, beerCategory.features ] }
 
         beerCategoryArray.push([ beerCategory._id, beerCategory.features ]);
     }
