@@ -5,7 +5,7 @@ import BeerCategories from "../schemas/beerCategory";
 
 const beerCategoryCrawlingRouter = express.Router();
 
-beerCategoryCrawlingRouter.get("/", async(req, res) => {
+beerCategoryCrawlingRouter.post("/", async(req, res) => {
     const beerCategory = [
         {
             name: "American Lager",
@@ -98,6 +98,8 @@ beerCategoryCrawlingRouter.get("/", async(req, res) => {
     ]
 
     try {
+        BeerCategories.collection.drop();
+
         for (let i = 0; i < beerCategory.length; i ++) {
             await BeerCategories.create(beerCategory[i]);
         }
