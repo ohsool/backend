@@ -105,7 +105,7 @@ myBeerRouter.get("/all", authMiddleware, async (req, res) => {
 });
 
 // get one mybeer
-myBeerRouter.get("/:myBeerId", async (req, res) => {
+myBeerRouter.get("/:myBeerId", authMiddleware, async (req, res) => {
     const myBeerId = req.params.myBeerId;
 
     try {
@@ -118,13 +118,40 @@ myBeerRouter.get("/:myBeerId", async (req, res) => {
 });
 
 // delete one mybeer
-myBeerRouter.delete("/:myBeerId", async (req, res) => {
+myBeerRouter.delete("/:myBeerId", authMiddleware, async (req, res) => {
     const myBeerId = req.params.myBeerId;
 
     try {
-        await MyBeer.findOneAndDelete({ _id: myBeerId });
+        const mybeer = await MyBeer.findOneAndDelete({ _id: myBeerId });
 
-        // delete할 때 beerCategory/avgRate에서도 뺄까?
+        // delete할 때 beerCategory/avgRate에서도 그 rate 뺄까?
+        const myPreference = res.locals.user.preference;
+        const beer_ = await Beer.findOne({ name: mybeer.name });
+        const beerCategoryId = beer_.categoryId;
+        const rate = mybeer.rate
+        
+        const beerCategory = await BeerCategory.findOne({ _id: beerCategoryId });
+        const avg = beerCategory.avgRate[myPreference][0];
+        const count = beerCategory.avgRate[myPreference][1];
+
+        const new_avgRate = (( avg * count ) - rate) / (count - 1);
+
+        let avgRate: avgRate = {
+            "American Lager": [0, 0],
+            "Pilsner": [0, 0],
+            "Pale Ale": [0, 0],
+            "IPA": [0, 0],
+            "Weizen": [0, 0],
+            "Dunkel": [0, 0],
+            "Stout": [0, 0],
+            "Bock": [0, 0],
+            "Unknown": [0, 0]
+        }
+
+        avgRate[myPreference][0] = new_avgRate;
+        avgRate[myPreference][1] = count - 1;
+
+        await BeerCategory.findOneAndUpdate({ _id: beerCategoryId }, {$set: { avgRate }});
 
         res.json({ message: "success" });
     } catch (err) {
