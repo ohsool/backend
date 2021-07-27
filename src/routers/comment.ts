@@ -6,9 +6,9 @@ import moment from "moment";
 const commentRouter = express.Router();
 
 // 댓글 업로드
-commentRouter.post("/:drinkId", authMiddleware, async (req, res) => {
+commentRouter.post("/:beerId", authMiddleware, async (req, res) => {
   try {
-    const { drinkId } = req.params;
+    const { beerId } = req.params;
     const { content } = req.body;
     if (!content) {
       res.status(400).send({
@@ -21,7 +21,7 @@ commentRouter.post("/:drinkId", authMiddleware, async (req, res) => {
     const taggedUser = getTaggedUser(content); // @ 기준 태그된 유저 가져오기
 
     await Comments.create({
-      drinkId,
+      beerId,
       userId,
       content,
       date,
@@ -36,17 +36,17 @@ commentRouter.post("/:drinkId", authMiddleware, async (req, res) => {
 });
 
 // 댓글 조회
-commentRouter.get("/:drinkId", async (req, res) => {
+commentRouter.get("/:beerId", async (req, res) => {
   try {
-    const { drinkId } = req.params;
-    if (!drinkId) {
-      // drinkId가 없을 시 진행 X
+    const { beerId } = req.params;
+    if (!beerId) {
+      // beerId 없을 시 진행 X
       res.status(400).send({
-        message: "drinkId 가 없습니다.",
+        message: "beerId 가 없습니다.",
       });
       return;
     }
-    const comment = await Comments.find({ drinkId }).sort("-date").lean();
+    const comment = await Comments.find({ beerId }).sort("-date").lean();
 
     res.json({ result: comment });
   } catch (err) {
@@ -61,7 +61,7 @@ commentRouter.delete("/:commentId", authMiddleware, async (req, res) => {
   try {
     const { commentId } = req.params;
     if (!commentId) {
-      // drinkId가 없을 시 진행 X
+      // commentId 없을 시 진행 X
       res.status(400).send({
         message: "commentId 가 없습니다.",
       });
@@ -82,7 +82,7 @@ commentRouter.put("/:commentId", authMiddleware, async (req, res) => {
     const { commentId } = req.params;
     const { content } = req.body;
     if (!commentId || !content) {
-      // drinkId 또는 content가 없을 시 진행 X
+      // commentId 또는 content가 없을 시 진행 X
       res.status(400).send({
         message: "commentId 또는 content를 확인해주세요.",
       });

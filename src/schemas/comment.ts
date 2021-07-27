@@ -1,9 +1,9 @@
 import mongoose, { Schema, model, mongo } from "mongoose";
 
 const CommentSchema: Schema = new Schema({
-  drinkId: {
+  beerId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "Drink",
+    ref: "Beers",
     required: true,
   },
   userId: {
