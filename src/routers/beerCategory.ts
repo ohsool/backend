@@ -20,6 +20,7 @@ beerCategoryRouter.post("/", async(req, res) => {
 
         if(isExist) {
             res.json({ message: "category already exists" });    
+            return;
         }
         await BeerCategories.create({ name, image, features, avgRate });
         res.json({ message: "success" });
@@ -38,6 +39,7 @@ beerCategoryRouter.get("/:beerCategoryId", async(req, res) => {
             res.json({ beerCategory });
         } else {
             res.json({ message: "category does not exist in the database" });
+            return;
         }
 
     } catch (error) {
