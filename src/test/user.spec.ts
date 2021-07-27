@@ -116,7 +116,7 @@ it ("signout - success", async () => {
 
 it ("signout - invalid user - fail", async () => {
     const response = await request(app).delete("/api/user")
-        .auth("waef", { type: 'bearer' })
+        .auth("asdf", { type: 'bearer' })
         .send();
 
     expect(response.body.message).toBe("fail");

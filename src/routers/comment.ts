@@ -1,6 +1,6 @@
 import express, {Request,Response,NextFunction,Router,response,} from "express";
 import Comments from "../schemas/comment";
-import { authMiddleware } from "./auth-middleware";
+import { authMiddleware } from "../middlewares/auth-middleware";
 import moment from "moment";
 
 const commentRouter = express.Router();

@@ -6,8 +6,12 @@ import cors from "cors";
 // importing APIs
 import { userRouter } from './routers/user';
 import { commentRouter } from './routers/comment';
-import { drinkRouter } from './routers/drink';
-import { drinkCategoryRouter } from './routers/drinkCategory';
+import { beerRouter } from './routers/beer';
+import { beerCategoryRouter } from './routers/beerCategory';
+
+// importing crawling APIs
+import { beerCategoryCrawlingRouter } from './postData/beerCategory';
+import { beerCrawlingRouter } from './postData/beer';
 
 // importing DB
 import { connect } from './schemas';
@@ -29,11 +33,15 @@ app.get("/", (req, res) => {
 // APIs
 app.use("/api/user", [userRouter]);
 app.use("/api/comment", [commentRouter]);
-app.use("/api/drink", [drinkRouter]);
-app.use("/api/drinkCategory", [drinkCategoryRouter]);
+app.use("/api/drink", [beerRouter]);
+app.use("/api/drinkCategory", [beerCategoryRouter]);
 
-app.listen(5208, () => {
-    console.log("listening at http://localhost:5208");
+// crawling APIs
+app.use("/api/crawling/beercategory", [beerCategoryCrawlingRouter]);
+app.use("/api/crawling/beer", [beerCrawlingRouter]);
+
+app.listen(5209, () => {
+    console.log("listening at http://localhost:5209");
 })
 
 export { app };
