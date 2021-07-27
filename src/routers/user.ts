@@ -1,6 +1,6 @@
 import express, { Request, Response, NextFunction, Router, response } from "express";
 import Users from "../schemas/user";
-import { authMiddleware } from "./auth-middleware";
+import { authMiddleware } from "../middlewares/auth-middleware";
 
 import joi from "joi";
 import jwt from "jsonwebtoken";

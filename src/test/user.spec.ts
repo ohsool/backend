@@ -114,3 +114,12 @@ it ("signout - success", async () => {
     expect(response.body.message).toBe("success");
 });
 
+it ("signout - invalid user - fail", async () => {
+    const response = await request(app).delete("/api/user")
+        .auth("asdf", { type: 'bearer' })
+        .send();
+
+    expect(response.body.message).toBe("fail");
+    expect(response.statusCode).toBe(401);
+    expect(response.body.err).toBeTruthy();
+});
