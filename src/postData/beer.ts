@@ -30,9 +30,9 @@ beerCrawlingRouter.post("/", async(req, res) => {
             degree: 5.0,
             categoryId: beerCategoryArray[0][0],
             hashtag: [
-                "엷은 황금색",
-                "안호이저-부시(인베브)",
-                "라이트 바디"
+                "황금색",
+                "안호이저 부시",
+                "라이트바디"
             ],
             features: beerCategoryArray[0][1]
         },
@@ -44,7 +44,8 @@ beerCrawlingRouter.post("/", async(req, res) => {
             categoryId: beerCategoryArray[0][0],
             hashtag: [
                 "미국",
-                "밀러쿠어스(MillerCoors)",
+                "밀러쿠어스",
+                "MillerCoors",
                 "옥수수"
             ],
             features: beerCategoryArray[0][1]
@@ -80,8 +81,8 @@ beerCrawlingRouter.post("/", async(req, res) => {
             categoryId: beerCategoryArray[0][0],
             hashtag: [
                 "VB",
-                "비터 에일",
-                "칼톤 앤 유나이티드 베버리지즈",
+                "비터에일",
+                "칼톤_앤_유나이티드_베버리지즈",
                 "포스터스"
             ],
             features: beerCategoryArray[0][1]
@@ -95,7 +96,7 @@ beerCrawlingRouter.post("/", async(req, res) => {
             categoryId: beerCategoryArray[1][0],
             hashtag: [
                 "체코",
-                "플젠스키 프라즈로이 양조장(삽-밀러)",
+                "플젠스키_프라즈로이_양조장",
                 "황금색"
             ],
             features: beerCategoryArray[1][1]
@@ -108,19 +109,19 @@ beerCrawlingRouter.post("/", async(req, res) => {
             categoryId: beerCategoryArray[1][0],
             hashtag: [
                 "미국",
-                "베어리퍼블릭 브루잉 컴퍼니",
-                "100% 보리 몰트"
+                "베어리퍼블릭_브루잉_컴퍼니",
+                "100%_보리_몰트"
             ],
             features: beerCategoryArray[1][1]
         },
         {
             name_korean: "더 젠틀맨",
-            name_english: "The gentleman",
+            name_english: "The Gentleman",
             image: "https://beerlikeit.com/upimg/brd/hE89tKGRZpYr8bB5jTO8L1nNsQhjplT0.png",
             degree: 7.6,
             categoryId: beerCategoryArray[1][0],
             hashtag: [
-                "플레이그라운드 브루어리",
+                "플레이그라운드_브루어리",
                 "한국"
             ],
             features: beerCategoryArray[1][1]
@@ -133,7 +134,7 @@ beerCrawlingRouter.post("/", async(req, res) => {
             categoryId: beerCategoryArray[1][0],
             hashtag: [
                 "독일",
-                "베를린 킨들 브라우어하이",
+                "베를린_킨들_브라우어하이",
                 "황금색",
                 "감귤"
             ],
@@ -147,7 +148,7 @@ beerCrawlingRouter.post("/", async(req, res) => {
             categoryId: beerCategoryArray[1][0],
             hashtag: [
                 "일본",
-                "다이아몬드 몰트"
+                "다이아몬드_몰트"
             ],
             features: beerCategoryArray[1][1]
         },
@@ -159,133 +160,146 @@ beerCrawlingRouter.post("/", async(req, res) => {
         {
             name_korean: "플래티넘",
             name_english: "Platinum",
-            image: "",
+            image: "https://mblogthumb-phinf.pstatic.net/MjAxODAxMDJfNDAg/MDAxNTE0ODk3MzA2MDEz.LzQc3SoBCaB74xaAWA6wRYehas79seuuU1B_je1dUR8g.qto-yOORsm7KLE9E7tYWbG0DHpMiAabCcMNj8NeO4rkg.JPEG.gf20003/IMG_20180102_204035673.jpg?type=w2",
             degree: 5.0,
             categoryId: beerCategoryArray[2][0],
             hashtag: [
-                "진한 오렌지색",
-                "푸르티한 과일의 향",
-                "미국식 페일 에일"
+                "오렌지색",
+                "과일향",
+                "미국식_페일_에일"
             ],
             features: beerCategoryArray[2][1]
         },
         {
             name_korean: "구아야베라",
             name_english: "Guayabera",
-            image: "",
+            image: "https://blog.kakaocdn.net/dn/cxPgcq/btqDurnf7LM/ClxhuI7sTvrtZuvblGhzq0/img.jpg",
             degree: 5.5,
             categoryId: beerCategoryArray[2][0],
             hashtag: [
-                "살짝 짙은 금색",
-                "구아바, 패션푸르츠, 라임, 레몬 과일 향",
-                "가볍고 산뜻한 맛"
+                "황금색",
+                "과일향",
+                "가볍고산뜻한맛"
             ],
             features: beerCategoryArray[2][1]
         },
         {
             name_korean: "그루니언",
             name_english: "Grunion",
-            image: "",
+            image: "https://mblogthumb-phinf.pstatic.net/20150706_197/decadentliz_1436154944009KC4QI_JPEG/IMG_0244.JPG?type=w2",
             degree: 5.5,
             categoryId: beerCategoryArray[2][0],
             hashtag: [
-                "멜론과 허브향의 밸런스",
-                "부드럽고 달콤한 캐러멜 몰트 맥주",
-                "가볍게 마시기 좋은 맛"
+                "멜론향",
+                "허브향",
+                "캐러멜몰트맥주",
+                "가볍고산뜻한맛"
             ],
             features: beerCategoryArray[2][1]
         },
         {
             name_korean: "오번",
             name_english: "Auburn",
-            image: "",
+            image: "https://img1.daumcdn.net/thumb/R800x0/?scode=mtistory2&fname=https%3A%2F%2Ft1.daumcdn.net%2Fcfile%2Ftistory%2F240DE84B596054AC27",
             degree: 4.5,
             categoryId: beerCategoryArray[2][0],
             hashtag:[
-                "감귤 계열의 향",
-                "가볍고 산뜻한 맛",
-                "옅은 금색"
+                "감귤향",
+                "가볍고산뜻한맛",
+                "황금색"
             ],
             features: beerCategoryArray[2][1]
         },
         {
-            name_korean: "아크 페일 에일 브라운",
-            name_english: "Ark pale ale brown",
-            image: "",
+            name_korean: "아크 페일 에일",
+            name_english: "Ark Pale Ale",
+            image: "http://www.koreacraftbrewery.com/wp-content/uploads/2019/09/%E1%84%8B%E1%85%A1%E1%84%8F%E1%85%B3-%E1%84%91%E1%85%A6%E1%84%8B%E1%85%B5%E1%86%AF%E1%84%8B%E1%85%A6%E1%84%8B%E1%85%B5%E1%86%AF-%E1%84%82%E1%85%AE%E1%84%81%E1%85%B5.png",
             degree: 5.0,
             categoryId: beerCategoryArray[2][0],
             hashtag: [
-                "구수하고 강한 맥아풍미",
-                "상쾌한 시트러스 향",
-                "한국식으로 재해석한 페일 에일"
+                "맥아향",
+                "상쾌한시트러스향",
+                "한국식"
             ],
             features: beerCategoryArray[2][1]
         },
         {
             name_korean: "인디카",
             name_english: "Indica",
-            image: "",
+            image: "https://static.openfoodfacts.org/images/products/075/124/912/9129/front_fr.5.full.jpg",
             degree: 6.5,
             categoryId: beerCategoryArray[3][0],
             hashtag: [
-                "미국 서부 해안 최고의 IPA 중 하나",
-                "풍부한 홉 향기와 자몽, 귤, 꽃향기",
-                "상쾌하고 쌉사름한 맛의 밸런스"
+                "미국서부해안",
+                "과일향",
+                "꽃향",
+                "상쾌한맛",
+                "쌉사름한맛"
             ],
             features: beerCategoryArray[3][1]
         },
         {
             name_korean: "구스 아일랜드",
-            name_english: "Goose island",
-            image: "",
+            name_english: "Goose Island",
+            image: "https://world-ar.openfoodfacts.org/images/products/073/692/011/4403/front_fr.21.400.jpg",
             degree: 5.9,
             categoryId: beerCategoryArray[3][0],
             hashtag: [
-                "상큼한 과일향",
-                "편하게 마시기 좋은 IPA 맥주",
-                "진한 홉향"
+                "과일향",
+                "진한홉향"
             ],
             features: beerCategoryArray[3][1]
         },
         {
             name_korean: "볼파스 엔젤맨",
-            name_english: "Vlofas engelman",
-            image: "",
+            name_english: "Vlofas Engelman",
+            image: "https://newmarket.brews.co.nz/wp-content/uploads/sites/10/2020/08/volfas-ipa.jpg",
             degree: 6.0,
             categoryId: beerCategoryArray[3][0],
             hashtag: [
-                "다양한 과일향",
-                "씁쓸하며 옅은 단맛",
-                "무거운 무게감과 보통의 탄산"
+                "과일향",
+                "씁쓸한맛",
+                "옅은단맛",
+                "무거운무게감",
+                "보통의탄산"
             ],
             features: beerCategoryArray[3][1]
         },
         {
             name_korean: "노스 코스트 스텔라",
-            name_english: "North coast steller",
-            image: "",
+            name_english: "North Coast Steller",
+            image: "https://northcoastbrewing.com/wp-content/uploads/2019/01/Steller-IPA-bottle-and-pour.png",
             degree: 6.7,
             categoryId: beerCategoryArray[3][0],
             hashtag: [
-                "상큼한 시트러스 계열의 과일 향",
-                "쌉사름함이 특징인 올드스쿨 IPA",
-                "부드러운 첫 맛과 은은한 끝맛"
+                "과일향",
+                "쌉사름한맛",
+                "올드스쿨",
+                "부드러운첫맛",
+                "은은한끝맛"
             ],
             features: beerCategoryArray[3][1]
         },
         {
             name_korean: "그린 킹",
-            name_english: "Green king",
-            image: "",
+            name_english: "Greene King",
+            image: "https://digitalcontent.api.tesco.com/v2/media/ghs/1665603d-bcb2-49ed-9961-ddc3e6108ee6/snapshotimagehandler_374015900.jpeg?h=540&w=540",
             degree: 3.6,
             categoryId: beerCategoryArray[3][0],
             hashtag: [
-                "견과류 향이 고소하고 아주 또렷",
-                "가벼운 무게감",
-                "보통의 IPA 와 다르게 낮은 도수"
+                "견과류향",
+                "가벼운무게감",
+                "낮은도수"
             ],
             features: beerCategoryArray[3][1]
         },
+
+
+
+
+
+
+
         {
             name_korean: "바이엔슈테판",
             name_english: "Weihenstephan",
@@ -293,9 +307,10 @@ beerCrawlingRouter.post("/", async(req, res) => {
             degree: 7.7,
             categoryId: beerCategoryArray[4][0],
             hashtag:[
-                "진한 밀 몰트의 바디감",
-                "크리미한 거품과 부드러운 목넘김",
-                "세계적으로 넓은 고정팬"
+                "진한밀몰트",
+                "크리미한거품",
+                "부드러운목넘김",
+                "고정팬"
             ],
             features: beerCategoryArray[4][1]
         },
@@ -306,48 +321,51 @@ beerCrawlingRouter.post("/", async(req, res) => {
             degree: 5.5,
             categoryId: beerCategoryArray[4][0],
             hashtag:[
-                "흐릿한 황금빛의 색",
-                "망고와 파인애플의 맛과 향",
-                "적당한 쓴맛"
+                "황금색",
+                "과일향",
+                "쓴맛"
             ],
             features: beerCategoryArray[4][1]
         },
         {
             name_korean: "리허 바이젠",
-            name_english: "Licher weizen",
+            name_english: "Licher Weizen",
             image: "https://beerconnoisseur.com/sites/default/files/styles/beer_page_245w/public/beer/licher-weizen-licher-privatbrauerei.jpg?itok=3HHbf9cx",
             degree: 5.4,
             categoryId: beerCategoryArray[4][0],
             hashtag:[
-                "다채로운 과일향",
-                "부드러운 바이젠 효모의 에스테르",
-                "라이트 바디감의 깔끔한 피니쉬"
+                "과일향",
+                "바이젠효모",
+                "에스테르",
+                "라이트바디감",
+                "깔끔한피니쉬"
             ],
             features: beerCategoryArray[4][1]
         },
         {
             name_korean: "엘 바이젠",
-            name_english: "L weizen",
+            name_english: "L Weizen",
             image: "https://modernseoul.files.wordpress.com/2013/09/l-weizen-german-beer-can.jpg",
             degree: 4.9,
             categoryId: beerCategoryArray[4][0],
             hashtag:[
-                "강한 과일향과 산미",
-                "가벼운 무게감",
-                "저렴한 가격"
+                "과일향",
+                "가벼운무게감",
+                "저렴함"
             ],
             features: beerCategoryArray[4][1]
         },
         {
             name_korean: "블루 문",
-            name_english: "Blue moon",
+            name_english: "Blue Moon",
             image: "https://lh3.googleusercontent.com/proxy/Cl6yWSCcCI0eVkcmumR7WSCkHGLIZ_BcQmrYNP3TrE1M8B2ohyq9tAB-BUpTqMJSMmMShZmWBonr4JHTWPjWNphBIFiT8A8nfSeuH-eRIhuCeqgGc0zNA3qsn_sHRJMf5lg8okv6",
             degree: 5.4,
             categoryId: beerCategoryArray[4][0],
             hashtag:[
-                "강한 오렌지와 같은 향기와 맛",
-                "탁하고 불투명한 금색",
-                "첫모금의 톡 쏘는 탄산"
+                "오렌지향",
+                "오렌지맛",
+                "탁한금색",
+                "톡쏘는탄산"
             ],
             features: beerCategoryArray[4][1]
         },
@@ -404,7 +422,7 @@ beerCrawlingRouter.post("/", async(req, res) => {
             degree: 4.5,
             categoryId: beerCategoryArray[5][0],
             hashtag: [
-                "대한민국",
+                "한국",
                 "다크라거스타일",
                 "흑맥주",
                 "로스팅향"
@@ -453,7 +471,7 @@ beerCrawlingRouter.post("/", async(req, res) => {
             features: beerCategoryArray[6][1]
         },
         {
-            name_korean: "스팀 브루 임페리얼 스타우트",
+            name_korean: "스팀 브루, 임페리얼 스타우트",
             name_english: "Steam Brew, Imperial Stout",
             image: "https://dthumb-phinf.pstatic.net/?src=%22https%3A%2F%2Fdbscthumb-phinf.pstatic.net%2F5011_000_2%2F20210721110109899_P665R683Q.png%2FW0501603.png%3Ftype%3Dw690_fst%26wm%3DN%22&twidth=353&theight=530&opts=17",
             degree: 7.5,
@@ -518,9 +536,9 @@ beerCrawlingRouter.post("/", async(req, res) => {
             categoryId: beerCategoryArray[7][0],
             hashtag: [
                 "흑맥주",
-                "높은 도수",
+                "높은도수",
                 "부드러움",
-                "치즈와 어울림",
+                "치즈",
                 "과일향" 
             ],
             features: beerCategoryArray[7][1]
@@ -561,7 +579,7 @@ beerCrawlingRouter.post("/", async(req, res) => {
             categoryId: beerCategoryArray[7][0],
             hashtag: [
                 "흑맥주",
-                "무거운 바디감",
+                "무거운바디감",
                 "달콤함",
                 "새콤함", 
                 "독일" 
@@ -578,8 +596,8 @@ beerCrawlingRouter.post("/", async(req, res) => {
                 "흑맥주",
                 "과일향",
                 "아로마향",
-                "부드러운 바디감",
-                "높은 도수",
+                "부드러운바디감",
+                "높은도수",
                 "독일" 
             ],
             features: beerCategoryArray[7][1]
