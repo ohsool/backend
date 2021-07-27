@@ -26,11 +26,11 @@ const BeerSchema: Schema = new Schema({
     features: {
         type: Object,
         default: {
-            "bitter": 0,
-            "crispy": 0,
-            "flavor": 0,
-            "sweet": 0,
-            "nutty": 0
+            "bitter": 1,
+            "crispy": 1,
+            "flavor": 1,
+            "sweet": 1,
+            "nutty": 1
         }
     }
 })

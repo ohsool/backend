@@ -31,6 +31,9 @@ const MyBeerSchema: Schema = new Schema({
     rate: {
         type: Number,
         required: true
+    },
+    review: {
+        type: String
     }
 });
 

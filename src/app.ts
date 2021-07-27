@@ -8,6 +8,7 @@ import { userRouter } from './routers/user';
 import { commentRouter } from './routers/comment';
 import { beerRouter } from './routers/beer';
 import { beerCategoryRouter } from './routers/beerCategory';
+import { myBeerRouter } from './routers/myBeer';
 
 // importing crawling APIs
 import { beerCategoryCrawlingRouter } from './postData/beerCategory';
@@ -35,6 +36,7 @@ app.use("/api/user", [userRouter]);
 app.use("/api/comment", [commentRouter]);
 app.use("/api/drink", [beerRouter]);
 app.use("/api/drinkCategory", [beerCategoryRouter]);
+app.use("/api/mybeer", [myBeerRouter]);
 
 // crawling APIs
 app.use("/api/crawling/beercategory", [beerCategoryCrawlingRouter]);

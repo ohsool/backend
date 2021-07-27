@@ -12,6 +12,7 @@ const BeerCategorySchema: Schema = new Schema({
         type: Object,
         required: true
     },
+    // 0: avgRate, 1: count
     avgRate: {
         type: Object,
         default: {
@@ -22,7 +23,8 @@ const BeerCategorySchema: Schema = new Schema({
             "Weizen": [0, 0],
             "Dunkel": [0, 0],
             "Stout": [0, 0],
-            "Bock": [0, 0]
+            "Bock": [0, 0],
+            "Unknown": [0, 0]
         }
     }
 });

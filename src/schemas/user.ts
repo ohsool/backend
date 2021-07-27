@@ -12,6 +12,10 @@ const UserSchema: Schema = new Schema({
     password: {
         type: String,
         required: true
+    },
+    preference: {
+        type: String,
+        default: "Unknown"
     }
 });
 
