@@ -622,4 +622,26 @@ beerCrawlingRouter.post("/", async(req, res) => {
     res.json({ message: "success" });
 });
 
+beerCrawlingRouter.get("/hashtags", async(req, res) => {
+    try {
+        const beers = await Beers.find({});
+        const hashtags: Array<String> = [];
+
+        for (let i = 0; i < beers.length; i ++) {
+            const hashtag = beers[i].hashtag;
+
+            for (let j = 0; j < hashtag.length; j ++) {
+                if (!hashtags.includes(hashtag[j])) {
+                    hashtags.push(hashtag[j]);
+                }
+            }
+        }
+    
+        res.json({ message: "success", hashtags });
+    } catch (err) {
+        res.json({ message: "fail", err });
+    }
+    
+})
+
 export { beerCrawlingRouter };
