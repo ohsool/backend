@@ -1,6 +1,7 @@
 import express, {Request,Response,NextFunction,Router,response,} from "express";
 import Comments from "../schemas/comment";
 import { authMiddleware } from "../middlewares/auth-middleware";
+import mongoose, { Schema, model, mongo } from "mongoose";
 import moment from "moment";
 
 const commentRouter = express.Router();
@@ -27,7 +28,7 @@ commentRouter.post("/:beerId", authMiddleware, async (req, res) => {
       date,
       tagged_array: taggedUser,
     });
-    res.json({ message: "success" });
+    res.status(200).json({ message: "success" });
   } catch (err) {
     res.status(400).send({
       message: `[댓글 업로드] ${err}`,
@@ -48,7 +49,7 @@ commentRouter.get("/:beerId", async (req, res) => {
     }
     const comment = await Comments.find({ beerId }).sort("-date").lean();
 
-    res.json({ result: comment });
+    res.status(200).json({ result: comment });
   } catch (err) {
     res.status(400).send({
       message: `[댓글 조회] ${err}`,
@@ -68,7 +69,7 @@ commentRouter.delete("/:commentId", authMiddleware, async (req, res) => {
       return;
     }
     await Comments.deleteOne({ _id: commentId });
-    res.json({ message: "success" });
+    res.status(200).json({ message: "success" });
   } catch (err) {
     res.status(400).send({
       message: `[댓글 삭제] ${err}`,
@@ -95,7 +96,7 @@ commentRouter.put("/:commentId", authMiddleware, async (req, res) => {
       { $set: { content: content, edited: true, tagged_array: taggedUser } } // 내용 수정 시 'edited'는 true값으로 변경.
     );
 
-    res.json({ message: "success" });
+    res.status(200).json({ message: "success" });
   } catch (err) {
     res.status(400).send({
       message: `[댓글 수정] ${err}`,
@@ -129,7 +130,7 @@ commentRouter.put("/like/:commentId", authMiddleware, async (req, res) => {
     );
    
 
-    res.json({ message: "success" });
+    res.status(200).json({ message: "success" });
   } catch (err) {
     res.status(400).send({
       message: `[댓글 좋아요] ${err}`,
@@ -163,13 +164,50 @@ commentRouter.put("/unlike/:commentId", authMiddleware, async (req, res) => {
         { $pull: { like_array: userId } } 
       );
       
-    res.json({ message: "success" });
+    res.status(200).json({ message: "success" });
   } catch (err) {
     res.status(400).send({
       message: `[댓글 좋아요 취소] ${err}`,
     });
   }
 
+});
+
+// 현재 유저가 작성한 댓글 가져오기
+commentRouter.get("/mypage/comments", authMiddleware, async (req, res) => {
+  try {
+    const userId = res.locals.user._id;
+    const comment = await Comments.find({ userId: userId })
+    
+    res.status(200).json({ result: comment })
+  } catch (err) {
+    res.status(400).send({
+      message: `[내 댓글 가져오기] ${err}`,
+    });
+  }
+});
+
+// 현재 유저가 태그된 댓글 가져오기
+commentRouter.get("/mypage/tags", authMiddleware, async (req, res) => {
+  try {
+    const userId = res.locals.user._id;
+    const comments = await Comments.find({})
+    interface commentObj{ [key: string]: any[] }; // db 결과값의 타입을 정의할 수 있는 interface 선언
+    let result:Array<object> = []
+    
+    comments.forEach((comment:commentObj) => {
+      if (comment['tagged_array']?.includes(userId)) {
+        result.push(comment);
+      }
+    });
+
+    res.status(200).json({ result });
+
+  } catch (err) {
+    res.status(400).send({
+      message: `[태그된 댓글 가져오기] ${err}`,
+    });
+  }
 });
 
 // @ 기준 태그된 유저 가져온 후 @ 제거된 순수 닉네임만 저장
