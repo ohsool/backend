@@ -17,7 +17,7 @@ const UserSchema: Schema = new Schema({
         default: "Unknown"
     },
     passport: {
-        type: Array,
+        type: Array
     }
 });
 
