@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # EC2 작업 파일로 이동
-cd /home/ohsool-admin/ohsool
+cd /home/ec2-user/ohsool
 
 # npm과 node 설치
 export NVM_DIR="$HOME/.nvm"	
