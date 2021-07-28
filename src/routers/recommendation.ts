@@ -3,7 +3,7 @@ import webhook, { WebClient, LogLevel } from "@slack/web-api";
 
 import { authMiddleware } from "../middlewares/auth-middleware";
 
-const client = new WebClient("xoxb-2304718692502-2319759042067-myErZsAzBXWwIgm4N6vUm2fG", {
+const client = new WebClient("xoxb-2304718692502-2319759042067-xIvNCDFuSiJuheNw49PXUYGq", {
     logLevel: LogLevel.DEBUG
 });
 
@@ -38,3 +38,12 @@ recommendationRouter.post("/", authMiddleware, async (req, res) => {
 })
 
 export { recommendationRouter };
+
+/*
+removed an integration from this channel: beer bot
+
+https://api.slack.com/apps/A029KN5LE84
+OAuth & Permissions
+- Token check
+- Scope check
+*/
