@@ -95,8 +95,11 @@ const joiSchema = joi.object({
 
       return;
     }
+    
+    const nickname = res.locals.user.nickname;
+    const preference = res.locals.user.preference;
 
-    res.json({ message: "success", nickname: res.locals.user.nickname });
+    res.json({ message: "success", nickname, preference });
   })
 
   // google login
