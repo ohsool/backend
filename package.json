@@ -37,6 +37,8 @@
     "jsonwebtoken": "^8.5.1",
     "moment": "^2.29.1",
     "mongoose": "^5.13.3",
+    "passport": "^0.4.1",
+    "passport-google-oauth2": "^0.2.0",
     "request": "^2.88.2",
     "request-promise": "^4.2.6",
     "supertest": "^6.1.4"
@@ -47,6 +49,8 @@
     "@types/jest": "^26.0.24",
     "@types/jsonwebtoken": "^8.5.4",
     "@types/node": "^16.4.1",
+    "@types/passport": "^1.0.7",
+    "@types/passport-google-oauth2": "^0.1.4",
     "@types/request-promise": "^4.1.48",
     "@types/supertest": "^2.0.11",
     "jest": "^27.0.6",
