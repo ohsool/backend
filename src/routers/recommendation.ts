@@ -44,6 +44,7 @@ removed an integration from this channel: beer bot
 
 https://api.slack.com/apps/A029KN5LE84
 OAuth & Permissions
+- https://api.slack.com/apps/A029KN5LE84/incoming-webhooks? 등록
 - Token check
 - Scope check
 */
