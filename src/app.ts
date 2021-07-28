@@ -1,5 +1,5 @@
 /*
-OHSOOL!
+OHSOOL! >_<
 */
 
 // importing packages, modules
