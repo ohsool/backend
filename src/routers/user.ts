@@ -13,10 +13,11 @@ const joiSchema = joi.object({
       .string()
       .email({ minDomainSegments: 2, tlds: { allow: ["com", "net"] } })
       .required(),
-    nickname: joi.string().min(3).max(30).required(),
-    password: joi.string().pattern(new RegExp("^[a-zA-Z0-9]{4,30}$")),
+    nickname: joi.string().min(1).max(30).required(),
+    password: joi.string().min(4).pattern(new RegExp("^[a-zA-Z0-9]{4,30}$")),
     confirmPassword: joi.ref("password")
   });
+  // id 포함 안하게
 
   // register
   userRouter.post("/", async (req, res) => {
