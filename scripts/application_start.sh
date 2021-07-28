@@ -11,6 +11,10 @@ export NVM_DIR="$HOME/.nvm"
 # node_modules 설치
 npm install
 
+# typescript를 javascript 로 complie 하기
+tsc -p .
+
 # node 어플리케이션 background에서 실행시키기 (by doing so, the server won't be terminated due to inactivates)
 # node app.js 만 입력시 foreground로 실행이 됌
-node app.js > app.out.log 2> app.err.log < /dev/null & 
+node dist/app.js > app.out.log 2> app.err.log < /dev/null & 
+
