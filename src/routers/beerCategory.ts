@@ -15,14 +15,14 @@ beerCategoryRouter.get("/", async(req, res) => {
 
 beerCategoryRouter.post("/", async(req, res) => {
     try {
-        const { name, image, features, avgRate } = req.body;
-        const isExist = await BeerCategories.findOne({ name, image, features, avgRate });
+        const { name, image, features } = req.body;
+        const isExist = await BeerCategories.findOne({ name, image, features });
 
         if(isExist) {
             res.json({ message: "category already exists" });    
             return;
         }
-        await BeerCategories.create({ name, image, features, avgRate });
+        await BeerCategories.create({ name, image, features });
         res.json({ message: "success" });
     } catch (error) {
         res.status(400).send({ message: "failed" , error });
