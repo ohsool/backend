@@ -1,10 +1,11 @@
 import express, { Request, Response, NextFunction, Router, response } from "express";
-import Users from "../schemas/user";
-import { authMiddleware } from "../middlewares/auth-middleware";
-
+import passport from "passport";
 import joi from "joi";
 import jwt from "jsonwebtoken";
 import crypto from "crypto";
+
+import Users from "../schemas/user";
+import { authMiddleware } from "../middlewares/auth-middleware";
 
 const userRouter = express.Router();
 
@@ -13,10 +14,11 @@ const joiSchema = joi.object({
       .string()
       .email({ minDomainSegments: 2, tlds: { allow: ["com", "net"] } })
       .required(),
-    nickname: joi.string().min(3).max(30).required(),
-    password: joi.string().pattern(new RegExp("^[a-zA-Z0-9]{4,30}$")),
+    nickname: joi.string().min(1).max(30).required(),
+    password: joi.string().min(4).pattern(new RegExp("^[a-zA-Z0-9]{4,30}$")),
     confirmPassword: joi.ref("password")
   });
+  // id 포함 안하게
 
   // register
   userRouter.post("/", async (req, res) => {
@@ -94,12 +96,30 @@ const joiSchema = joi.object({
 
       return;
     }
+    
+    const nickname = res.locals.user.nickname;
+    const preference = res.locals.user.preference;
 
-    res.json({ message: "success", nickname: res.locals.user.nickname });
+    res.json({ message: "success", nickname, preference });
   })
 
   // google login
-  
+  userRouter.get("/google", passport.authenticate("google", { scope: ["email", "profile"] }));
+
+  userRouter.get("/google/callback", (req, res, next) => {
+    passport.authenticate(
+      "google", {
+        successRedirect: "/",
+        failureRedirect: "/login"
+      }, (err, profile, info) => {
+        if (err) return next(err);
+
+        const token = info.message;
+
+        res.redirect(`/token=${token}`)
+      }
+    )(req, res, next)
+  });
 
   // kakao login
 

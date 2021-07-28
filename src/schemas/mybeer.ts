@@ -14,11 +14,11 @@ const MyBeerSchema: Schema = new Schema({
     myFeatures: {
         type: Object,
         default: {
-            "bitter": 0,
-            "crispy": 0,
-            "flavor": 0,
-            "sweet": 0,
-            "nutty": 0
+            "bitter": 1,
+            "crispy": 1,
+            "flavor": 1,
+            "sweet": 1,
+            "nutty": 1
         }
     },
     date: {
@@ -31,6 +31,9 @@ const MyBeerSchema: Schema = new Schema({
     rate: {
         type: Number,
         required: true
+    },
+    review: {
+        type: String
     }
 });
 

@@ -10,8 +10,14 @@ const UserSchema: Schema = new Schema({
         required: true
     },
     password: {
+        type: String
+    },
+    preference: {
         type: String,
-        required: true
+        default: "Unknown"
+    },
+    passport: {
+        type: Array
     }
 });
 
