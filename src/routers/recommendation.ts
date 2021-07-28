@@ -38,3 +38,12 @@ recommendationRouter.post("/", authMiddleware, async (req, res) => {
 })
 
 export { recommendationRouter };
+
+/*
+removed an integration from this channel: beer bot
+
+https://api.slack.com/apps/A029KN5LE84
+OAuth & Permissions
+- Token check
+- Scope check
+*/
