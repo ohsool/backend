@@ -13,6 +13,7 @@ beerCategoryRouter.get("/", async(req, res) => {
     }
 });
 
+
 beerCategoryRouter.post("/", async(req, res) => {
     try {
         const { name, image, features } = req.body;
