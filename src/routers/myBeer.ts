@@ -91,7 +91,7 @@ myBeerRouter.get("/all", authMiddleware, async (req, res) => {
 });
 
 // get my mybeers
-myBeerRouter.get("/all", authMiddleware, async (req, res) => {
+myBeerRouter.get("/my", authMiddleware, async (req, res) => {
     const userId = res.locals.user._id;
 
     try {

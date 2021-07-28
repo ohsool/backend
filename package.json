@@ -25,7 +25,7 @@
     "dev": "tsc && nodemon src/app.ts",
     "prettify": "prettier --write src/*.ts src/**/*.ts",
     "build": "tsc -p .",
-    "test": "jest"
+    "test": "jest --detectOpenHandles --forceExit"
   },
   "author": "",
   "license": "ISC",
