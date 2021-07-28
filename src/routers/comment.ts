@@ -116,18 +116,18 @@ commentRouter.put("/like/:commentId", authMiddleware, async (req, res) => {
     }
 
     const userId = res.locals.user._id;
-    if (comment.like_array.includes(userId)) {
-      // '좋아요'를 누른 내역이 있는지 확인
-      await Comments.updateOne(
-        { _id: commentId },
-        { $pull: { like_array: userId } } // 있으면 배열에서 제거
-      );
-    } else {
-      await Comments.updateOne(
-        { _id: commentId },
-        { $push: { like_array: userId } } // 없으면 배열에 추가
-      );
+    if (comment.like_array.includes(userId)) {  // 중복된 아이디가 좋아요 배열에 있는지 확인
+      res.status(400).send({
+        message: "해당 아이디는 이미 좋아요를 눌렀습니다.",
+      });
+      return;
     }
+    
+    await Comments.updateOne( // 좋아요 배열에 아이디 추가
+      { _id: commentId },
+      { $push: { like_array: userId } } 
+    );
+   
 
     res.json({ message: "success" });
   } catch (err) {
@@ -135,6 +135,41 @@ commentRouter.put("/like/:commentId", authMiddleware, async (req, res) => {
       message: `[댓글 좋아요] ${err}`,
     });
   }
+});
+
+// 댓글 좋아요 취소
+commentRouter.put("/unlike/:commentId", authMiddleware, async (req, res) => {
+  try {
+      const { commentId } = req.params;
+      const comment = await Comments.findOne({ _id: commentId });
+      
+      if (!comment) {
+        res.status(400).send({
+          message: "commentId 를 확인해주세요.",
+        });
+        return;
+      }
+
+      const userId = res.locals.user._id;
+      if (!comment.like_array.includes(userId)) {  // 중복된 아이디가 좋아요 배열에 있는지 확인
+        res.status(400).send({
+          message: "해당 아이디에 대한 좋아요 정보가 없습니다.",
+        });
+        return;
+      }
+
+      await Comments.updateOne( // 좋아요 배열에서 해당 유저 아이디 제거
+        { _id: commentId },
+        { $pull: { like_array: userId } } 
+      );
+      
+    res.json({ message: "success" });
+  } catch (err) {
+    res.status(400).send({
+      message: `[댓글 좋아요 취소] ${err}`,
+    });
+  }
+
 });
 
 // @ 기준 태그된 유저 가져온 후 @ 제거된 순수 닉네임만 저장
