@@ -1,10 +1,11 @@
 import express, { Request, Response, NextFunction, Router, response } from "express";
-import Users from "../schemas/user";
-import { authMiddleware } from "../middlewares/auth-middleware";
-
+import passport from "passport";
 import joi from "joi";
 import jwt from "jsonwebtoken";
 import crypto from "crypto";
+
+import Users from "../schemas/user";
+import { authMiddleware } from "../middlewares/auth-middleware";
 
 const userRouter = express.Router();
 
@@ -103,9 +104,40 @@ const joiSchema = joi.object({
   })
 
   // google login
-  
+  userRouter.get("/google", passport.authenticate("google", { scope: ["email", "profile"] }));
+
+  userRouter.get("/google/callback", (req, res, next) => {
+    passport.authenticate(
+      "google", {
+        successRedirect: "/",
+        failureRedirect: "/login"
+      }, (err, profile, info) => {
+        if (err) return next(err);
+
+        const token = info.message;
+
+        res.redirect(`/token=${token}`)
+      }
+    )(req, res, next)
+  });
 
   // kakao login
+  userRouter.get("/kakao", passport.authenticate("kakao"));
+
+  userRouter.get("/kakao/callback", (req, res, next) => {
+    passport.authenticate(
+      "kakao",
+      {
+        failureRedirect: "/",
+      }, (err, profile, info) => {
+        if (err) return next(err);
+
+        const token = info.message;
+
+        res.redirect(`/token=${token}`)
+      }
+    )(req, res, next);
+  })
 
 
   export { userRouter };

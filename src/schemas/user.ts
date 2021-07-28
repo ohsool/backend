@@ -2,20 +2,21 @@ import mongoose, { Schema, model, mongo } from "mongoose";
 
 const UserSchema: Schema = new Schema({
     email: {
-        type: String,
-        required: true
+        type: String
     },
     nickname: {
         type: String,
         required: true
     },
     password: {
-        type: String,
-        required: true
+        type: String
     },
     preference: {
         type: String,
         default: "Unknown"
+    },
+    passport: {
+        type: Array
     }
 });
 
