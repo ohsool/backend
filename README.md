@@ -20,4 +20,5 @@ test : 테스트 코드 수정에 대한 커밋
 
 
 
-[ 수정자 ] < type > commit message 
+[ 수정자 ] < type > commit message
+ 
