@@ -3,4 +3,3 @@
 
 echo "Stopping any existing node servers"
 pkill node
-pm2 kill
