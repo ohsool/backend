@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const url = "mongodb://13.125.162.255:27017/ohsool";
+const url = "mongodb://13.125.162.255:27017/admin";
 
 const connect = (): void => {
     mongoose
