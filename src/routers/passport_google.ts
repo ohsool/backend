@@ -1,10 +1,9 @@
-import express, { Application, Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 import Users from "../schemas/user";
 import passportRouter from "passport";
 import GoogleStrategy, { Strategy } from "passport-google-oauth2";
 
-const passportConfig = () => {
+const googlePassportConfig = () => {
     passportRouter.serializeUser((user, done) => {
         done(null, user);
     });
@@ -24,8 +23,6 @@ const passportConfig = () => {
         const nickname = profile.name.givenName;
         const provider = profile.provider;
 
-        console.log(profile);
-
         let user = await Users.findOne({passport: [{provider: "google"}, {id: userId}]});
 
         if (!user) {
@@ -40,4 +37,4 @@ const passportConfig = () => {
     ));
 }
 
-export { passportConfig };
+export { googlePassportConfig };
