@@ -46,7 +46,7 @@ const allowOrigins = [];
 app.use(cors());
 
 app.get("/", (req, res) => {
-    res.send(`🎉Welcome to BACK!💐 <br>-NODEMEN👨‍👩‍👦 
+    res.send(`🎉Welcome to BACK!!!!💐 <br>-NODEMEN👨‍👩‍👦 
     <form action = '/api/user/google' method ='get'>
     <input type='submit'>
     </form>
