@@ -122,6 +122,22 @@ const joiSchema = joi.object({
   });
 
   // kakao login
+  userRouter.get("/kakao", passport.authenticate("kakao"));
+
+  userRouter.get("/kakao/callback", (req, res, next) => {
+    passport.authenticate(
+      "kakao",
+      {
+        failureRedirect: "/",
+      }, (err, profile, info) => {
+        if (err) return next(err);
+
+        const token = info.message;
+
+        res.redirect(`/token=${token}`)
+      }
+    )(req, res, next);
+  })
 
 
   export { userRouter };

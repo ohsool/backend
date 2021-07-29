@@ -23,6 +23,10 @@ const BeerSchema: Schema = new Schema({
         type: Array,
         default: []
     },
+    like_array: {
+        type: Array,
+        default: []
+    },
     features: {
         type: Object,
         default: {
@@ -32,6 +36,18 @@ const BeerSchema: Schema = new Schema({
             "sweet": 1,
             "nutty": 1
         }
+    },
+    count: {
+        type: Number,
+        default: 0
+    },
+    avgRate: {
+        type: Number,
+        default: 0
+    },
+    location: {
+        type: Array,
+        default: []
     }
 })
 

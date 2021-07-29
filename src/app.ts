@@ -1,5 +1,6 @@
 /*
-OHSOOL! >_<
+sudo lsof -i :5209
+kill -9 [PID]
 */
 
 // importing packages, modules
@@ -17,7 +18,8 @@ import { myBeerRouter } from './routers/myBeer';
 import { complaintRouter } from './routers/complaint';
 import { recommendationRouter } from './routers/recommendation';
 
-import { passportConfig } from './routers/passport';
+import { googlePassportConfig } from './routers/passport_google';
+import { kakaoPassportConfig } from './routers/passport_kakao';
 
 // importing crawling APIs
 import { beerCategoryCrawlingRouter } from './postData/beerCategory';
@@ -37,13 +39,21 @@ app.use(bodyParser.json());
 app.use(passport.initialize());
 app.use(passport.session());
 
-passportConfig();
+googlePassportConfig();
+kakaoPassportConfig();
 
 const allowOrigins = [];
 app.use(cors());
 
 app.get("/", (req, res) => {
-    res.send("🎉Welcome to BACK! (v2)💐 <br>-NODEMEN👨‍👩‍👦 <form action = '/api/user/google' method ='get'><input type='submit'></form>");
+    res.send(`🎉Welcome to BACK!💐 <br>-NODEMEN👨‍👩‍👦 
+    <form action = '/api/user/google' method ='get'>
+    <input type='submit'>
+    </form>
+    <form action = '/api/user/kakao' method ='get'>
+    <input type='submit'>
+    </form>`
+    );
 });
 
 // APIs
