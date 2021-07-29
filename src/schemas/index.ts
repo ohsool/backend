@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const url = "mongodb://localhost:27017/ohsool";
+const url = "mongodb://13.125.162.255:27017/ohsool";
 
 const connect = (): void => {
     mongoose
@@ -9,8 +9,8 @@ const connect = (): void => {
         useUnifiedTopology: true,
         useCreateIndex: true,
         ignoreUndefined: true,
-        // user: "test",
-        // pass: "test"
+        user: "test",
+        pass: "test"
       })
       .catch((err) => {
         console.log(err);
