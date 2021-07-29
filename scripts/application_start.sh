@@ -1,7 +1,12 @@
 #!/bin/bash
 
-#give permission for everything in the express-app directory
+#give permission for everything in the ohsool directory
 sudo chmod -R 777 /home/ec2-user/ohsool
+
+#PM2 설치
+sudo -s
+npm install -g pm2
+exit
 
 # EC2 작업 파일로 이동
 cd /home/ec2-user/ohsool
@@ -19,5 +24,6 @@ npm run build
 
 # node 어플리케이션 background에서 실행시키기 (by doing so, the server won't be terminated due to inactivates)
 # node app.js 만 입력시 foreground로 실행이 됌
-node dist/app.js > app.out.log 2> app.err.log < /dev/null & 
+# node dist/app.js > app.out.log 2> app.err.log < /dev/null & 
+pm2 start dist/app.js
 
