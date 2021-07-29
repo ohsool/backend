@@ -24,6 +24,12 @@ myBeerRouter.post("/", authMiddleware, async (req, res) => {
         location = "";
     }
 
+    if (String(review).length > 48) {
+        res.json({ message: "fail", err: "too long" });
+
+        return;
+    }
+
     const features = ["bitter", "crispy", "flavor", "sweet", "nutty"];
 
     // If there is no value in features, set to 0
