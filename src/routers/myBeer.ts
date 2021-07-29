@@ -69,6 +69,13 @@ myBeerRouter.post("/", authMiddleware, async (req, res) => {
 
         await BeerCategory.findOneAndUpdate({ _id: beerCategoryId }, {$set: { avgRate }});
 
+        const beerCount = beer_.count;
+        const beerAvgRate = beer_.avgRate;
+
+        const newBeerAvgRate = (( beerCount * beerAvgRate) + rate) / (beerCount + 1);
+
+        await Beer.findOneAndUpdate({ name_korean: beer }, { $set: { avgRate: newBeerAvgRate, count: beerCount + 1 } });
+
         res.send({ message: "success", myBeerId });
     } catch (err) {
         res.json({ message: "fail", err });
@@ -117,18 +124,22 @@ myBeerRouter.get("/:myBeerId", authMiddleware, async (req, res) => {
     }
 });
 
+// modify one mybeer
+
+
 // delete one mybeer
 myBeerRouter.delete("/:myBeerId", authMiddleware, async (req, res) => {
     const myBeerId = req.params.myBeerId;
 
     try {
-        const mybeer = await MyBeer.findOneAndDelete({ _id: myBeerId });
+        const mybeer = await MyBeer.findOne({ _id: myBeerId });
+        await MyBeer.deleteOne({ _id: myBeerId });
 
         // delete할 때 beerCategory/avgRate에서도 그 rate 뺄까?
         const myPreference = res.locals.user.preference;
-        const beer_ = await Beer.findOne({ name: mybeer.name });
-        const beerCategoryId = beer_.categoryId;
-        const rate = mybeer.rate
+        const beer = await Beer.findOne({ _id: mybeer.beerId });
+        const beerCategoryId = beer.categoryId;
+        const rate = mybeer.rate;
         
         const beerCategory = await BeerCategory.findOne({ _id: beerCategoryId });
         const avg = beerCategory.avgRate[myPreference][0];
@@ -152,6 +163,13 @@ myBeerRouter.delete("/:myBeerId", authMiddleware, async (req, res) => {
         avgRate[myPreference][1] = count - 1;
 
         await BeerCategory.findOneAndUpdate({ _id: beerCategoryId }, {$set: { avgRate }});
+
+        const beerCount = beer.count;
+        const beerAvgRate = beer.avgRate;
+
+        const newBeerAvgRate = (( beerCount * beerAvgRate) - rate) / (beerCount - 1);
+
+        await Beer.findOneAndUpdate({ name_korean: beer.name_korean }, { $set: { avgRate: newBeerAvgRate, count: beerCount - 1 } });
 
         res.json({ message: "success" });
     } catch (err) {
