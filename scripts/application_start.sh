@@ -3,11 +3,6 @@
 #give permission for everything in the ohsool directory
 sudo chmod -R 777 /home/ec2-user/ohsool
 
-#PM2 설치
-sudo -s
-npm install -g pm2
-exit
-
 # EC2 작업 파일로 이동
 cd /home/ec2-user/ohsool
 
@@ -15,6 +10,12 @@ cd /home/ec2-user/ohsool
 export NVM_DIR="$HOME/.nvm"	
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # loads nvm	
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # loads nvm bash_completion (node is in path now)
+
+
+#PM2 설치
+sudo -s
+npm install -g pm2
+exit
 
 # node_modules 설치
 npm install
