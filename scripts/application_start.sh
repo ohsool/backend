@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # EC2 작업 파일로 이동
-cd /home/ec2-user/ohsool
+cd /home/ubuntu/ohsool
 
 # npm과 node 설치
 export NVM_DIR="$HOME/.nvm"	
@@ -12,7 +12,7 @@ export NVM_DIR="$HOME/.nvm"
 npm install
 
 # typescript를 javascript 로 complie 하기
-tsc -p .
+npm run build
 
 # node 어플리케이션 background에서 실행시키기 (by doing so, the server won't be terminated due to inactivates)
 # node app.js 만 입력시 foreground로 실행이 됌

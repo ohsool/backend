@@ -2,18 +2,18 @@ version: 0.0
 os: linux
 files: 
   - source: /
-    destination: /home/ec2-user/ohsool
+    destination: /home/ubuntu/ohsool
 hooks: 
   ApplicationStop: 
     - location: scripts/application_stop.sh
       timeout: 300
-      runas: ec2-user
+      runas: root
   BeforeInstall:
     - location: scripts/before_install.sh
       timeout: 300
-      runas: ec2-user
+      runas: root
   ApplicationStart:
     - location: scripts/application_start.sh
       timeout: 300
-      runas: ec2-user
+      runas: root
   
