@@ -149,6 +149,8 @@ myBeerRouter.put("/:myBeerId", authMiddleware, async (req, res) => {
     
         if (String(myBeer.userId) != String(userId)) {
             res.json({ message: "fail", err: "not the same user" });
+
+            return;
         }
     
         const beer_ = await Beer.findOne({ name_korean: beer });
@@ -207,8 +209,17 @@ myBeerRouter.delete("/:myBeerId", authMiddleware, async (req, res) => {
 
     try {
         const mybeer = await MyBeer.findOne({ _id: myBeerId });
+        const userId = res.locals.user._id;
+
+        if (String(mybeer.userId) != String(userId)) {
+            res.json({ message: "fail", err: "not the same user" });
+
+            return;
+        }
+
         await MyBeer.deleteOne({ _id: myBeerId });
 
+        // delete beer category rate
         const myPreference = res.locals.user.preference;
         const beer = await Beer.findOne({ _id: mybeer.beerId });
         const beerCategoryId = beer.categoryId;
@@ -217,8 +228,6 @@ myBeerRouter.delete("/:myBeerId", authMiddleware, async (req, res) => {
         const beerCategory = await BeerCategory.findOne({ _id: beerCategoryId });
         const avg = beerCategory.avgRate[myPreference][0];
         const count = beerCategory.avgRate[myPreference][1];
-
-        const new_avgRate = (( avg * count ) - rate) / (count - 1);
 
         let avgRate: avgRate = {
             "American Lager": [0, 0],
@@ -232,15 +241,24 @@ myBeerRouter.delete("/:myBeerId", authMiddleware, async (req, res) => {
             "Unknown": [0, 0]
         }
 
-        avgRate[myPreference][0] = new_avgRate;
-        avgRate[myPreference][1] = count - 1;
+        if (Number(count) > 1) {
+            const new_avgRate = (( avg * count ) - rate) / (count - 1);
+
+            avgRate[myPreference][0] = new_avgRate;
+            avgRate[myPreference][1] = count - 1;
+        }
 
         await BeerCategory.findOneAndUpdate({ _id: beerCategoryId }, {$set: { avgRate }});
 
+        // delete beer rate
         const beerCount = beer.count;
         const beerAvgRate = beer.avgRate;
 
-        const newBeerAvgRate = (( beerCount * beerAvgRate) - rate) / (beerCount - 1);
+        let newBeerAvgRate = 0
+
+        if (beerCount > 1) {
+            newBeerAvgRate = (( beerCount * beerAvgRate) - rate) / (beerCount - 1);
+        }
 
         await Beer.findOneAndUpdate({ name_korean: beer.name_korean }, { $set: { avgRate: newBeerAvgRate, count: beerCount - 1 } });
 

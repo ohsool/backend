@@ -48,6 +48,10 @@ const BeerSchema: Schema = new Schema({
     location: {
         type: Array,
         default: []
+    },
+    location_report: {
+        type: Array,
+        default: []
     }
 })
 
