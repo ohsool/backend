@@ -13,9 +13,7 @@ export NVM_DIR="$HOME/.nvm"
 
 
 #PM2 설치
-sudo -s
 npm install -g pm2
-exit
 
 # node_modules 설치
 npm install
