@@ -1,4 +1,6 @@
 import express, {Request,Response,NextFunction,Router,response,} from "express";
+import moment from "moment";
+
 import MyBeer from "../schemas/mybeer";
 import Beer from "../schemas/beer";
 import { authMiddleware } from "../middlewares/auth-middleware";
@@ -36,7 +38,7 @@ myBeerRouter.post("/", authMiddleware, async (req, res) => {
 
     const userId = res.locals.user._id;
 
-    const date = new Date();
+    const date = moment().format("YYYY-MM-DD hh:mm A");
 
     try {
         const myBeer = await MyBeer.create({ beerId, userId, myFeatures, date, location, rate, review});
@@ -124,8 +126,80 @@ myBeerRouter.get("/:myBeerId", authMiddleware, async (req, res) => {
     }
 });
 
-// modify one mybeer
+// get all reviews with one beer
+myBeerRouter.get("/review/:beer", async (req, res) => {
+    const beer = req.params.beer;
+    const beer_ = await Beer.findOne({ name_korean: beer });
+    const beerId = beer_._id;
 
+    const myBeers = await MyBeer.find({ beerId });
+
+    res.json({ message: "success", myBeers });
+})
+
+// modify one mybeer
+myBeerRouter.put("/:myBeerId", authMiddleware, async (req, res) => {
+    const myBeerId = req.params.myBeerId;
+
+    const { beer, myFeatures, location, rate, review } = req.body;
+
+    try {
+        const myBeer = await MyBeer.findOne({ _id: myBeerId });
+        const userId = res.locals.user._id;
+    
+        if (String(myBeer.userId) != String(userId)) {
+            res.json({ message: "fail", err: "not the same user" });
+        }
+    
+        const beer_ = await Beer.findOne({ name_korean: beer });
+        const beerId = beer_._id;
+    
+        await MyBeer.findOneAndUpdate({ _id: myBeerId }, { $set: { beerId, myFeatures, location, rate, review } });
+
+
+        // category rate
+        const myPreference = res.locals.user.preference;
+        const beerCategoryId = beer_.categoryId;
+        const rateOld = myBeer.rate;
+
+        const beerCategory = await BeerCategory.findOne({ _id: beerCategoryId });
+        const avgRate_ = beerCategory.avgRate[myPreference][0];
+        const count = beerCategory.avgRate[myPreference][1];
+
+        const new_avgRate = ((count * avgRate_) - rateOld + rate ) / count;
+
+        let avgRate: avgRate = {
+            "American Lager": [0, 0],
+            "Pilsner": [0, 0],
+            "Pale Ale": [0, 0],
+            "IPA": [0, 0],
+            "Weizen": [0, 0],
+            "Dunkel": [0, 0],
+            "Stout": [0, 0],
+            "Bock": [0, 0],
+            "Unknown": [0, 0]
+        }
+
+        avgRate[myPreference][0] = new_avgRate;
+        avgRate[myPreference][1] = count;
+
+        await BeerCategory.findOneAndUpdate({ _id: beerCategoryId }, {$set: { avgRate }});
+        
+        // beer rate
+        const beerCount = beer_.count;
+        const beerAvgRate = beer_.avgRate;
+
+        const newBeerAvgRate = ( (beerCount * beerAvgRate) - rateOld + rate) / beerCount;
+
+        await Beer.findOneAndUpdate({ name_korean: beer_.name_korean }, { $set: { avgRate: newBeerAvgRate } });
+
+        res.json({ message: "success", myBeerId });
+    } catch (err) {
+        res.json({ message: "fail", err })
+    }
+
+    
+});
 
 // delete one mybeer
 myBeerRouter.delete("/:myBeerId", authMiddleware, async (req, res) => {
@@ -135,7 +209,6 @@ myBeerRouter.delete("/:myBeerId", authMiddleware, async (req, res) => {
         const mybeer = await MyBeer.findOne({ _id: myBeerId });
         await MyBeer.deleteOne({ _id: myBeerId });
 
-        // delete할 때 beerCategory/avgRate에서도 그 rate 뺄까?
         const myPreference = res.locals.user.preference;
         const beer = await Beer.findOne({ _id: mybeer.beerId });
         const beerCategoryId = beer.categoryId;
