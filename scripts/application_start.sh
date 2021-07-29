@@ -1,7 +1,10 @@
 #!/bin/bash
 
+#give permission for everything in the express-app directory
+sudo chmod -R 777 /home/ec2-user/ohsool
+
 # EC2 작업 파일로 이동
-cd /home/ubuntu/ohsool
+cd /home/ec2-user/ohsool
 
 # npm과 node 설치
 export NVM_DIR="$HOME/.nvm"	

@@ -9,7 +9,7 @@ nvm install node
 sudo iptables -t nat -A PREROUTING -i eth0 -p tcp --dport 80 -j REDIRECT --to-port 5209
 
 # EC2 서버에 작업 폴더가 존재하는 지 확인 (없을 시 새로 생성함)
-DIR="/home/ubuntu/ohsool"
+DIR="/home/ec2-user/ohsool"
 if [ -d "$DIR" ]; then
   echo "${DIR} exists"
 else
