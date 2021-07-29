@@ -1,5 +1,6 @@
 /*
-OHSOOL! >_<
+sudo lsof -i :5209
+kill -9 [PID]
 */
 
 // importing packages, modules
