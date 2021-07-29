@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
+import { env } from "../env";
 
-const url = "mongodb://localhost:27017/ohsool";
+const url = env.url;
 
 const connect = (): void => {
     mongoose

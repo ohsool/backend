@@ -8,6 +8,7 @@ import express, {Request, Response, NextFunction} from 'express';
 import bodyParser from 'body-parser';
 import cors from "cors";
 import passport from "passport";
+import dotenv from "dotenv";
 
 // importing APIs
 import { userRouter } from './routers/user';
@@ -28,6 +29,10 @@ import { beerCrawlingRouter } from './postData/beer';
 // importing DB
 import { connect } from './schemas';
 
+// importing env
+import { env } from "./env";
+
+const port = env.port;
 const app = express();
 connect();
 
@@ -70,8 +75,8 @@ app.use("/api/recommendation", [recommendationRouter]);
 app.use("/api/crawling/beercategory", [beerCategoryCrawlingRouter]);
 app.use("/api/crawling/beer", [beerCrawlingRouter]);
 
-app.listen(5209, () => {
-    console.log("listening at http://localhost:5209");
+app.listen(port, () => {
+    console.log(`listening at http://localhost:${ port }`);
 })
 
 export { app };
