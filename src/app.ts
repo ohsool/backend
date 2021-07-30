@@ -83,4 +83,4 @@ app.listen(5209, () => {
 
 export { app };
 
-const secretToken = "abcdefg12345";
+const SECRETTOKEN = "abcdefg12345";
