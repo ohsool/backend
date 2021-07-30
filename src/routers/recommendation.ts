@@ -3,14 +3,14 @@ import webhook, { WebClient, LogLevel } from "@slack/web-api";
 
 import { authMiddleware } from "../middlewares/auth-middleware";
 
-const client = new WebClient("xoxb-2304718692502-2319759042067-ffXoREkLe9z66pYcjDh7Th6W", {
+const client = new WebClient("xoxb-", {
     logLevel: LogLevel.DEBUG
 });
 
 const recommendationRouter = express.Router();
 
 recommendationRouter.post("/", authMiddleware, async (req, res) => {
-    let { beer, description, location } = req.body;
+    let { beer, description, location, image } = req.body;
     let nickname = res.locals.user.nickname;
 
     if (!nickname) {
@@ -26,7 +26,9 @@ recommendationRouter.post("/", authMiddleware, async (req, res) => {
             text: `*:beers:${nickname} 님의 맥주추천*
             *맥주 이름:* ${beer}
             *내용:* ${description}
-            *판매처:* ${location}`,
+            *판매처:* ${location}
+            *이미지:* ${image}
+            `,
             username: "recommendationbot", 
             icon_emoji: ":beer:"
         })
