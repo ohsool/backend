@@ -8,6 +8,8 @@ import express, {Request, Response, NextFunction} from 'express';
 import bodyParser from 'body-parser';
 import cors from "cors";
 import passport from "passport";
+import https from "https";
+import fs from "fs";
 
 // importing APIs
 import { userRouter } from './routers/user';
@@ -29,12 +31,25 @@ import { beerCrawlingRouter } from './postData/beer';
 import swaggerUi from 'swagger-ui-express';
 const swaggerFile =  require('../swagger/swagger-output.json')
 
-
 // importing DB
 import { connect } from './schemas';
 
 const app = express();
 connect();
+
+// using https
+const options = {
+    key: fs.readFileSync("pems/garden-key.pem", "utf-8"),
+    cert: fs.readFileSync("pems/garden-cert.pem", "utf-8"),
+    agent: false
+};
+
+// https.createServer(options, (req, res) => {
+//     res.statusCode = 200;
+//     res.end("Hello Secure World\n");
+// }).listen(8000, () => {
+//     console.log("Server started");
+// });
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
@@ -81,6 +96,9 @@ app.listen(5209, () => {
     console.log("listening at http://localhost:5209");
 })
 
-export { app };
+// const httpServer = https.createServer(options, app);
+// httpServer.listen(5209, () => {
+//     console.log("listening at https://localhost:5209 at " + new Date() + "now");
+// });
 
-const SECRETTOKEN = "abcdefg12345";
+export { app };
