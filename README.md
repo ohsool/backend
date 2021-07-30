@@ -22,3 +22,49 @@ test : 테스트 코드 수정에 대한 커밋
 
 [ 수정자 ] < type > commit message
  
+ <hr>
+
+
+ ## Swagger 
+<details>
+
+<summary> npm 설치 </summary>
+
+>\$ npm install swagger-ui-express -D<br>
+\$ npm install swagger-autogen -D<br>
+\$ npm install @types/swagger-ui-express -D
+
+</details>
+<br>
+
+<details>
+<summary> app.ts 기본 설정 </summary>
+
+```
+// importing swagger 
+import swaggerUi from 'swagger-ui-express';
+const swaggerFile =  require('../swagger/swagger-output.json')
+app.use('/swagger', swaggerUi.serve, swaggerUi.setup(swaggerFile))
+```
+
+</details>
+<br>
+
+<details>
+<summary> 폴더 구조 </summary>
+
+```
+├── swagger
+│   ├── swagger-output.json
+│   └── swagger.js
+```
+
+</details>
+
+<br>
+<details>
+<summary> 참고 </summary>
+
+https://charming-kyu.tistory.com/11
+
+</details>
