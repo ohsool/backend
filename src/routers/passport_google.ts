@@ -15,7 +15,7 @@ const googlePassportConfig = () => {
     passportRouter.use(new Strategy({
         clientID: "191938571707-m8nhi8j2inb8dn0c0pq99f3gc1hd9sfd.apps.googleusercontent.com",
         clientSecret: "vgLllg0mbn2wmTQu8gR83mqc",
-        callbackURL: "http://localhost:5209/api/user/google/callback",
+        callbackURL: "http://XN--WH1BO80AC4CI9A.shop/api/user/google/callback"
     },
     async function(accessToken, refreshToken, profile, done: GoogleStrategy.VerifyCallback) {
         const userId = profile.id;
