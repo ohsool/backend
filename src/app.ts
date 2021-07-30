@@ -64,8 +64,8 @@ app.get("/", (req, res) => {
 // APIs
 app.use("/api/user", [userRouter]);
 app.use("/api/comment", [commentRouter]);
-app.use("/api/drink", [beerRouter]);
-app.use("/api/drinkCategory", [beerCategoryRouter]);
+app.use("/api/beer", [beerRouter]);
+app.use("/api/beerCategory", [beerCategoryRouter]);
 app.use("/api/mybeer", [myBeerRouter]);
 app.use("/api/complaint", [complaintRouter]);
 app.use("/api/recommendation", [recommendationRouter]);
