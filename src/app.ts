@@ -85,7 +85,7 @@ app.use("/api/recommendation", [recommendationRouter]);
 app.use("/api/crawling/beercategory", [beerCategoryCrawlingRouter]);
 app.use("/api/crawling/beer", [beerCrawlingRouter]);
 
-app.get("/.well-known/pki-valication", (req, res) => {
+app.get("/.well-known/pki-valication/2EEBA01B88D40DE743290182B86FC99B.txt", (req, res) => {
     res.send(`6B450C258F9F68ABBE4044790FBD460AED340FCD5C0925CC8D0CD2378C8AB35A<br>
     comodoca.com<br>
     0be44665760ad69f4e`);
