@@ -44,13 +44,6 @@ const options = {
     agent: false
 };
 
-// https.createServer(options, (req, res) => {
-//     res.statusCode = 200;
-//     res.end("Hello Secure World\n");
-// }).listen(8000, () => {
-//     console.log("Server started");
-// });
-
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(bodyParser.json());
@@ -92,13 +85,19 @@ app.use("/api/recommendation", [recommendationRouter]);
 app.use("/api/crawling/beercategory", [beerCategoryCrawlingRouter]);
 app.use("/api/crawling/beer", [beerCrawlingRouter]);
 
-app.listen(5209, () => {
-    console.log("listening at http://localhost:5209");
+app.get("/.well-known/pki-valication", (req, res) => {
+    res.send(`6B450C258F9F68ABBE4044790FBD460AED340FCD5C0925CC8D0CD2378C8AB35A<br>
+    comodoca.com<br>
+    0be44665760ad69f4e`);
 })
 
-// const httpServer = https.createServer(options, app);
-// httpServer.listen(5209, () => {
-//     console.log("listening at https://localhost:5209 at " + new Date() + "now");
-// });
+// app.listen(5209, () => {
+//     console.log("listening at http://localhost:5209");
+// })
+
+const httpServer = https.createServer(options, app);
+httpServer.listen(5209, () => {
+    console.log("listening at https://localhost:5209 at " + new Date() + "now");
+});
 
 export { app };
