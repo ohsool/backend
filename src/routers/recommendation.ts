@@ -3,7 +3,7 @@ import webhook, { WebClient, LogLevel } from "@slack/web-api";
 
 import { authMiddleware } from "../middlewares/auth-middleware";
 
-const client = new WebClient("xoxb-2304718692502-2319759042067-MPfEAU88ZkJcY8fdYrEY0nUc", {
+const client = new WebClient("xoxb-2304718692502-2319759042067-KsrLQfnbqXjC9iOuK2IIlWy2", {
     logLevel: LogLevel.DEBUG
 });
 
