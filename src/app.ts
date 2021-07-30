@@ -38,11 +38,11 @@ const app = express();
 connect();
 
 // using https
-const options = {
-    key: fs.readFileSync("pems/garden-key.pem", "utf-8"),
-    cert: fs.readFileSync("pems/garden-cert.pem", "utf-8"),
-    agent: false
-};
+// const options = {
+//     key: fs.readFileSync("pems/garden-key.pem", "utf-8"),
+//     cert: fs.readFileSync("pems/garden-cert.pem", "utf-8"),
+//     agent: false
+// };
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
