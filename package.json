@@ -25,7 +25,8 @@
     "dev": "tsc && nodemon src/app.ts",
     "prettify": "prettier --write src/*.ts src/**/*.ts",
     "build": "tsc -p .",
-    "test": "jest --detectOpenHandles --forceExit"
+    "test": "jest --detectOpenHandles --forceExit",
+    "prestart": "node ./swagger/swagger.js"
   },
   "author": "",
   "license": "ISC",
@@ -43,7 +44,8 @@
     "passport-kakao": "^1.0.1",
     "request": "^2.88.2",
     "request-promise": "^4.2.6",
-    "supertest": "^6.1.4"
+    "supertest": "^6.1.4",
+    "swagger-ui-express": "^4.1.6"
   },
   "devDependencies": {
     "@types/cors": "^2.8.12",
@@ -55,8 +57,10 @@
     "@types/passport-google-oauth2": "^0.1.4",
     "@types/request-promise": "^4.1.48",
     "@types/supertest": "^2.0.11",
+    "@types/swagger-ui-express": "^4.1.3",
     "jest": "^27.0.6",
     "nodemon": "^2.0.12",
+    "swagger-autogen": "^2.11.1",
     "ts-jest": "^27.0.4",
     "ts-node": "^10.1.0",
     "typescript": "^4.3.5"
