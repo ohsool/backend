@@ -118,3 +118,5 @@ dist
 .pnp.*
 
 package-lock.json
+.idea
+.config
