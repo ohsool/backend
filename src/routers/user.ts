@@ -116,7 +116,7 @@ const joiSchema = joi.object({
 
         const token = info.message;
 
-        res.redirect(`/token=${token}`)
+        res.redirect(`http://오늘의술.shop/token=${token}`)
       }
     )(req, res, next)
   });
@@ -134,7 +134,7 @@ const joiSchema = joi.object({
 
         const token = info.message;
 
-        res.redirect(`/token=${token}`)
+        res.redirect(`http://오늘의술.shop/token=${token}`)
       }
     )(req, res, next);
   })
