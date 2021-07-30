@@ -17,7 +17,7 @@ const kakaoPassportConfig = () => {
     passportRouter.use(new Strategy({
         clientID: "e37e7e15c49d382837d031d60c753b43",
         clientSecret: "13fdRoU16v1eX7rJm2u1HaNZ8ICy1xkO",
-        callbackURL: "http://localhost:5209/api/user/kakao/callback"
+        callbackURL: "http://오늘의술.shop/api/user/kakao/callback"
     },
     async function(accessToken, refreshToken, profile, done) {
         const userId = String(profile.id);

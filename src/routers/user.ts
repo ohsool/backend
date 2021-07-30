@@ -25,9 +25,10 @@ const joiSchema = joi.object({
       const { email, nickname, password, confirmPassword } = req.body;
     
       try {
-        const existUser = await Users.findOne({ nickname, email });
+        const existUser1 = await Users.findOne({ nickname });
+        const existUser2 = await Users.findOne({ email });
 
-        if (existUser) {
+        if (existUser1 || existUser2) {
             res.json({ message: "existed user" });
   
             return;
@@ -116,7 +117,7 @@ const joiSchema = joi.object({
 
         const token = info.message;
 
-        res.redirect(`/token=${token}`)
+        res.redirect(`http://오늘의술.shop/token=${token}`)
       }
     )(req, res, next)
   });
@@ -134,7 +135,7 @@ const joiSchema = joi.object({
 
         const token = info.message;
 
-        res.redirect(`/token=${token}`)
+        res.redirect(`http://오늘의술.shop/token=${token}`)
       }
     )(req, res, next);
   })

@@ -9,6 +9,8 @@ import bodyParser from 'body-parser';
 import cors from "cors";
 import passport from "passport";
 import dotenv from "dotenv";
+import https from "https";
+import fs from "fs";
 
 // importing APIs
 import { userRouter } from './routers/user';
@@ -26,6 +28,10 @@ import { kakaoPassportConfig } from './routers/passport_kakao';
 import { beerCategoryCrawlingRouter } from './postData/beerCategory';
 import { beerCrawlingRouter } from './postData/beer';
 
+// importing swagger 
+import swaggerUi from 'swagger-ui-express';
+const swaggerFile =  require('../swagger/swagger-output.json')
+
 // importing DB
 import { connect } from './schemas';
 
@@ -35,6 +41,13 @@ import { env } from "./env";
 const port = env.port;
 const app = express();
 connect();
+
+// using https
+// const options = {
+//     key: fs.readFileSync("pems/garden-key.pem", "utf-8"),
+//     cert: fs.readFileSync("pems/garden-cert.pem", "utf-8"),
+//     agent: false
+// };
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
@@ -46,6 +59,8 @@ app.use(passport.session());
 
 googlePassportConfig();
 kakaoPassportConfig();
+ 
+app.use('/swagger', swaggerUi.serve, swaggerUi.setup(swaggerFile))
 
 const allowOrigins = [];
 app.use(cors());
@@ -75,8 +90,18 @@ app.use("/api/recommendation", [recommendationRouter]);
 app.use("/api/crawling/beercategory", [beerCategoryCrawlingRouter]);
 app.use("/api/crawling/beer", [beerCrawlingRouter]);
 
+
+app.get("/.well-known/pki-validation/2EEBA01B88D40DE743290182B86FC99B.txt", (req, res) => {
+    res.redirect("https://drive.google.com/uc?id=1GjxUJAUzop7oACRaBxLodwSrvMk4I7U7&export=download");
+})
+
 app.listen(port, () => {
     console.log(`listening at http://localhost:${ port }`);
-})
+});
+
+// const httpServer = https.createServer(options, app);
+// httpServer.listen(5209, () => {
+//     console.log("listening at https://localhost:5209 at " + new Date() + "now");
+// });
 
 export { app };
