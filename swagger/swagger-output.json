@@ -1,0 +1,567 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "OHSOOL; 오늘의 술",
+    "description": "당신을 위한 오늘의 맥주."
+  },
+  "host": "13.125.162.255",
+  "basePath": "/",
+  "components": {
+    "securitySchemes": {
+      "Bearer": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  },
+  
+  "securityDefinitions": {
+    "Bearer": {
+      "type": "apiKey",
+      "name": "Authorization",
+      "in":"header",
+      "description": "Bearer <Token> 을 입력해주세요."
+    }
+  },
+  "tags": [],
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "consumes": ["application/json"],
+  "produces": ["application/json"],
+  "paths": {
+    "/api/user": {
+      "post": {
+        "tags": ["User"],
+        "description": "회원가입",
+        "parameters": [
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "type": "string",
+                  "example": "test@test.com"
+                },
+                "nickname": {
+                  "type": "string",
+                  "example": "test닉네임"
+                },
+                "password": {
+                  "type": "string",
+                  "example": "password123"
+                },
+                "confirmPassword": {
+                  "type": "string",
+                  "example": "password123"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["User"],
+        "description": "유저 탈퇴 [로그인 필요]",
+        "security": [{
+          "Bearer": []
+        }],
+        "parameters": [],
+        "responses": {
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/user/auth": {
+      "post": {
+        "tags": ["User"],
+        "description": "로그인",
+        "parameters": [
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "type": "string",
+                  "example": "test@test.com"
+                },
+                "password": {
+                  "type": "string",
+                  "example": "password123"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/user/me": {
+      "get": {
+        "tags": ["User"],
+        "description": "로그인 성공 확인 [로그인 필요]",
+        "security": [{
+          "Bearer": []
+        }],
+        "parameters": [],
+        "responses": {
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/google": {
+      "get": {
+        "tags": ["User"],
+        "description": "구글 로그인",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/google/callback": {
+      "get": {
+        "tags": ["User"],
+        "description": "구글 로그인",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/kakao": {
+      "get": {
+        "tags": ["User"],
+        "description": "카카오 로그인",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/kakao/callback": {
+      "get": {
+        "tags": ["User"],
+        "description": "카카오 로그인",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/api/mybeer": {
+      "post": {
+        "tags": ["My Beer"],
+        "description": "myBeer(리뷰) 작성하기 [로그인 필요]",
+        "security": [{
+          "Bearer": []
+        }],
+        "parameters": [
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "beer": {
+                  "type": "string",
+                  "example": "..."
+                },
+                "myFeatures": {
+                  "type": "Object",
+                  "description": "시음 노트",
+                  "example": {
+                      "bitter": 1,
+                      "crispy": 1,
+                      "flavor": 1,
+                      "sweet": 1,
+                      "nutty": 1
+                   }
+                },
+                "location": {
+                  "type": "string",
+                  "example": "GS 편의점 신림점"
+                },
+                "rate": {
+                  "type": "number",
+                  "example": 3
+                },
+                "review": {
+                  "type": "string",
+                  "example": "테스트 리뷰"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {}
+      },
+      "get": {
+        "tags": ["My Beer"],
+        "description": "특정 인덱스의 myBeer(리뷰) 가져오기 [로그인 필요]",
+        "security": [{
+          "Bearer": []
+        }],
+        "parameters": [
+          {
+            "name": "myBeerId",
+            "in": "path",
+            "description": "myBeer 인덱스",
+            "required": true,
+            "type": "objectId"
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }, 
+      "delete": {
+        "tags": ["My Beer"],
+        "description": "특정 인덱스의 myBeer 삭제하기 [로그인 필요]",
+        "security": [{
+          "Bearer": []
+        }],
+        "parameters": [
+          {
+            "name": "myBeerId",
+            "in": "path",
+            "description": "myBeer 인덱스",
+            "required": true,
+            "type": "objectId"
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      },
+      "put": {
+        "tags": ["My Beer"],
+        "description": "특정 인덱스의 myBeer(리뷰) 수정하기 [로그인 필요]",
+        "security": [{
+          "Bearer": []
+        }],
+        "parameters": [
+          {
+            "name": "myBeerId",
+            "in": "path",
+            "description": "myBeer 인덱스",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "beer": {
+                  "type": "string",
+                  "example": "..."
+                },
+                "myFeatures": {
+                  "type": "Object",
+                  "description": "시음 노트",
+                  "example": {
+                      "bitter": 1,
+                      "crispy": 1,
+                      "flavor": 1,
+                      "sweet": 1,
+                      "nutty": 1
+                   }
+                },
+                "location": {
+                  "type": "string",
+                  "example": "GS 편의점 신림점"
+                },
+                "rate": {
+                  "type": "number",
+                  "example": 3
+                },
+                "review": {
+                  "type": "string",
+                  "example": "테스트 리뷰"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/myBeer/all": {
+      "get": {
+        "tags": ["My Beer"],
+        "description": "전체 맥주 리뷰 가져오기 [로그인 필요]",
+        "security": [{
+          "Bearer": []
+        }],
+        "parameters": [],
+        "responses": {
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/myBeer/my": {
+      "get": {
+        "tags": ["My Beer"],
+        "description": "현재 유저가 작성한 맥주 리뷰 가져오기 [로그인 필요]",
+        "security": [{
+          "Bearer": []
+        }],
+        "parameters": [],
+        "responses": {
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/myBeer/review": {
+      "get": {
+        "tags": ["My Beer"],
+        "description": "특정 맥주의 전체 리뷰 확인하기",
+        "parameters": [
+          {
+            "name": "beer",
+            "in": "path",
+            "description": "맥주 상품의 인덱스",
+            "required": true,
+            "type": "objectId"
+          }
+        ],
+        "responses": {}
+      }
+    },
+    "/api/beer": {
+      "post": {
+        "tags": ["Beer"],
+        "description": "맥주 작성하기 [관리자 사용]",
+        "security": [{
+          "Bearer": []
+        }],
+        "parameters": [
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name_korean": {
+                  "type": "string",
+                  "example": "곰표 맥주"
+                },
+                "name_english": {
+                  "type": "string",
+                  "example": "Gompyo"
+                },
+                "image": {
+                  "type": "string",
+                  "example": "..."
+                },
+                "degree": {
+                  "type": "number",
+                  "description": "맥주 도수",
+                  "example": 5
+                },
+                "categoryId": {
+                  "type": "objectId",
+                  "description": "맥주 카테고리 인덱스",
+                  "example": "..."
+                },
+                "hashtag": {
+                  "type": "array",
+                  "example": ["달달함","대한민국"]
+                },
+                "features": {
+                  "type": "object",
+                  "description": "맥주 특징",
+                  "example": {
+                    "bitter": 1,
+                    "crispy": 1,
+                    "flavor": 1,
+                    "sweet": 1,
+                    "nutty": 1
+                  }
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      },
+      "get": {
+        "tags": ["Beer"],
+        "description": "맥주 가져오기",
+        "parameters": [
+          {
+            "name": "beerId",
+            "in": "path",
+            "description": "전체 갖고올 시 Param 값 X ,특정 맥주 가져올 때만 param O",
+            "type": "objectId"
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Beer"],
+        "description": "맥주 삭제하기 [관리자 사용]",
+        "security": [{
+          "Bearer": []
+        }],
+        "parameters": [
+          {
+            "name": "beerId",
+            "in": "path",
+            "required": true,
+            "type": "objectId"
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/api/beerCategory": {
+      "post": {
+        "tags": ["Beer Category"],
+        "description": "맥주 카테고리 작성하기 [관리자 사용]",
+        "security": [{
+          "Bearer": []
+        }],
+        "parameters": [
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "example": "IPA"
+                },
+                "image": {
+                  "type": "string",
+                  "example": "..."
+                },
+                "features": {
+                  "type": "object",
+                  "example": "..."
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      },
+      "get": {
+        "tags": ["Beer Category"],
+        "description": "맥주 카테고리 가져오기",
+        "parameters": [
+          {
+            "name": "beerCategoryId",
+            "in": "path",
+            "description": "전체 갖고올 시 Param 값 X ,특정 카테고리 가져올 때만 param O",
+            "type": "objectId"
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/api/recommendation": {
+      "post": {
+        "tags": ["Slack"],
+        "description": "사용자의 맥주 추천 [로그인 필요]",
+        "security": [{
+          "Bearer": []
+        }],
+        "parameters": [
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "beer": {
+                  "type": "string",
+                  "example": "추천하는 맥주 아름"
+                },
+                "description": {
+                  "type": "string",
+                  "example": "맥주 설명"
+                },
+                "location": {
+                  "type": "string",
+                  "example": "맥주 판매처"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {}
+      }
+    },
+    "/api/complaint": {
+      "post": {
+        "tags": ["Slack"],
+        "description": "사용자 건의 [로그인 필요]",
+        "security": [{
+          "Bearer": []
+        }],
+        "properties": [
+        {
+          "title": {
+            "type": "string",
+            "example": "개선"
+          },
+          "description": {
+            "type": "string",
+            "example": "개선 내용"
+          }
+        }
+      ],
+        "responses": {}
+      }
+    }
+  },
+  "definitions": {}
+}
