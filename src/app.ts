@@ -38,11 +38,10 @@ const app = express();
 connect();
 
 // using https
-// const options = {
-//     key: fs.readFileSync("pems/garden-key.pem", "utf-8"),
-//     cert: fs.readFileSync("pems/garden-cert.pem", "utf-8"),
-//     agent: false
-// };
+const options = {
+    key: fs.readFileSync("forhttps/gardenkey.key"),
+    cert: fs.readFileSync("forhttps/XN--WH1BO80AC4CI9A_shop.crt")
+};
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
@@ -85,17 +84,13 @@ app.use("/api/recommendation", [recommendationRouter]);
 app.use("/api/crawling/beercategory", [beerCategoryCrawlingRouter]);
 app.use("/api/crawling/beer", [beerCrawlingRouter]);
 
-app.get("/.well-known/pki-validation/2EEBA01B88D40DE743290182B86FC99B.txt", (req, res) => {
-    res.redirect("https://drive.google.com/uc?id=1GjxUJAUzop7oACRaBxLodwSrvMk4I7U7&export=download");
-})
+// app.listen(5209, () => {
+//     console.log("listening at http://localhost:5209");
+// })
 
-app.listen(5209, () => {
-    console.log("listening at http://localhost:5209");
-})
-
-// const httpServer = https.createServer(options, app);
-// httpServer.listen(5209, () => {
-//     console.log("listening at https://localhost:5209 at " + new Date() + "now");
-// });
+const httpServer = https.createServer(options, app);
+httpServer.listen(5209, () => {
+    console.log("listening at https://localhost:5209 at " + new Date() + " now");
+});
 
 export { app };
