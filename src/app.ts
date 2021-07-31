@@ -102,6 +102,6 @@ if (app.get("env") == "development") {
     secure.listen(5209, () => {
         console.log("server running..");
     })
-}
+} 
 
 export { app };
