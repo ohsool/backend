@@ -1,6 +1,5 @@
 // crawling beers
 
-
 import express, { Request, Response, NextFunction, Router, response } from "express";
 import Beers from "../schemas/beer";
 import BeerCategories from "../schemas/beerCategory";
