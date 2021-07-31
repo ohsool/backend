@@ -1,7 +1,7 @@
 import express, {Request, Response, NextFunction} from "express";
-import BeerCategory from "../schemas/beerCategory";
+import BeerCategories from "../schemas/beerCategory";
 
-const getBeerCategories = async(req, res) => {
+const getBeerCategories = async(req: Request, res: Response) => {
     try {
         const beerCategories = await BeerCategories.find();
         res.json({ beerCategories });
@@ -10,7 +10,7 @@ const getBeerCategories = async(req, res) => {
     }
 }
 
-const postBeerCategory = async(req, res) => {
+const postBeerCategory = async(req: Request, res: Response) => {
     try {
         const { name, image, features } = req.body;
         const isExist = await BeerCategories.findOne({ name, image, features });
@@ -26,7 +26,7 @@ const postBeerCategory = async(req, res) => {
     }
 }
 
-const getBeerCategory = async(req, res) => {
+const getBeerCategory = async(req: Request, res: Response) => {
     try {
         const { beerCategoryId } = req.params;
 
