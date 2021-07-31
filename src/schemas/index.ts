@@ -14,7 +14,7 @@ const connect = (): void => {
         ignoreUndefined: true,
         server: {
             ssl: true,
-            sslValidate: false,
+            sslValidate: true,
         },
         user:"test",
         pass:"test"
