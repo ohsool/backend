@@ -41,18 +41,22 @@ import { env } from "./env";
 
 const port = env.port;
 const app = express();
+console.log("mongodb connecting...");
 connect();
+console.log("mongodb connecting success");
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(bodyParser.json());
 
 // initialize google authenticate
+console.log("passport initializing...")
 app.use(passport.initialize());
 app.use(passport.session());
 
 googlePassportConfig();
 kakaoPassportConfig();
+console.log("passport initializing done");
  
 app.use('/swagger', swaggerUi.serve, swaggerUi.setup(swaggerFile))
 
