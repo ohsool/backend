@@ -89,13 +89,13 @@ app.use("/api/recommendation", [recommendationRouter]);
 app.use("/api/crawling/beercategory", [beerCategoryCrawlingRouter]);
 app.use("/api/crawling/beer", [beerCrawlingRouter]);
 
-// app.listen(5209, () => {
-//     console.log("listening at http://localhost:5209");
-// })
+app.listen(5209, () => {
+    console.log("listening at http://localhost:5209");
+})
 
-const httpServer = https.createServer(options, app);
-httpServer.listen(5209, () => {
-    console.log("listening at https://localhost:5209 at " + new Date() + " now");
-});
+// const httpServer = https.createServer(options, app);
+// httpServer.listen(5209, () => {
+//     console.log("listening at https://localhost:5209 at " + new Date() + " now");
+// });
 
 export { app };
