@@ -9,7 +9,9 @@ const connect = (): void => {
         useNewUrlParser: true,
         useUnifiedTopology: true,
         useCreateIndex: true,
-        ignoreUndefined: true
+        ignoreUndefined: true,
+        user:"test",
+        pass:"test"
       })
       .catch((err) => {
         console.log(err);
