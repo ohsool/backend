@@ -16,7 +16,7 @@ const connect = (): void => {
         sslValidate: false,
         user:"test",
         pass:"test"
-      })
+      }) 
       .catch((err) => {
         console.log(err);
       });
