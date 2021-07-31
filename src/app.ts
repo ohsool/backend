@@ -8,6 +8,7 @@ import express, {Request, Response, NextFunction} from 'express';
 import bodyParser from 'body-parser';
 import cors from "cors";
 import passport from "passport";
+import dotenv from "dotenv";
 import https from "https";
 import fs from "fs";
 
@@ -34,13 +35,17 @@ const swaggerFile =  require('../swagger/swagger-output.json')
 // importing DB
 import { connect } from './schemas';
 
+// importing env
+import { env } from "./env";
+
+const port = env.port;
 const app = express();
 connect();
 
 // using https
 const options = {
-    key: fs.readFileSync("forhttps/gardenkey.key"),
-    cert: fs.readFileSync("forhttps/XN--WH1BO80AC4CI9A_shop.crt")
+    key: fs.readFileSync("forhttps/gardenkey.key", "utf-8"),
+    cert: fs.readFileSync("forhttps/public.pem", "utf-8")
 };
 
 app.use(express.urlencoded({ extended: false }));
@@ -84,9 +89,13 @@ app.use("/api/recommendation", [recommendationRouter]);
 app.use("/api/crawling/beercategory", [beerCategoryCrawlingRouter]);
 app.use("/api/crawling/beer", [beerCrawlingRouter]);
 
-app.listen(5209, () => {
-    console.log("listening at http://localhost:5209");
-})
+// app.listen(5209, () => {
+//     console.log("listening at http://localhost:5209");
+// })
 
+const httpServer = https.createServer(options, app);
+httpServer.listen(5209, () => {
+    console.log("listening at https://localhost:5209 at " + new Date() + " now");
+});
 
 export { app };
