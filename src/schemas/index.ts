@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 import { env } from "../env";
 
 // const url = env.url;
-const url = 'mongodb://localhost:27017/ohsool_dev?ssl=true'
+const url = 'mongodb://localhost:27017/ohsool_dev'
 console.log("mongo:::", url)
 
 const connect = (): void => {
@@ -12,6 +12,8 @@ const connect = (): void => {
         useUnifiedTopology: true,
         useCreateIndex: true,
         ignoreUndefined: true,
+        ssl: true,
+        sslValidate: false,
         user:"test",
         pass:"test"
       })
