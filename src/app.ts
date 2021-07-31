@@ -88,10 +88,12 @@ app.use("/api/crawling/beer", [beerCrawlingRouter]);
 //     console.log("listening at http://localhost:5209");
 // })
 
-// using https
+// using http secure
 if (app.get("env") == "development") {
+    console.log("development env");
+
     const options = {
-        key: fs.readFileSync("../../security/gardenkey.key", "utf-8"),
+        key: fs.readFileSync("security/gardenkey.key", "utf-8"),
         cert: fs.readFileSync("security/public.pem", "utf-8")
     };
 
