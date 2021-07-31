@@ -84,22 +84,22 @@ app.use("/api/recommendation", [recommendationRouter]);
 app.use("/api/crawling/beercategory", [beerCategoryCrawlingRouter]);
 app.use("/api/crawling/beer", [beerCrawlingRouter]);
 
-// app.listen(5209, () => {
-//     console.log("listening at http://localhost:5209");
-// })
+app.listen(5209, () => {
+    console.log("listening at http://localhost:5209");
+})
 
 // using https
-if (app.get("env") == "development") {
-    const options = {
-        key: fs.readFileSync("security/gardenkey.key", "utf-8"),
-        cert: fs.readFileSync("security/public.pem", "utf-8")
-    };
+// if (app.get("env") == "development") {
+//     const options = {
+//         key: fs.readFileSync("security/gardenkey.key", "utf-8"),
+//         cert: fs.readFileSync("security/public.pem", "utf-8")
+//     };
 
-    const secure = https.createServer(options, app);
+//     const secure = https.createServer(options, app);
 
-    secure.listen(5209, () => {
-        console.log("server running..");
-    })
-}
+//     secure.listen(5209, () => {
+//         console.log("server running..");
+//     })
+// }
 
 export { app };
