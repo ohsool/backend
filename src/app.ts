@@ -39,8 +39,8 @@ connect();
 
 // using https
 const options = {
-    key: fs.readFileSync("forhttps/gardenkey.key"),
-    cert: fs.readFileSync("forhttps/XN--WH1BO80AC4CI9A_shop.crt")
+    key: fs.readFileSync("forhttps/gardenkey.key", "utf-8"),
+    cert: fs.readFileSync("forhttps/public.pem", "utf-8")
 };
 
 app.use(express.urlencoded({ extended: false }));
