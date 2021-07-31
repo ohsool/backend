@@ -12,8 +12,8 @@ const connect = (): void => {
         useUnifiedTopology: true,
         useCreateIndex: true,
         ignoreUndefined: true,
-        ssl: true,
-        sslValidate: true,
+//         ssl: true,
+//         sslValidate: true,
         user:"test",
         pass:"test"
       }) 
