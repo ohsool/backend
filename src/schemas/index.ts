@@ -18,6 +18,7 @@ const connect = (): void => {
         pass:"test"
       }) 
       .catch((err) => {
+        console.log('여기가 맞음');
         console.log(err);
       });
   };
