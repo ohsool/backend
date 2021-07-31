@@ -87,6 +87,7 @@ app.use("/api/crawling/beer", [beerCrawlingRouter]);
 // app.listen(5209, () => {
 //     console.log("listening at http://localhost:5209");
 // })
+console.log(app.get("env"))
 
 // using http secure
 if (app.get("env") == "development") {
