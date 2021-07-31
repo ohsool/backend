@@ -90,6 +90,8 @@ app.use("/api/crawling/beer", [beerCrawlingRouter]);
 
 // using http secure
 if (app.get("env") == "development") {
+    console.log("development env");
+
     const options = {
         key: fs.readFileSync("security/gardenkey.key", "utf-8"),
         cert: fs.readFileSync("security/public.pem", "utf-8")
@@ -97,7 +99,7 @@ if (app.get("env") == "development") {
 
     const secure = https.createServer(options, app);
 
-    secure.listen(443, () => {
+    secure.listen(5209, () => {
         console.log("server running..");
     })
 }
