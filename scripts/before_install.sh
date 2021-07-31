@@ -28,6 +28,3 @@ if [ -d "$DIST" ]; then
   sudo rm -r /home/ec2-user/ohsool/dist
   echo "${DIST} removed"
 fi
-
-# production 상태로 전환
-set NODE_ENV=production
