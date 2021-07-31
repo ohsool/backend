@@ -91,7 +91,7 @@ app.use("/api/crawling/beer", [beerCrawlingRouter]);
 // using https
 if (app.get("env") == "development") {
     const options = {
-        key: fs.readFileSync("security/gardenkey.key", "utf-8"),
+        key: fs.readFileSync("../../security/gardenkey.key", "utf-8"),
         cert: fs.readFileSync("security/public.pem", "utf-8")
     };
 
