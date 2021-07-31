@@ -8,6 +8,7 @@ import express, {Request, Response, NextFunction} from 'express';
 import bodyParser from 'body-parser';
 import cors from "cors";
 import passport from "passport";
+import dotenv from "dotenv";
 import https from "https";
 import fs from "fs";
 
@@ -34,6 +35,10 @@ const swaggerFile =  require('../swagger/swagger-output.json')
 // importing DB
 import { connect } from './schemas';
 
+// importing env
+import { env } from "./env";
+
+const port = env.port;
 const app = express();
 connect();
 
@@ -92,5 +97,6 @@ const httpServer = https.createServer(options, app);
 httpServer.listen(5209, () => {
     console.log("listening at https://localhost:5209 at " + new Date() + " now");
 });
+
 
 export { app };
