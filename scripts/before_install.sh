@@ -6,7 +6,8 @@ curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.34.0/install.sh | bash
 nvm install node
 
 # production 상태로 전환
-set NODE_ENV=production
+export NODE_ENV=production
+echo "${NODE_ENV} mode is on"
 
 # 80, 443 포트로 들어오는 사용자들을 5209 포트로 우회하기
 sudo iptables -t nat -A PREROUTING -i eth0 -p tcp --dport 80 -j REDIRECT --to-port 5209
