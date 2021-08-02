@@ -2,7 +2,11 @@ import mongoose from "mongoose";
 
 import { env } from "../env";
 
-const url = env.url;
+// const url = env.url;
+const user = env.user;
+const pass = env.pass;
+
+const url = "mongodb://localhost:27017/ohsool"
 
 const connect = (): void => {
     mongoose
@@ -11,8 +15,8 @@ const connect = (): void => {
         useUnifiedTopology: true,
         useCreateIndex: true,
         ignoreUndefined: true,
-        user: env.user,
-        pass: env.pass
+        // user: "ohsool_admin",
+        // pass: pass
       })
       .catch((err) => {
         console.log(err);
