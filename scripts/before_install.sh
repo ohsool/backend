@@ -23,8 +23,8 @@ else
 fi
 
 # Typescript에서 컴파일된 JS 파일을 저장하는 폴더를 삭제한다. (다시 run build를 통해 생성될 예정)
-DIST="/home/ec2-user/ohsool/dist"
-if [ -d "$DIST" ]; then
-  sudo rm -r /home/ec2-user/ohsool/dist
-  echo "${DIST} removed"
-fi
+# DIST="/home/ec2-user/ohsool/dist"
+# if [ -d "$DIST" ]; then
+#   sudo rm -r /home/ec2-user/ohsool/dist
+#   echo "${DIST} removed"
+# fi
