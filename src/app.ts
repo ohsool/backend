@@ -94,9 +94,9 @@ app.use("/api/crawling/beer", [beerCrawlingRouter]);
 
 if (app.get("env") == "development") {
     const options = {
-        key: fs.readFileSync("../ssl/ohsoolkey.key", "utf-8"),
-        cert: fs.readFileSync("../ssl/ohsoolcert.crt", "utf-8"),
-        ca: fs.readFileSync("../ssl/ohsool.ca")
+        key: fs.readFileSync("ssl/ohsoolkey.key", "utf-8"),
+        cert: fs.readFileSync("ssl/ohsoolcert.crt", "utf-8"),
+        ca: fs.readFileSync("ssl/ohsool.ca")
     };
 
     // const secure = https.createServer(options, app);
