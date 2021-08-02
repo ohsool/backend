@@ -3,6 +3,8 @@ import Users from "../schemas/user";
 import passportRouter from "passport";
 import GoogleStrategy, { Strategy } from "passport-google-oauth2";
 
+import { env } from "../env";
+
 const googlePassportConfig = () => {
     passportRouter.serializeUser((user, done) => {
         done(null, user);
@@ -13,9 +15,9 @@ const googlePassportConfig = () => {
     });
 
     passportRouter.use(new Strategy({
-        clientID: "191938571707-m8nhi8j2inb8dn0c0pq99f3gc1hd9sfd.apps.googleusercontent.com",
-        clientSecret: "vgLllg0mbn2wmTQu8gR83mqc",
-        callbackURL: "http://XN--WH1BO80AC4CI9A.shop/api/user/google/callback"
+        clientID: env.clientId_google,
+        clientSecret: env.clientSecret_google,
+        callbackURL: env.callbackUrl_google
     },
     async function(accessToken, refreshToken, profile, done: GoogleStrategy.VerifyCallback) {
         const userId = profile.id;
