@@ -10,13 +10,15 @@ const client = new WebClient(env.botUserOAuthToken, {
 
 const recommendationRouter = express.Router();
 
-recommendationRouter.post("/", authMiddleware, async (req, res) => {
+recommendationRouter.post("/", async (req, res) => {
     let { beer, description, location, image } = req.body;
-    let nickname = res.locals.user.nickname;
+    // let nickname = res.locals.user.nickname;
 
-    if (!nickname) {
-        nickname = "Anonymous";
-    }
+    // if (!nickname) {
+    //     nickname = "Anonymous";
+    // }
+    const nickname = "Anonymous";
+
     if (!location) {
         location = "Unknown";
     }
