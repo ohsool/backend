@@ -12,6 +12,7 @@ import dotenv from "dotenv";
 import fs from "fs";
 import http from "http";
 import https from "https";
+import path from "path";
 
 // importing APIs
 import { userRouter } from './routers/user';
@@ -94,9 +95,9 @@ app.use("/api/crawling/beer", [beerCrawlingRouter]);
 
 if (app.get("env") == "development") {
     const options = {
-        key: fs.readFileSync("ssl/ohsoolkey.key", "utf-8"),
-        cert: fs.readFileSync("ssl/ohsoolcert.crt", "utf-8"),
-        ca: fs.readFileSync("ssl/ohsool.ca")
+        key: fs.readFileSync(path.join(__dirname, "ssl", "ohsoolkey.key")),
+        cert: fs.readFileSync(path.join(__dirname, "ssl", "ssl/ohsoolcert.crt")),
+        ca: fs.readFileSync(path.join(__dirname, "ssl", "ssl/ohsool.ca"))
     };
 
     // const secure = https.createServer(options, app);
