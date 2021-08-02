@@ -1,7 +1,9 @@
 import mongoose from "mongoose";
 import { env } from "../env";
 
-const url = env.url;
+// const url = env.url;
+const url = 'mongodb://localhost:27017/ohsool_dev'
+console.log("mongo:::", url)
 
 const connect = (): void => {
     mongoose
@@ -10,10 +12,13 @@ const connect = (): void => {
         useUnifiedTopology: true,
         useCreateIndex: true,
         ignoreUndefined: true,
-        user: "test",
-        pass: "test"
-      })
+//         ssl: true,
+//         sslValidate: true,
+        user:"test",
+        pass:"test"
+      }) 
       .catch((err) => {
+        console.log('여기가 맞음');
         console.log(err);
       });
   };

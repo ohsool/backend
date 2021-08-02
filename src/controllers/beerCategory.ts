@@ -1,5 +1,5 @@
 import express, {Request, Response, NextFunction} from "express";
-import BeerCategory from "../schemas/beerCategory";
+import BeerCategories from "../schemas/beerCategory";
 
 const getBeerCategories = async(req: Request, res: Response) => {
     try {

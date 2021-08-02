@@ -10,6 +10,7 @@ import cors from "cors";
 import passport from "passport";
 import dotenv from "dotenv";
 import https from "https";
+import http from "http";
 import fs from "fs";
 
 // importing APIs
@@ -40,25 +41,22 @@ import { env } from "./env";
 
 const port = env.port;
 const app = express();
+console.log("mongodb connecting...");
 connect();
-
-// using https
-// const options = {
-//     key: fs.readFileSync("pems/garden-key.pem", "utf-8"),
-//     cert: fs.readFileSync("pems/garden-cert.pem", "utf-8"),
-//     agent: false
-// };
+console.log("mongodb connecting success");
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(bodyParser.json());
 
 // initialize google authenticate
+console.log("passport initializing...")
 app.use(passport.initialize());
 app.use(passport.session());
 
 googlePassportConfig();
 kakaoPassportConfig();
+console.log("passport initializing done");
  
 app.use('/swagger', swaggerUi.serve, swaggerUi.setup(swaggerFile))
 
@@ -90,18 +88,25 @@ app.use("/api/recommendation", [recommendationRouter]);
 app.use("/api/crawling/beercategory", [beerCategoryCrawlingRouter]);
 app.use("/api/crawling/beer", [beerCrawlingRouter]);
 
+// app.listen(5209, () => {
+//     console.log("listening at http://localhost:5209");
+// })
+console.log(app.get("env"))
 
-app.get("/.well-known/pki-validation/2EEBA01B88D40DE743290182B86FC99B.txt", (req, res) => {
-    res.redirect("https://drive.google.com/uc?id=1GjxUJAUzop7oACRaBxLodwSrvMk4I7U7&export=download");
-})
+// using http secure
+if (app.get("env") == "development") {
+    console.log("development env");
 
-app.listen(port, () => {
-    console.log(`listening at http://localhost:${ port }`);
-});
+    const options = {
+        key: fs.readFileSync("security/gardenkey.key", "utf-8"),
+        cert: fs.readFileSync("security/public.pem", "utf-8")
+    };
 
-// const httpServer = https.createServer(options, app);
-// httpServer.listen(5209, () => {
-//     console.log("listening at https://localhost:5209 at " + new Date() + "now");
-// });
+    const secure = https.createServer(options, app);
+
+    secure.listen(5209, () => {
+        console.log("server running..");
+    })
+} 
 
 export { app };
