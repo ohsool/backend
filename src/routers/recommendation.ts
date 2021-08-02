@@ -2,8 +2,9 @@ import express, { Request, Response, NextFunction, Router, response } from "expr
 import webhook, { WebClient, LogLevel } from "@slack/web-api";
 
 import { authMiddleware } from "../middlewares/auth-middleware";
+import { env } from "../env";
 
-const client = new WebClient("xoxb-", {
+const client = new WebClient(env.botUserOAuthToken, {
     logLevel: LogLevel.DEBUG
 });
 
