@@ -11,8 +11,8 @@ const connect = (): void => {
         useUnifiedTopology: true,
         useCreateIndex: true,
         ignoreUndefined: true,
-        user: "ohsool_admin",
-        pass: "ohsool5209"
+        user: env.user,
+        pass: env.pass
       })
       .catch((err) => {
         console.log(err);

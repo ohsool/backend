@@ -15,4 +15,6 @@ export const env = {
     clientSecret_google: String(process.env.CLIENTSECRET_GOOGLE),
     callbackUrl_google: String(process.env.CALLBACKURL_GOOGLE),
     botUserOAuthToken: String(process.env.BOTUSEROAUTHTOKEN),
+    user: String(process.env.USER),
+    pass: String(process.env.PASS)
 };
