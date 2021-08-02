@@ -10,6 +10,7 @@ import cors from "cors";
 import passport from "passport";
 import dotenv from "dotenv";
 import fs from "fs";
+import http from "http";
 import https from "https";
 
 // importing APIs
@@ -98,10 +99,17 @@ if (app.get("env") == "development") {
         ca: fs.readFileSync("../ssl/ohsool.ca")
     };
 
-    const secure = https.createServer(options, app);
+    // const secure = https.createServer(options, app);
 
-    secure.listen(5209, () => {
-        console.log("server running..");
+    // secure.listen(5209, () => {
+    //     console.log("server running..");
+    // })
+
+    http.createServer(app).listen(5209, () => {
+        console.log("http opened in 5209");
+    });
+    https.createServer(options, app).listen(443, () => {
+        console.log("https opened in 443");
     })
 }
 
