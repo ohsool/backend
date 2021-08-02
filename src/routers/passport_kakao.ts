@@ -2,6 +2,7 @@ import jwt from "jsonwebtoken";
 import Users from "../schemas/user";
 import passportRouter from "passport";
 import KakaoStrategy, { Strategy } from "passport-kakao";
+import { env } from "../env";
 
 const kakaoPassportConfig = () => {
     passportRouter.serializeUser((user, done) => {
@@ -15,9 +16,9 @@ const kakaoPassportConfig = () => {
     // https://kauth.kakao.com/oauth/authorize?response_type=code&redirect_uri=http%3A%2F%2Flocalhost%3A5209%2Fapi%2Fuser%2Fkakao%2Fcallback&client_id=e37e7e15c49d382837d031d60c753b43
 
     passportRouter.use(new Strategy({
-        clientID: "e37e7e15c49d382837d031d60c753b43",
-        clientSecret: "13fdRoU16v1eX7rJm2u1HaNZ8ICy1xkO",
-        callbackURL: "http://오늘의술.shop/api/user/kakao/callback"
+        clientID: env.clientId_kakao,
+        clientSecret: env.clientSecret_kakao,
+        callbackURL: env.callbackUrl_kakao
     },
     async function(accessToken, refreshToken, profile, done) {
         const userId = String(profile.id);
