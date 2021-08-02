@@ -9,9 +9,6 @@ import bodyParser from 'body-parser';
 import cors from "cors";
 import passport from "passport";
 import dotenv from "dotenv";
-import https from "https";
-import http from "http";
-import fs from "fs";
 
 // importing APIs
 import { userRouter } from './routers/user';
@@ -88,25 +85,8 @@ app.use("/api/recommendation", [recommendationRouter]);
 app.use("/api/crawling/beercategory", [beerCategoryCrawlingRouter]);
 app.use("/api/crawling/beer", [beerCrawlingRouter]);
 
-// app.listen(5209, () => {
-//     console.log("listening at http://localhost:5209");
-// })
-console.log(app.get("env"))
-
-// using http secure
-if (app.get("env") == "development") {
-    console.log("development env");
-
-    const options = {
-        key: fs.readFileSync("security/gardenkey.key", "utf-8"),
-        cert: fs.readFileSync("security/public.pem", "utf-8")
-    };
-
-    const secure = https.createServer(options, app);
-
-    secure.listen(5209, () => {
-        console.log("server running..");
-    })
-} 
+app.listen(5209, () => {
+    console.log("listening at http://localhost:5209");
+})
 
 export { app };

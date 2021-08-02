@@ -1,9 +1,9 @@
 import mongoose from "mongoose";
+
 import { env } from "../env";
 
-// const url = env.url;
-const url = 'mongodb://localhost:27017/ohsool_dev'
-console.log("mongo:::", url)
+//const url = env.url;
+const url = "mongodb://localhost:27017/ohsool_dev";
 
 const connect = (): void => {
     mongoose
@@ -12,8 +12,8 @@ const connect = (): void => {
         useUnifiedTopology: true,
         useCreateIndex: true,
         ignoreUndefined: true,
-        user:"test",
-        pass:"test"
+        user: "test",
+        pass: "test"
       })
       .catch((err) => {
         console.log(err);
