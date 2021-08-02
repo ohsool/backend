@@ -56,6 +56,13 @@ const deleteBeer = async(req: Request, res: Response) => {
     }
 }
 
+const likeBeer = async(req: Request, res: Response) => {
+    const { userId } = res.locals.user._id;
+
+    try {
+    }
+}
+
 export default {
     getBeers,
     postBeer,

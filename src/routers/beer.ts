@@ -11,4 +11,8 @@ beerRouter.get("/:beerId", BeerController.getBeer);
 
 beerRouter.delete("/:beerId", BeerController.deleteBeer);
 
+beerRouter.put("/like", BeerController.likeBeer);
+
+beerRouter.put("/unlike", BeerController.unlikeBeer);
+
 export { beerRouter };
