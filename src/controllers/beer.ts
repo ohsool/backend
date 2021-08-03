@@ -1,6 +1,7 @@
 import express, {Request, Response, NextFunction} from 'express';
 import Beers from "../schemas/beer";
 import mongoose from "mongoose";
+import beer from '../schemas/beer';
 
 const getBeers = async(req: Request, res: Response) => {
     try {
@@ -69,6 +70,9 @@ const likeBeer = async(req: Request, res: Response) => {
             res.status(400).send({ message: "user already liked this beer" });
             return;
         }
+
+        await Beers.findOneAndUpdate({_id: beerId}, {$push: {like_array: userId}});
+
         res.json({ message: "success" });
     } catch(error) {
         res.status(400).send({ message: "failed", error });
@@ -87,7 +91,8 @@ const unlikeBeer = async(req: Request, res: Response) => {
             res.status(400).send({ message: "user has never liked this beer" });
             return;
         }
-        res.json({ message: "success" });
+
+        res.status(400).send({ message: "user has never liked this beer" });
     } catch(error) {
         res.status(400).send({ message: "failed", error });
     }
