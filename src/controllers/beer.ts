@@ -89,8 +89,6 @@ const unlikeBeer = async(req: Request, res: Response) => {
             res.status(400).send({ message: "user has never liked this beer" });
             return;
         }
-
-        res.status(400).send({ message: "user has never liked this beer" });
     } catch(error) {
         res.status(400).send({ message: "failed", error });
     }
