@@ -62,7 +62,7 @@ const likeBeer = async(req: Request, res: Response) => {
 
     try {
         const exists = await Beers.find({ like_array: mongoose.Types.ObjectId(userId) });
-        console.log(exists.length)
+
         if(exists.length == 0) {
             await Beers.findOneAndUpdate({_id: beerId}, {$push: {like_array: userId}});
         } else if(exists.length) {
