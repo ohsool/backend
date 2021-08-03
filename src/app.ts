@@ -110,8 +110,8 @@ if (app.get("env") == "development") {
     };
 
     const secure = https.createServer(options, app);
-    secure.listen(5209, () => {
-        console.log("server running..");
+    secure.listen(port, () => {
+        console.log(`server running.. ${port}`);
     })
 }
 
