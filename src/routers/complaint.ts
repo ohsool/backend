@@ -10,14 +10,13 @@ const client = new WebClient(env.botUserOAuthToken, {
 
 const complaintRouter = express.Router();
 
-complaintRouter.post("/", async (req, res) => {
+complaintRouter.post("/", authMiddleware, async (req, res) => {
     const { title, description } = req.body;
-    // let nickname = res.locals.user.nickname;
-    const nickname = "Anonymous";
+    let nickname = res.locals.user.nickname;
 
-    // if (!nickname) {
-    //     nickname = "Anonymous";
-    // }
+    if (!nickname) {
+        nickname = "Anonymous";
+    }
 
     try {
         const result = await client.chat.postMessage({
