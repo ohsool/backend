@@ -1,5 +1,6 @@
 import express, {Request,Response,NextFunction,Router,response,} from "express";
 import moment from "moment";
+import tz from "moment-timezone";
 
 import MyBeer from "../schemas/mybeer";
 import Beers from "../schemas/beer";
@@ -49,7 +50,7 @@ myBeerRouter.post("/", authMiddleware, async (req, res) => {
 
     const userId = res.locals.user._id;
 
-    const date = moment().format("YYYY-MM-DD hh:mm A");
+    const date = moment().tz("Asia/Seoul").format("YYYY-MM-DD hh:mm A");
 
     try {
         const myBeer = await MyBeer.create({ beerId, userId, myFeatures, date, location, rate, review});
