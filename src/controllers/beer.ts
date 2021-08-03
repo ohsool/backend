@@ -50,7 +50,7 @@ const deleteBeer = async(req: Request, res: Response) => {
 
     try {
         await Beers.findOneAndDelete({ _id: beerId });
-        res.json({ message: "success"})
+        res.json({ message: "success"});
     } catch(error) {
         res.status(400).send({ message: "failed deleting beer from the database" });
     }
@@ -58,8 +58,25 @@ const deleteBeer = async(req: Request, res: Response) => {
 
 const likeBeer = async(req: Request, res: Response) => {
     const { userId } = res.locals.user._id;
+    const { beerId } = req.params;
 
     try {
+        await Beers.update({ _id: beerId }, {$push: { like_array: userId }});
+        res.json({ message: "success" });
+    } catch(error) {
+        res.status(400).send({ message: "failed", error });
+    }
+}
+
+const unlikeBeer = async(req: Request, res: Response) => {
+    const { userId } = res.locals.user._id;
+    const { beerId } = req.params;
+
+    try {
+        await Beers.update({ _id: beerId }, {$push: { like_array: userId }});
+        res.json({ message: "success" });
+    } catch(error) {
+        res.status(400).send({ message: "failed", error });
     }
 }
 
@@ -67,5 +84,7 @@ export default {
     getBeers,
     postBeer,
     getBeer,
-    deleteBeer
+    deleteBeer,
+    likeBeer,
+    unlikeBeer
 }
