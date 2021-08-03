@@ -59,7 +59,7 @@ beerCrawlingRouter.post("/", async(req, res) => {
         {
             name_korean: "아사히",
             name_english: "Asahi",
-            image: "https://drive.google.com/uc?export=view&id=1saRgrv4DHbJ8u2EQSAQPo3pcnfdfKTJ ",
+            image: "https://drive.google.com/uc?export=view&id=1saRgrv4DHbJ8u2EQSAQPo3pcnfdfKTJ- ",
             degree: 5.0,
             categoryId: beerCategoryArray[0][0],
             hashtag: [
@@ -111,7 +111,7 @@ beerCrawlingRouter.post("/", async(req, res) => {
         {
             name_korean: "더 젠틀맨 라거",
             name_english: "The Gentleman Lager",
-            image: "https://drive.google.com/uc?export=view&id=/1kTlJxygEsJ_G6lunKWnLwTWOQMe_1GCj ",
+            image: "https://drive.google.com/uc?export=view&id=1kTlJxygEsJ_G6lunKWnLwTWOQMe_1GCj ",
             degree: 7.6,
             categoryId: beerCategoryArray[1][0],
             hashtag: [
