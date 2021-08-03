@@ -30,7 +30,7 @@ const getBeerCategory = async(req: Request, res: Response) => {
     try {
         const { beerCategoryId } = req.params;
 
-        const beerCategory = BeerCategories.findById(beerCategoryId);
+        const beerCategory = await BeerCategories.findById(beerCategoryId);
         if(beerCategory) {
             res.json({ beerCategory });
         } else {
