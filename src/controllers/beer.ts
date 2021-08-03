@@ -57,7 +57,7 @@ const deleteBeer = async(req: Request, res: Response) => {
 }
 
 const likeBeer = async(req: Request, res: Response) => {
-    const { userId } = res.locals.user._id;
+    const userId = res.locals.user._id;
     const { beerId } = req.params;
 
     try {
@@ -69,7 +69,7 @@ const likeBeer = async(req: Request, res: Response) => {
 }
 
 const unlikeBeer = async(req: Request, res: Response) => {
-    const { userId } = res.locals.user._id;
+    const userId = res.locals.user._id;
     const { beerId } = req.params;
 
     try {
