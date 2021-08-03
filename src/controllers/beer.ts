@@ -71,8 +71,6 @@ const likeBeer = async(req: Request, res: Response) => {
             return;
         }
 
-        await Beers.findOneAndUpdate({_id: beerId}, {$push: {like_array: userId}});
-
         res.json({ message: "success" });
     } catch(error) {
         res.status(400).send({ message: "failed", error });
@@ -91,8 +89,6 @@ const unlikeBeer = async(req: Request, res: Response) => {
             res.status(400).send({ message: "user has never liked this beer" });
             return;
         }
-
-        res.status(400).send({ message: "user has never liked this beer" });
     } catch(error) {
         res.status(400).send({ message: "failed", error });
     }
