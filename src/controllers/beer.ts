@@ -61,7 +61,12 @@ const likeBeer = async(req: Request, res: Response) => {
     const { beerId } = req.params;
 
     try {
-        await Beers.findOneAndUpdate({ _id: beerId }, {$push: { like_array: userId }});
+        const exists = await Beers.find({ like_array: userId });
+        if(!exists) {
+            await Beers.findOneAndUpdate({_id: beerId}, {$push: {like_array: userId}});
+        } else {
+            res.status(400).send({ message: "user already liked this beer" });
+        }
         res.json({ message: "success" });
     } catch(error) {
         res.status(400).send({ message: "failed", error });
