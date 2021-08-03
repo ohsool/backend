@@ -62,15 +62,13 @@ const likeBeer = async(req: Request, res: Response) => {
     const { beerId } = req.params;
 
     try {
-        const beer = await Beers.findOne({ _id: beerId });
-        const like_array = beer.like_array;
-
-        for (let i = 0; i < like_array.length; i ++) {
-            if (like_array[i] == userId) {
-                res.status(400).send({ message: "user already liked this beer" });
-
-                return;
-            }
+        const exists = await Beers.find({ like_array: mongoose.Types.ObjectId(userId) });
+        console.log(exists.length)
+        if(exists.length == 0) {
+            await Beers.findOneAndUpdate({_id: beerId}, {$push: {like_array: userId}});
+        } else if(exists.length) {
+            res.status(400).send({ message: "user already liked this beer" });
+            return;
         }
 
         await Beers.findOneAndUpdate({_id: beerId}, {$push: {like_array: userId}});
@@ -86,17 +84,12 @@ const unlikeBeer = async(req: Request, res: Response) => {
     const { beerId } = req.params;
 
     try {
-        const beer = await Beers.findOne({ _id: beerId });
-        const like_array = beer.like_array;
-
-        for (let i = 0; i < like_array.length; i ++) {
-            if (like_array[i] == userId) {
-                await Beers.findOneAndUpdate({_id: beerId}, {$pull: {like_array: userId}});
-                
-                res.json({ message: "success" });
-
-                return;
-            }
+        const exists = await Beers.find({ like_array: mongoose.Types.ObjectId(userId) });
+        if(exists.length) {
+            await Beers.findOneAndUpdate({_id: beerId}, {$pull: {like_array: userId}});
+        } else if(exists.length == 0) {
+            res.status(400).send({ message: "user has never liked this beer" });
+            return;
         }
 
         res.status(400).send({ message: "user has never liked this beer" });
