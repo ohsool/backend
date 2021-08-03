@@ -73,7 +73,7 @@ const unlikeBeer = async(req: Request, res: Response) => {
     const { beerId } = req.params;
 
     try {
-        await Beers.findOneAndUpdate({ _id: beerId }, {$push: { like_array: userId }});
+        await Beers.findOneAndUpdate({ _id: beerId }, {$pull: { like_array: userId }});
         res.json({ message: "success" });
     } catch(error) {
         res.status(400).send({ message: "failed", error });
