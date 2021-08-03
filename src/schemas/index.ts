@@ -3,6 +3,8 @@ import mongoose from "mongoose";
 import { env } from "../env";
 
 const url = env.url;
+const user = env.user;
+const pass = env.pass;
 
 const connect = (): void => {
     mongoose
@@ -11,8 +13,8 @@ const connect = (): void => {
         useUnifiedTopology: true,
         useCreateIndex: true,
         ignoreUndefined: true,
-        user: "ohsool_admin",
-        pass: "ohsool5209"
+        user: user,
+        pass: pass
       })
       .catch((err) => {
         console.log(err);
