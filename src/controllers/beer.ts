@@ -85,11 +85,14 @@ const unlikeBeer = async(req: Request, res: Response) => {
         const exists = await Beers.find({ like_array: mongoose.Types.ObjectId(userId) });
         if(exists.length) {
             await Beers.findOneAndUpdate({_id: beerId}, {$pull: {like_array: userId}});
+
         } else if(exists.length == 0) {
             res.status(400).send({ message: "user has never liked this beer" });
             return;
         }
+
         res.json({ message: "success" });
+
     } catch(error) {
         res.status(400).send({ message: "failed", error });
     }
