@@ -14,6 +14,7 @@ import http from "http";
 import https from "https";
 import path from "path";
 
+
 // importing APIs
 import { userRouter } from './routers/user';
 import { commentRouter } from './routers/comment';
@@ -22,6 +23,7 @@ import { beerCategoryRouter } from './routers/beerCategory';
 import { myBeerRouter } from './routers/myBeer';
 import { complaintRouter } from './routers/complaint';
 import { recommendationRouter } from './routers/recommendation';
+import { searchRouter } from './routers/search';
 
 import { googlePassportConfig } from './routers/passport_google';
 import { kakaoPassportConfig } from './routers/passport_kakao';
@@ -50,6 +52,9 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(bodyParser.json());
 
+app.set('views', __dirname + '/views');
+app.set('view engine', 'ejs');
+
 // initialize google authenticate
 console.log("passport initializing...")
 app.use(passport.initialize());
@@ -75,6 +80,10 @@ app.get("/", (req, res) => {
     );
 });
 
+app.get("/search", (req, res) => {
+    res.render("index")
+})
+
 // APIs
 app.use("/api/user", [userRouter]);
 app.use("/api/comment", [commentRouter]);
@@ -83,6 +92,7 @@ app.use("/api/beerCategory", [beerCategoryRouter]);
 app.use("/api/mybeer", [myBeerRouter]);
 app.use("/api/complaint", [complaintRouter]);
 app.use("/api/recommendation", [recommendationRouter]);
+app.use("/api/search", [searchRouter]);
 
 
 // crawling APIs
@@ -98,12 +108,6 @@ if (app.get("env") == "development") {
         key: fs.readFileSync(path.join(__dirname, "ssl", "ohsoolkey.key")),
         cert: fs.readFileSync(path.join(__dirname, "ssl", "ohsoolcert.crt"))
     };
-
-    // const secure = https.createServer(options, app);
-
-    // secure.listen(5209, () => {
-    //     console.log("server running..");
-    // })
 
     const secure = https.createServer(options, app);
     secure.listen(5209, () => {

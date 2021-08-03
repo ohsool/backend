@@ -6,6 +6,8 @@ const url = env.url;
 const user = env.user;
 const pass = env.pass;
 
+// const url = "mongodb://localhost:27017/ohsool"
+
 const connect = (): void => {
     mongoose
       .connect(url, {
@@ -13,7 +15,7 @@ const connect = (): void => {
         useUnifiedTopology: true,
         useCreateIndex: true,
         ignoreUndefined: true,
-        user: user,
+        user: "ohsool_admin",
         pass: pass
       })
       .catch((err) => {

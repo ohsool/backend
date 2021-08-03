@@ -20,6 +20,53 @@ const joiSchema = joi.object({
   });
   // id 포함 안하게
 
+  // existed email?
+  userRouter.get("/email", async (req, res) => {
+    const { email } = req.body;
+
+    if (!email) {
+      res.json({ message: "fail", err: "no input" });
+
+      return
+    }
+
+    try {
+      const existedUser = await Users.findOne({ email });
+
+      if (existedUser) {
+        res.json({ message: "success", existed: true });
+      } else {
+        res.json({ message: "success", existed: false });
+      }
+    } catch (err) {
+      res.json({ message: "fail", err });
+    }
+    
+  });
+
+  // existed nickname?
+  userRouter.get("/nickname", async (req, res) => {
+    const { nickname } = req.body;
+
+    if (!nickname) {
+      res.json({ message: "fail", err: "no input" });
+
+      return
+    }
+
+    try {
+      const existedUser = await Users.findOne({ nickname });
+
+      if (existedUser) {
+        res.json({ message: "success", existed: true });
+      } else {
+        res.json({ message: "success", existed: false });
+      }
+    } catch (err) {
+      res.json({ message: "fail", err });
+    }
+  });
+
   // register
   userRouter.post("/", async (req, res) => {
       const { email, nickname, password, confirmPassword } = req.body;
