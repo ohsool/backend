@@ -60,7 +60,7 @@ const deleteBeer = async(req: Request, res: Response) => {
 const likeBeer = async(req: Request, res: Response) => {
     const userId = res.locals.user._id;
     const { beerId } = req.params;
-
+    //beer.ts
     try {
         const exists = await Beers.find({ like_array: mongoose.Types.ObjectId(userId) });
 
@@ -70,8 +70,6 @@ const likeBeer = async(req: Request, res: Response) => {
             res.status(400).send({ message: "user already liked this beer" });
             return;
         }
-
-        await Beers.findOneAndUpdate({_id: beerId}, {$push: {like_array: userId}});
 
         res.json({ message: "success" });
     } catch(error) {
@@ -91,8 +89,7 @@ const unlikeBeer = async(req: Request, res: Response) => {
             res.status(400).send({ message: "user has never liked this beer" });
             return;
         }
-
-        res.status(400).send({ message: "user has never liked this beer" });
+        res.json({ message: "success" });
     } catch(error) {
         res.status(400).send({ message: "failed", error });
     }
