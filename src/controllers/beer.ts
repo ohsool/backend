@@ -1,6 +1,7 @@
 import express, {Request, Response, NextFunction} from 'express';
 import Beers from "../schemas/beer";
 import mongoose from "mongoose";
+import beer from '../schemas/beer';
 
 const getBeers = async(req: Request, res: Response) => {
     try {
@@ -61,13 +62,19 @@ const likeBeer = async(req: Request, res: Response) => {
     const { beerId } = req.params;
 
     try {
-        const exists = await Beers.find({ like_array: mongoose.Types.ObjectId(userId) });
-        if(!exists) {
-            await Beers.findOneAndUpdate({_id: beerId}, {$push: {like_array: userId}});
-        } else if(exists) {
-            res.status(400).send({ message: "user already liked this beer" });
-            return;
+        const beer = await Beers.findOne({ _id: beerId });
+        const like_array = beer.like_array;
+
+        for (let i = 0; i < like_array.length; i ++) {
+            if (like_array[i] == userId) {
+                res.status(400).send({ message: "user already liked this beer" });
+
+                return;
+            }
         }
+
+        await Beers.findOneAndUpdate({_id: beerId}, {$push: {like_array: userId}});
+
         res.json({ message: "success" });
     } catch(error) {
         res.status(400).send({ message: "failed", error });
@@ -79,14 +86,20 @@ const unlikeBeer = async(req: Request, res: Response) => {
     const { beerId } = req.params;
 
     try {
-        const exists = await Beers.find({ like_array: mongoose.Types.ObjectId(userId) });
-        if(exists) {
-            await Beers.findOneAndUpdate({_id: beerId}, {$pull: {like_array: userId}});
-        } else if(!exists) {
-            res.status(400).send({ message: "user has never liked this beer" });
-            return;
+        const beer = await Beers.findOne({ _id: beerId });
+        const like_array = beer.like_array;
+
+        for (let i = 0; i < like_array.length; i ++) {
+            if (like_array[i] == userId) {
+                await Beers.findOneAndUpdate({_id: beerId}, {$pull: {like_array: userId}});
+                
+                res.json({ message: "success" });
+
+                return;
+            }
         }
-        res.json({ message: "success" });
+
+        res.status(400).send({ message: "user has never liked this beer" });
     } catch(error) {
         res.status(400).send({ message: "failed", error });
     }
