@@ -1,6 +1,6 @@
 import express, {Request, Response, NextFunction} from 'express';
 import Beers from "../schemas/beer";
-
+import mongoose from "mongoose";
 
 const getBeers = async(req: Request, res: Response) => {
     try {
@@ -61,7 +61,7 @@ const likeBeer = async(req: Request, res: Response) => {
     const { beerId } = req.params;
 
     try {
-        const exists = await Beers.find({ like_array: userId });
+        const exists = await Beers.find({ like_array: mongoose.Types.ObjectId(userId) });
         if(!exists) {
             await Beers.findOneAndUpdate({_id: beerId}, {$push: {like_array: userId}});
         } else if(exists) {
@@ -79,7 +79,7 @@ const unlikeBeer = async(req: Request, res: Response) => {
     const { beerId } = req.params;
 
     try {
-        const exists = await Beers.find({ like_array: userId });
+        const exists = await Beers.find({ like_array: mongoose.Types.ObjectId(userId) });
         if(exists) {
             await Beers.findOneAndUpdate({_id: beerId}, {$pull: {like_array: userId}});
         } else if(!exists) {
