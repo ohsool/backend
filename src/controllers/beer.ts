@@ -72,7 +72,7 @@ const likeBeer = async(req: Request, res: Response) => {
             return;
         }
 
-        res.json({ message: "success", likes: result.like_array });
+        res.json({ message: "success", likes: result[0].like_array });
     } catch(error) {
         res.status(400).send({ message: "fail", error });
     }
@@ -84,16 +84,15 @@ const unlikeBeer = async(req: Request, res: Response) => {
 
     try {
         const exists = await Beers.find({ _id: beerId, like_array: mongoose.Types.ObjectId(userId) });
-        let result
+        let result;
         if(exists.length) {
             await Beers.findOneAndUpdate({_id: beerId}, {$pull: {like_array: userId}});
-            result = Beers.find({_id: beerId, like_array: mongoose.Types.ObjectId(userId) });
+            result = await Beers.find({_id: beerId });
         } else if(exists.length == 0) {
             res.status(400).send({ message: "fail", error: "user has never liked this beer" });
             return;
         }
-
-        res.json({ message: "success", likes: result.like_array });
+        res.json({ message: "success", likes: result[0].like_array });
 
     } catch(error) {
         res.status(400).send({ message: "fail", error });
