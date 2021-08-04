@@ -23,14 +23,19 @@ function authMiddleware(req: Request, res: Response, next: NextFunction){
             return;
         }
 
-        const user = jwt.verify(tokenValue, "bananatulip");
-        const userId = (<any>user).userId;
+        const userVerified = jwt.verify(tokenValue, "bananatulip");
+        const userId = (<any>userVerified).userId;
 
         Users.findOne({ _id: userId })
             .then((result: object) => {
-                res.locals.user = result;
+                if (result) {
+                    res.locals.user = result;
 
-                next();
+                    next();
+                } else {
+                    res.status(401).json({ message: "fail", err: "no existed user" });
+                }
+                
             }).catch((err: object) => {
                 res.status(401).json({ message: "fail", err});
             });
