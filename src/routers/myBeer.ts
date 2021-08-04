@@ -162,17 +162,6 @@ myBeerRouter.get("/:myBeerId", authMiddleware, async (req, res) => {
     }
 });
 
-// get all reviews with one beer
-myBeerRouter.get("/review/:beer", async (req, res) => {
-    const beer = req.params.beer;  // with Korean name
-    const beer_ = await Beers.findOne({ name_korean: beer });
-    const beerId = beer_._id;
-
-    const myBeers = await MyBeer.find({ beerId }).populate({path: 'userId', select: 'nickname'});
-
-    res.json({ message: "success", myBeers });
-})
-
 // modify one mybeer
 myBeerRouter.put("/:myBeerId", authMiddleware, async (req, res) => {
     const myBeerId = req.params.myBeerId;
