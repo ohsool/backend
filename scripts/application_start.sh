@@ -6,6 +6,10 @@ sudo chmod -R 777 /home/ec2-user/ohsool
 # EC2 작업 파일로 이동
 cd /home/ec2-user/ohsool
 
+# production 상태로 전환
+export NODE_ENV=production
+echo "${NODE_ENV} mode is on"
+
 # npm과 node 설치
 export NVM_DIR="$HOME/.nvm"	
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # loads nvm	
