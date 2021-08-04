@@ -62,7 +62,7 @@ const likeBeer = async(req: Request, res: Response) => {
     const { beerId } = req.params;
     //beer.ts
     try {
-        const exists = await Beers.find({ like_array: mongoose.Types.ObjectId(userId) });
+        const exists = await Beers.find({_id: beerId, like_array: mongoose.Types.ObjectId(userId) });
 
         if(exists.length == 0) {
             await Beers.findOneAndUpdate({_id: beerId}, {$push: {like_array: userId}});
@@ -82,7 +82,7 @@ const unlikeBeer = async(req: Request, res: Response) => {
     const { beerId } = req.params;
 
     try {
-        const exists = await Beers.find({ like_array: mongoose.Types.ObjectId(userId) });
+        const exists = await Beers.find({ _id: beerId, like_array: mongoose.Types.ObjectId(userId) });
         if(exists.length) {
             await Beers.findOneAndUpdate({_id: beerId}, {$pull: {like_array: userId}});
 
