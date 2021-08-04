@@ -4,9 +4,9 @@ import BeerCategories from "../schemas/beerCategory";
 const getBeerCategories = async(req: Request, res: Response) => {
     try {
         const beerCategories = await BeerCategories.find();
-        res.json({ beerCategories });
+        res.json({ message:"success", beerCategories });
     } catch (error) {
-        res.status(400).send({ message: "failed", error });
+        res.status(400).send({ message: "fail", error });
     }
 }
 
@@ -16,13 +16,13 @@ const postBeerCategory = async(req: Request, res: Response) => {
         const isExist = await BeerCategories.findOne({ name, image, features });
 
         if(isExist) {
-        res.json({ message: "category already exists" });
+        res.json({ message: "fail", error: "category already exists" });
         return;
     }
-        await BeerCategories.create({ name, image, features });
-        res.json({ message: "success" });
+        const beerCategory = await BeerCategories.create({ name, image, features });
+        res.json({ message: "success", beerCategory });
     } catch (error) {
-        res.status(400).send({ message: "failed" , error });
+        res.status(400).send({ message: "fail" , error });
     }
 }
 
@@ -32,13 +32,13 @@ const getBeerCategory = async(req: Request, res: Response) => {
 
         const beerCategory = await BeerCategories.findById(beerCategoryId);
         if(beerCategory) {
-            res.json({ beerCategory });
+            res.json({ message:"success", beerCategory });
         } else {
-            res.json({ message: "category does not exist in the database" });
+            res.json({ message: "fail", error: "category does not exist in the database" });
             return;
         }
     } catch (error) {
-        res.status(400).send({ message: "failed", error });
+        res.status(400).send({ message: "fail", error });
     }
 }
 

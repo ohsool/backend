@@ -18,7 +18,7 @@ myBeerRouter.post("/", authMiddleware, async (req, res) => {
     let { beer, myFeatures, location, rate, review } = req.body;
 
     if (!beer || !myFeatures || !rate) {
-        res.json({ message: "fail" });
+        res.json({ message: "fail", error: "Either beer or myFeatures or rate doesn't exist." });
 
         return;
     } else if (!location) {
@@ -26,7 +26,7 @@ myBeerRouter.post("/", authMiddleware, async (req, res) => {
     }
 
     if (String(review).length > 48) {
-        res.json({ message: "fail", err: "too long" });
+        res.json({ message: "fail", error: "the length of the review must be under 48" });
 
         return;
     }
@@ -42,7 +42,7 @@ myBeerRouter.post("/", authMiddleware, async (req, res) => {
 
     const beer_ = await Beers.findOne({ name_korean: beer });
     if (!beer_) {
-        res.json({ message: "fail", err: "no existed beer" });
+        res.json({ message: "fail", error: "beer doesn't exist" });
 
         return;
     }
@@ -91,8 +91,8 @@ myBeerRouter.post("/", authMiddleware, async (req, res) => {
         await Beers.findOneAndUpdate({ name_korean: beer }, { $set: { avgRate: newBeerAvgRate, count: beerCount + 1 } });
 
         res.send({ message: "success", myBeerId });
-    } catch (err) {
-        res.json({ message: "fail", err });
+    } catch (error) {
+        res.json({ message: "fail", error });
 
         return;
     }
@@ -104,9 +104,9 @@ myBeerRouter.get("/all", authMiddleware, async (req, res) => {
         const mybeers = await MyBeer.find({}).populate({path: 'userId', select: 'nickname'});
 
         res.json({ message: "success", mybeers });
-    } catch (err) {
+    } catch (error) {
 
-        res.json({ message: "fail", err });
+        res.json({ message: "fail", error });
     }
     
 });
@@ -114,15 +114,13 @@ myBeerRouter.get("/all", authMiddleware, async (req, res) => {
 // get my mybeers
 myBeerRouter.get("/my", authMiddleware, async (req, res) => {
     const userId = res.locals.user._id;
-
     try {
         const mybeers = await MyBeer.find({ userId }).populate({path: 'userId', select: 'nickname'});
 
         res.json({ message: "success", mybeers });
-    } catch (err) {
-        res.json({ message: "fail", err });
+    } catch (error) {
+        res.json({ message: "fail", error });
     }
-    
 });
 
 // get one beer's mybeers
@@ -133,7 +131,7 @@ myBeerRouter.get("/beer", async (req, res) => {
         const beer = await Beers.findOne({ name_korean: beerName });
 
         if (!beer) {
-            res.json({ message: "fail", err: "no exsited beer" });
+            res.json({ message: "fail", error: "beer doesn't exist" });
 
             return;
         }
@@ -141,8 +139,8 @@ myBeerRouter.get("/beer", async (req, res) => {
         const myBeers = await MyBeer.find({ beerId: beer._id }).populate({path: 'userId', select: 'nickname'});
 
         res.json({ message: "success", myBeers });
-    } catch (err) {
-        res.json({ message: "fail", err });
+    } catch (error) {
+        res.json({ message: "fail", error });
 
         return;
     }
@@ -157,8 +155,8 @@ myBeerRouter.get("/:myBeerId", authMiddleware, async (req, res) => {
         const mybeer = await MyBeer.findOne({ _id: myBeerId }).populate({path: 'userId', select: 'nickname'});
 
         res.json({ message: "success", mybeer });
-    } catch (err) {
-        res.json({ message: "fail", err });
+    } catch (error) {
+        res.json({ message: "fail", error });
     }
 });
 
@@ -173,7 +171,7 @@ myBeerRouter.put("/:myBeerId", authMiddleware, async (req, res) => {
         const userId = res.locals.user._id;
     
         if (String(myBeer.userId) != String(userId)) {
-            res.json({ message: "fail", err: "not the same user" });
+            res.json({  message: "fail", error: "not the same user" });
 
             return;
         }
@@ -220,8 +218,8 @@ myBeerRouter.put("/:myBeerId", authMiddleware, async (req, res) => {
         await Beers.findOneAndUpdate({ name_korean: beer_.name_korean }, { $set: { avgRate: newBeerAvgRate } });
 
         res.json({ message: "success", myBeerId });
-    } catch (err) {
-        res.json({ message: "fail", err })
+    } catch (error) {
+        res.json({ message: "fail", error })
     }
 
     
@@ -236,8 +234,7 @@ myBeerRouter.delete("/:myBeerId", authMiddleware, async (req, res) => {
         const userId = res.locals.user._id;
 
         if (String(mybeer.userId) != String(userId)) {
-            res.json({ message: "fail", err: "not the same user" });
-
+            res.json({ message: "fail", error: "not the same user" });
             return;
         }
 
@@ -287,8 +284,8 @@ myBeerRouter.delete("/:myBeerId", authMiddleware, async (req, res) => {
         await Beers.findOneAndUpdate({ name_korean: beer.name_korean }, { $set: { avgRate: newBeerAvgRate, count: beerCount - 1 } });
 
         res.json({ message: "success" });
-    } catch (err) {
-        res.json({ message: "fail", err });
+    } catch (error) {
+        res.json({ message: "fail", error });
     }
 });
 

@@ -29,8 +29,8 @@ complaintRouter.post("/", authMiddleware, async (req, res) => {
         })
 
         res.json({ message: "success", result })
-    } catch (err) {
-        res.json({ message: "fail", err });
+    } catch (error) {
+        res.json({ message: "fail", error });
     }
 })
 
