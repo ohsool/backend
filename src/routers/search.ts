@@ -10,7 +10,7 @@ searchRouter.get("/", async (req, res) => {
     const words: Array<String> = []
 
     if (word.length < 1) {
-        res.json({ message: "fail" })
+        res.json({ message: "fail", error: "no input" });
     }
 
     const beers = await Beers.find({});

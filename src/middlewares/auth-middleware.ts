@@ -8,7 +8,7 @@ function authMiddleware(req: Request, res: Response, next: NextFunction){
 
     try {
         if (!authorization) {
-            res.status(401).json({ message: "unidentified user" });
+            res.status(401).json({ message: "fail", error: "unidentified user" });
 
             return;
         }
@@ -18,7 +18,7 @@ function authMiddleware(req: Request, res: Response, next: NextFunction){
         const tokenValue = tokenArray[1];
 
         if (tokenScheme != "Bearer") {
-            res.status(401).json({ message: "unidentified token schema" });
+            res.status(401).json({ message: "fail", error: "unidentified token schema" });
 
             return;
         }
@@ -33,15 +33,15 @@ function authMiddleware(req: Request, res: Response, next: NextFunction){
 
                     next();
                 } else {
-                    res.status(401).json({ message: "fail", err: "no existed user" });
+                    res.status(401).json({ message: "fail", error: "no existed user" });
                 }
                 
-            }).catch((err: object) => {
-                res.status(401).json({ message: "fail", err});
+            }).catch((error: object) => {
+                res.status(401).json({ message: "fail", error});
             });
 
-    } catch (err) {
-        res.status(401).json({ message: "fail", err});
+    } catch (error) {
+        res.status(401).json({ message: "fail", error});
     }
 }
 

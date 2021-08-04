@@ -21,11 +21,11 @@ const joiSchema = joi.object({
   // id 포함 안하게
 
   // existed email?
-  userRouter.get("/email", async (req, res) => {
+  userRouter.post("/email", async (req, res) => {
     const { email } = req.body;
 
     if (!email) {
-      res.json({ message: "fail", err: "no input" });
+      res.json({ message: "fail", error: "no input" });
 
       return
     }
@@ -38,18 +38,18 @@ const joiSchema = joi.object({
       } else {
         res.json({ message: "success", existed: false });
       }
-    } catch (err) {
-      res.json({ message: "fail", err });
+    } catch (error) {
+      res.json({ message: "fail", error });
     }
     
   });
 
   // existed nickname?
-  userRouter.get("/nickname", async (req, res) => {
+  userRouter.post("/nickname", async (req, res) => {
     const { nickname } = req.body;
 
     if (!nickname) {
-      res.json({ message: "fail", err: "no input" });
+      res.json({ message: "fail", error: "no input" });
 
       return
     }
@@ -62,8 +62,8 @@ const joiSchema = joi.object({
       } else {
         res.json({ message: "success", existed: false });
       }
-    } catch (err) {
-      res.json({ message: "fail", err });
+    } catch (error) {
+      res.json({ message: "fail", error });
     }
   });
 
@@ -76,12 +76,12 @@ const joiSchema = joi.object({
         const existUser2 = await Users.findOne({ email });
 
         if (existUser1 || existUser2) {
-            res.json({ message: "existed user" });
+            res.json({ message: "fail", error: "existed user" });
   
             return;
         }
-      } catch(err) {
-          res.json({ message: "fail", err });
+      } catch(error) {
+          res.json({ message: "fail", error });
       }
 
       const { value, error } = joiSchema.validate({
@@ -95,7 +95,7 @@ const joiSchema = joi.object({
 
           res.status(201).json({ message: "success" });
       } else {
-          res.json({ message: "fail", err: error.details[0].message });
+          res.json({ message: "fail", error: error.details[0].message });
       }
   });
 
@@ -108,7 +108,7 @@ const joiSchema = joi.object({
       const user = await Users.findOne({ email });
 
       if (user.password != crypted_password) {
-        res.status(401).json({ message: "fail" });
+        res.status(401).json({ message: "fail", error: "wrong password" });
   
         return;
       }
@@ -116,8 +116,8 @@ const joiSchema = joi.object({
       const token = jwt.sign({ userId: user._id }, "bananatulip");
   
       res.json({ message: "success", token });
-    } catch(err) {
-      res.status(401).json({ message: "fail" });
+    } catch(error) {
+      res.status(401).json({ message: "fail", error });
 
       return;
     }
@@ -131,8 +131,8 @@ const joiSchema = joi.object({
       const user = await Users.findOneAndDelete({ _id: userId });
 
       res.json({ message: "success" });
-    } catch (err) {
-      res.status(401).json({ message: "fail" });
+    } catch (error) {
+      res.status(401).json({ message: "fail", error });
     }
 
   })
@@ -140,7 +140,7 @@ const joiSchema = joi.object({
   // if the person is logged in
   userRouter.get("/me", authMiddleware, async (req, res, next) => {
     if (!res.locals.user) {
-      res.status(401).json({ message: "unidentified user" });
+      res.status(401).json({ message: "fail", error: "unidentified user" });
 
       return;
     }
