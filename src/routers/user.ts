@@ -21,7 +21,7 @@ const joiSchema = joi.object({
   // id 포함 안하게
 
   // existed email?
-  userRouter.get("/email", async (req, res) => {
+  userRouter.post("/email", async (req, res) => {
     const { email } = req.body;
 
     if (!email) {
@@ -45,7 +45,7 @@ const joiSchema = joi.object({
   });
 
   // existed nickname?
-  userRouter.get("/nickname", async (req, res) => {
+  userRouter.post("/nickname", async (req, res) => {
     const { nickname } = req.body;
 
     if (!nickname) {
