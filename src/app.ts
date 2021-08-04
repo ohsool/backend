@@ -99,6 +99,8 @@ app.use("/api/search", [searchRouter]);
 app.use("/api/crawling/beercategory", [beerCategoryCrawlingRouter]);
 app.use("/api/crawling/beer", [beerCrawlingRouter]);
 
+console.log("production mode:", env.isProduction, ", development mode: ", env.isDevelopment);
+
 // app.listen(5209, () => {
 //     console.log("listening at http://localhost:5209");
 // })
