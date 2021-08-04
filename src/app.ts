@@ -101,9 +101,9 @@ app.use("/api/crawling/beer", [beerCrawlingRouter]);
 
 console.log("mode:", env.modeNow);
 
-app.listen(5209, () => {
-    console.log("listening at http://localhost:5209");
-})
+// app.listen(5209, () => {
+//     console.log("listening at http://localhost:5209");
+// })
 
 if (app.get("env") == "development" || app.get("env") == "production") {
     console.log("mode:", app.get("env"));
