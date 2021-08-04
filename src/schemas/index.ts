@@ -15,6 +15,7 @@ const connect = (): void => {
         useUnifiedTopology: true,
         useCreateIndex: true,
         ignoreUndefined: true,
+        useFindAndModify: false,
         user: "ohsool_admin",
         pass: pass
       })
