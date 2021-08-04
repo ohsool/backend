@@ -6,9 +6,9 @@ import beer from '../schemas/beer';
 const getBeers = async(req: Request, res: Response) => {
     try {
         const beers = await Beers.find();
-        res.json({ beers });
+        res.json({ message: "success", beers });
     } catch (error) {
-        res.status(400).send({ message: "failed", error });
+        res.status(400).send({ message: "fail", error });
     }
 }
 
@@ -22,11 +22,11 @@ const postBeer = async(req: Request, res: Response) => {
             return;
         }
 
-        await Beers.create({ name_korean, name_english, image, degree, categoryId, hashtag, features });
-        res.json({ message: "success" });
+        const beer = await Beers.create({ name_korean, name_english, image, degree, categoryId, hashtag, features });
+        res.status(201).json({ message: "success", beer });
 
     } catch (error) {
-        res.status(400).send({ message: "failed", error });
+        res.status(400).send({ message: "fail", error });
     }
 }
 
@@ -35,7 +35,7 @@ const getBeer = async(req: Request, res: Response) => {
         const { beerId } = req.params;
         const beer = await Beers.findById(beerId).exec();
         if (beer) {
-            res.json({ beer });
+            res.json({ message:"success", beer });
         } else {
             res.send(400).send({ message: "beer does not exist in the database" });
             return;
@@ -65,15 +65,15 @@ const likeBeer = async(req: Request, res: Response) => {
         const exists = await Beers.find({_id: beerId, like_array: mongoose.Types.ObjectId(userId) });
 
         if(exists.length == 0) {
-            await Beers.findOneAndUpdate({_id: beerId}, {$push: {like_array: userId}});
+            const beer = await Beers.findOneAndUpdate({_id: beerId}, {$push: {like_array: userId}});
         } else if(exists.length) {
             res.status(400).send({ message: "user already liked this beer" });
             return;
         }
 
-        res.json({ message: "success" });
+        res.json({ message: "success", likes: beer.like_array });
     } catch(error) {
-        res.status(400).send({ message: "failed", error });
+        res.status(400).send({ message: "fail", error });
     }
 }
 
@@ -84,17 +84,17 @@ const unlikeBeer = async(req: Request, res: Response) => {
     try {
         const exists = await Beers.find({ _id: beerId, like_array: mongoose.Types.ObjectId(userId) });
         if(exists.length) {
-            await Beers.findOneAndUpdate({_id: beerId}, {$pull: {like_array: userId}});
+            const beer = await Beers.findOneAndUpdate({_id: beerId}, {$pull: {like_array: userId}});
 
         } else if(exists.length == 0) {
             res.status(400).send({ message: "user has never liked this beer" });
             return;
         }
 
-        res.json({ message: "success" });
+        res.json({ message: "success", likes: beer.like_array });
 
     } catch(error) {
-        res.status(400).send({ message: "failed", error });
+        res.status(400).send({ message: "fail", error });
     }
 }
 
@@ -108,7 +108,7 @@ const likedBeer = async(req: Request, res: Response) => {
         const likedList = await Beers.find({ like_array: mongoose.Types.ObjectId(userId) });
         res.json({ result: likedList });
     } catch (error) {
-        res.status(400).send({ message: "failed", error });
+        res.status(400).send({ message: "fail", error });
     }
 }
 
