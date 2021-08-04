@@ -4,16 +4,18 @@ import { authMiddleware } from "../middlewares/auth-middleware";
 
 const beerRouter = express.Router();
 
-beerRouter.get("/", BeerController.getBeers);
+beerRouter.get("/list", BeerController.getBeers);
 
-beerRouter.post("/", BeerController.postBeer);
+beerRouter.post("/list", BeerController.postBeer);
 
-beerRouter.get("/:beerId", BeerController.getBeer);
+beerRouter.get("/list/:beerId", BeerController.getBeer);
 
-beerRouter.delete("/:beerId", BeerController.deleteBeer);
+beerRouter.delete("/list/:beerId", BeerController.deleteBeer);
 
 beerRouter.put("/like/:beerId", authMiddleware, BeerController.likeBeer);
 
 beerRouter.put("/unlike/:beerId", authMiddleware, BeerController.unlikeBeer);
+
+beerRouter.get("/liked", authMiddleware, BeerController.likedBeer);
 
 export { beerRouter };

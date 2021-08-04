@@ -62,7 +62,7 @@ const likeBeer = async(req: Request, res: Response) => {
     const { beerId } = req.params;
     //beer.ts
     try {
-        const exists = await Beers.find({ like_array: mongoose.Types.ObjectId(userId) });
+        const exists = await Beers.find({_id: beerId, like_array: mongoose.Types.ObjectId(userId) });
 
         if(exists.length == 0) {
             await Beers.findOneAndUpdate({_id: beerId}, {$push: {like_array: userId}});
@@ -82,7 +82,7 @@ const unlikeBeer = async(req: Request, res: Response) => {
     const { beerId } = req.params;
 
     try {
-        const exists = await Beers.find({ like_array: mongoose.Types.ObjectId(userId) });
+        const exists = await Beers.find({ _id: beerId, like_array: mongoose.Types.ObjectId(userId) });
         if(exists.length) {
             await Beers.findOneAndUpdate({_id: beerId}, {$pull: {like_array: userId}});
 
@@ -98,11 +98,26 @@ const unlikeBeer = async(req: Request, res: Response) => {
     }
 }
 
+// 현재 유저가 찜한 리스트 가져오기
+const likedBeer = async(req: Request, res: Response) => {
+    try {
+        const userId = res.locals.user._id;
+        if (!userId) {
+            res.status(400).send({ message: "userId doesn't exist" });
+        }
+        const likedList = await Beers.find({ like_array: mongoose.Types.ObjectId(userId) });
+        res.json({ result: likedList });
+    } catch (error) {
+        res.status(400).send({ message: "failed", error });
+    }
+}
+
 export default {
     getBeers,
     postBeer,
     getBeer,
     deleteBeer,
     likeBeer,
-    unlikeBeer
+    unlikeBeer,
+    likedBeer
 }
