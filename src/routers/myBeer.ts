@@ -101,7 +101,7 @@ myBeerRouter.post("/", authMiddleware, async (req, res) => {
 // get all mybeers
 myBeerRouter.get("/all", authMiddleware, async (req, res) => {
     try {
-        const mybeers = await MyBeer.find({});
+        const mybeers = await MyBeer.find({}).populate({path: 'userId', select: 'nickname'});
 
         res.json({ message: "success", mybeers });
     } catch (err) {
@@ -116,7 +116,7 @@ myBeerRouter.get("/my", authMiddleware, async (req, res) => {
     const userId = res.locals.user._id;
 
     try {
-        const mybeers = await MyBeer.find({ userId });
+        const mybeers = await MyBeer.find({ userId }).populate({path: 'userId', select: 'nickname'});
 
         res.json({ message: "success", mybeers });
     } catch (err) {
@@ -138,7 +138,7 @@ myBeerRouter.get("/beer", async (req, res) => {
             return;
         }
 
-        const myBeers = await MyBeer.find({ beerId: beer._id });
+        const myBeers = await MyBeer.find({ beerId: beer._id }).populate({path: 'userId', select: 'nickname'});
 
         res.json({ message: "success", myBeers });
     } catch (err) {
@@ -154,7 +154,7 @@ myBeerRouter.get("/:myBeerId", authMiddleware, async (req, res) => {
     const myBeerId = req.params.myBeerId;
 
     try {
-        const mybeer = await MyBeer.findOne({ _id: myBeerId });
+        const mybeer = await MyBeer.findOne({ _id: myBeerId }).populate({path: 'userId', select: 'nickname'});
 
         res.json({ message: "success", mybeer });
     } catch (err) {
@@ -164,11 +164,11 @@ myBeerRouter.get("/:myBeerId", authMiddleware, async (req, res) => {
 
 // get all reviews with one beer
 myBeerRouter.get("/review/:beer", async (req, res) => {
-    const beer = req.params.beer;
+    const beer = req.params.beer;  // with Korean name
     const beer_ = await Beers.findOne({ name_korean: beer });
     const beerId = beer_._id;
 
-    const myBeers = await MyBeer.find({ beerId });
+    const myBeers = await MyBeer.find({ beerId }).populate({path: 'userId', select: 'nickname'});
 
     res.json({ message: "success", myBeers });
 })
@@ -193,7 +193,6 @@ myBeerRouter.put("/:myBeerId", authMiddleware, async (req, res) => {
         const beerId = beer_._id;
     
         await MyBeer.findOneAndUpdate({ _id: myBeerId }, { $set: { beerId, myFeatures, location, rate, review } });
-
 
         // category rate
         const myPreference = res.locals.user.preference;
