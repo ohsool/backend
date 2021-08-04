@@ -18,7 +18,7 @@ myBeerRouter.post("/", authMiddleware, async (req, res) => {
     let { beer, myFeatures, location, rate, review } = req.body;
 
     if (!beer || !myFeatures || !rate) {
-        res.json({ message: "Either beer or myFeatures or rate doesn't exist. " });
+        res.json({ message: "fail", error: "Either beer or myFeatures or rate doesn't exist." });
 
         return;
     } else if (!location) {
@@ -26,7 +26,7 @@ myBeerRouter.post("/", authMiddleware, async (req, res) => {
     }
 
     if (String(review).length > 48) {
-        res.json({ message: "the length of the review must be under 48" });
+        res.json({ message: "fail", error: "the length of the review must be under 48" });
 
         return;
     }
@@ -42,7 +42,7 @@ myBeerRouter.post("/", authMiddleware, async (req, res) => {
 
     const beer_ = await Beers.findOne({ name_korean: beer });
     if (!beer_) {
-        res.json({ message: "beer doesn't exist" });
+        res.json({ message: "fail", error: "beer doesn't exist" });
 
         return;
     }
@@ -131,7 +131,7 @@ myBeerRouter.get("/beer", async (req, res) => {
         const beer = await Beers.findOne({ name_korean: beerName });
 
         if (!beer) {
-            res.json({ message: "beer doesn't exist" });
+            res.json({ message: "fail", error: "beer doesn't exist" });
 
             return;
         }
@@ -171,7 +171,7 @@ myBeerRouter.put("/:myBeerId", authMiddleware, async (req, res) => {
         const userId = res.locals.user._id;
     
         if (String(myBeer.userId) != String(userId)) {
-            res.json({  message: "not the same user" });
+            res.json({  message: "fail", error: "not the same user" });
 
             return;
         }
@@ -234,8 +234,7 @@ myBeerRouter.delete("/:myBeerId", authMiddleware, async (req, res) => {
         const userId = res.locals.user._id;
 
         if (String(mybeer.userId) != String(userId)) {
-            res.json({ message: "not the same user" });
-
+            res.json({ message: "fail", error: "not the same user" });
             return;
         }
 
