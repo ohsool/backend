@@ -18,7 +18,7 @@ const postBeer = async(req: Request, res: Response) => {
         const isExist = await Beers.findOne({ name_korean });
 
         if(isExist) {
-            res.json({ message: "beer already exists" });
+            res.json({ message: "fail", error: "beer already exists" });
             return;
         }
 
@@ -37,11 +37,11 @@ const getBeer = async(req: Request, res: Response) => {
         if (beer) {
             res.json({ message:"success", beer });
         } else {
-            res.send(400).send({ message: "beer does not exist in the database" });
+            res.send(400).send({ message: "fail", error: "beer does not exist in the database" });
             return;
         }
     } catch(error) {
-        res.status(400).send({ message: "beer does not exist in the datasbase" });
+        res.status(400).send({ message: "fail", error: "beer does not exist in the datasbase" });
     }
 
 }
@@ -53,7 +53,7 @@ const deleteBeer = async(req: Request, res: Response) => {
         await Beers.findOneAndDelete({ _id: beerId });
         res.json({ message: "success"});
     } catch(error) {
-        res.status(400).send({ message: "failed deleting beer from the database" });
+        res.status(400).send({ message: "fail", error: "failed deleting beer from the database" });
     }
 }
 
@@ -63,15 +63,15 @@ const likeBeer = async(req: Request, res: Response) => {
     //beer.ts
     try {
         const exists = await Beers.find({_id: beerId, like_array: mongoose.Types.ObjectId(userId) });
-
+        let result;
         if(exists.length == 0) {
-            const beer = await Beers.findOneAndUpdate({_id: beerId}, {$push: {like_array: userId}});
+            result = await Beers.findOneAndUpdate({_id: beerId}, {$push: {like_array: userId}});
         } else if(exists.length) {
-            res.status(400).send({ message: "user already liked this beer" });
+            res.status(400).send({ message: "fail", error: "user already liked this beer" });
             return;
         }
 
-        res.json({ message: "success", likes: beer.like_array });
+        res.json({ message: "success", likes: result.like_array });
     } catch(error) {
         res.status(400).send({ message: "fail", error });
     }
@@ -83,15 +83,16 @@ const unlikeBeer = async(req: Request, res: Response) => {
 
     try {
         const exists = await Beers.find({ _id: beerId, like_array: mongoose.Types.ObjectId(userId) });
+        let result
         if(exists.length) {
-            const beer = await Beers.findOneAndUpdate({_id: beerId}, {$pull: {like_array: userId}});
+            result = await Beers.findOneAndUpdate({_id: beerId}, {$pull: {like_array: userId}});
 
         } else if(exists.length == 0) {
-            res.status(400).send({ message: "user has never liked this beer" });
+            res.status(400).send({ message: "fail", error: "user has never liked this beer" });
             return;
         }
 
-        res.json({ message: "success", likes: beer.like_array });
+        res.json({ message: "success", likes: result.like_array });
 
     } catch(error) {
         res.status(400).send({ message: "fail", error });
@@ -103,10 +104,10 @@ const likedBeer = async(req: Request, res: Response) => {
     try {
         const userId = res.locals.user._id;
         if (!userId) {
-            res.status(400).send({ message: "userId doesn't exist" });
+            res.status(400).send({ message: "fail", error: "userId doesn't exist" });
         }
         const likedList = await Beers.find({ like_array: mongoose.Types.ObjectId(userId) });
-        res.json({ result: likedList });
+        res.json({ message:"success", likedList: likedList });
     } catch (error) {
         res.status(400).send({ message: "fail", error });
     }

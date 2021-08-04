@@ -16,7 +16,7 @@ const postBeerCategory = async(req: Request, res: Response) => {
         const isExist = await BeerCategories.findOne({ name, image, features });
 
         if(isExist) {
-        res.json({ message: "category already exists" });
+        res.json({ message: "fail", error: "category already exists" });
         return;
     }
         const beerCategory = await BeerCategories.create({ name, image, features });
@@ -34,7 +34,7 @@ const getBeerCategory = async(req: Request, res: Response) => {
         if(beerCategory) {
             res.json({ message:"success", beerCategory });
         } else {
-            res.json({ message: "category does not exist in the database" });
+            res.json({ message: "fail", error: "category does not exist in the database" });
             return;
         }
     } catch (error) {
