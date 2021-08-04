@@ -101,11 +101,13 @@ app.use("/api/crawling/beer", [beerCrawlingRouter]);
 
 console.log("production mode:", env.isProduction, ", development mode: ", env.isDevelopment);
 
-// app.listen(5209, () => {
-//     console.log("listening at http://localhost:5209");
-// })
+app.listen(5209, () => {
+    console.log("listening at http://localhost:5209");
+})
 
-if (app.get("env") == "development") {
+if (app.get("env") == "development" || app.get("env") == "production") {
+    console.log("mode:", app.get("env"));
+
     const options = {
         key: fs.readFileSync(path.join(__dirname, "ssl", "ohsoolkey.key")),
         cert: fs.readFileSync(path.join(__dirname, "ssl", "ohsoolcert.crt"))
