@@ -67,8 +67,8 @@ console.log("passport initializing done");
 app.use('/swagger', swaggerUi.serve, swaggerUi.setup(swaggerFile))
 
 // get secret key
-import { secretAPIkey } from './ssl/secretAPI';
-const key = secretAPIkey();
+// import { secretAPIkey } from './ssl/secretAPI';
+// const key = secretAPIkey();
 
 const allowOrigins = [];
 app.use(cors());
