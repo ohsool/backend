@@ -122,4 +122,4 @@ dist
 package-lock.json
 .idea
 .config
-
+secretKeyAPI.ts
