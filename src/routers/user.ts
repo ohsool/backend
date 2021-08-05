@@ -4,7 +4,6 @@ import joi from "joi";
 import jwt from "jsonwebtoken";
 import crypto from "crypto";
 
-import mongoose, { Schema, model, mongo } from "mongoose";
 import Beers from "../schemas/beer";
 import BeerCategories from "../schemas/beerCategory";
 import Users from "../schemas/user";
@@ -13,127 +12,106 @@ import { authMiddleware } from "../middlewares/auth-middleware";
 const userRouter = express.Router();
 
 const joiSchema = joi.object({
-  email: joi
-    .string()
-    .email({ minDomainSegments: 2, tlds: { allow: ["com", "net"] } })
-    .required(),
-  nickname: joi.string().min(1).max(30).required(),
-  password: joi.string().min(4).pattern(new RegExp("^[a-zA-Z0-9]{4,30}$")),
-  confirmPassword: joi.ref("password")
-});
-// id 포함 안하게
+    email: joi
+      .string()
+      .email({ minDomainSegments: 2, tlds: { allow: ["com", "net"] } })
+      .required(),
+    nickname: joi.string().min(1).max(30).required(),
+    password: joi.string().min(4).pattern(new RegExp("^[a-zA-Z0-9]{4,30}$")),
+    confirmPassword: joi.ref("password")
+  });
+  // id 포함 안하게
 
-// existed email?
-userRouter.post("/email", async (req, res) => {
-  const { email } = req.body;
+  // existed email?
+  userRouter.post("/email", async (req, res) => {
+    const { email } = req.body;
 
-  if (!email) {
-    res.json({ message: "fail", error: "no input" });
+    if (!email) {
+      res.json({ message: "fail", error: "no input" });
 
-    return
-  }
-
-  try {
-    const existedUser = await Users.findOne({ email });
-
-    if (existedUser) {
-      res.json({ message: "success", existed: true });
-    } else {
-      res.json({ message: "success", existed: false });
+      return
     }
-  } catch (error) {
-    res.json({ message: "fail", error });
-  }
-  
-});
 
-// existed nickname?
-userRouter.post("/nickname", async (req, res) => {
-  const { nickname } = req.body;
-
-  if (!nickname) {
-    res.json({ message: "fail", error: "no input" });
-
-    return
-  }
-
-  try {
-    const existedUser = await Users.findOne({ nickname });
-
-    if (existedUser) {
-      res.json({ message: "success", existed: true });
-    } else {
-      res.json({ message: "success", existed: false });
-    }
-  } catch (error) {
-    res.json({ message: "fail", error });
-  }
-});
-
-// register
-userRouter.post("/", async (req, res) => {
-    const { email, nickname, password, confirmPassword } = req.body;
-  
     try {
-      const existUser1 = await Users.findOne({ nickname });
-      const existUser2 = await Users.findOne({ email });
+      const existedUser = await Users.findOne({ email });
 
-      if (existUser1 || existUser2) {
-          res.json({ message: "fail", error: "existed user" });
-
-          return;
+      if (existedUser) {
+        res.json({ message: "success", existed: true });
+      } else {
+        res.json({ message: "success", existed: false });
       }
-    } catch(error) {
-        res.json({ message: "fail", error });
+    } catch (error) {
+      res.json({ message: "fail", error });
+    }
+    
+  });
+
+  // existed nickname?
+  userRouter.post("/nickname", async (req, res) => {
+    const { nickname } = req.body;
+
+    if (!nickname) {
+      res.json({ message: "fail", error: "no input" });
+
+      return
     }
 
-    const { value, error } = joiSchema.validate({
-      email, nickname, password, confirmPassword
-    });
+    try {
+      const existedUser = await Users.findOne({ nickname });
 
-    if (!error) {
-        const crypted_password = crypto.createHmac("sha256", password).update("¡hellosnail!").digest("hex");
-
-        await Users.create({ email, nickname, password: crypted_password });
-
-        res.status(201).json({ message: "success" });
-    } else {
-        res.json({ message: "fail", error: error.details[0].message });
+      if (existedUser) {
+        res.json({ message: "success", existed: true });
+      } else {
+        res.json({ message: "success", existed: false });
+      }
+    } catch (error) {
+      res.json({ message: "fail", error });
     }
-});
+  });
 
-// login
-userRouter.post("/auth", async (req, res) => {
-  let { email, password } = req.body;
+  // register
+  userRouter.post("/", async (req, res) => {
+      const { email, nickname, password, confirmPassword } = req.body;
+    
+      try {
+        const existUser1 = await Users.findOne({ nickname });
+        const existUser2 = await Users.findOne({ email });
 
-  console.log(email, password);
+        if (existUser1 || existUser2) {
+            res.json({ message: "fail", error: "existed user" });
+  
+            return;
+        }
+      } catch(error) {
+          res.json({ message: "fail", error });
+      }
 
-  const crypted_password = crypto.createHmac("sha256", password).update("¡hellosnail!").digest("hex");
-  try {
-    const user = await Users.findOne({ email });
+      const { value, error } = joiSchema.validate({
+        email, nickname, password, confirmPassword
+      });
 
-    console.log(user);
+      if (!error) {
+          const crypted_password = crypto.createHmac("sha256", password).update("¡hellosnail!").digest("hex");
 
-    if (user.password != crypted_password) {
-      res.status(401).json({ message: "fail", error: "wrong password" });
+          await Users.create({ email, nickname, password: crypted_password });
 
-      return;
-    }
+          res.status(201).json({ message: "success" });
+      } else {
+          res.json({ message: "fail", error: error.details[0].message });
+      }
+  });
 
-    const token = jwt.sign({ userId: user._id }, "bananatulip");
+  // login
+  userRouter.post("/auth", async (req, res) => {
+    let { email, password } = req.body;
 
-    res.json({ message: "success", token });
-  } catch(error) {
-    res.status(401).json({ message: "fail", error });
+    console.log(email, password);
 
-    return;
-  }
-});
-
-<<<<<<< Updated upstream
     const crypted_password = crypto.createHmac("sha256", password).update("¡hellosnail!").digest("hex");
     try {
       const user = await Users.findOne({ email });
+
+      console.log(user);
 
       if (user.password != crypted_password) {
         res.status(401).json({ message: "fail", error: "wrong password" });
@@ -146,90 +124,75 @@ userRouter.post("/auth", async (req, res) => {
       res.json({ message: "success", token });
     } catch(error) {
       res.status(401).json({ message: "fail", error });
-=======
-// sign out
-userRouter.delete("/", authMiddleware, async (req, res) => {
-  const userId = res.locals.user._id;
 
-  try {
-    const user = await Users.findOneAndDelete({ _id: userId });
-
-    res.json({ message: "success" });
-  } catch (error) {
-    res.status(401).json({ message: "fail", error });
-  }
-
-})
->>>>>>> Stashed changes
-
-// if the person is logged in
-userRouter.get("/me", authMiddleware, async (req, res, next) => {
-  if (!res.locals.user) {
-    res.status(401).json({ message: "fail", error: "unidentified user" });
-
-    return;
-  }
-  
-  const userId = res.locals.user._id;
-  const nickname = res.locals.user.nickname;
-  const preference = res.locals.user.preference;
-
-  res.json({ message: "success", userId, nickname, preference });
-})
-
-// google login
-userRouter.get("/google", passport.authenticate("google", { scope: ["email", "profile"] }));
-
-userRouter.get("/google/callback", (req, res, next) => {
-  passport.authenticate(
-    "google", {
-      successRedirect: "/",
-      failureRedirect: "/login"
-    }, (err, profile, info) => {
-      if (err) return next(err);
-
-      const token = info.message;
-
-      res.redirect(`https://오늘의술.shop/token=${token}`)
+      return;
     }
-  )(req, res, next)
-});
+  });
 
-// kakao login
-userRouter.get("/kakao", passport.authenticate("kakao"));
+  // sign out
+  userRouter.delete("/", authMiddleware, async (req, res) => {
+    const userId = res.locals.user._id;
 
-userRouter.get("/kakao/callback", (req, res, next) => {
-  passport.authenticate(
-    "kakao",
-    {
-      failureRedirect: "/",
-    }, (err, profile, info) => {
-      if (err) return next(err);
+    try {
+      const user = await Users.findOneAndDelete({ _id: userId });
 
-      const token = info.message;
-
-      res.redirect(`https://오늘의술.shop/token=${token}`)
+      res.json({ message: "success" });
+    } catch (error) {
+      res.status(401).json({ message: "fail", error });
     }
-  )(req, res, next);
-})
 
-// kakao login
-userRouter.get("/kakao", passport.authenticate("kakao"));
+  })
 
-userRouter.get("/kakao/callback", (req, res, next) => {
-  passport.authenticate(
-    "kakao",
-    {
-      failureRedirect: "/",
-    }, (err, profile, info) => {
-      if (err) return next(err);
+  // if the person is logged in
+  userRouter.get("/me", authMiddleware, async (req, res, next) => {
+    if (!res.locals.user) {
+      res.status(401).json({ message: "fail", error: "unidentified user" });
 
-      const token = info.message;
-
-      res.redirect(`https://오늘의술.shop/token=${token}`)
+      return;
     }
-  )(req, res, next);
-})
+    
+    const userId = res.locals.user._id;
+    const nickname = res.locals.user.nickname;
+    const preference = res.locals.user.preference;
+
+    res.json({ message: "success", userId, nickname, preference });
+  })
+
+  // google login
+  userRouter.get("/google", passport.authenticate("google", { scope: ["email", "profile"] }));
+
+  userRouter.get("/google/callback", (req, res, next) => {
+    passport.authenticate(
+      "google", {
+        successRedirect: "/",
+        failureRedirect: "/login"
+      }, (err, profile, info) => {
+        if (err) return next(err);
+
+        const token = info.message;
+
+        res.redirect(`https://오늘의술.shop/token=${token}`)
+      }
+    )(req, res, next)
+  });
+
+  // kakao login
+  userRouter.get("/kakao", passport.authenticate("kakao"));
+
+  userRouter.get("/kakao/callback", (req, res, next) => {
+    passport.authenticate(
+      "kakao",
+      {
+        failureRedirect: "/",
+      }, (err, profile, info) => {
+        if (err) return next(err);
+
+        const token = info.message;
+
+        res.redirect(`https://오늘의술.shop/token=${token}`)
+      }
+    )(req, res, next);
+  })
 
 // 현재 유저 preference에 테스트 결과 값 반영 & 클라이언트에게 결과에 대한 정보 돌려주기
 userRouter.post("/test", async (req, res, next) => {
@@ -267,6 +230,5 @@ userRouter.post("/test", async (req, res, next) => {
     res.json({ message: "fail", error });
   }
 })
-  
 
   export { userRouter };
