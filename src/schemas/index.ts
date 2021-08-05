@@ -2,11 +2,11 @@ import mongoose from "mongoose";
 
 import { env } from "../env";
 
-// const url = env.url;
+const url = env.url;
 const user = env.user;
 const pass = env.pass;
 
-const url = "mongodb://localhost:27017/ohsool"
+// const url = "mongodb://localhost:27017/ohsool"
 
 const connect = (): void => {
     mongoose
@@ -16,8 +16,8 @@ const connect = (): void => {
         useCreateIndex: true,
         ignoreUndefined: true,
         useFindAndModify: false,
-        // user: "ohsool_admin",
-        // pass: pass
+        user: "ohsool_admin",
+        pass: pass
       })
       .catch((err) => {
         console.log(err);
