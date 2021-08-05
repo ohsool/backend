@@ -119,7 +119,13 @@ dist
 .yarn/install-state.gz
 .pnp.*
 
+# ssl
+ssl
+*.ca
+*.key
+*.crt
+secretAPI.ts
+
 package-lock.json
 .idea
 .config
-secretKeyAPI.ts

@@ -1,10 +1,8 @@
-// import bcrypt from "bcrypt";
+import crypto from "crypto";
 
-// export const secretAPIkey = async ( ) => {
-//     const time = new Date();
-//     const key = String(time.getDate()) + String(time.getHours()) + String(time.getUTCFullYear()) + String(time.getUTCHours());
+export const secretAPIkey = ( ) => {
+    const time = new Date();
+    const key = String(time.getDate()) + String(time.getHours()) + String(time.getUTCFullYear()) + String(time.getUTCHours());
 
-//     const secretKey = 
-
-//     return secretKey;
-// };
+    return crypto.createHmac('sha256', key).digest('base64');
+};

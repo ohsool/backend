@@ -66,6 +66,10 @@ console.log("passport initializing done");
  
 app.use('/swagger', swaggerUi.serve, swaggerUi.setup(swaggerFile))
 
+// get secret key
+import { secretAPIkey } from './ssl/secretAPI';
+const key = secretAPIkey();
+
 const allowOrigins = [];
 app.use(cors());
 
@@ -99,29 +103,24 @@ app.use("/api/search", [searchRouter]);
 app.use("/api/crawling/beercategory", [beerCategoryCrawlingRouter]);
 app.use("/api/crawling/beer", [beerCrawlingRouter]);
 
-// import key
-// import { secretAPIkey } from './ssl/secretAPI';
-// const key = secretAPIkey();
-// console.log(key);
-
 console.log("mode:", env.modeNow);
 
-// app.listen(5209, () => {
-//     console.log("listening at http://localhost:5209");
-// })
+app.listen(5209, () => {
+    console.log("listening at http://localhost:5209");
+})
 
-if (app.get("env") == "development" || app.get("env") == "production") {
-    console.log("mode:", app.get("env"));
+// if (app.get("env") == "development" || app.get("env") == "production") {
+//     console.log("mode:", app.get("env"));
 
-    const options = {
-        key: fs.readFileSync(path.join(__dirname, "ssl", "ohsoolkey.key")),
-        cert: fs.readFileSync(path.join(__dirname, "ssl", "ohsoolcert.crt"))
-    };
+//     const options = {
+//         key: fs.readFileSync(path.join(__dirname, "ssl", "ohsoolkey.key")),
+//         cert: fs.readFileSync(path.join(__dirname, "ssl", "ohsoolcert.crt"))
+//     };
 
-    const secure = https.createServer(options, app);
-    secure.listen(port, () => {
-        console.log(`server running.. ${port}`);
-    })
-}
+//     const secure = https.createServer(options, app);
+//     secure.listen(port, () => {
+//         console.log(`server running.. ${port}`);
+//     })
+// }
 
 export { app };
