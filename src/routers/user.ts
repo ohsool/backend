@@ -4,6 +4,8 @@ import joi from "joi";
 import jwt from "jsonwebtoken";
 import crypto from "crypto";
 
+import Beers from "../schemas/beer";
+import BeerCategories from "../schemas/beerCategory";
 import Users from "../schemas/user";
 import { authMiddleware } from "../middlewares/auth-middleware";
 
@@ -192,5 +194,41 @@ const joiSchema = joi.object({
     )(req, res, next);
   })
 
+// 현재 유저 preference에 테스트 결과 값 반영 & 클라이언트에게 결과에 대한 정보 돌려주기
+userRouter.post("/test", async (req, res, next) => {
+  try {
+    const { userId, result } = req.body;
+    let user = false
+
+    /* 1. 로그인 유저일 시 preference 변경 */
+    if (userId != undefined) {
+      await Users.updateOne({ _id: userId }, { $set: { preference: result }});
+      // 로그인 유저일 시 user 값 true로 변경
+      user = true
+    }
+    
+    /* 2. 카테고리에 대한 정보 추출 */
+    const category = await BeerCategories.findOne({ name: result });
+    // category 에 대한 정보가 없다면 함수 종료
+    if (!category) {
+      res.json({ message: "fail", error: "Beer Category doesn't exist" });
+      return;
+    }
+    
+    /* 3. 추천 맥주 추출 (08/05 기준 동일한 카테고리 상위 2개만 추천) */
+    const beers = await Beers.find({ categoryId: category._id });
+    // 관련맥주에 대한 정보가 없다면 함수 종료
+    if (!beers) {
+      res.json({ message: "fail", error: "Beer doesn't exist" });
+      return;
+    }
+    const recommendations = beers.slice(3)
+  
+    res.status(200).json({ message: "success", user, category, recommendations })
+
+  } catch (error) {
+    res.json({ message: "fail", error });
+  }
+})
 
   export { userRouter };
