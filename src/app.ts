@@ -66,6 +66,16 @@ console.log("passport initializing done");
  
 app.use('/swagger', swaggerUi.serve, swaggerUi.setup(swaggerFile))
 
+// get secret key
+<<<<<<< HEAD
+import { secretAPIkey } from './ssl/secretAPI';
+const key = secretAPIkey();
+console.log("secret key now:", key);
+=======
+// import { secretAPIkey } from './ssl/secretAPI';
+// const key = secretAPIkey();
+>>>>>>> 44326a04ead34b8fd9957dd01911d3d111cdca3a
+
 const allowOrigins = [];
 app.use(cors());
 
@@ -98,11 +108,6 @@ app.use("/api/search", [searchRouter]);
 // crawling APIs
 app.use("/api/crawling/beercategory", [beerCategoryCrawlingRouter]);
 app.use("/api/crawling/beer", [beerCrawlingRouter]);
-
-// import key
-// import { secretAPIkey } from './ssl/secretAPI';
-// const key = secretAPIkey();
-// console.log(key);
 
 console.log("mode:", env.modeNow);
 
