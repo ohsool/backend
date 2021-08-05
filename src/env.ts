@@ -1,8 +1,9 @@
 require("dotenv").config({
-    path: `config/.env.${process.env.NODE_ENV || "development" }`,
+    path: "config/.env.development",
 });
 
 export const env = {
+    modeNow: process.env.NODE_ENV,
     isDevelopment: process.env.NODE_ENV === "development",
     isProduction: process.env.NODE_ENV === "production",
     isTest: process.env.NODE_ENV === "test",

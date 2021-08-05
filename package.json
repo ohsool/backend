@@ -39,6 +39,7 @@
     "express": "^4.17.1",
     "joi": "^17.4.1",
     "jsonwebtoken": "^8.5.1",
+    "korean-regexp": "^1.0.9",
     "moment": "^2.29.1",
     "moment-timezone": "^0.5.33",
     "mongoose": "^5.13.3",
