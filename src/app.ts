@@ -69,6 +69,7 @@ app.use('/swagger', swaggerUi.serve, swaggerUi.setup(swaggerFile))
 // get secret key
 import { secretAPIkey } from './ssl/secretAPI';
 const key = secretAPIkey();
+console.log("secret key now:", key);
 
 const allowOrigins = [];
 app.use(cors());
