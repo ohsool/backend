@@ -12,6 +12,14 @@ const BeerCategorySchema: Schema = new Schema({
         type: Object,
         required: true
     },
+    title: {
+        type: String,
+        required: true
+    },
+    description: {
+        type: String,
+        required: true
+    },
     // 0: avgRate, 1: count
     avgRate: {
         type: Object,

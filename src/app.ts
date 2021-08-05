@@ -99,6 +99,11 @@ app.use("/api/search", [searchRouter]);
 app.use("/api/crawling/beercategory", [beerCategoryCrawlingRouter]);
 app.use("/api/crawling/beer", [beerCrawlingRouter]);
 
+// import key
+// import { secretAPIkey } from './ssl/secretAPI';
+// const key = secretAPIkey();
+// console.log(key);
+
 console.log("mode:", env.modeNow);
 
 app.listen(5209, () => {
