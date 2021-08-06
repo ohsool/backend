@@ -2,6 +2,7 @@ import request from "supertest";
 import { app } from "../app";
 
 let token = "";
+let userId = "";
 
 it ("register success", async () => {
     const response = await request(app).post("/api/user").send({
@@ -33,19 +34,20 @@ it ("register fail - exited user", async () => {
         confirmPassword: "test1234"
     });
 
-    expect(response.body.message).toBe("existed user");
+    expect(response.body.message).toBe("fail");
+    expect(response.body.error).toBe("existed user");
 });
 
 it ("register fail - wrong email", async () => {
     const response = await request(app).post("/api/user").send({
-        email: "testtestcom",
-        nickname: "test",
+        email: "testtest.com",
+        nickname: "testuu",
         password: "test1234",
         confirmPassword: "test1234"
     });
 
     expect(response.body.message).toBe("fail");
-    expect(response.body.err).toBe('"email" must be a valid email');
+    expect(response.body.error).toBe('\"email\" must be a valid email');
 });
 
 it ("login success", async () => {
@@ -55,6 +57,7 @@ it ("login success", async () => {
     });
 
     token = response.body.token;
+    userId = response.body.userId;
 
     expect(response.body.message).toBe("success");
     expect(response.body.token).toBeTruthy();
@@ -96,15 +99,49 @@ it ("check if user is authorized - empty token", async () => {
 
     expect(response.body.message).toBe("fail");
     expect(response.statusCode).toBe(401);
-    expect(response.body.err).toBeTruthy();
+    expect(response.body.error).toBeTruthy();
 });
 
 it ("check if user is authorized - empty token scheme", async () => {
     const response = await request(app).get("/api/user/me").send();
 
-    expect(response.body.message).toBe("unidentified user");
+    expect(response.body.message).toBe("fail");
+    expect(response.body.error).toBe("unidentified user");
     expect(response.statusCode).toBe(401);
 });
+
+it ("gives test result", async () => {
+    const response = await request(app).post("/api/user/test").send({
+        userId: userId,
+        result: "IPA"
+    });
+
+    expect(response.body.message).toBe("success");
+    expect(response.body.user).toBe(true);
+    expect(response.body.category.name).toBe("IPA");
+    expect(response.body.recommendations.length).toBe(2)
+});
+
+it ("gives test result - fail", async () => {
+    const response = await request(app).post("/api/user/test").send({
+        userId: userId,
+        result: "IPA"
+    });
+
+    expect(response.body.message).toBe("success");
+    expect(response.body.user).toBe(true);
+    expect(response.body.category.name).toBe("IPA");
+    expect(response.body.recommendations.length).toBe(2)
+});
+
+
+
+
+
+
+
+
+
 
 it ("signout - success", async () => {
     const response = await request(app).delete("/api/user")
@@ -121,5 +158,5 @@ it ("signout - invalid user - fail", async () => {
 
     expect(response.body.message).toBe("fail");
     expect(response.statusCode).toBe(401);
-    expect(response.body.err).toBeTruthy();
+    expect(response.body.error).toBeTruthy();
 });

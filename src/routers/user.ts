@@ -117,7 +117,7 @@ const joiSchema = joi.object({
   
       const token = jwt.sign({ userId: user._id }, "bananatulip");
   
-      res.json({ message: "success", token });
+      res.json({ message: "success", token, userId: user._id });
     } catch(error) {
       res.status(401).json({ message: "fail", error });
 
