@@ -198,16 +198,21 @@ const joiSchema = joi.object({
 userRouter.post("/test", async (req, res, next) => {
   try {
     const { userId, result } = req.body;
-    let user = false
+    let user = false;
+
+    if (!result) {
+      res.json({ message: "fail", error: "test result doesn't exist" });
+      return;
+    }
 
     /* 1. 로그인 유저일 시 preference 변경 */
-    if (userId != undefined) {
+    const isExist = await Users.findOne({ _id: userId})
+    if (isExist) {
       await Users.updateOne({ _id: userId }, { $set: { preference: result }});
-      // 로그인 유저일 시 user 값 true로 변경
       user = true
     }
-    
-    /* 2. 카테고리에 대한 정보 추출 */
+
+    /* 2. 카테고리에 대한 정보 추출*/ 
     const category = await BeerCategories.findOne({ name: result });
     // category 에 대한 정보가 없다면 함수 종료
     if (!category) {
@@ -222,7 +227,7 @@ userRouter.post("/test", async (req, res, next) => {
       res.json({ message: "fail", error: "Beer doesn't exist" });
       return;
     }
-    const recommendations = beers.slice(3)
+    const recommendations = beers.slice(0,2)
   
     res.status(200).json({ message: "success", user, category, recommendations })
 
