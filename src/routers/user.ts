@@ -105,13 +105,9 @@ const joiSchema = joi.object({
   userRouter.post("/auth", async (req, res) => {
     let { email, password } = req.body;
 
-    console.log(email, password);
-
     const crypted_password = crypto.createHmac("sha256", password).update("¡hellosnail!").digest("hex");
     try {
       const user = await Users.findOne({ email });
-
-      console.log(user);
 
       if (user.password != crypted_password) {
         res.status(401).json({ message: "fail", error: "wrong password" });
