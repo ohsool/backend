@@ -1,6 +1,9 @@
 import request from "supertest";
 import { app } from "../app";
 
+import Beers from "../schemas/beer";
+import Users from "../schemas/user";
+
 let token = "";
 let userId = "";
 
@@ -110,38 +113,52 @@ it ("check if user is authorized - empty token scheme", async () => {
     expect(response.statusCode).toBe(401);
 });
 
-it ("gives test result", async () => {
+it ("gives test result - success", async () => {
     const response = await request(app).post("/api/user/test").send({
         userId: userId,
         result: "IPA"
     });
 
+    const user = await Users.findOne({ _id: userId });
+
     expect(response.body.message).toBe("success");
     expect(response.body.user).toBe(true);
     expect(response.body.category.name).toBe("IPA");
-    expect(response.body.recommendations.length).toBe(2)
+    expect(response.body.recommendations.length).toBe(2);
+    expect(user.preference).toBe("IPA");
 });
 
-it ("gives test result - fail", async () => {
+it ("gives test result - success (no user is fine)", async () => {
     const response = await request(app).post("/api/user/test").send({
-        userId: userId,
         result: "IPA"
     });
 
+    const user = await Users.findOne({ _id: userId });
+
     expect(response.body.message).toBe("success");
     expect(response.body.user).toBe(true);
     expect(response.body.category.name).toBe("IPA");
-    expect(response.body.recommendations.length).toBe(2)
+    expect(response.body.recommendations.length).toBe(2);
 });
 
+it ("gives test result - fail (no result)", async () => {
+    const response = await request(app).post("/api/user/test").send({
+        userId: userId
+    });
 
+    expect(response.body.message).toBe("fail");
+    expect(response.body.error).toBe("test result doesn't exist");
+});
 
+it ("gives test result - fail (wrong result)", async () => {
+    const response = await request(app).post("/api/user/test").send({
+        userId: userId,
+        result: "wrong result"
+    });
 
-
-
-
-
-
+    expect(response.body.message).toBe("fail");
+    expect(response.body.error).toBe("Beer Category doesn't exist");
+});
 
 it ("signout - success", async () => {
     const response = await request(app).delete("/api/user")
