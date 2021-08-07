@@ -246,6 +246,12 @@ myBeerRouter.delete("/:myBeerId", authMiddleware, async (req, res) => {
             return;
         }
 
+        if (!mybeer) {
+            res.json({  message: "fail", error: "wrong mybeer id" });
+
+            return;
+        }
+
         await MyBeer.deleteOne({ _id: myBeerId });
 
         // delete beer category rate
