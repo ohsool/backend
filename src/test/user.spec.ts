@@ -121,6 +121,8 @@ it ("gives test result - success", async () => {
 
     const user = await Users.findOne({ _id: userId });
 
+    console.log(user, user.preference);
+
     expect(response.body.message).toBe("success");
     expect(response.body.user).toBe(true);
     expect(response.body.category.name).toBe("IPA");

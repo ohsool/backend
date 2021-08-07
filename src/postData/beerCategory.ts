@@ -8,7 +8,7 @@ const beerCategoryCrawlingRouter = express.Router();
 beerCategoryCrawlingRouter.post("/", async(req, res) => {
     const beerCategory = [
         {
-            name: "American Lager",
+            name: "Lager",
             image: "https://drive.google.com/uc?export=view&id=1rGWJaU06CmWlyi7ZKHmk7ZwhLYlf6blX ",
             title: "맥주하면 제일 먼저 떠오르는 아메리칸 라거!",
             description: "4.2~5.3%의 알코올 도수를 가진 아메리칸 라거는 보리와 홉의 사용량을 줄이고 옥수수나 쌀 등의 녹말을 섞어 투명하고 밝은 노란색에 풍부한 탄산과 청량감이 특징인 맥주예요!",

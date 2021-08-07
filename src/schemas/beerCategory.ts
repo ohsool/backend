@@ -24,7 +24,7 @@ const BeerCategorySchema: Schema = new Schema({
     avgRate: {
         type: Object,
         default: {
-            "American Lager": [0, 0],
+            "Lager": [0, 0],
             "Pilsner": [0, 0],
             "Pale Ale": [0, 0],
             "IPA": [0, 0],
