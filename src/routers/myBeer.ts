@@ -133,9 +133,9 @@ myBeerRouter.get("/beer/:beerId", async (req, res) => {
             return;
         }
 
-        const myBeers = await MyBeer.find({ beerId: beer._id }).populate({path: 'userId', select: 'nickname'}).populate({ path: 'beerId', select: 'image' });
+        const mybeers = await MyBeer.find({ beerId: beer._id }).populate({path: 'userId', select: 'nickname'}).populate({ path: 'beerId', select: 'image' });
 
-        res.json({ message: "success", myBeers });
+        res.json({ message: "success", mybeers });
     } catch (error) {
         res.json({ message: "fail", error });
 
@@ -151,6 +151,12 @@ myBeerRouter.get("/:myBeerId", authMiddleware, async (req, res) => {
     try {
         const mybeer = await MyBeer.findOne({ _id: myBeerId }).populate({path: 'userId', select: 'nickname'}).populate({ path: 'beerId', select: 'image' });
 
+        if (!mybeer) {
+            res.json({ message: "fail", error: "no existed mybeer" });
+
+            return;
+        }
+
         res.json({ message: "success", mybeer });
     } catch (error) {
         res.json({ message: "fail", error });
@@ -165,6 +171,12 @@ myBeerRouter.put("/:myBeerId", authMiddleware, async (req, res) => {
     try {
         const myBeer = await MyBeer.findOne({ _id: myBeerId });
         const userId = res.locals.user._id;
+
+        if (!myBeer) {
+            res.json({  message: "fail", error: "wrong mybeer id" });
+
+            return;
+        }
     
         if (String(myBeer.userId) != String(userId)) {
             res.json({  message: "fail", error: "not the same user" });
