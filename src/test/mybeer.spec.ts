@@ -45,7 +45,8 @@ it ("post mybeer - success", async () => {
     const avgRateBefore = beer.avgRate;
 
     let beerCategory = await BeerCategories.findOne({ _id: beer.categoryId });
-    // const countCategoryBefore = beerCategory.avgRate.
+    const avgRateCategoryBefore = beerCategory.avgRate["Unknown"][0];
+    const countCategoryBefore = beerCategory.avgRate["Unknown"][1];
 
     const response = await request(app).post(`/api/mybeer/${beerId}`)
     .auth(token, { type: 'bearer' })
@@ -68,11 +69,18 @@ it ("post mybeer - success", async () => {
     const countAfter = beer.count;
     const avgRateAfter = beer.avgRate;
 
+    beerCategory = await BeerCategories.findOne({ _id: beer.categoryId });
+    const avgRateCategoryAfter = beerCategory.avgRate["Unknown"][0];
+    const countCategoryAfter = beerCategory.avgRate["Unknown"][1];
+
     const avgRate = (( countBefore * avgRateBefore ) + 5) / (countBefore + 1);
+    const avgRateCategory = (( countCategoryBefore * avgRateCategoryBefore ) + 5) / (countCategoryBefore + 1);
 
     expect(response.body.message).toBe("success");
     expect(countAfter - countBefore).toBe(1);
     expect(avgRate).toBe(avgRateAfter);
+    expect(countCategoryAfter - countCategoryBefore).toBe(1);
+    expect(avgRateCategory).toBe(avgRateCategoryAfter);
     expect(response.body.myBeerId).toBeTruthy();
 });
 
