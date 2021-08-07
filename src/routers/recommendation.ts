@@ -14,6 +14,10 @@ recommendationRouter.post("/", authMiddleware, async (req, res) => {
     let { beer, description, location, image } = req.body;
     let nickname = res.locals.user.nickname;
 
+    if (!beer || !description) {
+        res.json({ message: "fail", error: "no beer or descripton" })
+    }
+
     if (!nickname) {
         nickname = "Anonymous";
     }
