@@ -64,7 +64,7 @@ myBeerRouter.post("/:beerId", authMiddleware, async (req, res) => {
         const new_avgRate = (( avg * count ) + rate) / (count + 1);
 
         let avgRate: avgRate = {
-            "American Lager": [0, 0],
+            "Lager": [0, 0],
             "Pilsner": [0, 0],
             "Pale Ale": [0, 0],
             "IPA": [0, 0],
@@ -189,7 +189,7 @@ myBeerRouter.put("/:myBeerId", authMiddleware, async (req, res) => {
         const new_avgRate = ((count * avgRate_) - rateOld + rate ) / count;
 
         let avgRate: avgRate = {
-            "American Lager": [0, 0],
+            "Lager": [0, 0],
             "Pilsner": [0, 0],
             "Pale Ale": [0, 0],
             "IPA": [0, 0],
@@ -247,7 +247,7 @@ myBeerRouter.delete("/:myBeerId", authMiddleware, async (req, res) => {
         const count = beerCategory.avgRate[myPreference][1];
 
         let avgRate: avgRate = {
-            "American Lager": [0, 0],
+            "Lager": [0, 0],
             "Pilsner": [0, 0],
             "Pale Ale": [0, 0],
             "IPA": [0, 0],
