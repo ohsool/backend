@@ -184,6 +184,49 @@ security:
 <br>
 <hr>
 
+ ## Jenkins
+
+<details>
+
+<summary> Install JDK </summary>
+
+```
+### JDK 1.8.0 설치 및 버전 확인
+sudo yum install -y java-1.8.0-openjdk-devel.x86_64
+java -version 
+```
+
+</details>
 
 
 
+<details>
+
+<summary> Setup Jenkins </summary>
+
+```
+### Jenkins 설치
+# 1. jenkins repository를 설정파일을 생성
+sudo wget -O /etc/yum.repos.d/jenkins.repo
+https://pkg.jenkins.io/redhat-stable/jenkins.repo
+
+# 2. 설정파일 생성 후 아래 실행
+sudo rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io.key
+
+# 3. 관리자 권한으로 변경
+sudo -s
+
+# 4. yum 을 이용한 젠킨스 설치
+yum install jenkins
+
+# 5. 젠킨스 실행
+sudo systemctl start jenkins
+
+# (Optional) 만약 부팅시 가능하게 설정하려면 다음도 추가
+# sudo systemctl enable jenkins 
+
+# 6. 젠킨스 상태 확인
+sudo systemctl status jenkins
+```
+
+</details>
