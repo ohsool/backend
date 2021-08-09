@@ -13,7 +13,7 @@ beerCategoryRouter.post("/", BeerCategoryController.postBeerCategory);
 beerCategoryRouter.get("/:beerCategoryId", BeerCategoryController.getBeerCategory);
 
 
-beerCategoryRouter.get("/result/:beerCategory", BeerCategoryController.getTestResult);
+beerCategoryRouter.post("/result", BeerCategoryController.getTestResult);
 
 
 export { beerCategoryRouter };
