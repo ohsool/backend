@@ -3,11 +3,13 @@ import passport from "passport";
 import joi from "joi";
 import jwt from "jsonwebtoken";
 import crypto from "crypto";
+import mongoose from "mongoose";
 
 import Beers from "../schemas/beer";
 import BeerCategories from "../schemas/beerCategory";
 import Users from "../schemas/user";
 import { authMiddleware } from "../middlewares/auth-middleware";
+import MyBeers from "../schemas/mybeer";
 
 const userRouter = express.Router();
 
@@ -130,7 +132,28 @@ const joiSchema = joi.object({
     const userId = res.locals.user._id;
 
     try {
-      const user = await Users.findOneAndDelete({ _id: userId });
+      const user = await Users.findOne({ _id: userId });
+
+      if (!user) {
+        res.json({ message: "fail", error: "no existed user" });
+        
+        return;
+      }
+
+      // 해당 유저가 쓴 맥주도감들 삭제
+      await MyBeers.deleteMany({ userId: user._id });
+
+      // 해달 유저가 한 좋아요들 삭제
+      const liked_beers = await await Beers.find({ like_array: mongoose.Types.ObjectId(userId) });
+
+      for (let i = 0; i < liked_beers.length; i ++) {
+        let beerId = liked_beers[i]._id;
+
+        await Beers.findOneAndUpdate({_id: beerId}, {$pull: {like_array: userId}});
+      }
+
+      // 회원 탈퇴
+      await Users.deleteOne({ _id: userId });
 
       res.json({ message: "success" });
     } catch (error) {

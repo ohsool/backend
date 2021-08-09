@@ -106,13 +106,7 @@ app.use("/api/crawling/beer", [beerCrawlingRouter]);
 
 console.log("mode:", env.modeNow);
 
-// app.listen(5209, () => {
-//     console.log("listening at http://localhost:5209");
-// })
-
-if (app.get("env") == "development" || app.get("env") == "production") {
-    console.log("mode:", app.get("env"));
-
+if (env.modeNow == "development" || env.modeNow == "production") {  // on server
     const options = {
         key: fs.readFileSync(path.join(__dirname, "ssl", "ohsoolkey.key")),
         cert: fs.readFileSync(path.join(__dirname, "ssl", "ohsoolcert.crt"))
@@ -122,6 +116,12 @@ if (app.get("env") == "development" || app.get("env") == "production") {
     secure.listen(port, () => {
         console.log(`server running.. ${port}`);
     })
+} else if (!env.modeNow) {  // local
+    app.listen(port, () => {
+        console.log(`listening at http://localhost:${port}`);
+    })
+} else {  // jest doesn't use port
+    console.log("testing..");
 }
 
 export { app };
