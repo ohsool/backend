@@ -45,7 +45,7 @@ const getBeerCategory = async(req: Request, res: Response) => {
 }
 
 const getTestResult = async(req: Request, res:Response) => {
-    const result = req.params.beerCategory;
+    const result = req.body.result;
 
     if (!result) {
         res.json({ message: "fail", error: "test result doesn't exist" });
