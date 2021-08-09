@@ -25,7 +25,7 @@
     "dev": "tsc && nodemon src/app.ts",
     "prettify": "prettier --write src/*.ts src/**/*.ts",
     "build": "tsc -p .",
-    "test": "jest --detectOpenHandles --forceExit",
+    "test": "jest --verbose --coverage --forceExit --watchAll --maxWorkers=1",
     "prestart": "node ./swagger/swagger.js"
   },
   "author": "",

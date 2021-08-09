@@ -1,17 +1,19 @@
-import Mongoose from "mongoose";
+import mongoose from "mongoose";
 import { env } from "../env";
 
-let database : Mongoose.Connection;
-const url = env.atlas_url;
-// const url = env.url;
-// const user = env.user;
-// const pass = env.pass;
+let url = "mongodb://localhost:27017/ohsool";
+
+if (env.modeNow == "development" || env.modeNow == "production") { // on server
+  url = env.atlas_url;
+}  // else it's local or jest
+
+let database : mongoose.Connection;
 
 export const connect = () => {
   if (database) {
     return;
   }
-  Mongoose.connect(url, {
+  mongoose.connect(url, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useCreateIndex: true,
@@ -19,7 +21,7 @@ export const connect = () => {
     useFindAndModify: false,
   });
   
-  database = Mongoose.connection;
+  database = mongoose.connection;
   database.once("open", async () => {
     console.log('Connected to database');
   })
@@ -32,9 +34,11 @@ export const diconnect = () => {
   if (!database) {
     return;
   }
-  Mongoose.disconnect();
+  mongoose.disconnect();
 };
 
+
+// const url = "mongodb://localhost:27017/ohsool";
 
 // const connect = (): void => {
 //     mongoose
@@ -44,8 +48,6 @@ export const diconnect = () => {
 //         useCreateIndex: true,
 //         ignoreUndefined: true,
 //         useFindAndModify: false,
-//         user: "ohsool_admin",
-//         pass: pass
 //       })
 //       .catch((err) => {
 //         console.log(err);
