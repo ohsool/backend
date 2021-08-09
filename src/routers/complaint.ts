@@ -18,6 +18,12 @@ complaintRouter.post("/", authMiddleware, async (req, res) => {
         nickname = "Anonymous";
     }
 
+    if (!title || !description) {
+        res.json({ message: "fail", error: "no title or descripton" });
+
+        return;
+    }
+
     try {
         const result = await client.chat.postMessage({
             channel: "#불편사항",
