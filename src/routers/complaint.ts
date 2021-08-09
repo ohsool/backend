@@ -19,7 +19,9 @@ complaintRouter.post("/", authMiddleware, async (req, res) => {
     }
 
     if (!title || !description) {
-        res.json({ message: "fail", error: "no title or descripton" })
+        res.json({ message: "fail", error: "no title or descripton" });
+
+        return;
     }
 
     try {
