@@ -16,6 +16,8 @@ recommendationRouter.post("/", authMiddleware, async (req, res) => {
 
     if (!beer || !description) {
         res.json({ message: "fail", error: "no beer or descripton" })
+
+        return;
     }
 
     if (!nickname) {
