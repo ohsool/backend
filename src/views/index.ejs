@@ -34,10 +34,28 @@
                 }
             })
         }
+
+        function findLocation() {
+            if ("geolocation" in navigator) {
+                navigator.geolocation.getCurrentPosition((position) => {
+                    const lat = position.coords.latitude;
+                    const long = position.coords.longitude
+
+                    console.log("position:", lat, long);
+
+                    $("#location").append(`lat: ${lat}, long: ${long}`);
+                });
+            } else {
+                console.log("cannot get current address");
+            }
+        }
     </script>
 </head>
 <body>
     <input type="text" id="search" onkeyup="search()">
     <button>Search</button>
+
+    <p id="location"></p>
+    <button id="locationbtn" onclick="findLocation()">find</button>
 </body>
 </html>
