@@ -184,11 +184,11 @@ security:
 <br>
 <hr>
 
- ## Jenkins
+ ## Jenkins Setup
 
 <details>
 
-<summary> Install JDK </summary>
+<summary> Step 1. Install JDK </summary>
 
 ```
 ### JDK 1.8.0 설치 및 버전 확인
@@ -202,7 +202,7 @@ java -version
 
 <details>
 
-<summary> Setup Jenkins </summary>
+<summary> Step 2. Setup Jenkins </summary>
 
 ```
 ### Jenkins 설치
@@ -230,3 +230,74 @@ sudo systemctl status jenkins
 ```
 
 </details>
+
+<details>
+
+<summary> Step 3. Convert .crt, .key to .jks </summary>
+
+>.jks란 java key store의 약자로서 자바 언어에서 사용되는 보안 인증서
+
+```
+# 1. .crt 및 .key 를 조합하여 jenkins.pfx 만들기
+# export password 입력 필요!
+openssl pkcs12 -export -in <crt인증서 경로>.crt -inkey <private키 경로>.key -out jenkins.pfx
+
+# .pfx 에 포함된 인증서 확인 
+openssl pkcs12 -info -in jenkins.pfx
+
+# 2. 위에서 생성한 jenkin.pfx를  .jks 로 변환
+keytool -importkeystore -srckeystore jenkins.pfx -srcstoretype pkcs12 -destkeystore jenkins.jks -deststoretype jks
+
+# 3. jenkins 전용 폴더 생성 후 jks 파일 이동
+mkdir -p /etc/jenkins
+cp jenkins.jks /etc/jenkins/
+
+# 4. key와 폴더 권한 변경
+chown -R jenkins: /etc/jenkins
+chmod 700 /etc/jenkins
+chmod 600 /etc/jenkins/jenkins.jks
+
+```
+
+</details>
+
+<details>
+
+<summary> Step 4. 젠킨스 config 파일 설정 </summary>
+
+```
+# 1. config 파일 접속
+sudo vi /etc/sysconfig/jenkins
+
+아래와 같이 변경하기
+JENKINS_PORT="-1"	# http 포트 비활성화
+JENKINS_HTTPS_PORT="9090"	# 젠킨스 포트 설정 (다른 포트여도 ㄱㅊ)
+JENKINS_HTTPS_KEYSTORE="/etc/jenkins/jenkins.jks" # 앞서 변환한 .jks 인증서 경로
+JENKINS_HTTPS_KEYSTORE_PASSWORD="<인증서 비밀번호>"
+JENKINS_HTTPS_LISTEN_ADDRESS="0.0.0.0"	# 모든 ip에서 접근할 수 있도록 변경
+JENKINS_ENABLE_ACCESS_LOG="yes"	# 초기 admin 비밀번호를 확인할 수 있도록 로그 활성화
+
+# 2. 젠킨스 재실행
+sudo systemctl restart jenkins
+
+```
+
+</details>
+
+<details>
+
+<summary> Step 5. EC2 Security Group 수정 </summary>
+
+AWS에 접속하여 젠킨스 포트번호 (9090) 열어주기
+
+</details>
+
+<details>
+
+<summary> 참고 </summary>
+
+https://www.sslcert.co.kr/guides/SSL-Certificate-Convert-Format
+https://devopscube.com/configure-ssl-jenkins/
+
+</details>
+
