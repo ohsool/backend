@@ -26,31 +26,31 @@ it ("login success", async () => {
     expect(response.body.token).toBeTruthy();
 });
 
-it ("send beer recommendation to slack - success", async () => {
-    const response = await request(app).post("/api/recommendation")
-        .auth(token, { type: 'bearer' })
-        .send({
-            beer: "test beer",
-            description: "beer recommendation testing",
-            location: "test location",
-            image: "https://miro.medium.com/max/796/1*P_zZlof7IhiohKQ7QEaXzA.png"
-        });
+// it ("send beer recommendation to slack - success", async () => {
+//     const response = await request(app).post("/api/recommendation")
+//         .auth(token, { type: 'bearer' })
+//         .send({
+//             beer: "test beer",
+//             description: "beer recommendation testing",
+//             location: "test location",
+//             image: "https://miro.medium.com/max/796/1*P_zZlof7IhiohKQ7QEaXzA.png"
+//         });
 
-    expect(response.body.message).toBe("success");
-    expect(response.body.result).toBeTruthy();
-});
+//     expect(response.body.message).toBe("success");
+//     expect(response.body.result).toBeTruthy();
+// });
 
-it ("send beer complaint to slack - success", async () => {
-    const response = await request(app).post("/api/complaint")
-        .auth(token, { type: 'bearer' })
-        .send({
-            title: "test complaint",
-            description: "complaint testing"
-        });
+// it ("send beer complaint to slack - success", async () => {
+//     const response = await request(app).post("/api/complaint")
+//         .auth(token, { type: 'bearer' })
+//         .send({
+//             title: "test complaint",
+//             description: "complaint testing"
+//         });
 
-    expect(response.body.message).toBe("success");
-    expect(response.body.result).toBeTruthy();
-});
+//     expect(response.body.message).toBe("success");
+//     expect(response.body.result).toBeTruthy();
+// });
 
 it ("signout - success", async () => {
     const response = await request(app).delete("/api/user")
@@ -59,8 +59,3 @@ it ("signout - success", async () => {
 
     expect(response.body.message).toBe("success");
 });
-
-// csrf
-// 서버 정보 노출되지 않게 숨기기
-// 내 서비스 해킹해보기
-// sql injection, script 공격
