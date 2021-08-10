@@ -7,7 +7,6 @@ phases:
       - echo npm installed
   pre_build:
     commands:
-      - npm run lint
       - export NODE_ENV=test
       - echo "${NODE_ENV} mode is on"
   build:
