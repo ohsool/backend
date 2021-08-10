@@ -27,9 +27,21 @@ const joiSchema = joi.object({
   // existed email?
   userRouter.post("/email", async (req, res) => {
     const { email } = req.body;
+    const test_emails = [
+      "mybeertest@test.com", 
+      "anothermybeertest@test.com", 
+      "recommendationtest@test.com",
+      "test@test.com"
+    ]
 
     if (!email) {
       res.json({ message: "fail", error: "no input" });
+
+      return
+    }
+
+    if ( test_emails.includes(email) ) {
+      res.json({ message: "fail", error: "email for test. don't use this" });
 
       return
     }
