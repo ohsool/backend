@@ -15,47 +15,95 @@
         crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.4.0/socket.io.js"></script>
+
+    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=0b8e162a9a4883788f6fe7c7463d9cfc&libraries=services"></script>
     <script>
-        function search() {
-            const word = $("#search").val();
+        let map;
+        const infowindow = new kakao.maps.InfoWindow({zIndex:1});
 
-            console.log(word);
+        $(document).ready(function () {
+            findLocation();
+        })
 
-            $.ajax({
-                type: "GET",
-                url: "http://localhost:5209/api/search",
-                data: { 
-                    word: word 
-                },
-                success: function (response) {
-                    let words = response['words'];
-
-                    console.log(words);
-                }
-            })
-        }
-
-        function findLocation() {
-            if ("geolocation" in navigator) {
+        function findLocation(place) {  // Find my location. or not, 여삼빌딩
+            if ("geolocation" in navigator) {  // if i can get my address
                 navigator.geolocation.getCurrentPosition((position) => {
                     const lat = position.coords.latitude;
                     const long = position.coords.longitude
 
-                    console.log("position:", lat, long);
+                    $("#location").text(`lat: ${lat}, long: ${long}`);
 
-                    $("#location").append(`lat: ${lat}, long: ${long}`);
+                    makeMap(place, lat, long);
                 });
-            } else {
-                console.log("cannot get current address");
+            } else {  // if i cannot get my address. 여삼빌딩
+                const lat = 37.4995482;
+                const long = 127.0291611;
+
+                makeMap(place, lat, long);
             }
         }
-    </script>
+
+        function makeMap(place, lat, long) {  // Make kakaomap
+            const container = document.getElementById('map');
+            const options = {
+                center: new kakao.maps.LatLng(lat, long),
+                level: 3
+            };
+
+            map = new kakao.maps.Map(container, options);  // make kakao MAP
+
+            if (place) {  // keyword of address
+                const places = new kakao.maps.services.Places();
+
+                places.keywordSearch(place, placesSearchWithKeyword);  // find places with keywords. callback
+            }
+        }
+
+        function placesSearchWithKeyword(data, status, pagination) {  // find places with keywords. callback
+            if (status === kakao.maps.services.Status.OK) {
+                const bounds = new kakao.maps.LatLngBounds();
+
+                for (let i = 0; i < data.length; i++) {
+                    displayMarker(data[i]);  // show markers of searched places
+
+                    bounds.extend(new kakao.maps.LatLng(data[i].y, data[i].x));
+                }
+
+                map.setBounds(bounds);
+            } 
+        }
+
+        function displayMarker(place) {  // show markers of searched places
+            const marker = new kakao.maps.Marker({
+                map: map,
+                position: new kakao.maps.LatLng(place.y, place.x)
+            });
+
+            kakao.maps.event.addListener(marker, 'click', function() {  // if i click marker
+                infowindow.setContent('<div style="padding:5px;font-size:12px;" id="choosed">' + place.place_name + '</div>');
+                infowindow.open(map, marker);
+
+                choose(place);
+            });
+        }
+
+        function searchbtnclicked() {
+            const place = $('#addressinput').val();
+
+            findLocation(place);
+        }
+
+        function choose(place) {
+            console.log(place);
+
+            alert(`You chose ${place.place_name}`);
+        }
+	</script>
 </head>
 <body>
-    <input type="text" id="search" onkeyup="search()">
-    <button>Search</button>
-
-    <p id="location"></p>
-    <button id="locationbtn" onclick="findLocation()">find</button>
+    <p id="location">Ready..</p>
+    <input type="text" id="addressinput"><button id="addressbtn" onclick="searchbtnclicked()">Search</button>
+    <div id="map" style="width:500px;height:400px;"></div>
+    
 </body>
 </html>

@@ -293,7 +293,10 @@ myBeerRouter.delete("/:myBeerId", authMiddleware, async (req, res) => {
 
         if (beerCount > 1) {
             newBeerAvgRate = (( beerCount * beerAvgRate) - rate) / (beerCount - 1);
+            console.log("mybeer.ts: ", beerCount, beerAvgRate, rate, beerCount)
         }
+
+        console.log("mybeer.ts: ", beerCount, newBeerAvgRate);
 
         await Beers.findOneAndUpdate({ name_korean: beer.name_korean }, { $set: { avgRate: newBeerAvgRate, count: beerCount - 1 } });
 
