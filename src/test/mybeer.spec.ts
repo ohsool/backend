@@ -65,6 +65,8 @@ it ("another register success, get beer id, get beercategory id", async () => {
     beerId = beer._id;
     beerCategoryId = beer.categoryId;
 
+    console.log("res:", response.body);
+
     expect(response.body.message).toBe("success");
     expect(response.statusCode).toBe(201); 
 });
