@@ -113,6 +113,65 @@ const likedBeer = async(req: Request, res: Response) => {
     }
 }
 
+// 장소 제보하기
+const reportLocation = async(req: Request, res: Response) => {
+    const { beerId, name, address, url } = req.body;
+    
+    if (!beerId || !name || !address || !url) {
+        res.json({ message: "fail", error: "empty value" });
+
+        return;
+    }
+
+    try {
+        const beer = await Beers.findOne({ _id: beerId });
+        const new_report = [ url, name, address ];
+
+        if (!beer) {
+            res.json({ message: "fail", error: "wrong beer" });
+
+            return;
+        }
+
+        const location_report: Array<String> = beer.location_report;  // [[name, address, url], [name, address, url], ...]
+        const locations: Array<String> = beer.location;
+
+        // is reported location already exist in location list?
+        const found = locations.some(e => Array.isArray(e) && e.every((o, i) => Object.is(new_report[i], o)));
+    
+        if ( found ) {
+            res.send({ message: "fail", error: "location already reported" });
+
+            return;
+        } 
+
+        let cnt = 0;
+
+        for (let i = 0; i < location_report.length; i ++) {
+            if (new_report[0] == location_report[i][0]) {
+                cnt += 1;
+            }
+        }
+
+        if (cnt >= 2) {  // reported 3 times. goes to location.
+            for (let i = 0; i < cnt; i ++) {
+                await Beers.findOneAndUpdate({_id: beerId}, {$pull: {location_report: new_report}});
+            }
+
+            await Beers.findOneAndUpdate({_id: beerId}, {$push: {location: [new_report] }});
+        } else {  // reported less than 3 times. goes to location_report.
+            await Beers.findOneAndUpdate({_id: beerId}, {$push: {location_report: [new_report] }});
+        }
+
+        const new_beer = await Beers.findOne({ _id: beerId });
+
+        res.json({ message: "success", beer: new_beer });
+    } catch (error) {
+        res.status(400).send({ message: "fail", error });
+    }
+    
+}
+
 export default {
     getBeers,
     postBeer,
@@ -120,5 +179,6 @@ export default {
     deleteBeer,
     likeBeer,
     unlikeBeer,
-    likedBeer
+    likedBeer,
+    reportLocation
 }
