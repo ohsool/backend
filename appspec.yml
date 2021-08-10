@@ -3,7 +3,11 @@ os: linux
 files: 
   - source: /
     destination: /home/ec2-user/ohsool
-hooks: 
+hooks:   
+  ValidateService:
+    - location: scripts/validate_service.sh
+      timeout: 30
+      runas: ec2-user
   ApplicationStop: 
     - location: scripts/application_stop.sh
       timeout: 300
