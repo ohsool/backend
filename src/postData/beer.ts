@@ -24,6 +24,10 @@ beerCrawlingRouter.post("/", async(req, res) => {
             degree: 5.0,
             categoryId: beerCategoryArray[0][0],
             hashtag: [
+                "미국",
+                "5.0",
+                "감귤향",
+                "Lager",
                 "황금색",
                 "안호이저부시",
                 "라이트바디"
@@ -38,6 +42,9 @@ beerCrawlingRouter.post("/", async(req, res) => {
             categoryId: beerCategoryArray[0][0],
             hashtag: [
                 "미국",
+                "4.2",
+                "맥아향",
+                "Lager",
                 "밀러쿠어스",
                 "옥수수"
             ],
@@ -50,8 +57,11 @@ beerCrawlingRouter.post("/", async(req, res) => {
             degree: 4.7,
             categoryId: beerCategoryArray[0][0],
             hashtag: [
+                "중국",
+                "4.7",
+                "맥아향",
+                "Lager",
                 "양꼬치",
-                "중국"
             ],
             features: beerCategoryArray[0][1]
         },
@@ -63,6 +73,9 @@ beerCrawlingRouter.post("/", async(req, res) => {
             categoryId: beerCategoryArray[0][0],
             hashtag: [
                 "일본",
+                "5.0",
+                "아로마향",
+                "Lager",
                 "롯데",
                 "슈퍼드라이"
             ],
@@ -75,9 +88,12 @@ beerCrawlingRouter.post("/", async(req, res) => {
             degree: 4.6,
             categoryId: beerCategoryArray[0][0],
             hashtag: [
+                "호주",
+                "4.6",
+                "아로마향",
+                "Lager",
                 "VB",
-                "포스터스",
-                "호주"
+                "포스터스"
             ],
             features: beerCategoryArray[0][1]
         },
@@ -90,6 +106,9 @@ beerCrawlingRouter.post("/", async(req, res) => {
             categoryId: beerCategoryArray[1][0],
             hashtag: [
                 "체코",
+                "4.4",
+                "풀향",
+                "Pilsner",
                 "황금색",
                 "아사히그룹"
             ],
@@ -103,6 +122,9 @@ beerCrawlingRouter.post("/", async(req, res) => {
             categoryId: beerCategoryArray[1][0],
             hashtag: [
                 "미국",
+                "5.0",
+                "맥아향",
+                "Pilsner",
                 "보리몰트",
                 "상쾌함"
             ],
@@ -116,6 +138,9 @@ beerCrawlingRouter.post("/", async(req, res) => {
             categoryId: beerCategoryArray[1][0],
             hashtag: [
                 "한국",
+                "7.6",
+                "밀향",
+                "Pilsner",
                 "높은도수",
                 "강렬한맛"
             ],
@@ -129,8 +154,11 @@ beerCrawlingRouter.post("/", async(req, res) => {
             categoryId: beerCategoryArray[1][0],
             hashtag: [
                 "독일",
+                "5.1",
+                "감귤향",
+                "Pilsner",
                 "황금색",
-                "감귤향"
+                "쌉쌀한맛"
             ],
             features: beerCategoryArray[1][1]
         },
@@ -142,8 +170,10 @@ beerCrawlingRouter.post("/", async(req, res) => {
             categoryId: beerCategoryArray[1][0],
             hashtag: [
                 "일본",
-                "다이아몬드",
-                "맥아"
+                "5.5",
+                "맥아향",
+                "Pilsner",
+                "다이아몬드"
             ],
             features: beerCategoryArray[1][1]
         },
@@ -159,9 +189,12 @@ beerCrawlingRouter.post("/", async(req, res) => {
             degree: 5.0,
             categoryId: beerCategoryArray[2][0],
             hashtag: [
-                "황금색",
-                "가벼운쓴맛",
+                "한국",
+                "5.0",
                 "과일향",
+                "황금색",
+                "Pale Ale",
+                "가벼운쓴맛",
                 "꽃향기"
             ],
             features: beerCategoryArray[2][1]
@@ -173,8 +206,11 @@ beerCrawlingRouter.post("/", async(req, res) => {
             degree: 5.5,
             categoryId: beerCategoryArray[2][0],
             hashtag: [
-                "황금색",
+                "미국",
+                "5.5",
                 "과일향",
+                "Pale Ale",
+                "황금색",
                 "산뜻한맛"
             ],
             features: beerCategoryArray[2][1]
@@ -186,9 +222,12 @@ beerCrawlingRouter.post("/", async(req, res) => {
             degree: 5.5,
             categoryId: beerCategoryArray[2][0],
             hashtag: [
-                "멜론향",
+                "미국",
+                "5.5",
                 "허브향",
-                "미국"
+                "Pale Ale",
+                "멜론향",
+                "정어리"
             ],
             features: beerCategoryArray[2][1]
         },
@@ -199,8 +238,11 @@ beerCrawlingRouter.post("/", async(req, res) => {
             degree: 4.5,
             categoryId: beerCategoryArray[2][0],
             hashtag:[
-                "KneeDeep",
+                "미국",
+                "4.5",
                 "감귤향",
+                "Pale Ale",
+                "KneeDeep",
                 "산뜻한맛",
                 "황금색"
             ],
@@ -213,9 +255,12 @@ beerCrawlingRouter.post("/", async(req, res) => {
             degree: 5.0,
             categoryId: beerCategoryArray[2][0],
             hashtag: [
-                "산뜻한맛",
+                "한국",
+                "5.0",
                 "시트러스향",
-                "한국"
+                "Pale Ale",
+                "산뜻한맛",
+                "ark"
             ],
             features: beerCategoryArray[2][1]
         },
@@ -227,8 +272,10 @@ beerCrawlingRouter.post("/", async(req, res) => {
             categoryId: beerCategoryArray[3][0],
             hashtag: [
                 "미국",
-                "서부해안",
+                "6.5",
                 "과일향",
+                "IPA",
+                "서부해안",
                 "가벼운쓴맛"
             ],
             features: beerCategoryArray[3][1]
@@ -240,9 +287,12 @@ beerCrawlingRouter.post("/", async(req, res) => {
             degree: 5.9,
             categoryId: beerCategoryArray[3][0],
             hashtag: [
+                "미국",
+                "5.9",
+                "과일향",
+                "IPA",
                 "덕덕구스",
-                "황금색",
-                "과일향"
+                "황금색"
             ],
             features: beerCategoryArray[3][1]
         },
@@ -253,7 +303,10 @@ beerCrawlingRouter.post("/", async(req, res) => {
             degree: 6.0,
             categoryId: beerCategoryArray[3][0],
             hashtag: [
+                "리투아니아",
+                "6.0",
                 "과일향",
+                "IPA",
                 "씁쓸한맛",
                 "옅은단맛",
                 "무거운무게감"
@@ -267,7 +320,10 @@ beerCrawlingRouter.post("/", async(req, res) => {
             degree: 6.7,
             categoryId: beerCategoryArray[3][0],
             hashtag: [
+                "미국",
+                "6.7",
                 "과일향",
+                "IPA",
                 "씁쓸한맛",
                 "부드러운첫맛",
                 "은은한끝맛"
@@ -281,7 +337,10 @@ beerCrawlingRouter.post("/", async(req, res) => {
             degree: 3.6,
             categoryId: beerCategoryArray[3][0],
             hashtag: [
+                "영국",
+                "3.6",
                 "견과류향",
+                "IPA",
                 "가벼운바디감",
                 "낮은도수"
             ],
@@ -301,6 +360,10 @@ beerCrawlingRouter.post("/", async(req, res) => {
             degree: 7.7,
             categoryId: beerCategoryArray[4][0],
             hashtag:[
+                "독일",
+                "7.7",
+                "바나나향",
+                "Weizen",
                 "진한밀몰트",
                 "크리미한거품",
                 "부드러움"
@@ -314,8 +377,11 @@ beerCrawlingRouter.post("/", async(req, res) => {
             degree: 5.5,
             categoryId: beerCategoryArray[4][0],
             hashtag:[
-                "황금색",
+                "독일",
+                "5.5",
                 "과일향",
+                "Weizen",
+                "황금색",
                 "씁쓸한맛"
             ],
             features: beerCategoryArray[4][1]
@@ -327,7 +393,10 @@ beerCrawlingRouter.post("/", async(req, res) => {
             degree: 5.4,
             categoryId: beerCategoryArray[4][0],
             hashtag:[
+                "독일",
+                "5.4",
                 "과일향",
+                "Weizen",
                 "가벼운바디감",
                 "깔끔한끝맛"
             ],
@@ -340,7 +409,10 @@ beerCrawlingRouter.post("/", async(req, res) => {
             degree: 4.9,
             categoryId: beerCategoryArray[4][0],
             hashtag:[
+                "독일",
+                "4.9",
                 "과일향",
+                "Weizen",
                 "가벼운바디감",
                 "저렴"
             ],
@@ -353,7 +425,10 @@ beerCrawlingRouter.post("/", async(req, res) => {
             degree: 5.4,
             categoryId: beerCategoryArray[4][0],
             hashtag:[
+                "미국",
+                "5.4",
                 "오렌지향",
+                "Weizen",
                 "오렌지맛",
                 "톡쏘는탄산"
             ],
@@ -371,9 +446,13 @@ beerCrawlingRouter.post("/", async(req, res) => {
             degree: 5.3,
             categoryId: beerCategoryArray[5][0],
             hashtag: [
+                "독일",
+                "5.3",
+                "커피향",
+                "Dunkel",
                 "흑맥주",
-                "깔끔함",
-                "독일"
+                "깔끔함"
+                
             ],
             features: beerCategoryArray[5][1]
         },
@@ -385,8 +464,10 @@ beerCrawlingRouter.post("/", async(req, res) => {
             categoryId: beerCategoryArray[5][0],
             hashtag: [
                 "독일",
-                "흑맥주",
+                "5.3",
                 "초콜릿향",
+                "Dunkel",
+                "흑맥주",
                 "깔끔함"
             ],
             features: beerCategoryArray[5][1]
@@ -398,10 +479,14 @@ beerCrawlingRouter.post("/", async(req, res) => {
             degree: 4.7,
             categoryId: beerCategoryArray[5][0],
             hashtag: [
+                "독일",
+                "4.7",
+                "넛향",
+                "Dunkel",
                 "다크라거",
                 "부드러움",
                 "흑맥주",
-                "독일"
+                
             ],
             features: beerCategoryArray[5][1]
         },
@@ -413,9 +498,11 @@ beerCrawlingRouter.post("/", async(req, res) => {
             categoryId: beerCategoryArray[5][0],
             hashtag: [
                 "한국",
+                "4.5",
+                "로스팅향",
+                "Dunkel",
                 "다크라거",
-                "흑맥주",
-                "로스팅향"
+                "흑맥주"
             ],
             features: beerCategoryArray[5][1]
         },
@@ -426,9 +513,12 @@ beerCrawlingRouter.post("/", async(req, res) => {
             degree: 3.8,
             categoryId: beerCategoryArray[5][0],
             hashtag: [
+                "체코",
+                "3.8",
+                "커피향",
+                "Dunkel",
                 "흑맥주",
-                "초콜릿향",
-                "커피향"
+                "초콜릿향"
             ],
             features: beerCategoryArray[5][1]
         },
@@ -441,6 +531,11 @@ beerCrawlingRouter.post("/", async(req, res) => {
             degree: 4.2,
             categoryId: beerCategoryArray[6][0],
             hashtag: [
+                "아일랜드",
+                "4.2",
+                "커피향",
+                "초콜릿향",
+                "Stout",
                 "흑맥주",
                 "청량감",
                 "쌉쌀한"   
@@ -454,9 +549,13 @@ beerCrawlingRouter.post("/", async(req, res) => {
             degree: 4.2,
             categoryId: beerCategoryArray[6][0],
             hashtag: [
+                "아일랜드",
+                "4.2",
+                "커피향",
+                "Stout",
                 "흑맥주",
                 "부드러움",
-                "기네스"   
+                "초콜릿향"
             ],
             features: beerCategoryArray[6][1]
         },
@@ -467,10 +566,12 @@ beerCrawlingRouter.post("/", async(req, res) => {
             degree: 7.5,
             categoryId: beerCategoryArray[6][0],
             hashtag: [
-                "흑맥주",
                 "독일",
-                "부드러움",
-                "초콜릿향"     
+                "7.5",
+                "초콜릿향",
+                "Stout",
+                "흑맥주",
+                "부드러움"
             ],
             features: beerCategoryArray[6][1]
         },
@@ -482,8 +583,10 @@ beerCrawlingRouter.post("/", async(req, res) => {
             categoryId: beerCategoryArray[6][0],
             hashtag: [
                 "한국",
-                "무거운바디감",
+                "5.7",
                 "초콜릿향",
+                "Stout",
+                "무거운바디감",
                 "흑맥주" 
             ],
             features: beerCategoryArray[6][1]
@@ -495,9 +598,11 @@ beerCrawlingRouter.post("/", async(req, res) => {
             degree: 7.7,
             categoryId: beerCategoryArray[6][0],
             hashtag: [
+                "덴마크",
+                "7.7",
+                "초콜릿향",
                 "로스팅",
-                "흑맥주",
-                "초콜릿향"  
+                "흑맥주"
             ],
             features: beerCategoryArray[6][1]
         },
@@ -508,7 +613,10 @@ beerCrawlingRouter.post("/", async(req, res) => {
             degree: 5.8,
             categoryId: beerCategoryArray[6][0],
             hashtag: [
+                "미국",
+                "5.8",
                 "커피향",
+                "Stout",
                 "흑맥주",
                 "초콜릿향",
                 "무거운바디감",
@@ -523,10 +631,14 @@ beerCrawlingRouter.post("/", async(req, res) => {
             degree: 7.9,
             categoryId: beerCategoryArray[7][0],
             hashtag: [
+                "독일",
+                "과일향",
+                "7.9",
+                "Stout",
                 "흑맥주",
                 "높은도수",
                 "부드러움",
-                "과일향" 
+                
             ],
             features: beerCategoryArray[7][1]
         },
@@ -537,8 +649,11 @@ beerCrawlingRouter.post("/", async(req, res) => {
             degree: 5.2,
             categoryId: beerCategoryArray[7][0],
             hashtag: [
-                "흑맥주",
                 "포르투칼",
+                "5.2",
+                "보리향",
+                "Bock",
+                "흑맥주",
                 "달콤함" 
             ],
             features: beerCategoryArray[7][1]
@@ -550,10 +665,12 @@ beerCrawlingRouter.post("/", async(req, res) => {
             degree: 6.7,
             categoryId: beerCategoryArray[7][0],
             hashtag: [
-                "흑맥주",
-                "부드러움",
+                "독일",
+                "6.7",
                 "커피향", 
-                "독일" 
+                "Bock",
+                "흑맥주",
+                "부드러움"
             ],
             features: beerCategoryArray[7][1]
         },
@@ -564,10 +681,13 @@ beerCrawlingRouter.post("/", async(req, res) => {
             degree: 7.4,
             categoryId: beerCategoryArray[7][0],
             hashtag: [
+                "독일",
+                "7.4",
+                "꽃향",
+                "Bock",
                 "흑맥주",
                 "무거운바디감",
-                "달콤함",
-                "독일" 
+                "달콤함"
             ],
             features: beerCategoryArray[7][1]
         },
@@ -575,19 +695,18 @@ beerCrawlingRouter.post("/", async(req, res) => {
             name_korean: "아벤티누스 아이스복",
             name_english: "Schneider Aventinus Eisbock",
             image: "https://drive.google.com/uc?export=view&id=1AkpVsmwB6zMIQYcb95buWzCxhn3mumwP ",
-            degree: 12,
+            degree: 12.0,
             categoryId: beerCategoryArray[7][0],
             hashtag: [
-                "흑맥주",
+                "독일",
+                "12.0",
                 "과일향",
+                "Bock",
                 "높은도수",
-                "독일" 
+                "흑맥주",
             ],
             features: beerCategoryArray[7][1]
         },
-
-
-    
     ]
 
     try {
