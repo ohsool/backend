@@ -8,11 +8,13 @@ phases:
   pre_build:
     commands:
       - npm run lint
+      - export NODE_ENV=test
+      - echo "${NODE_ENV} mode is on"
   build:
     commands:
-      - begin test
+      - echo begin test
       - npm test
-      - end test
+      - echo end test
   post_build:
     commands:
       - echo Build completed
