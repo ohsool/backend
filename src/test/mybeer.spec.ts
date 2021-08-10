@@ -304,7 +304,8 @@ it ("delete one mybeer - success", async () => {
 
     if (countBefore > 1) {
         avgRate = (( countBefore * avgRateBefore ) - rate) / ( countBefore - 1);
-        avgRateCategory = (( countCategoryBefore * avgRateCategoryBefore ) - rate) / ( countCategoryBefore - 1);    
+        avgRateCategory = (( countCategoryBefore * avgRateCategoryBefore ) - rate) / ( countCategoryBefore - 1); 
+        console.log("test:", countCategoryBefore, avgRateCategoryBefore, rate, countCategoryBefore);   
     }
     
     expect(response.body.message).toBe("success");

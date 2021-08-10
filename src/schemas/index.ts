@@ -5,7 +5,7 @@ let url = "mongodb://localhost:27017/ohsool";
 
 console.log("DB mode:", env.modeNow);
 
-if (env.modeNow == "development" || env.modeNow == "production") { // on server
+if (env.modeNow == "development" || env.modeNow == "production" || env.modeNow == "test") { // on server
   url = env.atlas_url;
 }  // else it's local or jest
 
