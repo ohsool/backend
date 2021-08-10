@@ -1,0 +1,22 @@
+version: 0.2
+ 
+phases:
+  install:
+    commands:
+      - npm install
+      - echo npm installed
+  pre_build:
+    commands:
+      - export NODE_ENV=test
+      - echo "${NODE_ENV} mode is on"
+  build:
+    commands:
+      - echo begin test
+      - npm test
+      - echo end test
+  post_build:
+    commands:
+      - echo Build completed
+artifacts:
+  files:
+    - '**/*'

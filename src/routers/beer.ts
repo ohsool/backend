@@ -18,4 +18,6 @@ beerRouter.put("/unlike/:beerId", authMiddleware, BeerController.unlikeBeer);
 
 beerRouter.get("/liked", authMiddleware, BeerController.likedBeer);
 
+beerRouter.post("/report-location", BeerController.reportLocation);
+
 export { beerRouter };
