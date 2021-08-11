@@ -3,7 +3,7 @@ version: 0.2
 phases:
   install:
     runtime-versions:
-      nodejs: 16.6.1
+      nodejs: 10
     commands:
       - cd /home/ec2-user/ohsool
       - npm install
