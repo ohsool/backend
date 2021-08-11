@@ -6,6 +6,9 @@ import Users from "../schemas/user";
 import MyBeers from "../schemas/mybeer";
 import BeerCategories from "../schemas/beerCategory";
 
+import { secretAPIkey } from '../ssl/secretAPI';
+const key = secretAPIkey();
+
 let token = "";
 let anothertoken = "";
 let mybeerId = "";
@@ -31,7 +34,7 @@ const confirmPassword = "mybeertest1234";
 const wrongId = "610e5058dc866bf2e5db6334";
 
 it ("register success, get beer id, get beercategory id", async () => {
-    const response = await request(app).post("/api/user")
+    const response = await request(app).post(`${key}/api/user`)
         .send({ email, nickname, password, confirmPassword });
 
     const beer = await Beers.findOne({ name_korean: "버드와이저" });
@@ -43,7 +46,7 @@ it ("register success, get beer id, get beercategory id", async () => {
 });
 
 it ("login success", async () => {
-    const response = await request(app).post("/api/user/auth")
+    const response = await request(app).post(`/${key}/api/user/auth`)
     .send({ email, password });
 
     token = response.body.token;
@@ -53,7 +56,7 @@ it ("login success", async () => {
 });
 
 it ("another register success, get beer id, get beercategory id", async () => {
-    const response = await request(app).post("/api/user")
+    const response = await request(app).post(`/${key}/api/user`)
         .send({ 
             email: "anothermybeertest@test.com",
             nickname: "anothermybeertest22",
@@ -72,7 +75,7 @@ it ("another register success, get beer id, get beercategory id", async () => {
 });
 
 it ("another login success", async () => {
-    const response = await request(app).post("/api/user/auth").send({
+    const response = await request(app).post(`/${key}/api/user/auth`).send({
         email: "anothermybeertest@test.com",
         password: "mybeertest1234"
     });
@@ -92,7 +95,7 @@ it ("post mybeer - success", async () => {
     const avgRateCategoryBefore = beerCategory.avgRate["Unknown"][0];
     const countCategoryBefore = beerCategory.avgRate["Unknown"][1];
 
-    const response = await request(app).post(`/api/mybeer/${beerId}`)
+    const response = await request(app).post(`${key}/api/mybeer/${beerId}`)
     .auth(token, { type: 'bearer' })
     .send({ myFeatures, location, rate, review });
 
@@ -118,7 +121,7 @@ it ("post mybeer - success", async () => {
 });
 
 it ("post mybeer - fail (beer doesn't exist)", async () => {
-    const response = await request(app).post(`/api/mybeer/${wrongId}`)
+    const response = await request(app).post(`/${key}/api/mybeer/${wrongId}`)
     .auth(token, { type: 'bearer' })
     .send({ myFeatures, location, rate, review });
 
@@ -127,7 +130,7 @@ it ("post mybeer - fail (beer doesn't exist)", async () => {
 });
 
 it ("post mybeer - fail (no rate)", async () => {
-    const response = await request(app).post(`/api/mybeer/${beerId}`)
+    const response = await request(app).post(`/${key}/api/mybeer/${beerId}`)
     .auth(token, { type: 'bearer' })
     .send({ myFeatures, location, review });
 
@@ -136,7 +139,7 @@ it ("post mybeer - fail (no rate)", async () => {
 });
 
 it ("post mybeer - fail (review too long)", async () => {
-    const response = await request(app).post(`/api/mybeer/${beerId}`)
+    const response = await request(app).post(`/${key}/api/mybeer/${beerId}`)
     .auth(token, { type: 'bearer' })
     .send({
         myFeatures, location, rate, review: "test mybeer review too long test mybeer review too long test mybeer review too long test mybeer review too long test mybeer review too long test mybeer review too long test mybeer review too long"
@@ -147,7 +150,7 @@ it ("post mybeer - fail (review too long)", async () => {
 });
 
 it ("get all mybeers - success", async () => {
-    const response = await request(app).get("/api/mybeer/all")
+    const response = await request(app).get(`/${key}/api/mybeer/all`)
     .auth(token, { type: 'bearer' })
     .send();
 
@@ -157,7 +160,7 @@ it ("get all mybeers - success", async () => {
 });
 
 it ("get my mybeers - success", async () => {
-    const response = await request(app).get("/api/mybeer/my")
+    const response = await request(app).get(`/${key}/api/mybeer/my`)
     .auth(token, { type: 'bearer' })
     .send();
 
@@ -167,7 +170,7 @@ it ("get my mybeers - success", async () => {
 });
 
 it ("get specific beer's mybeers - success", async () => {
-    const response = await request(app).get(`/api/mybeer/beer/${beerId}`)
+    const response = await request(app).get(`/${key}/api/mybeer/beer/${beerId}`)
     .auth(token, { type: 'bearer' })
     .send();
 
@@ -177,7 +180,7 @@ it ("get specific beer's mybeers - success", async () => {
 });
 
 it ("get specific beer's mybeers - fail (wrong beerId)", async () => {
-    const response = await request(app).get(`/api/mybeer/beer/${wrongId}`)
+    const response = await request(app).get(`/${key}/api/mybeer/beer/${wrongId}`)
     .auth(token, { type: 'bearer' })
     .send();
 
@@ -186,7 +189,7 @@ it ("get specific beer's mybeers - fail (wrong beerId)", async () => {
 });
 
 it ("get one specific mybeer - success", async () => {
-    const response = await request(app).get(`/api/mybeer/${mybeerId}`)
+    const response = await request(app).get(`/${key}/api/mybeer/${beerId}`)
     .auth(token, { type: 'bearer' })
     .send();
 
@@ -197,7 +200,7 @@ it ("get one specific mybeer - success", async () => {
 });
 
 it ("get one specific mybeer - fail (wrong mybeer id)", async () => {
-    const response = await request(app).get(`/api/mybeer/${wrongId}`)
+    const response = await request(app).get(`/${key}/api/mybeer/${wrongId}`)
     .auth(token, { type: 'bearer' })
     .send();;
 
@@ -214,7 +217,7 @@ it ("modify one mybeer - success", async () => {
     const avgRateCategoryBefore = beerCategory.avgRate["Unknown"][0];
     const countCategoryBefore = beerCategory.avgRate["Unknown"][1];
 
-    const response = await request(app).put(`/api/mybeer/${mybeerId}`)
+    const response = await request(app).put(`/${key}/api/mybeer/${mybeerId}`)
     .auth(token, { type: 'bearer' })
     .send({
         myFeatures, location, rate: 4, review: "modified review"
@@ -240,7 +243,7 @@ it ("modify one mybeer - success", async () => {
 });
 
 it ("modify one mybeer - fail (wrong id)", async () => {
-    const response = await request(app).put(`/api/mybeer/${wrongId}`)
+    const response = await request(app).put(`/${key}/api/mybeer/${wrongId}`)
     .auth(token, { type: 'bearer' })
     .send({
         myFeatures, location, rate: 4, review: "modified review"
@@ -251,7 +254,7 @@ it ("modify one mybeer - fail (wrong id)", async () => {
 });
 
 it ("modify one mybeer - fail (wrong user)", async () => {
-    const response = await request(app).put(`/api/mybeer/${mybeerId}`)
+    const response = await request(app).put(`/${key}/api/mybeer/${mybeerId}`)
     .auth(anothertoken, { type: 'bearer' })
     .send({
         myFeatures, location, rate: 4, review: "modified review"
@@ -262,7 +265,7 @@ it ("modify one mybeer - fail (wrong user)", async () => {
 });
 
 it ("delete one mybeer - fail (wrong user)", async () => {
-    const response = await request(app).delete(`/api/mybeer/${mybeerId}`)
+    const response = await request(app).delete(`/${key}/api/mybeer/${mybeerId}`)
     .auth(anothertoken, { type: 'bearer' })
     .send();
 
@@ -271,7 +274,7 @@ it ("delete one mybeer - fail (wrong user)", async () => {
 });
 
 it ("delete one mybeer - fail (wrong id)", async () => {
-    const response = await request(app).delete(`/api/mybeer/${wrongId}`)
+    const response = await request(app).delete(`/${key}/api/mybeer/${wrongId}`)
     .auth(anothertoken, { type: 'bearer' })
     .send();
 
@@ -289,7 +292,7 @@ it ("delete one mybeer - success", async () => {
     const avgRateCategoryBefore = beerCategory.avgRate["Unknown"][0];
     const countCategoryBefore = beerCategory.avgRate["Unknown"][1];
 
-    const response = await request(app).delete(`/api/mybeer/${mybeerId}`)
+    const response = await request(app).delete(`/${key}/api/mybeer/${mybeerId}`)
     .auth(token, { type: 'bearer' })
     .send();
 
@@ -318,11 +321,11 @@ it ("delete one mybeer - success", async () => {
 });
 
 it ("signout - success", async () => {
-    const response = await request(app).delete("/api/user")
+    const response = await request(app).delete(`/${key}/api/user`)
         .auth(token, { type: 'bearer' })
         .send();
 
-    const response2 = await request(app).delete("/api/user")
+    const response2 = await request(app).delete(`/${key}/api/user`)
         .auth(anothertoken, { type: 'bearer' })
         .send();
 
