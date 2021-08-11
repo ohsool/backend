@@ -101,7 +101,7 @@ beerCrawlingRouter.post("/", async(req, res) => {
         {
             name_korean: "필스너우르켈",
             name_english: "Pilsner Urquell",
-            image: "https://drive.google.com/uc?export=view&id=13itou590w8VDxloEBu1Lgoyq4yZ62Lhv ",
+            image: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerImage/%ED%95%84%EC%8A%A4%EB%84%88.png",
             degree: 4.4,
             categoryId: beerCategoryArray[1][0],
             hashtag: [
@@ -177,15 +177,10 @@ beerCrawlingRouter.post("/", async(req, res) => {
             ],
             features: beerCategoryArray[1][1]
         },
-
-
-
-
-
         {
             name_korean: "플래티넘",
             name_english: "Platinum",
-            image: "https://drive.google.com/uc?export=view&id=1-boa2uXilB2_aJ_cdBeswjv9mS2uCQaL ",
+            image: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerImage/%ED%94%8C%EB%9E%98%ED%8B%B0%EB%84%98.png",
             degree: 5.0,
             categoryId: beerCategoryArray[2][0],
             hashtag: [
@@ -486,7 +481,7 @@ beerCrawlingRouter.post("/", async(req, res) => {
         {
             name_korean: "산청맥주 둔켈",
             name_english: "Sancheong Brewery Dunkel",
-            image: "https://drive.google.com/uc?export=view&id=15l-S0nyd2kz6inw4qC3t5OcoCDBHi7U-",
+            image: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerImage/%EC%82%B0%EC%B2%AD%EB%A7%A5%EC%A3%BC%EB%91%94%EC%BC%88.png",
             degree: 4.5,
             categoryId: beerCategoryArray[5][0],
             hashtag: [
