@@ -37,7 +37,7 @@ const getBeer = async(req: Request, res: Response) => {
         if (beer) {
             res.json({ message:"success", beer });
         } else {
-            res.send(400).send({ message: "fail", error: "beer does not exist in the database" });
+            res.status(400).send({ message: "fail", error: "beer does not exist in the database" });
             return;
         }
     } catch(error) {
