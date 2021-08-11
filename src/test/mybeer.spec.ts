@@ -38,6 +38,7 @@ it ("register success, get beer id, get beercategory id", async () => {
         .send({ email, nickname, password, confirmPassword });
 
     const beer = await Beers.findOne({ name_korean: "버드와이저" });
+    console.log(beer);
     beerId = beer._id;
     beerCategoryId = beer.categoryId;
 
@@ -92,6 +93,7 @@ it ("post mybeer - success", async () => {
     const avgRateBefore = beer.avgRate;
 
     let beerCategory = await BeerCategories.findOne({ _id: beer.categoryId });
+    console.log("avgRate:", beerCategory.avgRate);
     const avgRateCategoryBefore = beerCategory.avgRate["Unknown"][0];
     const countCategoryBefore = beerCategory.avgRate["Unknown"][1];
 

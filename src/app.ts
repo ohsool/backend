@@ -68,8 +68,21 @@ app.use('/swagger', swaggerUi.serve, swaggerUi.setup(swaggerFile))
 
 // get secret key
 import { secretAPIkey } from './ssl/secretAPI';
-const key = secretAPIkey();
+let key = secretAPIkey();
+let keyBefore = key;
 console.log("secret key now:", key);
+
+function getKey() {
+    key = secretAPIkey();
+    
+    if (key != keyBefore) {
+        keyBefore = key;
+        
+        console.log("secret key changed:", key);
+    }
+}
+
+setInterval(getKey, 5000);
 
 const allowOrigins = [];
 app.use(cors());
