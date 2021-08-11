@@ -2,13 +2,15 @@ version: 0.2
  
 phases:
   install:
-    commands:
-      - npm install
-      - echo npm installed
-  pre_build:
+    runtime-versions:
+      nodejs: 12
     commands:
       - export NODE_ENV=test
       - echo "${NODE_ENV} mode is on"
+  pre_build:
+    commands:
+      - npm install
+      - echo npm installed
   build:
     commands:
       - echo begin test
@@ -19,4 +21,4 @@ phases:
       - echo Build completed
 artifacts:
   files:
-    - '**/*'
+    - "**/*"

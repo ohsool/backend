@@ -87,7 +87,7 @@ myBeerRouter.post("/:beerId", authMiddleware, async (req, res) => {
 
         await Beers.findOneAndUpdate({ _id: beerId }, { $set: { avgRate: newBeerAvgRate, count: beerCount + 1 } });
 
-        res.send({ message: "success", myBeerId });
+        res.send({ message: "success", myBeer });
     } catch (error) {
         res.json({ message: "fail", error });
 
@@ -293,10 +293,7 @@ myBeerRouter.delete("/:myBeerId", authMiddleware, async (req, res) => {
 
         if (beerCount > 1) {
             newBeerAvgRate = (( beerCount * beerAvgRate) - rate) / (beerCount - 1);
-            console.log("mybeer.ts: ", beerCount, beerAvgRate, rate, beerCount)
         }
-
-        console.log("mybeer.ts: ", beerCount, newBeerAvgRate);
 
         await Beers.findOneAndUpdate({ name_korean: beer.name_korean }, { $set: { avgRate: newBeerAvgRate, count: beerCount - 1 } });
 

@@ -90,19 +90,18 @@ app.get("/search", (req, res) => {
 })
 
 // APIs
-app.use("/api/user", [userRouter]);
-app.use("/api/comment", [commentRouter]);
-app.use("/api/beer", [beerRouter]);
-app.use("/api/beerCategory", [beerCategoryRouter]);
-app.use("/api/mybeer", [myBeerRouter]);
-app.use("/api/complaint", [complaintRouter]);
-app.use("/api/recommendation", [recommendationRouter]);
-app.use("/api/search", [searchRouter]);
-
+app.use(`/${key}/api/user`, [userRouter]);
+app.use(`/${key}/api/comment`, [commentRouter]);
+app.use(`/${key}/api/beer`, [beerRouter]);
+app.use(`/${key}/api/beerCategory`, [beerCategoryRouter]);
+app.use(`/${key}/api/mybeer`, [myBeerRouter]);
+app.use(`/${key}/api/complaint`, [complaintRouter]);
+app.use(`/${key}/api/recommendation`, [recommendationRouter]);
+app.use(`/${key}/api/search`, [searchRouter]);
 
 // crawling APIs
-app.use("/api/crawling/beercategory", [beerCategoryCrawlingRouter]);
-app.use("/api/crawling/beer", [beerCrawlingRouter]);
+app.use(`/${key}/api/crawling/beercategory`, [beerCategoryCrawlingRouter]);
+app.use(`/${key}/api/crawling/beer`, [beerCrawlingRouter]);
 
 console.log("mode:", env.modeNow);
 

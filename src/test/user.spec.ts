@@ -1,6 +1,9 @@
 import request from "supertest";
 import { app } from "../app";
 
+import { secretAPIkey } from '../ssl/secretAPI';
+const key = secretAPIkey();
+
 import Beers from "../schemas/beer";
 import Users from "../schemas/user";
 
@@ -8,7 +11,7 @@ let token = "";
 let userId = "";
 
 it ("register success", async () => {
-    const response = await request(app).post("/api/user").send({
+    const response = await request(app).post(`/${key}/api/user`).send({
         email: "test@test.com",
         nickname: "test",
         password: "test1234",
@@ -20,7 +23,7 @@ it ("register success", async () => {
 });
 
 it ("register fail - missing one", async () => {
-    const response = await request(app).post("/api/user").send({
+    const response = await request(app).post(`/${key}/api/user`).send({
         nickname: "test22",
         password: "test1234",
         confirmPassword: "test1234"
@@ -30,7 +33,7 @@ it ("register fail - missing one", async () => {
 });
 
 it ("register fail - exited user", async () => {
-    const response = await request(app).post("/api/user").send({
+    const response = await request(app).post(`/${key}/api/user`).send({
         email: "test@test.com",
         nickname: "test",
         password: "test1234",
@@ -42,7 +45,7 @@ it ("register fail - exited user", async () => {
 });
 
 it ("register fail - wrong email", async () => {
-    const response = await request(app).post("/api/user").send({
+    const response = await request(app).post(`/${key}/api/user`).send({
         email: "testtest.com",
         nickname: "testuu",
         password: "test1234",
@@ -54,7 +57,7 @@ it ("register fail - wrong email", async () => {
 });
 
 it ("login success", async () => {
-    const response = await request(app).post("/api/user/auth").send({
+    const response = await request(app).post(`/${key}/api/user/auth`).send({
         email: "test@test.com",
         password: "test1234"
     });
@@ -67,7 +70,7 @@ it ("login success", async () => {
 });
 
 it ("login fail - wrong email", async () => {
-    const response = await request(app).post("/api/user/auth").send({
+    const response = await request(app).post(`/${key}/api/user/auth`).send({
         email: "wrongemail@test.com",
         password: "test1234"
     });
@@ -77,7 +80,7 @@ it ("login fail - wrong email", async () => {
 });
 
 it ("login fail - wrong password", async () => {
-    const response = await request(app).post("/api/user/auth").send({
+    const response = await request(app).post(`/${key}/api/user/auth`).send({
         email: "test@test.com",
         password: "asdf1234"
     });
@@ -87,7 +90,7 @@ it ("login fail - wrong password", async () => {
 });
 
 it ("check if user is authorized - success", async () => {
-    const response = await request(app).get("/api/user/me")
+    const response = await request(app).get(`/${key}/api/user/me`)
         .auth(token, { type: 'bearer' })
         .send();
 
@@ -96,7 +99,7 @@ it ("check if user is authorized - success", async () => {
 });
 
 it ("check if user is authorized - empty token", async () => {
-    const response = await request(app).get("/api/user/me")
+    const response = await request(app).get(`/${key}/api/user/me`)
         .auth("asdf", { type: 'bearer' })
         .send();
 
@@ -106,7 +109,7 @@ it ("check if user is authorized - empty token", async () => {
 });
 
 it ("check if user is authorized - empty token scheme", async () => {
-    const response = await request(app).get("/api/user/me").send();
+    const response = await request(app).get(`/${key}/api/user/me`).send();
 
     expect(response.body.message).toBe("fail");
     expect(response.body.error).toBe("unidentified user");
@@ -114,7 +117,7 @@ it ("check if user is authorized - empty token scheme", async () => {
 });
 
 it ("gives test result - success", async () => {
-    const response = await request(app).post("/api/user/test").send({
+    const response = await request(app).post(`/${key}/api/user/test`).send({
         userId: userId,
         result: "IPA"
     });
@@ -129,7 +132,7 @@ it ("gives test result - success", async () => {
 });
 
 it ("gives test result - success (no user is fine)", async () => {
-    const response = await request(app).post("/api/user/test").send({
+    const response = await request(app).post(`/${key}/api/user/test`).send({
         result: "IPA"
     });
 
@@ -142,7 +145,7 @@ it ("gives test result - success (no user is fine)", async () => {
 });
 
 it ("gives test result - fail (no result)", async () => {
-    const response = await request(app).post("/api/user/test").send({
+    const response = await request(app).post(`/${key}/api/user/test`).send({
         userId: userId
     });
 
@@ -151,7 +154,7 @@ it ("gives test result - fail (no result)", async () => {
 });
 
 it ("gives test result - fail (wrong result)", async () => {
-    const response = await request(app).post("/api/user/test").send({
+    const response = await request(app).post(`/${key}/api/user/test`).send({
         userId: userId,
         result: "wrong result"
     });
@@ -161,7 +164,7 @@ it ("gives test result - fail (wrong result)", async () => {
 });
 
 it ("signout - success", async () => {
-    const response = await request(app).delete("/api/user")
+    const response = await request(app).delete(`/${key}/api/user`)
         .auth(token, { type: 'bearer' })
         .send();
 
@@ -169,7 +172,7 @@ it ("signout - success", async () => {
 });
 
 it ("signout - invalid user - fail", async () => {
-    const response = await request(app).delete("/api/user")
+    const response = await request(app).delete(`/${key}/api/user`)
         .auth("asdf", { type: 'bearer' })
         .send();
 
