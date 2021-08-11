@@ -172,7 +172,7 @@ it ("signout - success", async () => {
 });
 
 it ("signout - invalid user - fail", async () => {
-    const response = await request(app).delete("/api/user")
+    const response = await request(app).delete(`/${key}/api/user`)
         .auth("asdf", { type: 'bearer' })
         .send();
 
