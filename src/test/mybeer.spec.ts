@@ -99,7 +99,7 @@ it ("post mybeer - success", async () => {
     .auth(token, { type: 'bearer' })
     .send({ myFeatures, location, rate, review });
 
-    mybeerId = response.body.myBeerId;
+    mybeerId = response.body.myBeer._id;
 
     beer = await Beers.findOne({ _id: beerId });
     const countAfter = beer.count;
@@ -117,7 +117,7 @@ it ("post mybeer - success", async () => {
     expect(avgRate).toBe(avgRateAfter);
     expect(countCategoryAfter - countCategoryBefore).toBe(1);
     expect(avgRateCategory).toBe(avgRateCategoryAfter);
-    expect(response.body.myBeerId).toBeTruthy();
+    expect(response.body.myBeer).toBeTruthy();
 });
 
 it ("post mybeer - fail (beer doesn't exist)", async () => {
