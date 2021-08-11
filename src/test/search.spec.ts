@@ -1,8 +1,11 @@
 import request from "supertest";
 import { app } from "../app";
 
+import { secretAPIkey } from '../ssl/secretAPI';
+const key = secretAPIkey();
+
 it ("get auto-complete beer name search - success", async () => {
-    const response = await request(app).get(encodeURI("/api/search?word=미"))
+    const response = await request(app).get(encodeURI(`/${key}/api/search?word=미`))
 
     const words = response.body.words;
 
@@ -13,7 +16,7 @@ it ("get auto-complete beer name search - success", async () => {
 });
 
 it ("get auto-complete beer category search search - success", async () => {
-    const response = await request(app).get("/api/search?word=la")
+    const response = await request(app).get(`/${key}/api/search?word=la`)
 
     const words = response.body.words;
 

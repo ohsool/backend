@@ -1,6 +1,9 @@
 import request from "supertest";
 import { app } from "../app";
 
+import { secretAPIkey } from '../ssl/secretAPI';
+const key = secretAPIkey();
+
 let token = "";
 
 const email = "recommendationtest@test.com"
@@ -9,7 +12,7 @@ const password = "recommendationtesttest1234";
 const confirmPassword = "recommendationtesttest1234";
 
 it ("register success, get beer id, get beercategory id", async () => {
-    const response = await request(app).post("/api/user")
+    const response = await request(app).post(`/${key}/api/user`)
         .send({ email, nickname, password, confirmPassword });
 
     expect(response.body.message).toBe("success");
@@ -17,7 +20,7 @@ it ("register success, get beer id, get beercategory id", async () => {
 });
 
 it ("login success", async () => {
-    const response = await request(app).post("/api/user/auth")
+    const response = await request(app).post(`/${key}/api/user/auth`)
     .send({ email, password });
 
     token = response.body.token;
@@ -27,7 +30,7 @@ it ("login success", async () => {
 });
 
 // it ("send beer recommendation to slack - success", async () => {
-//     const response = await request(app).post("/api/recommendation")
+//     const response = await request(app).post(`/${key}/api/recommendation`)
 //         .auth(token, { type: 'bearer' })
 //         .send({
 //             beer: "test beer",
@@ -41,7 +44,7 @@ it ("login success", async () => {
 // });
 
 // it ("send beer complaint to slack - success", async () => {
-//     const response = await request(app).post("/api/complaint")
+//     const response = await request(app).post(`/${key}/api/complaint`)
 //         .auth(token, { type: 'bearer' })
 //         .send({
 //             title: "test complaint",
@@ -53,7 +56,7 @@ it ("login success", async () => {
 // });
 
 it ("signout - success", async () => {
-    const response = await request(app).delete("/api/user")
+    const response = await request(app).delete(`/${key}/api/user`)
         .auth(token, { type: 'bearer' })
         .send();
 
