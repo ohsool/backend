@@ -3,6 +3,7 @@ version: 0.2
 phases:
   install:
     commands:
+      - cd /home/ec2-user/ohsool
       - npm install
       - echo npm installed
   pre_build:
