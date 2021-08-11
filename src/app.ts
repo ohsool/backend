@@ -100,8 +100,8 @@ app.use(`/${key}/api/recommendation`, [recommendationRouter]);
 app.use(`/${key}/api/search`, [searchRouter]);
 
 // crawling APIs
-app.use("/api/crawling/beercategory", [beerCategoryCrawlingRouter]);
-app.use("/api/crawling/beer", [beerCrawlingRouter]);
+app.use(`/${key}/api/crawling/beercategory`, [beerCategoryCrawlingRouter]);
+app.use(`/${key}/api/crawling/beer`, [beerCrawlingRouter]);
 
 console.log("mode:", env.modeNow);
 

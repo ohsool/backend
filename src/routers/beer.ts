@@ -4,7 +4,7 @@ import { authMiddleware } from "../middlewares/auth-middleware";
 
 const beerRouter = express.Router();
 
-beerRouter.get("/list", BeerController.getBeers);
+beerRouter.get("/list/all", BeerController.getBeers);
 
 beerRouter.post("/list", BeerController.postBeer);
 
