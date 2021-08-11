@@ -34,7 +34,7 @@ const confirmPassword = "mybeertest1234";
 const wrongId = "610e5058dc866bf2e5db6334";
 
 it ("register success, get beer id, get beercategory id", async () => {
-    const response = await request(app).post(`${key}/api/user`)
+    const response = await request(app).post(`/${key}/api/user`)
         .send({ email, nickname, password, confirmPassword });
 
     const beer = await Beers.findOne({ name_korean: "버드와이저" });
@@ -95,7 +95,7 @@ it ("post mybeer - success", async () => {
     const avgRateCategoryBefore = beerCategory.avgRate["Unknown"][0];
     const countCategoryBefore = beerCategory.avgRate["Unknown"][1];
 
-    const response = await request(app).post(`${key}/api/mybeer/${beerId}`)
+    const response = await request(app).post(`/${key}/api/mybeer/${beerId}`)
     .auth(token, { type: 'bearer' })
     .send({ myFeatures, location, rate, review });
 
