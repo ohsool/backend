@@ -156,7 +156,7 @@ const joiSchema = joi.object({
       await MyBeers.deleteMany({ userId: user._id });
 
       // 해달 유저가 한 좋아요들 삭제
-      const liked_beers = await await Beers.find({ like_array: mongoose.Types.ObjectId(userId) });
+      const liked_beers = await Beers.find({ like_array: mongoose.Types.ObjectId(userId) });
 
       for (let i = 0; i < liked_beers.length; i ++) {
         let beerId = liked_beers[i]._id;
