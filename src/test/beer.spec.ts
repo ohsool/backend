@@ -33,5 +33,27 @@ describe("testing ./src/test/beer.spec.ts", () => {
 
     }, 50000);
 
+    it("should call likeBeer", async () => {
+        const req = httpMocks.createRequest();
+        const res = httpMocks.createResponse();
+
+        await BeerController.likeBeer(req, res);
+
+        expect(BeerController.likeBeer).toBeCalled();
+        expect(BeerController.likeBeer).toBeCalledTimes(1);
+
+    }, 50000);
+
+    it("should call unlikeBeer", async () => {
+        const req = httpMocks.createRequest();
+        const res = httpMocks.createResponse();
+
+        await BeerController.unlikeBeer(req, res);
+
+        expect(BeerController.unlikeBeer).toBeCalled();
+        expect(BeerController.unlikeBeer).toBeCalledTimes(1);
+
+    }, 50000);
+
 
 });
