@@ -6,6 +6,8 @@ const beerRouter = express.Router();
 
 beerRouter.get("/list/all", BeerController.getBeers);
 
+beerRouter.get("/list/page/:pageNo", BeerController.getSomeBeers);
+
 beerRouter.post("/list", BeerController.postBeer);
 
 beerRouter.get("/list/:beerId", BeerController.getBeer);
