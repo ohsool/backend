@@ -31,6 +31,24 @@ myBeerRouter.post("/:beerId", authMiddleware, async (req, res) => {
         return;
     }
 
+    const userId = res.locals.user._id;
+    const date = moment().format("YYYY-MM-DD hh:mm A")
+
+    try {
+        // if the user already write review of this beer, reject it
+        const exist = await MyBeer.findOne({ beerId, userId });
+
+        if (exist) {
+            res.json({ message: "fail", error: "the user already made review of this beer" });
+
+            return;
+        }
+    } catch (error) {
+        res.json({ message: "fail", error });
+
+        return;
+    }
+
     const features = ["bitter", "crispy", "flavor", "sweet", "nutty"];
 
     // If there is no value in features, set to 0
@@ -46,9 +64,6 @@ myBeerRouter.post("/:beerId", authMiddleware, async (req, res) => {
 
         return;
     }
-
-    const userId = res.locals.user._id;
-    const date = moment().format("YYYY-MM-DD hh:mm A")
 
     try {
         const myPreference = res.locals.user.preference;
