@@ -11,6 +11,11 @@ const MyBeerSchema: Schema = new Schema({
         ref: "Users",
         required: true,
     },
+    preference: {
+        type: String,
+        required: true
+    }
+    ,
     myFeatures: {
         type: Object,
         default: {
