@@ -67,10 +67,6 @@ googlePassportConfig();
 kakaoPassportConfig();
 console.log("passport initializing done");
 
-app.use(secretKeyMiddleware);
- 
-app.use('/swagger', swaggerUi.serve, swaggerUi.setup(swaggerFile))
-
 const allowOrigins = [];
 app.use(cors());
 
@@ -85,27 +81,13 @@ app.get("/", (req, res) => {
     );
 });
 
+app.use(secretKeyMiddleware);
+
+app.use('/swagger', swaggerUi.serve, swaggerUi.setup(swaggerFile))
+
 app.get("/search", (req, res) => {
     res.render("index")
 })
-
-// // get secret key
-// import { secretAPIkey } from './ssl/secretAPI';
-// let key = secretAPIkey();
-// let keyBefore = key;
-// console.log("secret key now:", key);
-
-// setInterval(getKey, 5000);
-
-// function getKey() {
-//     key = secretAPIkey();
-
-//     if (key != keyBefore) {
-//         keyBefore = key;
-
-//         console.log("secret key changed:", key);
-//     }
-// }
 
 // APIs
 app.use(`/api/user`, [userRouter]);
