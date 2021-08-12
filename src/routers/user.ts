@@ -31,7 +31,7 @@ const joiSchema = joi.object({
       "mybeertest@test.com", 
       "anothermybeertest@test.com", 
       "recommendationtest@test.com",
-      "test@test.com"
+      "usertest@test.com"
     ]
 
     if (!email) {
@@ -122,6 +122,12 @@ const joiSchema = joi.object({
     const crypted_password = crypto.createHmac("sha256", password).update("¡hellosnail!").digest("hex");
     try {
       const user = await Users.findOne({ email });
+
+      if (!user) {
+        res.status(401).json({ message: "fail", error: "wrong user" });
+  
+        return;
+      }
 
       if (user.password != crypted_password) {
         res.status(401).json({ message: "fail", error: "wrong password" });

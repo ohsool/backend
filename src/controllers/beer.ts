@@ -1,12 +1,40 @@
 import express, {Request, Response, NextFunction} from 'express';
 import Beers from "../schemas/beer";
 import mongoose from "mongoose";
-import beer from '../schemas/beer';
+import Beer from '../schemas/beer';
 
 const getBeers = async(req: Request, res: Response) => {
     try {
         const beers = await Beers.find();
         res.json({ message: "success", beers });
+    } catch (error) {
+        res.status(400).send({ message: "fail", error });
+    }
+}
+
+const getSomeBeers = async(req: Request, res: Response) => {
+    let { pageNo } = req.params;
+
+    try {
+        const beers = await Beers.find({});
+
+        if ( Number(pageNo) < 0 || (Number(pageNo) * 8 > beers.length) ) {
+            res.status(400).send({ message: "fail", error: "wrong page" });
+
+            return;
+        }
+
+        const res_beers = [];
+
+        for (let i = Number(pageNo) * 8; i < (Number(pageNo) * 8) + 8; i ++) {
+            if ( beers[i] ) {
+                res_beers.push(beers[i]);
+            } else {
+                break;
+            }
+        }
+
+        res.json({ messgae: "success", beers: res_beers });
     } catch (error) {
         res.status(400).send({ message: "fail", error });
     }
@@ -174,6 +202,7 @@ const reportLocation = async(req: Request, res: Response) => {
 
 export default {
     getBeers,
+    getSomeBeers,
     postBeer,
     getBeer,
     deleteBeer,
