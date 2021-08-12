@@ -1,12 +1,15 @@
 version: 0.2
- 
+
+env:
+  variables:
+    NODE_ENV: "test"
 phases:
   install:
     runtime-versions:
-      nodejs: 12
+      nodejs: 10
     commands:
-      - export NODE_ENV=test
-      - echo "${NODE_ENV} mode is on"
+      - npm install -g jest
+      - npm install -g supertest
   pre_build:
     commands:
       - npm install
@@ -15,7 +18,6 @@ phases:
     commands:
       - echo begin test
       - npm test
-      - echo end test
   post_build:
     commands:
       - echo Build completed

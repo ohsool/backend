@@ -29,31 +29,31 @@ it ("login success", async () => {
     expect(response.body.token).toBeTruthy();
 });
 
-// it ("send beer recommendation to slack - success", async () => {
-//     const response = await request(app).post(`/${key}/api/recommendation`)
-//         .auth(token, { type: 'bearer' })
-//         .send({
-//             beer: "test beer",
-//             description: "beer recommendation testing",
-//             location: "test location",
-//             image: "https://miro.medium.com/max/796/1*P_zZlof7IhiohKQ7QEaXzA.png"
-//         });
+it ("send beer recommendation to slack - success", async () => {
+    const response = await request(app).post(`/${key}/api/recommendation`)
+        .auth(token, { type: 'bearer' })
+        .send({
+            beer: "test beer",
+            description: "beer recommendation testing",
+            location: "test location",
+            image: "https://miro.medium.com/max/796/1*P_zZlof7IhiohKQ7QEaXzA.png"
+        });
 
-//     expect(response.body.message).toBe("success");
-//     expect(response.body.result).toBeTruthy();
-// });
+    expect(response.body.message).toBe("success");
+    expect(response.body.result).toBeTruthy();
+});
 
-// it ("send beer complaint to slack - success", async () => {
-//     const response = await request(app).post(`/${key}/api/complaint`)
-//         .auth(token, { type: 'bearer' })
-//         .send({
-//             title: "test complaint",
-//             description: "complaint testing"
-//         });
+it ("send beer complaint to slack - success", async () => {
+    const response = await request(app).post(`/${key}/api/complaint`)
+        .auth(token, { type: 'bearer' })
+        .send({
+            title: "test complaint",
+            description: "complaint testing"
+        });
 
-//     expect(response.body.message).toBe("success");
-//     expect(response.body.result).toBeTruthy();
-// });
+    expect(response.body.message).toBe("success");
+    expect(response.body.result).toBeTruthy();
+});
 
 it ("signout - success", async () => {
     const response = await request(app).delete(`/${key}/api/user`)

@@ -31,6 +31,24 @@ myBeerRouter.post("/:beerId", authMiddleware, async (req, res) => {
         return;
     }
 
+    const userId = res.locals.user._id;
+    const date = moment().format("YYYY-MM-DD hh:mm A")
+
+    try {
+        // if the user already write review of this beer, reject it
+        const exist = await MyBeer.findOne({ beerId, userId });
+
+        if (exist) {
+            res.json({ message: "fail", error: "the user already made review of this beer" });
+
+            return;
+        }
+    } catch (error) {
+        res.json({ message: "fail", error });
+
+        return;
+    }
+
     const features = ["bitter", "crispy", "flavor", "sweet", "nutty"];
 
     // If there is no value in features, set to 0
@@ -47,14 +65,11 @@ myBeerRouter.post("/:beerId", authMiddleware, async (req, res) => {
         return;
     }
 
-    const userId = res.locals.user._id;
-    const date = moment().format("YYYY-MM-DD hh:mm A")
-
     try {
-        const myBeer = await MyBeer.create({ beerId, userId, myFeatures, date, location, rate, review});
-        const myBeerId = myBeer._id;
-
         const myPreference = res.locals.user.preference;
+        const mybeer = await MyBeer.create({ beerId, userId, preference: myPreference, myFeatures, date, location, rate, review});
+        const myBeerId = mybeer._id;
+
         const beerCategoryId = beer.categoryId;
         
         const beerCategory = await BeerCategory.findOne({ _id: beerCategoryId });
@@ -63,20 +78,11 @@ myBeerRouter.post("/:beerId", authMiddleware, async (req, res) => {
 
         const new_avgRate = (( avg * count ) + rate) / (count + 1);
 
-        let avgRate: avgRate = {
-            "Lager": [0, 0],
-            "Pilsner": [0, 0],
-            "Pale Ale": [0, 0],
-            "IPA": [0, 0],
-            "Weizen": [0, 0],
-            "Dunkel": [0, 0],
-            "Stout": [0, 0],
-            "Bock": [0, 0],
-            "Unknown": [0, 0]
-        }
+        let avgRate = beerCategory.avgRate;
 
         avgRate[myPreference][0] = new_avgRate;
         avgRate[myPreference][1] = count + 1;
+
 
         await BeerCategory.findOneAndUpdate({ _id: beerCategoryId }, {$set: { avgRate }});
 
@@ -87,7 +93,7 @@ myBeerRouter.post("/:beerId", authMiddleware, async (req, res) => {
 
         await Beers.findOneAndUpdate({ _id: beerId }, { $set: { avgRate: newBeerAvgRate, count: beerCount + 1 } });
 
-        res.send({ message: "success", myBeer });
+        res.send({ message: "success", mybeer });
     } catch (error) {
         res.json({ message: "fail", error });
 
@@ -187,10 +193,10 @@ myBeerRouter.put("/:myBeerId", authMiddleware, async (req, res) => {
         const beerId = myBeer.beerId;
         const beer = await Beers.findOne({ _id: beerId });
     
-        await MyBeer.findOneAndUpdate({ _id: myBeerId }, { $set: { beerId, myFeatures, location, rate, review } });
+        const mybeer = await MyBeer.findOneAndUpdate({ _id: myBeerId }, { $set: { beerId, myFeatures, location, rate, review } });
 
         // category rate
-        const myPreference = res.locals.user.preference;
+        const myPreference = mybeer.preference;
         const beerCategoryId = beer.categoryId;
         const rateOld = myBeer.rate;
 
@@ -200,17 +206,7 @@ myBeerRouter.put("/:myBeerId", authMiddleware, async (req, res) => {
 
         const new_avgRate = ((count * avgRate_) - rateOld + rate ) / count;
 
-        let avgRate: avgRate = {
-            "Lager": [0, 0],
-            "Pilsner": [0, 0],
-            "Pale Ale": [0, 0],
-            "IPA": [0, 0],
-            "Weizen": [0, 0],
-            "Dunkel": [0, 0],
-            "Stout": [0, 0],
-            "Bock": [0, 0],
-            "Unknown": [0, 0]
-        }
+        const avgRate = beerCategory.avgRate;
 
         avgRate[myPreference][0] = new_avgRate;
         avgRate[myPreference][1] = count;
@@ -255,26 +251,16 @@ myBeerRouter.delete("/:myBeerId", authMiddleware, async (req, res) => {
         await MyBeer.deleteOne({ _id: myBeerId });
 
         // delete beer category rate
-        const myPreference = res.locals.user.preference;
+        const myPreference = mybeer.preference;
         const beer = await Beers.findOne({ _id: mybeer.beerId });
         const beerCategoryId = beer.categoryId;
         const rate = mybeer.rate;
         
         const beerCategory = await BeerCategory.findOne({ _id: beerCategoryId });
-        const avg = beerCategory.avgRate[myPreference][0];
-        const count = beerCategory.avgRate[myPreference][1];
-
-        let avgRate: avgRate = {
-            "Lager": [0, 0],
-            "Pilsner": [0, 0],
-            "Pale Ale": [0, 0],
-            "IPA": [0, 0],
-            "Weizen": [0, 0],
-            "Dunkel": [0, 0],
-            "Stout": [0, 0],
-            "Bock": [0, 0],
-            "Unknown": [0, 0]
-        }
+        const avgRate = beerCategory.avgRate;
+        
+        const avg = avgRate[myPreference][0];
+        const count = avgRate[myPreference][1];
 
         if (Number(count) > 1) {
             const new_avgRate = (( avg * count ) - rate) / (count - 1);
