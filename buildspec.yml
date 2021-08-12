@@ -8,8 +8,8 @@ phases:
     runtime-versions:
       nodejs: 10
     commands:
-     - npm install -g jest
-     - npm install -g supertest
+      - npm install -g jest
+      - npm install -g supertest
   pre_build:
     commands:
       - npm install
