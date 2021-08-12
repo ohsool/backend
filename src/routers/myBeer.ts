@@ -16,6 +16,7 @@ interface avgRate {
 myBeerRouter.post("/:beerId", authMiddleware, async (req, res) => {
     let { myFeatures, location, rate, review } = req.body;
     const beerId = req.params.beerId;
+    rate = Math.round(rate);
 
     if (!beerId || !myFeatures || !rate) {
         res.json({ message: "fail", error: "Either beer or myFeatures or rate doesn't exist." });
@@ -23,6 +24,12 @@ myBeerRouter.post("/:beerId", authMiddleware, async (req, res) => {
         return;
     } else if (!location) {
         location = "";
+    }
+
+    if (rate < 1 || rate > 5) {
+        res.json({ message: "fail", error: "please input rate 1~4" });
+
+        return;
     }
 
     if (String(review).length > 48) {
@@ -51,7 +58,7 @@ myBeerRouter.post("/:beerId", authMiddleware, async (req, res) => {
 
     const features = ["bitter", "crispy", "flavor", "sweet", "nutty"];
 
-    // If there is no value in features, set to 0
+    // If there is no value in features, set to 1
     for (let i = 0; i < features.length; i ++) {
         if (!myFeatures[features[i]]) {
             myFeatures[features[i]] = 1;
@@ -93,6 +100,7 @@ myBeerRouter.post("/:beerId", authMiddleware, async (req, res) => {
 
         await Beers.findOneAndUpdate({ _id: beerId }, { $set: { avgRate: newBeerAvgRate, count: beerCount + 1 } });
 
+        console.log(mybeer);
         res.send({ message: "success", mybeer });
     } catch (error) {
         res.json({ message: "fail", error });
@@ -178,10 +186,25 @@ myBeerRouter.put("/:myBeerId", authMiddleware, async (req, res) => {
         const myBeer = await MyBeer.findOne({ _id: myBeerId });
         const userId = res.locals.user._id;
 
+        if (rate < 1 || rate > 5) {
+            res.json({ message: "fail", error: "please input rate 1~4" });
+    
+            return;
+        }
+
         if (!myBeer) {
             res.json({  message: "fail", error: "wrong mybeer id" });
 
             return;
+        }
+
+        const features = ["bitter", "crispy", "flavor", "sweet", "nutty"];
+
+        // If there is no value in features, set to 1
+        for (let i = 0; i < features.length; i ++) {
+            if (!myFeatures[features[i]]) {
+                myFeatures[features[i]] = 1;
+            }
         }
     
         if (String(myBeer.userId) != String(userId)) {
