@@ -42,6 +42,9 @@ import { connect } from './schemas';
 // importing env
 import { env } from "./env";
 
+// get secretKeyMiddleware
+import { secretKeyMiddleware } from './middlewares/secretkey-middleware';
+
 const port = env.port;
 const app = express();
 console.log("mongodb connecting...");
@@ -63,26 +66,10 @@ app.use(passport.session());
 googlePassportConfig();
 kakaoPassportConfig();
 console.log("passport initializing done");
+
+app.use(secretKeyMiddleware);
  
 app.use('/swagger', swaggerUi.serve, swaggerUi.setup(swaggerFile))
-
-// get secret key
-import { secretAPIkey } from './ssl/secretAPI';
-let key = secretAPIkey();
-let keyBefore = key;
-console.log("secret key now:", key);
-
-function getKey() {
-    key = secretAPIkey();
-    
-    if (key != keyBefore) {
-        keyBefore = key;
-        
-        console.log("secret key changed:", key);
-    }
-}
-
-setInterval(getKey, 5000);
 
 const allowOrigins = [];
 app.use(cors());
@@ -102,19 +89,37 @@ app.get("/search", (req, res) => {
     res.render("index")
 })
 
+// // get secret key
+// import { secretAPIkey } from './ssl/secretAPI';
+// let key = secretAPIkey();
+// let keyBefore = key;
+// console.log("secret key now:", key);
+
+// setInterval(getKey, 5000);
+
+// function getKey() {
+//     key = secretAPIkey();
+
+//     if (key != keyBefore) {
+//         keyBefore = key;
+
+//         console.log("secret key changed:", key);
+//     }
+// }
+
 // APIs
-app.use(`/${key}/api/user`, [userRouter]);
-app.use(`/${key}/api/comment`, [commentRouter]);
-app.use(`/${key}/api/beer`, [beerRouter]);
-app.use(`/${key}/api/beerCategory`, [beerCategoryRouter]);
-app.use(`/${key}/api/mybeer`, [myBeerRouter]);
-app.use(`/${key}/api/complaint`, [complaintRouter]);
-app.use(`/${key}/api/recommendation`, [recommendationRouter]);
-app.use(`/${key}/api/search`, [searchRouter]);
+app.use(`/api/user`, [userRouter]);
+app.use(`/api/comment`, [commentRouter]);
+app.use(`/api/beer`, [beerRouter]);
+app.use(`/api/beerCategory`, [beerCategoryRouter]);
+app.use(`/api/mybeer`, [myBeerRouter]);
+app.use(`/api/complaint`, [complaintRouter]);
+app.use(`/api/recommendation`, [recommendationRouter]);
+app.use(`/api/search`, [searchRouter]);
 
 // crawling APIs
-app.use(`/${key}/api/crawling/beercategory`, [beerCategoryCrawlingRouter]);
-app.use(`/${key}/api/crawling/beer`, [beerCrawlingRouter]);
+app.use(`/api/crawling/beercategory`, [beerCategoryCrawlingRouter]);
+app.use(`/api/crawling/beer`, [beerCrawlingRouter]);
 
 console.log("mode:", env.modeNow);
 
@@ -131,7 +136,7 @@ if (env.modeNow == "development" || env.modeNow == "production") {  // on server
 } else if (!env.modeNow) {  // local
     app.listen(port, () => {
         console.log(`listening at http://localhost:${port}`);
-    })
+    });
 } else {  // jest doesn't use port
     console.log("testing..");
 }

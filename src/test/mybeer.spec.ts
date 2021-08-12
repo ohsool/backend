@@ -191,7 +191,7 @@ it ("get specific beer's mybeers - fail (wrong beerId)", async () => {
 });
 
 it ("get one specific mybeer - success", async () => {
-    const response = await request(app).get(`/${key}/api/mybeer/${beerId}`)
+    const response = await request(app).get(`/${key}/api/mybeer/${mybeerId}`)
     .auth(token, { type: 'bearer' })
     .send();
 
