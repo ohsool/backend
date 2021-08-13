@@ -3,11 +3,11 @@ import { app } from "../app";
 import { disconnect } from "../schemas";
 import { secretAPIkey } from '../ssl/secretAPI';
 const key = secretAPIkey();
-
 import Users from "../schemas/user";
 
 let token = "";
 let userId = "";
+
 
 it ("register success", async () => {
     const response = await request(app).post(`/api/user`)
