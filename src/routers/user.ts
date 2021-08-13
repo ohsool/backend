@@ -244,21 +244,22 @@ userRouter.post("/test", secretKeyMiddleware, async (req, res, next) => {
       return;
     }
 
-    /* 1. 로그인 유저일 시 preference 변경 */
-    const isExist = await Users.findOne({ _id: userId})
-    if (isExist) {
-      await Users.updateOne({ _id: userId }, { $set: { preference: result }});
-      user = true
-    }
-
-    /* 2. 카테고리에 대한 정보 추출*/ 
+    /* 1. 카테고리에 대한 정보 추출*/ 
     const category = await BeerCategories.findOne({ name: result });
     // category 에 대한 정보가 없다면 함수 종료
     if (!category) {
       res.json({ message: "fail", error: "Beer Category doesn't exist" });
       return;
     }
-    
+
+    /* 2. 로그인 유저일 시 preference 변경 */
+    const isExist = await Users.findOne({ _id: userId})
+    if (isExist) {
+      await Users.updateOne({ _id: userId }, { $set: { preference: result }});
+      user = true
+    }
+
+
     /* 3. 추천 맥주 추출 (08/05 기준 동일한 카테고리 상위 2개만 추천) */
     const beers = await Beers.find({ categoryId: category._id });
     // 관련맥주에 대한 정보가 없다면 함수 종료

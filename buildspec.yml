@@ -1,17 +1,24 @@
 version: 0.2
-
 env:
-  variables:
-    NODE_ENV: "test"
+  parameter-store:
+    SECRET-KEY-SCRIPT: "/ohsool/ssl/secretApi"
 phases:
   install:
     runtime-versions:
       nodejs: 10
     commands:
-      - npm install -g jest
-      - npm install -g supertest
+      - echo $SECRET-KEY-SCRIPT
   pre_build:
     commands:
+      # Secretkey 파일 생성
+      - echo $CODEBUILD_SRC_DIR
+      - mkdir ssl
+      - cat <<EOF >/$CODEBUILD_SRC_DIR/backend/src/ssl/secretAPI.ts
+      - $SECRET-KEY-SCRIPT
+      - EOF
+      # test mode로 변경
+      - export NODE_ENV=test
+      - echo node -v
       - npm install
       - echo npm installed
   build:
@@ -24,3 +31,4 @@ phases:
 artifacts:
   files:
     - "**/*"
+  base-directory: "**/*"

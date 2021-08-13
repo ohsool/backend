@@ -74,7 +74,7 @@ myBeerRouter.post("/:beerId", authMiddleware, async (req, res) => {
 
     try {
         const myPreference = res.locals.user.preference;
-        const mybeer = await MyBeer.create({ beerId, userId, preference: myPreference, myFeatures, date, location, rate, review});
+        let mybeer = await MyBeer.create({ beerId, userId, preference: myPreference, myFeatures, date, location, rate, review});
         const myBeerId = mybeer._id;
 
         const beerCategoryId = beer.categoryId;
@@ -99,6 +99,9 @@ myBeerRouter.post("/:beerId", authMiddleware, async (req, res) => {
         const newBeerAvgRate = (( beerCount * beerAvgRate) + rate) / (beerCount + 1);
 
         await Beers.findOneAndUpdate({ _id: beerId }, { $set: { avgRate: newBeerAvgRate, count: beerCount + 1 } });
+
+        //mybeer = mybeer.populate({path: 'userId', select: 'nickname'});
+        mybeer = await MyBeer.findOne({ _id: mybeer._id }).populate({path: 'userId', select: 'nickname'});
 
         res.send({ message: "success", mybeer });
     } catch (error) {
