@@ -2,12 +2,14 @@ import mongoose from "mongoose";
 import { env } from "../env";
 
 let url = "mongodb://localhost:27017/ohsool";
-
 console.log("DB mode:", env.modeNow);
 
-if (env.modeNow == "development" || env.modeNow == "production" || env.modeNow == "test") { // on server
+if (env.modeNow == "development" || env.modeNow == "production") { // on server
   url = env.atlas_url;
-}  // else it's local or jest
+} else if ( env.modeNow == "test") {  // for jest test code
+  url = env.test_url
+}  
+// else it's local
 
 let database : mongoose.Connection;
 
