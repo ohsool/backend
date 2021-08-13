@@ -8,8 +8,10 @@ import mongoose from "mongoose";
 import Beers from "../schemas/beer";
 import BeerCategories from "../schemas/beerCategory";
 import Users from "../schemas/user";
-import { authMiddleware } from "../middlewares/auth-middleware";
 import MyBeers from "../schemas/mybeer";
+
+import { authMiddleware } from "../middlewares/auth-middleware";
+import { secretKeyMiddleware } from "../middlewares/secretkey-middleware";
 
 const userRouter = express.Router();
 
@@ -61,7 +63,7 @@ const joiSchema = joi.object({
   });
 
   // existed nickname?
-  userRouter.post("/nickname", async (req, res) => {
+  userRouter.post("/nickname", secretKeyMiddleware, async (req, res) => {
     const { nickname } = req.body;
 
     if (!nickname) {
@@ -84,7 +86,7 @@ const joiSchema = joi.object({
   });
 
   // register
-  userRouter.post("/", async (req, res) => {
+  userRouter.post("/", secretKeyMiddleware, async (req, res) => {
       const { email, nickname, password, confirmPassword } = req.body;
     
       try {
@@ -116,7 +118,7 @@ const joiSchema = joi.object({
   });
 
   // login
-  userRouter.post("/auth", async (req, res) => {
+  userRouter.post("/auth", secretKeyMiddleware, async (req, res) => {
     let { email, password } = req.body;
 
     const crypted_password = crypto.createHmac("sha256", password).update("¡hellosnail!").digest("hex");
@@ -146,7 +148,7 @@ const joiSchema = joi.object({
   });
 
   // sign out
-  userRouter.delete("/", authMiddleware, async (req, res) => {
+  userRouter.delete("/", secretKeyMiddleware, authMiddleware, async (req, res) => {
     const userId = res.locals.user._id;
 
     try {
@@ -232,7 +234,7 @@ const joiSchema = joi.object({
   })
 
 // 현재 유저 preference에 테스트 결과 값 반영 & 클라이언트에게 결과에 대한 정보 돌려주기
-userRouter.post("/test", async (req, res, next) => {
+userRouter.post("/test", secretKeyMiddleware, async (req, res, next) => {
   try {
     const { userId, result } = req.body;
     let user = false;
