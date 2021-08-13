@@ -85,6 +85,8 @@ import { secretAPIkey } from './ssl/secretAPI';
 const secretKey = secretAPIkey();
 console.log("secret key now: ", secretKey);
 
+app.use(`/api/user`, [userRouter]);
+
 app.use(secretKeyMiddleware);
 
 app.use('/swagger', swaggerUi.serve, swaggerUi.setup(swaggerFile))
@@ -94,7 +96,7 @@ app.get("/search", (req, res) => {
 })
 
 // APIs
-app.use(`/api/user`, [userRouter]);
+// app.use(`/api/user`, [userRouter]);
 app.use(`/api/comment`, [commentRouter]);
 app.use(`/api/beer`, [beerRouter]);
 app.use(`/api/beerCategory`, [beerCategoryRouter]);
