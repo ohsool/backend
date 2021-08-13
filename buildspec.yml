@@ -1,11 +1,24 @@
 version: 0.2
-
+env:
+  parameter-store:
+    SECRET-KEY-SCRIPT: ohsool-secertkey-ts
 phases:
   install:
     runtime-versions:
       nodejs: 10
     commands:
+      # npm과 node 설치
+      - export NVM_DIR="$HOME/.nvm"	
+      - [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # loads nvm	
+      - [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # loads nvm bash_completion (node is in path now) 
+      # Secretkey 파일 생성
+      - mkdir ssl
+      - cat <<EOF >/$CODEBUILD_SRC_DIR/backend/src/ssl/secretAPI.ts
+      - $SECRET-KEY-SCRIPT
+      - EOF
+      # test mode로 변경
       - export NODE_ENV=test
+      - echo node -v
   pre_build:
     commands:
       - npm install
@@ -20,3 +33,4 @@ phases:
 artifacts:
   files:
     - "**/*"
+  base-directory: "**/*"
