@@ -1,7 +1,7 @@
 version: 0.2
 env:
   parameter-store:
-    SECRET-KEY-SCRIPT: /CodeBuild/ohsool
+    SECRET-KEY-SCRIPT: "/ohsool/ssl/secretApi"
 phases:
   install:
     runtime-versions:
