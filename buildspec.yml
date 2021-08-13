@@ -7,6 +7,9 @@ phases:
     runtime-versions:
       nodejs: 10
     commands:
+      - echo $SECRET-KEY-SCRIPT
+  pre_build:
+    commands:
       # npm과 node 설치
       - export NVM_DIR="$HOME/.nvm"	
       - [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # loads nvm	
@@ -19,8 +22,6 @@ phases:
       # test mode로 변경
       - export NODE_ENV=test
       - echo node -v
-  pre_build:
-    commands:
       - npm install
       - echo npm installed
   build:
