@@ -1,6 +1,6 @@
 import request from "supertest";
 import { app } from "../app";
-
+import { disconnect } from "../schemas";
 import { secretAPIkey } from '../ssl/secretAPI';
 const key = secretAPIkey();
 
@@ -27,3 +27,8 @@ it ("get auto-complete beer category search search - success", async () => {
     expect(words.includes("Lager")).toBe(true);
     expect(words.includes("IPA")).toBe(false);
 });
+
+ // Disconnect Mongoose
+ afterAll( async () => {
+    await disconnect()
+})

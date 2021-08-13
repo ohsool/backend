@@ -1,6 +1,6 @@
 import request from "supertest";
 import { app } from "../app";
-
+import { disconnect } from "../schemas";
 import { secretAPIkey } from '../ssl/secretAPI';
 const key = secretAPIkey();
 
@@ -207,3 +207,8 @@ it ("signout - invalid user - fail", async () => {
     expect(response.statusCode).toBe(401);
     expect(response.body.error).toBeTruthy();
 });
+
+ // Disconnect Mongoose
+ afterAll( async () => {
+    await disconnect()
+})

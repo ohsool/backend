@@ -1,6 +1,6 @@
 import request from "supertest";
 import { app } from "../app";
-
+import { disconnect } from "../schemas";
 import { secretAPIkey } from '../ssl/secretAPI';
 const key = secretAPIkey();
 
@@ -68,3 +68,8 @@ it ("send beer complaint to slack - success", async () => {
 
 //     expect(response.body.message).toBe("success");
 // });
+
+ // Disconnect Mongoose
+ afterAll( async () => {
+    await disconnect()
+})
