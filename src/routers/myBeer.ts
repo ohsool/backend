@@ -100,7 +100,6 @@ myBeerRouter.post("/:beerId", authMiddleware, async (req, res) => {
 
         await Beers.findOneAndUpdate({ _id: beerId }, { $set: { avgRate: newBeerAvgRate, count: beerCount + 1 } });
 
-        console.log(mybeer);
         res.send({ message: "success", mybeer });
     } catch (error) {
         res.json({ message: "fail", error });
