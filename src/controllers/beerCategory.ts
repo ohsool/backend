@@ -46,14 +46,13 @@ const getBeerCategory = async(req: Request, res: Response) => {
 
 const getTestResult = async(req: Request, res:Response) => {
     const result = req.body.result;
-
-    if (!result) {
-        res.json({ message: "fail", error: "test result doesn't exist" });
-
-        return;
-    }
-
     try {
+        if (!result) {
+            res.json({ message: "fail", error: "test result doesn't exist" });
+    
+            return;
+        }
+    
         /* 1. 카테고리에 대한 정보 추출*/ 
         const category = await BeerCategories.findOne({ name: result });
 

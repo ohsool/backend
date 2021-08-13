@@ -151,7 +151,9 @@ $ service mongod start
 #### 관리자 권한 설정
 
 > \$ use admin <br>
-$ db.createUser({user: "<userName>", pwd: "<password>", roles:["root"]});
+\$ db.createUser({user: "<userName>", pwd: "<password>", roles:["root"]});
+$ exit
+\$ sudo service mongod start
 
 <br>
 
@@ -169,6 +171,7 @@ net:
 security:
   authorization: enabled 
 ```
+> \$ sudo service service mongod restart
 
 <br>
 
