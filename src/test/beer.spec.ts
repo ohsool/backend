@@ -1,5 +1,5 @@
 import BeerController from "../controllers/beer";
-
+import { disconnect } from "../schemas";
 const Beer = require('../schemas/beer');
 const httpMocks = require('node-mocks-http');
 
@@ -57,3 +57,8 @@ describe("testing ./src/test/beer.spec.ts", () => {
 
 
 });
+
+ // Disconnect Mongoose
+ afterAll( async () => {
+    await disconnect()
+})
