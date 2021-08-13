@@ -1,5 +1,6 @@
 import request from "supertest";
 import { app } from "../app";
+import { disconnect } from "../schemas";
 
 import Beers from "../schemas/beer";
 import Users from "../schemas/user";
@@ -373,3 +374,8 @@ it ("delete one mybeer - success", async () => {
 //     expect(response.body.message).toBe("success");
 //     expect(response2.body.message).toBe("success");
 // });
+
+ // Disconnect Mongoose
+ afterAll( async () => {
+    await disconnect()
+})

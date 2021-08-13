@@ -32,9 +32,11 @@ export const connect = () => {
   });
 }
 
-export const diconnect = () => {
+export const disconnect = async () => {
   if (!database) {
     return;
   }
-  mongoose.disconnect();
+  // await database.close()
+  await mongoose.disconnect();
+  console.log('Database disconnected')
 };
