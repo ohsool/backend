@@ -1,7 +1,7 @@
 version: 0.2
 env:
   parameter-store:
-    SECRET-KEY-SCRIPT: ohsool-secertkey-ts
+    SECRET-KEY-SCRIPT: /CodeBuild/ohsool
 phases:
   install:
     runtime-versions:
@@ -11,6 +11,7 @@ phases:
   pre_build:
     commands:
       # Secretkey 파일 생성
+      - echo $CODEBUILD_SRC_DIR
       - mkdir ssl
       - cat <<EOF >/$CODEBUILD_SRC_DIR/backend/src/ssl/secretAPI.ts
       - $SECRET-KEY-SCRIPT
