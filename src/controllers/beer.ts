@@ -144,6 +144,8 @@ const likedBeer = async(req: Request, res: Response) => {
 // 장소 제보하기
 const reportLocation = async(req: Request, res: Response) => {
     const { beerId, name, address, url } = req.body;
+    const user = res.locals.user;
+    const userId = user._id;
     
     if (!beerId || !name || !address || !url) {
         res.json({ message: "fail", error: "empty value" });
@@ -153,7 +155,7 @@ const reportLocation = async(req: Request, res: Response) => {
 
     try {
         const beer = await Beers.findOne({ _id: beerId });
-        const new_report = [ url, name, address ];
+        const new_report = [ url, name, address, userId ];
 
         if (!beer) {
             res.json({ message: "fail", error: "wrong beer" });
@@ -177,6 +179,12 @@ const reportLocation = async(req: Request, res: Response) => {
 
         for (let i = 0; i < location_report.length; i ++) {
             if (new_report[0] == location_report[i][0]) {
+                if ( String(new_report[3]) == String(location_report[i][3]) ) {
+                    res.send({ message: "fail", error: "user already reported this location" });
+
+                    return;
+                }
+
                 cnt += 1;
             }
         }
