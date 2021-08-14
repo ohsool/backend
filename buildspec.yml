@@ -11,13 +11,20 @@ phases:
   pre_build:
     commands:
       # Secretkey 파일 생성
-      - echo $CODEBUILD_SRC_DIR
-      - file="$CODEBUILD_SRC_DIR/ssl/secretAPI.ts"
+      - FILE="$CODEBUILD_SRC_DIR/src/ssl/secretAPI.ts"
+      - DIR="$CODEBUILD_SRC_DIR/src"
+      # 폴더 생성
+      - if [ -d "${DIR}" ]; then
+      - echo "${DIR} exists"
+      - else
+      - echo "Creating ${DIR} directory"
+      - mkdir ${DIR}
+      - fi
       - mkdir ssl
-      - touch $file
-      - echo "import crypto from "crypto"; export const secretAPIkey = ( ) => { const time = new Date();" > $file 
-      - echo "let key = String(time.getDate()) + String(time.getHours()) + String(time.getUTCFullYear()) + String(time.getUTCHours());" > $file
-      - echo "key = crypto.createHmac('sha256', key).digest('base64'); key = key.replace(/[^a-zA-Z ]/g, "") return key; };" > $file
+      - touch $FILE
+      - echo "import crypto from "crypto"; export const secretAPIkey = ( ) => { const time = new Date();" > $FILE 
+      - echo "let key = String(time.getDate()) + String(time.getHours()) + String(time.getUTCFullYear()) + String(time.getUTCHours());" > $FILE
+      - echo "key = crypto.createHmac('sha256', key).digest('base64'); key = key.replace(/[^a-zA-Z ]/g, "") return key; };" > $FILE
       # test mode로 변경
       - export NODE_ENV=test
       - echo node -v
