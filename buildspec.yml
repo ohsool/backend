@@ -1,7 +1,5 @@
 version: 0.2
-env:
-  parameter-store:
-    SECRET-KEY-SCRIPT: "/ohsool/ssl/secretApi"
+
 phases:
   install:
     runtime-versions:
@@ -10,23 +8,11 @@ phases:
       - echo $SECRET-KEY-SCRIPT
   pre_build:
     commands:
-      - export TEST_URL=mongodb://test:test@13.124.177.247:27017/admin?authSource=admin
-      # Secretkey 파일 생성
-      - FILE="$CODEBUILD_SRC_DIR/src/ssl/secretAPI.ts"
-      - touch $FILE
-      - echo "import crypto from "crypto"; export const secretAPIkey = ( ) => { const time = new Date();" > $FILE 
-      - echo "let key = String(time.getDate()) + String(time.getHours()) + String(time.getUTCFullYear()) + String(time.getUTCHours());" > $FILE
-      - echo "key = crypto.createHmac('sha256', key).digest('base64'); key = key.replace(/[^a-zA-Z ]/g, "") return key; };" > $FILE
-      # test mode로 변경
-      - export NODE_ENV=test
-      - echo node -v
       - npm install
       - echo npm installed
   build:
     commands:
-      - echo begin test
-      - pwd
-      - npm test
+      - npm run build
   post_build:
     commands:
       - echo Build completed
