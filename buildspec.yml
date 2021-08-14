@@ -12,15 +12,7 @@ phases:
     commands:
       # Secretkey 파일 생성
       - FILE="$CODEBUILD_SRC_DIR/src/ssl/secretAPI.ts"
-      - DIR="$CODEBUILD_SRC_DIR/src"
-      # 폴더 생성
-      - if [ -d "${DIR}" ]; then
-      - echo "${DIR} exists"
-      - else
-      - echo "Creating ${DIR} directory"
-      - mkdir ${DIR}
-      - fi
-      - mkdir ssl
+      - mkdir $CODEBUILD_SRC_DIR/src/ssl
       - touch $FILE
       - echo "import crypto from "crypto"; export const secretAPIkey = ( ) => { const time = new Date();" > $FILE 
       - echo "let key = String(time.getDate()) + String(time.getHours()) + String(time.getUTCFullYear()) + String(time.getUTCHours());" > $FILE
