@@ -74,14 +74,18 @@ app.get("/", (req, res) => {
     res.send(`🎉Welcome to BACK!💐 <br>-NODEMEN👨‍👩‍👦`);
 });
 
-import { secretAPIkey } from './ssl/secretAPI';
-const secretKey = secretAPIkey();
-console.log("secret key now: ", secretKey);
+if (env.modeNow !== 'test') {
+    const secretAPIkey = require('./ssl/secretAPI')
+    const secretKey = secretAPIkey();
+    console.log("secret key now: ", secretKey);
+} 
+// import { secretAPIkey } from './ssl/secretAPI';
 
 app.use(`/api/user`, [userRouter]);
 
 // test 모드가 아닐 시에만 진행
 if (env.modeNow !== "test") {
+
     app.use(secretKeyMiddleware);
 }
 
