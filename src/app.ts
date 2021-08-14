@@ -74,12 +74,15 @@ app.get("/", (req, res) => {
     res.send(`🎉Welcome to BACK!💐 <br>-NODEMEN👨‍👩‍👦`);
 });
 
-if (env.modeNow !== 'test') {
-    const secretAPIkey = require('./ssl/secretAPI')
+
+if (env.modeNow !== "test") {
+    const secretAPIkey = require('./ssl/secretAPI');
     const secretKey = secretAPIkey();
     console.log("secret key now: ", secretKey);
-} 
+}
 // import { secretAPIkey } from './ssl/secretAPI';
+// const secretKey = secretAPIkey();
+// console.log("secret key now: ", secretKey);
 
 app.use(`/api/user`, [userRouter]);
 
