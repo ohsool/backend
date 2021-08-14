@@ -1,12 +1,12 @@
 import request from "supertest";
 import { app } from "../app";
 import { disconnect } from "../schemas";
-import { secretAPIkey } from '../ssl/secretAPI';
-const key = secretAPIkey();
+// import { secretAPIkey } from '../ssl/secretAPI';
+// const key = secretAPIkey();
 
 it ("get auto-complete beer name search - success", async () => {
     const response = await request(app).get(encodeURI(`/api/search?word=미`))
-        .set('secretkey', key)
+        // .set('secretkey', key)
 
     const words = response.body.words;
 
@@ -18,7 +18,7 @@ it ("get auto-complete beer name search - success", async () => {
 
 it ("get auto-complete beer category search search - success", async () => {
     const response = await request(app).get(`/api/search?word=la`)
-        .set('secretkey', key)
+        // .set('secretkey', key)
 
     const words = response.body.words;
 

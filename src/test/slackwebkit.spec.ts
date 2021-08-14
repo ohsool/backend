@@ -1,8 +1,8 @@
 import request from "supertest";
 import { app } from "../app";
 import { disconnect } from "../schemas";
-import { secretAPIkey } from '../ssl/secretAPI';
-const key = secretAPIkey();
+// import { secretAPIkey } from '../ssl/secretAPI';
+// const key = secretAPIkey();
 
 let token = "";
 
@@ -24,7 +24,7 @@ const confirmPassword = "recommendationtesttest1234";
 
 it ("login success", async () => {
     const response = await request(app).post(`/api/user/auth`)
-        .set('secretkey', key)
+        // .set('secretkey', key)
         .send({ email, password });
 
     token = response.body.token;
@@ -35,7 +35,7 @@ it ("login success", async () => {
 
 it ("send beer recommendation to slack - success", async () => {
     const response = await request(app).post(`/api/recommendation`)
-        .set('secretkey', key)
+        // .set('secretkey', key)
         .auth(token, { type: 'bearer' })
         .send({
             beer: "test beer",
@@ -50,7 +50,7 @@ it ("send beer recommendation to slack - success", async () => {
 
 it ("send beer complaint to slack - success", async () => {
     const response = await request(app).post(`/api/complaint`)
-        .set('secretkey', key)  
+        // .set('secretkey', key)  
         .auth(token, { type: 'bearer' })
         .send({
             title: "test complaint",

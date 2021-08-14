@@ -7,8 +7,8 @@ import Users from "../schemas/user";
 import MyBeers from "../schemas/mybeer";
 import BeerCategories from "../schemas/beerCategory";
 
-import { secretAPIkey } from '../ssl/secretAPI';
-const key = secretAPIkey();
+// import { secretAPIkey } from '../ssl/secretAPI';
+// const key = secretAPIkey();
 
 let token = "";
 let anothertoken = "";
@@ -50,7 +50,7 @@ const wrongId = "610e5058dc866bf2e5db6334";
 
 it ("login success", async () => {
     const response = await request(app).post(`/api/user/auth`)
-        .set('secretkey', key)
+        // .set('secretkey', key)
         .send({ 
             email: "mybeertest@test.com",
             password: "mybeertest1234" 
@@ -86,7 +86,7 @@ it ("login success", async () => {
 
 it ("another login success", async () => {
     const response = await request(app).post(`/api/user/auth`)
-        .set('secretkey', key)
+        // .set('secretkey', key)
         .send({
             email: "anothermybeertest@test.com",
             password: "mybeertest1234"
@@ -108,7 +108,7 @@ it ("post mybeer - success", async () => {
     const countCategoryBefore = beerCategory.avgRate["Unknown"][1];
 
     const response = await request(app).post(`/api/mybeer/${beerId}`)
-        .set('secretkey', key)
+        // .set('secretkey', key)
         .auth(token, { type: 'bearer' })
         .send({ myFeatures, location, rate, review });
 
@@ -138,7 +138,7 @@ it ("post mybeer - success", async () => {
 
 it ("post mybeer - fail (beer doesn't exist)", async () => {
     const response = await request(app).post(`/api/mybeer/${wrongId}`)
-        .set('secretkey', key)
+        // .set('secretkey', key)
         .auth(token, { type: 'bearer' })
         .send({ myFeatures, location, rate, review });
 
@@ -148,7 +148,7 @@ it ("post mybeer - fail (beer doesn't exist)", async () => {
 
 it ("post mybeer - fail (no rate)", async () => {
     const response = await request(app).post(`/api/mybeer/${beerId}`)
-        .set('secretkey', key)
+        // .set('secretkey', key)
         .auth(token, { type: 'bearer' })
         .send({ myFeatures, location, review });
 
@@ -158,7 +158,7 @@ it ("post mybeer - fail (no rate)", async () => {
 
 it ("post mybeer - fail (review too long)", async () => {
     const response = await request(app).post(`/api/mybeer/${beerId}`)
-        .set('secretkey', key)
+        // .set('secretkey', key)
         .auth(token, { type: 'bearer' })
         .send({
             myFeatures, location, rate, review: "test mybeer review too long test mybeer review too long test mybeer review too long test mybeer review too long test mybeer review too long test mybeer review too long test mybeer review too long"
@@ -170,7 +170,7 @@ it ("post mybeer - fail (review too long)", async () => {
 
 it ("get all mybeers - success", async () => {
     const response = await request(app).get(`/api/mybeer/all`)
-        .set('secretkey', key)
+        // .set('secretkey', key)
         .auth(token, { type: 'bearer' })
         .send();
 
@@ -181,7 +181,7 @@ it ("get all mybeers - success", async () => {
 
 it ("get my mybeers - success", async () => {
     const response = await request(app).get(`/api/mybeer/my`)
-        .set('secretkey', key)
+        // .set('secretkey', key)
         .auth(token, { type: 'bearer' })
         .send();
 
@@ -192,7 +192,7 @@ it ("get my mybeers - success", async () => {
 
 it ("get specific beer's mybeers - success", async () => {
     const response = await request(app).get(`/api/mybeer/beer/${beerId}`)
-        .set('secretkey', key)
+        // .set('secretkey', key)
         .auth(token, { type: 'bearer' })
         .send();
 
@@ -203,7 +203,7 @@ it ("get specific beer's mybeers - success", async () => {
 
 it ("get specific beer's mybeers - fail (wrong beerId)", async () => {
     const response = await request(app).get(`/api/mybeer/beer/${wrongId}`)
-        .set('secretkey', key)
+        // .set('secretkey', key)
         .auth(token, { type: 'bearer' })
         .send();
 
@@ -213,7 +213,7 @@ it ("get specific beer's mybeers - fail (wrong beerId)", async () => {
 
 it ("get one specific mybeer - success", async () => {
     const response = await request(app).get(`/api/mybeer/${mybeerId}`)
-        .set('secretkey', key)
+        // .set('secretkey', key)
         .auth(token, { type: 'bearer' })
         .send();
 
@@ -225,7 +225,7 @@ it ("get one specific mybeer - success", async () => {
 
 it ("get one specific mybeer - fail (wrong mybeer id)", async () => {
     const response = await request(app).get(`/api/mybeer/${wrongId}`)
-        .set('secretkey', key)
+        // .set('secretkey', key)
         .auth(token, { type: 'bearer' })
         .send();
 
@@ -243,7 +243,7 @@ it ("modify one mybeer - success", async () => {
     const countCategoryBefore = beerCategory.avgRate["Unknown"][1];
 
     const response = await request(app).put(`/api/mybeer/${mybeerId}`)
-        .set('secretkey', key)
+        // .set('secretkey', key)
         .auth(token, { type: 'bearer' })
         .send({
             myFeatures, location, rate, review: "modified review"
@@ -273,7 +273,7 @@ it ("modify one mybeer - success", async () => {
 
 it ("modify one mybeer - fail (wrong id)", async () => {
     const response = await request(app).put(`/api/mybeer/${wrongId}`)
-        .set('secretkey', key)
+        // .set('secretkey', key)
         .auth(token, { type: 'bearer' })
         .send({
             myFeatures, location, rate: 4, review: "modified review"
@@ -285,7 +285,7 @@ it ("modify one mybeer - fail (wrong id)", async () => {
 
 it ("modify one mybeer - fail (wrong user)", async () => {
     const response = await request(app).put(`/api/mybeer/${mybeerId}`)
-        .set('secretkey', key)
+        // .set('secretkey', key)
         .auth(anothertoken, { type: 'bearer' })
         .send({
             myFeatures, location, rate: 4, review: "modified review"
@@ -297,7 +297,7 @@ it ("modify one mybeer - fail (wrong user)", async () => {
 
 it ("delete one mybeer - fail (wrong user)", async () => {
     const response = await request(app).delete(`/api/mybeer/${mybeerId}`)
-        .set('secretkey', key)
+        // .set('secretkey', key)
         .auth(anothertoken, { type: 'bearer' })
         .send();
 
@@ -307,7 +307,7 @@ it ("delete one mybeer - fail (wrong user)", async () => {
 
 it ("delete one mybeer - fail (wrong id)", async () => {
     const response = await request(app).delete(`/api/mybeer/${wrongId}`)
-        .set('secretkey', key)
+        // .set('secretkey', key)
         .auth(anothertoken, { type: 'bearer' })
         .send();
 
@@ -326,7 +326,7 @@ it ("delete one mybeer - success", async () => {
     const countCategoryBefore = beerCategory.avgRate["Unknown"][1];
 
     const response = await request(app).delete(`/api/mybeer/${mybeerId}`)
-        .set('secretkey', key)
+        // .set('secretkey', key)
         .auth(token, { type: 'bearer' })
         .send();
 

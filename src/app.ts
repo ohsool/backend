@@ -80,7 +80,11 @@ console.log("secret key now: ", secretKey);
 
 app.use(`/api/user`, [userRouter]);
 
-app.use(secretKeyMiddleware);
+// test 모드가 아닐 시에만 진행
+if (env.modeNow !== "test") {
+    app.use(secretKeyMiddleware);
+}
+
 
 app.use('/swagger', swaggerUi.serve, swaggerUi.setup(swaggerFile))
 
