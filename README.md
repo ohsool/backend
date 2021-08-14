@@ -297,7 +297,7 @@ AWS에 접속하여 젠킨스 포트번호 (9090) 열어주기
 
 <details>
 
-<summary> 참고 </summary>
+<summary> 참 고 </summary>
 
 https://www.sslcert.co.kr/guides/SSL-Certificate-Convert-Format
 https://devopscube.com/configure-ssl-jenkins/
