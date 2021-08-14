@@ -129,3 +129,4 @@ secretAPI.ts
 package-lock.json
 .idea
 .config
+.DS_Store
