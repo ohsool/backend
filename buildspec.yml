@@ -10,6 +10,7 @@ phases:
       - echo $SECRET-KEY-SCRIPT
   pre_build:
     commands:
+      - export TEST_URL=mongodb://test:test@13.124.177.247:27017/admin?authSource=admin
       # Secretkey 파일 생성
       - FILE="$CODEBUILD_SRC_DIR/src/ssl/secretAPI.ts"
       - touch $FILE
@@ -24,6 +25,7 @@ phases:
   build:
     commands:
       - echo begin test
+      - pwd
       - npm test
   post_build:
     commands:
@@ -31,5 +33,4 @@ phases:
 artifacts:
   files:
     - "**/*"
-  base-directory: "**/*"
 
