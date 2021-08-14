@@ -13,8 +13,10 @@ phases:
       # Secretkey 파일 생성
       - echo $CODEBUILD_SRC_DIR
       - mkdir ssl
-      - cat <<EOF >/$CODEBUILD_SRC_DIR/backend/src/ssl/secretAPI.ts
-      - $SECRET-KEY-SCRIPT
+      - cat <<EOF >$CODEBUILD_SRC_DIR/backend/src/ssl/secretAPI.ts
+      - import crypto from "crypto"; export const secretAPIkey = ( ) => { const time = new Date(); 
+      - let key = String(time.getDate()) + String(time.getHours()) + String(time.getUTCFullYear()) + String(time.getUTCHours());
+      - key = crypto.createHmac('sha256', key).digest('base64'); key = key.replace(/[^a-zA-Z ]/g, "") return key; };
       - EOF
       # test mode로 변경
       - export NODE_ENV=test
