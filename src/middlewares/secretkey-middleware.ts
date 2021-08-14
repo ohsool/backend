@@ -7,8 +7,6 @@ function secretKeyMiddleware(req: Request, res: Response, next: NextFunction){
     try {
         const secretkey = secretAPIkey();
 
-        // console.log(received_key, secretkey);
-
         if (received_key == secretkey) {
             next();
         } else {
