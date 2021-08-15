@@ -47,7 +47,6 @@ import { secretKeyMiddleware } from './middlewares/secretkey-middleware';
 
 const port = env.port;
 const app = express();
-console.log("mongodb connecting...");
 connect();
 console.log("mongodb connecting success");
 
@@ -74,27 +73,14 @@ app.get("/", (req, res) => {
     res.send(`🎉Welcome to BACK!💐 <br>-NODEMEN👨‍👩‍👦`);
 });
 
-
-if (env.modeNow !== "test") {
-    const secretAPIkey = require('./ssl/secretAPI');
-    const secretKey = secretAPIkey();
-    console.log("secret key now: ", secretKey);
-}
-// import { secretAPIkey } from './ssl/secretAPI';
-// const secretKey = secretAPIkey();
-// console.log("secret key now: ", secretKey);
+import { secretAPIkey } from './ssl/secretAPI';
+const secretKey = secretAPIkey();
+console.log("secret key now: ", secretKey);
 
 app.use(`/api/user`, [userRouter]);
 
-// test 모드가 아닐 시에만 진행
-if (env.modeNow !== "test") {
-
-    app.use(secretKeyMiddleware);
-}
-
-
+app.use(secretKeyMiddleware);
 app.use('/swagger', swaggerUi.serve, swaggerUi.setup(swaggerFile))
-
 app.get("/search", (req, res) => {
     res.render("index")
 })
@@ -129,8 +115,6 @@ if (env.modeNow == "development" || env.modeNow == "production") {  // on server
     app.listen(port, () => {
         console.log(`listening at http://localhost:${port}`);
     });
-} else {  // jest doesn't use port
-    console.log("testing..");
-}
+} 
 
 export { app };

@@ -1,5 +1,6 @@
 import request from "supertest";
-import { app } from "../app";
+import { app } from "./test-app";
+// import { app } from "../app";
 import { disconnect } from "../schemas";
 
 import Beers from "../schemas/beer";
