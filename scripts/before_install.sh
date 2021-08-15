@@ -9,18 +9,19 @@ nvm install node
 sudo iptables -t nat -A PREROUTING -i eth0 -p tcp --dport 80 -j REDIRECT --to-port 5209
 sudo iptables -t nat -A PREROUTING -i eth0 -p tcp --dport 443 -j REDIRECT --to-port 5209
 
-if [ -d /home/ec2-user/ohsool/node_modules ]; then
-    rm -rf home/ec2-user/ohsool/node_modules
-fi
 
-# EC2 서버에 작업 폴더가 존재하는 지 확인 (없을 시 새로 생성함)
+# EC2 서버에 작업 폴더가 존재한다면 삭제
 DIR="/home/ec2-user/ohsool"
 if [ -d "$DIR" ]; then
-  echo "${DIR} exists"
-else
-  echo "Creating ${DIR} directory"
-  mkdir ${DIR}
+  rm -rf ${DIR}
 fi
+
+mkdir ${DIR}
+
+# security 파일 옮기기
+cp -r /home/ec2-user/security/config /home/ec2-user/ohsool
+cp -r /home/ec2-user/security/ssl /home/ec2-user/ohsool/dist
+
 
 # Typescript에서 컴파일된 JS 파일을 저장하는 폴더를 삭제한다. (다시 run build를 통해 생성될 예정)
 # DIST="/home/ec2-user/ohsool/dist"
