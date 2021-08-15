@@ -10,13 +10,13 @@ sudo iptables -t nat -A PREROUTING -i eth0 -p tcp --dport 80 -j REDIRECT --to-po
 sudo iptables -t nat -A PREROUTING -i eth0 -p tcp --dport 443 -j REDIRECT --to-port 5209
 
 
-# EC2 서버에 작업 폴더가 존재한다면 삭제
+# EC2 서버 작업 폴더 확인
 DIR="/home/ec2-user/ohsool"
 if [ -d "$DIR" ]; then
-  rm -rf ${DIR}
+  echo folder exists
+else 
+  mkdir ${DIR}
 fi
-
-mkdir ${DIR}
 
 # security 파일 옮기기
 cp -r /home/ec2-user/security/config /home/ec2-user/ohsool
