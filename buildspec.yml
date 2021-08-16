@@ -11,7 +11,7 @@ phases:
       - npm install
       - echo npm installed
       - export NODE_ENV=test
-      - export TEST_URL=TEST_URL=mongodb://test:test@13.124.177.247:27017/admin?authSource=admin
+      - export TEST_URL=mongodb://test:test@13.124.177.247:27017/admin?authSource=admin
   build:
     commands:
       - npm run test
