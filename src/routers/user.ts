@@ -212,7 +212,7 @@ const joiSchema = joi.object({
 
         const token = info.message;
 
-        res.redirect(`http://ohsool.com/token=${token}`)
+        res.redirect(`https://ohsool.com/token=${token}`)
       }
     )(req, res, next)
   });
@@ -230,7 +230,7 @@ const joiSchema = joi.object({
 
         const token = info.message;
 
-        res.redirect(`http://ohsool.com/token=${token}`)
+        res.redirect(`https://ohsool.com/token=${token}`)
       }
     )(req, res, next);
   })
