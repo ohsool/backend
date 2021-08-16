@@ -1,5 +1,5 @@
 import express, { Application, Request, Response, NextFunction } from "express";
-// import { secretAPIkey } from "../ssl/secretAPI";
+import { secretAPIkey } from "../ssl/secretAPI";
 import { env } from "../env";
 
 function secretKeyMiddleware(req: Request, res: Response, next: NextFunction){
@@ -9,8 +9,6 @@ function secretKeyMiddleware(req: Request, res: Response, next: NextFunction){
         next();
         return;
     }
-
-    const secretAPIkey = require('../ssl/secretAPI');
     const received_key = req.headers.secretkey;
 
     try {
