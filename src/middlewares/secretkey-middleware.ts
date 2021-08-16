@@ -1,5 +1,5 @@
 import express, { Application, Request, Response, NextFunction } from "express";
-import { secretAPIkey } from "../ssl/secretAPI";
+// import { secretAPIkey } from "../ssl/secretAPI";
 import { env } from "../env";
 if (env.modeNow !== "test") {
     import { secretAPIkey } from "../ssl/secretAPI";
