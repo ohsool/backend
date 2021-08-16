@@ -79,4 +79,16 @@ searchRouter.get("/", async (req, res) => {
     }
 });
 
+searchRouter.get("/hashtag", async (req, res) => {
+    const hashtag = req.body.hashtag;
+
+    try {
+        const beers = await Beers.find({ hashtag: { $in: hashtag } });
+
+        res.json({ message: "success", beers });
+    } catch (error) {
+        res.json({ message: "fail", error });
+    }
+});
+
 export { searchRouter };
