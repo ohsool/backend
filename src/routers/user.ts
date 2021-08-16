@@ -139,9 +139,22 @@ const joiSchema = joi.object({
         return;
       }
   
-      const token = jwt.sign({ userId: user._id }, env.jwt_secret);
+      const refreshToken = jwt.sign( {}, 
+        env.jwt_secret, { 
+          expiresIn: '14d', 
+          issuer: 'node-avengers' 
+        }
+      );
+      const accessToken = jwt.sign({ userId: user._id }, 
+        env.jwt_secret, {
+          expiresIn: '1h',
+          issuer: 'node-avengers'
+        }
+      );
+
+      await Users.findByIdAndUpdate({ _id: user._id}, {$set: { refreshToken }} );
   
-      res.json({ message: "success", token, userId: user._id });
+      res.json({ message: "success", refreshToken, accessToken, userId: user._id });
     } catch(error) {
       res.status(401).json({ message: "fail", error });
 
@@ -196,7 +209,14 @@ const joiSchema = joi.object({
     const nickname = res.locals.user.nickname;
     const preference = res.locals.user.preference;
 
-    res.json({ message: "success", userId, nickname, preference });
+    if (res.locals.accessToken) {
+      res.json({ message: "success", userId, nickname, preference, accessToken: res.locals.accessToken });
+    } else if (res.locals.refreshToken) {
+      res.json({ message: "success", userId, nickname, preference, refreshToken: res.locals.refreshToken });
+    } else {
+      res.json({ message: "success", userId, nickname, preference });
+    }
+    
   })
 
   // google login
@@ -210,9 +230,11 @@ const joiSchema = joi.object({
       }, (err, profile, info) => {
         if (err) return next(err);
 
-        const token = info.message;
+        const tokens = info.tokens;
+        const refreshToken = tokens.split("***")[0];
+        const accessToken = tokens.split("***")[1];
 
-        res.redirect(`https://ohsool.com/token=${token}`)
+        res.redirect(`https://ohsool.com/refresh=${refreshToken}&access=${accessToken}`);
       }
     )(req, res, next)
   });
@@ -228,9 +250,9 @@ const joiSchema = joi.object({
       }, (err, profile, info) => {
         if (err) return next(err);
 
-        const token = info.message;
+        const { refreshToken, accessToken} = info;
 
-        res.redirect(`https://ohsool.com/token=${token}`)
+        res.redirect(`https://ohsool.com/refresh=${refreshToken}&access=${accessToken}`);
       }
     )(req, res, next);
   })

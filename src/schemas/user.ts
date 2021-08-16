@@ -17,6 +17,9 @@ const UserSchema: Schema = new Schema({
     },
     passport: {
         type: Array
+    },
+    refreshToken: {
+        type: String
     }
 });
 
