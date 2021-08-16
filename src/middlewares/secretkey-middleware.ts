@@ -1,9 +1,6 @@
 import express, { Application, Request, Response, NextFunction } from "express";
 // import { secretAPIkey } from "../ssl/secretAPI";
 import { env } from "../env";
-if (env.modeNow !== "test") {
-    import { secretAPIkey } from "../ssl/secretAPI";
-}
 
 function secretKeyMiddleware(req: Request, res: Response, next: NextFunction){
 
@@ -15,6 +12,7 @@ function secretKeyMiddleware(req: Request, res: Response, next: NextFunction){
     const received_key = req.headers.secretkey;
 
     try {
+        const { secretAPIkey } = require("../ssl/secretAPI");
         const secretkey = secretAPIkey();
 
         if (received_key == secretkey) {
