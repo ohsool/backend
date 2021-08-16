@@ -162,6 +162,19 @@ const joiSchema = joi.object({
     }
   });
 
+  // logout
+  userRouter.post("/logout", secretKeyMiddleware, authMiddleware, async (req, res) => {
+    const userId = res.locals.user._id;
+
+    try {
+      await Users.findOneAndUpdate({ _id: userId }, { refreshToken: "" } );
+
+      res.json({ message: "success" });
+    } catch (error) {
+      res.status(401).json({ message: "fail", error });
+    }
+  })
+
   // sign out
   userRouter.delete("/", secretKeyMiddleware, authMiddleware, async (req, res) => {
     const userId = res.locals.user._id;
