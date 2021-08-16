@@ -5,17 +5,19 @@ phases:
     runtime-versions:
       nodejs: 10
     commands:
-      - echo $SECRET-KEY-SCRIPT
+      - echo start
   pre_build:
     commands:
       - npm install
       - echo npm installed
+      - export NODE_ENV=test
+      - export TEST_URL=TEST_URL=mongodb://test:test@13.124.177.247:27017/admin?authSource=admin
   build:
     commands:
-      - npm run build
+      - npm run test
   post_build:
     commands:
-      - echo Build completed
+      - echo test completed
 artifacts:
   files:
     - "**/*"

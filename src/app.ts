@@ -47,7 +47,6 @@ import { secretKeyMiddleware } from './middlewares/secretkey-middleware';
 
 const port = env.port;
 const app = express();
-console.log("mongodb connecting...");
 connect();
 console.log("mongodb connecting success");
 
@@ -81,9 +80,7 @@ console.log("secret key now: ", secretKey);
 app.use(`/api/user`, [userRouter]);
 
 app.use(secretKeyMiddleware);
-
 app.use('/swagger', swaggerUi.serve, swaggerUi.setup(swaggerFile))
-
 app.get("/search", (req, res) => {
     res.render("index")
 })
@@ -118,8 +115,6 @@ if (env.modeNow == "development" || env.modeNow == "production") {  // on server
     app.listen(port, () => {
         console.log(`listening at http://localhost:${port}`);
     });
-} else {  // jest doesn't use port
-    console.log("testing..");
-}
+} 
 
 export { app };
