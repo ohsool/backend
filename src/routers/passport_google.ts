@@ -32,7 +32,7 @@ const googlePassportConfig = () => {
         }
 
         const _id = user._id;
-        const token = jwt.sign({ userId: _id }, "bananatulip");
+        const token = jwt.sign({ userId: _id }, env.jwt_secret);
 
         return done(null, profile, { message: token });
     }

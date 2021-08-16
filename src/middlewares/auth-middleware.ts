@@ -1,6 +1,8 @@
 import jwt from "jsonwebtoken";
 import Users from "../schemas/user";
 
+import { env } from "../env";
+
 import express, { Application, Request, Response, NextFunction } from "express";
 
 function authMiddleware(req: Request, res: Response, next: NextFunction){
@@ -23,7 +25,7 @@ function authMiddleware(req: Request, res: Response, next: NextFunction){
             return;
         }
 
-        const userVerified = jwt.verify(tokenValue, "bananatulip");
+        const userVerified = jwt.verify(tokenValue, env.jwt_secret);
         const userId = (<any>userVerified).userId;
 
         Users.findOne({ _id: userId })

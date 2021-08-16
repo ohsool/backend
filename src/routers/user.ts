@@ -10,6 +10,8 @@ import BeerCategories from "../schemas/beerCategory";
 import Users from "../schemas/user";
 import MyBeers from "../schemas/mybeer";
 
+import { env } from "../env";
+
 import { authMiddleware } from "../middlewares/auth-middleware";
 import { secretKeyMiddleware } from "../middlewares/secretkey-middleware";
 
@@ -137,7 +139,7 @@ const joiSchema = joi.object({
         return;
       }
   
-      const token = jwt.sign({ userId: user._id }, "bananatulip");
+      const token = jwt.sign({ userId: user._id }, env.jwt_secret);
   
       res.json({ message: "success", token, userId: user._id });
     } catch(error) {

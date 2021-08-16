@@ -11,6 +11,7 @@ export const env = {
     url: String(process.env.URL),
     atlas_url: String(process.env.ATLAS_URL),
     test_url: String(process.env.TEST_URL),
+    jwt_secret: String(process.env.JWT_SECRET),
     clientId_kakao: String(process.env.CLIENTID_KAKAO),
     clientSecret_kakao: String(process.env.CLIENTSECRET_KAKAO),
     callbackUrl_kakao: String(process.env.CALLBACKURL_KAKAO),
