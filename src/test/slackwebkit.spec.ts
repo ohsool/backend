@@ -9,20 +9,7 @@ let refresh = "";
 let access = "";
 
 const email = "slackwebkittest@test.com"
-const nickname = "slackwebkittest";
 const password = "recommendationtesttest1234";
-const confirmPassword = "recommendationtesttest1234";
-
-// it ("register success, get beer id, get beercategory id", async () => {
-//     const response = await request(app).post(`/api/user`)
-//         .set('secretkey', key)
-//         .send({ email, nickname, password, confirmPassword });
-
-//     console.log("🍻", email, nickname, password, confirmPassword, response.body);
-
-//     expect(response.body.message).toBe("success");
-//     expect(response.statusCode).toBe(201); 
-// });
 
 it ("login success", async () => {
     const response = await request(app).post(`/api/user/auth`)
@@ -38,8 +25,6 @@ it ("login success", async () => {
 });
 
 it ("send beer recommendation to slack - success", async () => {
-    console.log("🍻", refresh, access);
-
     const response = await request(app).post(`/api/recommendation`)
         // .set('secretkey', key)
         .set('refresh', `Bearer ${refresh}`)
@@ -50,8 +35,6 @@ it ("send beer recommendation to slack - success", async () => {
             location: "test location",
             image: "https://miro.medium.com/max/796/1*P_zZlof7IhiohKQ7QEaXzA.png"
         });
-
-    console.log(response.body);
 
     expect(response.body.message).toBe("success");
     expect(response.body.result).toBeTruthy();
@@ -67,19 +50,9 @@ it ("send beer complaint to slack - success", async () => {
             description: "complaint testing"
         });
 
-    console.log(response.body);
-
     expect(response.body.message).toBe("success");
     expect(response.body.result).toBeTruthy();
 });
-
-// it ("signout - success", async () => {
-//     const response = await request(app).delete(`/${key}/api/user`)
-//         .auth(token, { type: 'bearer' })
-//         .send();
-
-//     expect(response.body.message).toBe("success");
-// });
 
  // Disconnect Mongoose
  afterAll( async () => {
