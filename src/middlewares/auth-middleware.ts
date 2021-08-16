@@ -5,43 +5,148 @@ import { env } from "../env";
 
 import express, { Application, Request, Response, NextFunction } from "express";
 
+interface User {
+    _id: String
+}
+
 function authMiddleware(req: Request, res: Response, next: NextFunction){
-    const { authorization } = req.headers;
+    let refreshToken = req.headers.refresh;
+    let accessToken = req.headers.access;
+
+    if (!accessToken || !refreshToken) {
+        res.status(401).json({ message: "fail", error: "unidentified user" });
+
+        return;
+    }
+
+    const refreshTokenArray = (<String>refreshToken).split(" ");
+    const refreshTokenScheme = refreshTokenArray[0];
+    const refreshTokenValue = refreshTokenArray[1];
+
+    const accessTokenArray = (<String>accessToken).split(" ");
+    const accessTokenScheme = accessTokenArray[0];
+    const accessTokenValue = accessTokenArray[1];
+
+    if (refreshTokenScheme != "Bearer" || accessTokenScheme != "Bearer") {
+        res.status(401).json({ message: "fail", error: "unidentified token schema" });
+
+        return;
+    }
+
+    let userRefreshVerified;
+    let userAccessVerified
 
     try {
-        if (!authorization) {
-            res.status(401).json({ message: "fail", error: "unidentified user" });
+        userRefreshVerified = jwt.verify(refreshTokenValue, env.jwt_secret);
+    } catch (error) {
+        userRefreshVerified = null;
+    }
 
-            return;
-        }
+    try {
+        userAccessVerified = jwt.verify(accessTokenValue, env.jwt_secret);
+    } catch (error) {
+        userAccessVerified = null;
+    }
+    
+    try {
+        if (!userAccessVerified) {
+            if (!userRefreshVerified) { 
+                // 1. access token, refresh token are all expired
+                // : gives error
+                // console.log("1. access token, refresh token are all expired");
 
-        const tokenArray = authorization.split(" ");
-        const tokenScheme = tokenArray[0];
-        const tokenValue = tokenArray[1];
+                res.json({ message: "fail", error: "all tokens are expired" });
 
-        if (tokenScheme != "Bearer") {
-            res.status(401).json({ message: "fail", error: "unidentified token schema" });
-
-            return;
-        }
-
-        const userVerified = jwt.verify(tokenValue, env.jwt_secret);
-        const userId = (<any>userVerified).userId;
-
-        Users.findOne({ _id: userId })
-            .then((result: object) => {
-                if (result) {
-                    res.locals.user = result;
-
-                    next();
-                } else {
-                    res.status(401).json({ message: "fail", error: "no existed user" });
-                }
+                return;
                 
-            }).catch((error: object) => {
-                res.status(401).json({ message: "fail", error});
-            });
+            } else {  
+                // 2. refresh token is valid but access token is expired
+                // : reissue access token
+                // console.log("2. refresh token is valid but access token is expired");
 
+                Users.findOne({ refreshToken: refreshTokenValue })
+                    .then(( user: User ) => {
+                        if (user) {
+                            accessToken = jwt.sign({ userId: user._id }, 
+                                env.jwt_secret, {
+                                  expiresIn: '1h',
+                                  issuer: 'node-avengers'
+                                }
+                            );
+
+                            res.locals.user = user;
+                            res.locals.accessToken = accessToken;
+
+                            next();
+
+                            return;
+                        }
+                    }).catch((error: object) => {
+                        res.status(401).json({ message: "fail", error});
+                    }
+                )
+            }
+            
+        } else {
+            if (!userRefreshVerified) {
+                // 3. access token is valid but refresh token is expired
+                // : reissue refresh token
+                // console.log("3. access token is valid but refresh token is expired");
+
+                let userId = (<any>userAccessVerified).userId;
+
+                Users.findOne({ _id: userId })
+                    .then((user: User) => {
+                        if (user) {
+                            refreshToken = jwt.sign( {}, 
+                                env.jwt_secret, { 
+                                  expiresIn: '14d', 
+                                  issuer: 'node-avengers' 
+                                }
+                            );
+
+                            Users.findOneAndUpdate({ _id: userId }, {$set: {refreshToken}})
+                                .then((user: User) => {
+                                    res.locals.user = user;
+                                    res.locals.refreshToken = refreshToken;
+
+                                    next();
+
+                                    return;
+                                })
+                            
+                        } else {
+                            res.status(401).json({ message: "fail", error: "no existed user" });
+                        }
+                        
+                    }).catch((error: object) => {
+                        res.status(401).json({ message: "fail", error});
+                    }
+                );
+
+            } else {
+                // 4. all are valid
+                // : to next middleware
+                // console.log("4. all are valid");
+
+                let userId = (<any>userAccessVerified).userId;
+
+                Users.findOne({ _id: userId })
+                    .then((user: User) => {
+                        if (user) {
+                            res.locals.user = user;
+
+                            next();
+                        } else {
+                            res.status(401).json({ message: "fail", error: "no existed user" });
+                        }
+                        
+                    }).catch((error: object) => {
+                        res.status(401).json({ message: "fail", error});
+                    }
+                );
+            }
+        }
     } catch (error) {
         res.status(401).json({ message: "fail", error});
     }
