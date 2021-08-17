@@ -152,7 +152,7 @@ const joiSchema = joi.object({
         }
       );
 
-      await Users.findByIdAndUpdate({ _id: user._id}, {$set: { refreshToken }} );
+      await Users.findOneAndUpdate({ _id: user._id}, {$set: { refreshToken }} );
   
       res.json({ message: "success", refreshToken, accessToken, userId: user._id });
     } catch(error) {
@@ -243,13 +243,9 @@ const joiSchema = joi.object({
       }, (err, profile, info) => {
         if (err) return next(err);
 
-        console.log("/google/callback111: ", info);
-
         const tokens = String(info.message);
         const refreshToken = tokens.split("***")[0];
         const accessToken = tokens.split("***")[1];
-
-        console.log("/google/callback222: ", refreshToken, accessToken);
 
         res.redirect(`https://ohsool.com/refresh=${refreshToken}&access=${accessToken}`);
       }

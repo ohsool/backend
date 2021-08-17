@@ -38,8 +38,6 @@ const kakaoPassportConfig = () => {
             user = await Users.create({ nickname, email, passport: [{ provider: provider }, { id: userId }] });
         }
 
-        console.log("passport1:", user);
-
         const _id = user._id;
         const refresh = jwt.sign( {}, 
             env.jwt_secret, { 
@@ -54,7 +52,7 @@ const kakaoPassportConfig = () => {
             }
         );
 
-        console.log("passport2:", refresh, access);
+        await Users.findOneAndUpdate({ _id: user._id}, {$set: { refresh }} );
 
         return done(null, profile, { refreshToken: refresh, accessToken: access });
     }
