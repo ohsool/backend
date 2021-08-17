@@ -245,7 +245,7 @@ const joiSchema = joi.object({
 
         console.log("/google/callback111: ", info);
 
-        const tokens = String(info.tokens);
+        const tokens = String(info.message);
         const refreshToken = tokens.split("***")[0];
         const accessToken = tokens.split("***")[1];
 
