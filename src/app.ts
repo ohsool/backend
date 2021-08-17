@@ -67,9 +67,9 @@ console.log("passport initializing done");
 
 // setting CORS
 const allowOrigins = [
-    "https://ohsool.com",
-    "172.30.160.1",
-    "124.48.159.81"
+    env.page_domain_address,
+    env.jy_ip,
+    env.dh_ip
 ];
 const corsOptions = {
     origin: (origin: string, callback: any) => {
