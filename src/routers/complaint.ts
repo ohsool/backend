@@ -1,53 +1,10 @@
-import express, { Request, Response, NextFunction, Router, response } from "express";
-import webhook, { WebClient, LogLevel } from "@slack/web-api";
-
+import express from "express";
+import complaintController from "../controllers/complaint";
 import { authMiddleware } from "../middlewares/auth-middleware";
-import { env } from "../env";
-
-const client = new WebClient(env.botUserOAuthToken, {
-    logLevel: LogLevel.DEBUG
-});
 
 const complaintRouter = express.Router();
 
-complaintRouter.post("/", authMiddleware, async (req, res) => {
-    const { title, description } = req.body;
-    let nickname = res.locals.user.nickname;
-
-    if (!nickname) {
-        nickname = "Anonymous";
-    }
-
-    if (!title || !description) {
-        res.json({ message: "fail", error: "no title or descripton" });
-
-        return;
-    }
-
-    try {
-        const result = await client.chat.postMessage({
-            channel: "#불편사항",
-            text: `*:person_frowning:${nickname} 님의 불편사항*
-            *제목:* ${title}
-            *내용:* ${description}`,
-            username: "complaintbot", 
-            icon_emoji: ":imp:"
-        })
-
-        res.json({ message: "success", result })
-    } catch (error) {
-        res.json({ message: "fail", error });
-    }
-})
+// 슬랙을 통해 불편사항 전달하기
+complaintRouter.post("/", authMiddleware, complaintController.postComplaint); 
 
 export { complaintRouter };
-
-
-/*
-removed an integration from this channel: beer bot
-
-https://api.slack.com/apps/A029KN5LE84
-OAuth & Permissions
-- Token check
-- Scope check
-*/
