@@ -8,9 +8,7 @@ import express, {Request, Response, NextFunction} from 'express';
 import bodyParser from 'body-parser';
 import cors from "cors";
 import passport from "passport";
-import dotenv from "dotenv";
 import fs from "fs";
-import http from "http";
 import https from "https";
 import path from "path";
 
@@ -66,7 +64,23 @@ googlePassportConfig();
 kakaoPassportConfig();
 console.log("passport initializing done");
 
-const allowOrigins = [];
+
+// setting CORS
+const allowOrigins = [
+    "https://ohsool.com",
+    "59.14.6.218",
+    "124.48.159.81"
+];
+const corsOptions = {
+    origin: (origin: string, callback: any) => {
+        if (allowOrigins.indexOf(origin) !== -1){
+            callback(null, true);
+        } else {
+            callback(new Error());
+        }
+    }
+}
+// app.use(cors(corsOptions));
 app.use(cors());
 
 app.get("/", (req, res) => {
