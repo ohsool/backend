@@ -52,7 +52,7 @@ const kakaoPassportConfig = () => {
             }
         );
 
-        await Users.findOneAndUpdate({ _id: user._id}, {$set: { refresh }} );
+        await Users.findOneAndUpdate({ _id: user._id}, {$set: { refreshToken: refresh }} );
 
         return done(null, profile, { refreshToken: refresh, accessToken: access });
     }
