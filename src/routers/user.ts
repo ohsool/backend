@@ -109,7 +109,7 @@ const joiSchema = joi.object({
       });
 
       if (!error) {
-          const crypted_password = crypto.createHmac("sha256", password).update("¡hellosnail!").digest("hex");
+          const crypted_password = crypto.createHmac("sha256", password).update(env.pass_secret).digest("hex");
 
           await Users.create({ email, nickname, password: crypted_password });
 
@@ -123,7 +123,7 @@ const joiSchema = joi.object({
   userRouter.post("/auth", secretKeyMiddleware, async (req, res) => {
     let { email, password } = req.body;
 
-    const crypted_password = crypto.createHmac("sha256", password).update("¡hellosnail!").digest("hex");
+    const crypted_password = crypto.createHmac("sha256", password).update(env.pass_secret).digest("hex");
     try {
       const user = await Users.findOne({ email });
 
