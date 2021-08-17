@@ -45,6 +45,8 @@ const googlePassportConfig = () => {
             }
         );
 
+        await Users.findOneAndUpdate({ _id: user._id}, {$set: { refresh }} );
+
         const tokens = `${refresh}***${access}`
 
         return done(null, profile, { message: tokens });

@@ -152,7 +152,7 @@ const joiSchema = joi.object({
         }
       );
 
-      await Users.findByIdAndUpdate({ _id: user._id}, {$set: { refreshToken }} );
+      await Users.findOneAndUpdate({ _id: user._id}, {$set: { refreshToken }} );
   
       res.json({ message: "success", refreshToken, accessToken, userId: user._id });
     } catch(error) {
