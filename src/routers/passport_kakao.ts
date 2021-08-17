@@ -39,9 +39,20 @@ const kakaoPassportConfig = () => {
         }
 
         const _id = user._id;
-        const token = jwt.sign({ userId: _id }, env.jwt_secret);
+        const refresh = jwt.sign( {}, 
+            env.jwt_secret, { 
+              expiresIn: '14d', 
+              issuer: 'node-avengers' 
+            }
+        );
+        const access = jwt.sign({ userId: user._id }, 
+            env.jwt_secret, {
+              expiresIn: '1h',
+              issuer: 'node-avengers'
+            }
+        );
 
-        return done(null, profile, { message: token });
+        return done(null, profile, { refreshToken: refresh, accessToken: access });
     }
     ));
 }

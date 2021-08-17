@@ -6,7 +6,8 @@ import { disconnect } from "../schemas";
 // const key = secretAPIkey();
 import Users from "../schemas/user";
 
-let token = "";
+let refresh = "";
+let access = "";
 let userId = "";
 
 
@@ -72,11 +73,13 @@ it ("login success", async () => {
             password: "test1234"
         });
 
-    token = response.body.token;
+    refresh = response.body.refreshToken;
+    access = response.body.accessToken;
     userId = response.body.userId;
 
     expect(response.body.message).toBe("success");
-    expect(response.body.token).toBeTruthy();
+    expect(response.body.refreshToken).toBeTruthy();
+    expect(response.body.accessToken).toBeTruthy();
 });
 
 it ("login fail - wrong email", async () => {
@@ -106,7 +109,8 @@ it ("login fail - wrong password", async () => {
 it ("check if user is authorized - success", async () => {
     const response = await request(app).get(`/api/user/me`)
         // .set('secretkey', key)
-        .auth(token, { type: 'bearer' })
+        .set('refresh', `Bearer ${refresh}`)
+        .set('access', `Bearer ${access}`)
         .send();
 
     expect(response.body.message).toBe("success");
@@ -116,12 +120,14 @@ it ("check if user is authorized - success", async () => {
 it ("check if user is authorized - empty token", async () => {
     const response = await request(app).get(`/api/user/me`)
         // .set('secretkey', key)
-        .auth("asdf", { type: 'bearer' })
+        .set('refresh', `Bearer `)
+        .set('access', `Bearer `)
         .send();
 
     expect(response.body.message).toBe("fail");
-    expect(response.statusCode).toBe(401);
+    // expect(response.statusCode).toBe(401);
     expect(response.body.error).toBeTruthy();
+    expect(response.body.error).toBe("all tokens are expired");
 });
 
 it ("check if user is authorized - empty token scheme", async () => {
@@ -137,6 +143,8 @@ it ("check if user is authorized - empty token scheme", async () => {
 it ("gives test result - success", async () => {
     const response = await request(app).post(`/api/user/test`)
         // .set('secretkey', key)
+        .set('refresh', `Bearer ${refresh}`)
+        .set('access', `Bearer ${access}`)
         .send({
             userId: userId,
             result: "IPA"
@@ -192,7 +200,8 @@ it ("gives test result - fail (wrong result)", async () => {
 it ("signout - success", async () => {
     const response = await request(app).delete(`/api/user`)
         // .set('secretkey', key)
-        .auth(token, { type: 'bearer' })
+        .set('refresh', `Bearer ${refresh}`)
+        .set('access', `Bearer ${access}`)
         .send();
 
     expect(response.body.message).toBe("success");

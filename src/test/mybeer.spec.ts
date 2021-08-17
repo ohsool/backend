@@ -11,8 +11,10 @@ import BeerCategories from "../schemas/beerCategory";
 // import { secretAPIkey } from '../ssl/secretAPI';
 // const key = secretAPIkey();
 
-let token = "";
-let anothertoken = "";
+let refresh = "";
+let access = "";
+let anotherrefresh = "";
+let anotheraccess = "";
 let mybeerId = "";
 let beerId = "";
 let beerCategoryId = "";
@@ -29,25 +31,9 @@ const rate = 5;
 const modified_rate = 4;
 const review = "test mybeer";
 
-const email = "mybeertest@test.com"
 const nickname = "mybeertest";
-const password = "mybeertest1234";
-const confirmPassword = "mybeertest1234";
 
 const wrongId = "610e5058dc866bf2e5db6334";
-
-// it ("register success, get beer id, get beercategory id", async () => {
-//     const response = await request(app).post(`/api/user`)
-//         .set('secretkey', key)
-//         .send({ email, nickname, password, confirmPassword });
-
-//     const beer = await Beers.findOne({ name_korean: "버드와이저" });
-//     beerId = beer._id;
-//     beerCategoryId = beer.categoryId;
-
-//     expect(response.body.message).toBe("success");
-//     expect(response.statusCode).toBe(201); 
-// });
 
 it ("login success", async () => {
     const response = await request(app).post(`/api/user/auth`)
@@ -57,33 +43,17 @@ it ("login success", async () => {
             password: "mybeertest1234" 
         });
 
-    token = response.body.token;
+    refresh = response.body.refreshToken;
+    access = response.body.accessToken;
 
     const beer = await Beers.findOne({ name_korean: "버드와이저" });
     beerId = beer._id;
     beerCategoryId = beer.categoryId;
 
     expect(response.body.message).toBe("success");
-    expect(response.body.token).toBeTruthy();
+    expect(response.body.refreshToken).toBeTruthy();
+    expect(response.body.accessToken).toBeTruthy();
 });
-
-// it ("another register success, get beer id, get beercategory id", async () => {
-//     const response = await request(app).post(`/api/user`)
-//         .set('secretkey', key)
-//         .send({ 
-//             email: "anothermybeertest@test.com",
-//             nickname: "anothermybeertest22",
-//             password: "mybeertest1234", 
-//             confirmPassword: "mybeertest1234"
-//         });
-
-//     const beer = await Beers.findOne({ name_korean: "버드와이저" });
-//     beerId = beer._id;
-//     beerCategoryId = beer.categoryId;
-
-//     expect(response.body.message).toBe("success");
-//     expect(response.statusCode).toBe(201); 
-// });
 
 it ("another login success", async () => {
     const response = await request(app).post(`/api/user/auth`)
@@ -93,10 +63,12 @@ it ("another login success", async () => {
             password: "mybeertest1234"
         });
 
-    anothertoken = response.body.token;
+    anotherrefresh = response.body.refreshToken;
+    anotheraccess = response.body.accessToken;
 
     expect(response.body.message).toBe("success");
-    expect(response.body.token).toBeTruthy();
+    expect(response.body.refreshToken).toBeTruthy();
+    expect(response.body.accessToken).toBeTruthy();
 });
 
 it ("post mybeer - success", async () => {
@@ -110,7 +82,8 @@ it ("post mybeer - success", async () => {
 
     const response = await request(app).post(`/api/mybeer/${beerId}`)
         // .set('secretkey', key)
-        .auth(token, { type: 'bearer' })
+        .set('refresh', `Bearer ${refresh}`)
+        .set('access', `Bearer ${access}`)
         .send({ myFeatures, location, rate, review });
 
     mybeerId = response.body.mybeer._id;
@@ -126,9 +99,6 @@ it ("post mybeer - success", async () => {
     const avgRate = (( countBefore * avgRateBefore ) + rate) / (countBefore + 1);
     const avgRateCategory = (( countCategoryBefore * avgRateCategoryBefore ) + rate) / (countCategoryBefore + 1);
 
-    console.log("1️⃣", countAfter, avgRateAfter);
-    console.log("1️⃣", countCategoryAfter, avgRateCategoryAfter);
-
     expect(response.body.message).toBe("success");
     expect(countAfter - countBefore).toBe(1);
     expect(avgRate).toBe(avgRateAfter);
@@ -140,7 +110,8 @@ it ("post mybeer - success", async () => {
 it ("post mybeer - fail (beer doesn't exist)", async () => {
     const response = await request(app).post(`/api/mybeer/${wrongId}`)
         // .set('secretkey', key)
-        .auth(token, { type: 'bearer' })
+        .set('refresh', `Bearer ${refresh}`)
+        .set('access', `Bearer ${access}`)
         .send({ myFeatures, location, rate, review });
 
     expect(response.body.message).toBe("fail");
@@ -150,7 +121,8 @@ it ("post mybeer - fail (beer doesn't exist)", async () => {
 it ("post mybeer - fail (no rate)", async () => {
     const response = await request(app).post(`/api/mybeer/${beerId}`)
         // .set('secretkey', key)
-        .auth(token, { type: 'bearer' })
+        .set('refresh', `Bearer ${refresh}`)
+        .set('access', `Bearer ${access}`)
         .send({ myFeatures, location, review });
 
     expect(response.body.message).toBe("fail");
@@ -160,7 +132,8 @@ it ("post mybeer - fail (no rate)", async () => {
 it ("post mybeer - fail (review too long)", async () => {
     const response = await request(app).post(`/api/mybeer/${beerId}`)
         // .set('secretkey', key)
-        .auth(token, { type: 'bearer' })
+        .set('refresh', `Bearer ${refresh}`)
+        .set('access', `Bearer ${access}`)
         .send({
             myFeatures, location, rate, review: "test mybeer review too long test mybeer review too long test mybeer review too long test mybeer review too long test mybeer review too long test mybeer review too long test mybeer review too long"
         });
@@ -172,7 +145,8 @@ it ("post mybeer - fail (review too long)", async () => {
 it ("get all mybeers - success", async () => {
     const response = await request(app).get(`/api/mybeer/all`)
         // .set('secretkey', key)
-        .auth(token, { type: 'bearer' })
+        .set('refresh', `Bearer ${refresh}`)
+        .set('access', `Bearer ${access}`)
         .send();
 
     expect(response.body.message).toBe("success");
@@ -183,7 +157,8 @@ it ("get all mybeers - success", async () => {
 it ("get my mybeers - success", async () => {
     const response = await request(app).get(`/api/mybeer/my`)
         // .set('secretkey', key)
-        .auth(token, { type: 'bearer' })
+        .set('refresh', `Bearer ${refresh}`)
+        .set('access', `Bearer ${access}`)
         .send();
 
     expect(response.body.message).toBe("success");
@@ -194,7 +169,8 @@ it ("get my mybeers - success", async () => {
 it ("get specific beer's mybeers - success", async () => {
     const response = await request(app).get(`/api/mybeer/beer/${beerId}`)
         // .set('secretkey', key)
-        .auth(token, { type: 'bearer' })
+        .set('refresh', `Bearer ${refresh}`)
+        .set('access', `Bearer ${access}`)
         .send();
 
     expect(response.body.message).toBe("success");
@@ -205,7 +181,8 @@ it ("get specific beer's mybeers - success", async () => {
 it ("get specific beer's mybeers - fail (wrong beerId)", async () => {
     const response = await request(app).get(`/api/mybeer/beer/${wrongId}`)
         // .set('secretkey', key)
-        .auth(token, { type: 'bearer' })
+        .set('refresh', `Bearer ${refresh}`)
+        .set('access', `Bearer ${access}`)
         .send();
 
     expect(response.body.message).toBe("fail");
@@ -215,7 +192,8 @@ it ("get specific beer's mybeers - fail (wrong beerId)", async () => {
 it ("get one specific mybeer - success", async () => {
     const response = await request(app).get(`/api/mybeer/${mybeerId}`)
         // .set('secretkey', key)
-        .auth(token, { type: 'bearer' })
+        .set('refresh', `Bearer ${refresh}`)
+        .set('access', `Bearer ${access}`)
         .send();
 
     expect(response.body.message).toBe("success");
@@ -227,7 +205,8 @@ it ("get one specific mybeer - success", async () => {
 it ("get one specific mybeer - fail (wrong mybeer id)", async () => {
     const response = await request(app).get(`/api/mybeer/${wrongId}`)
         // .set('secretkey', key)
-        .auth(token, { type: 'bearer' })
+        .set('refresh', `Bearer ${refresh}`)
+        .set('access', `Bearer ${access}`)
         .send();
 
     expect(response.body.message).toBe("fail");
@@ -245,7 +224,8 @@ it ("modify one mybeer - success", async () => {
 
     const response = await request(app).put(`/api/mybeer/${mybeerId}`)
         // .set('secretkey', key)
-        .auth(token, { type: 'bearer' })
+        .set('refresh', `Bearer ${refresh}`)
+        .set('access', `Bearer ${access}`)
         .send({
             myFeatures, location, rate, review: "modified review"
         });
@@ -261,9 +241,6 @@ it ("modify one mybeer - success", async () => {
     const avgRate = (( countBefore * avgRateBefore ) - rate + modified_rate) / countBefore;
     const avgRateCategory = (( countCategoryBefore * avgRateCategoryBefore ) - rate + modified_rate) / countCategoryBefore;
 
-    console.log("2️⃣", countAfter, avgRateAfter);
-    console.log("2️⃣", countCategoryAfter, avgRateCategoryAfter);
-
     expect(response.body.message).toBe("success");
     expect(countAfter).toBe(countBefore);
     // expect(avgRate).toBe(avgRateAfter);
@@ -275,7 +252,8 @@ it ("modify one mybeer - success", async () => {
 it ("modify one mybeer - fail (wrong id)", async () => {
     const response = await request(app).put(`/api/mybeer/${wrongId}`)
         // .set('secretkey', key)
-        .auth(token, { type: 'bearer' })
+        .set('refresh', `Bearer ${refresh}`)
+        .set('access', `Bearer ${access}`)
         .send({
             myFeatures, location, rate: 4, review: "modified review"
         });
@@ -287,7 +265,8 @@ it ("modify one mybeer - fail (wrong id)", async () => {
 it ("modify one mybeer - fail (wrong user)", async () => {
     const response = await request(app).put(`/api/mybeer/${mybeerId}`)
         // .set('secretkey', key)
-        .auth(anothertoken, { type: 'bearer' })
+        .set('refresh', `Bearer ${anotherrefresh}`)
+        .set('access', `Bearer ${anotheraccess}`)
         .send({
             myFeatures, location, rate: 4, review: "modified review"
         });
@@ -299,7 +278,8 @@ it ("modify one mybeer - fail (wrong user)", async () => {
 it ("delete one mybeer - fail (wrong user)", async () => {
     const response = await request(app).delete(`/api/mybeer/${mybeerId}`)
         // .set('secretkey', key)
-        .auth(anothertoken, { type: 'bearer' })
+        .set('refresh', `Bearer ${anotherrefresh}`)
+        .set('access', `Bearer ${anotheraccess}`)
         .send();
 
     expect(response.body.message).toBe("fail");
@@ -309,7 +289,8 @@ it ("delete one mybeer - fail (wrong user)", async () => {
 it ("delete one mybeer - fail (wrong id)", async () => {
     const response = await request(app).delete(`/api/mybeer/${wrongId}`)
         // .set('secretkey', key)
-        .auth(anothertoken, { type: 'bearer' })
+        .set('refresh', `Bearer ${refresh}`)
+        .set('access', `Bearer ${access}`)
         .send();
 
     expect(response.body.message).toBe("fail");
@@ -328,7 +309,8 @@ it ("delete one mybeer - success", async () => {
 
     const response = await request(app).delete(`/api/mybeer/${mybeerId}`)
         // .set('secretkey', key)
-        .auth(token, { type: 'bearer' })
+        .set('refresh', `Bearer ${refresh}`)
+        .set('access', `Bearer ${access}`)
         .send();
 
     beer = await Beers.findOne({ _id: beerId });
@@ -347,34 +329,12 @@ it ("delete one mybeer - success", async () => {
         avgRateCategory = (( countCategoryBefore * avgRateCategoryBefore ) - modified_rate) / ( countCategoryBefore - 1); 
     }
 
-    console.log("3️⃣", countAfter, avgRateAfter);
-    console.log("3️⃣", countCategoryAfter, avgRateCategoryAfter);
-
     expect(response.body.message).toBe("success");
     expect(countCategoryBefore - countCategoryAfter).toBe(1);
     // expect(avgRateCategory).toBe(avgRateCategoryAfter);
     expect(countBefore - countAfter).toBe(1);
     // expect(avgRate).toBe(avgRateAfter);
 });
-
-// it ("signout - success", async () => {
-//     const response = await request(app).delete(`/api/user`)
-//         .set('secretkey', key)
-//         .auth(token, { type: 'bearer' })
-//         .send();
-
-//     console.log("response1:", response.body);
-
-//     const response2 = await request(app).delete(`/api/user`)
-//         .set('secretkey', key)
-//         .auth(anothertoken, { type: 'bearer' })
-//         .send();
-    
-//     console.log("response2:", response2.body)
-
-//     expect(response.body.message).toBe("success");
-//     expect(response2.body.message).toBe("success");
-// });
 
  // Disconnect Mongoose
  afterAll( async () => {

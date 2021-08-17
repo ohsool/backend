@@ -17,7 +17,7 @@ it ("get auto-complete beer name search - success", async () => {
     expect(words.includes("버드와이저")).toBe(false);
 });
 
-it ("get auto-complete beer category search search - success", async () => {
+it ("get auto-complete beer category search - success", async () => {
     const response = await request(app).get(`/api/search?word=la`)
         // .set('secretkey', key)
 
@@ -27,6 +27,29 @@ it ("get auto-complete beer category search search - success", async () => {
     expect(Array.isArray(response.body.words)).toBe(true);
     expect(words.includes("Lager")).toBe(true);
     expect(words.includes("IPA")).toBe(false);
+});
+
+it ("get auto-complete hashtag search - success", async () => {
+    const response = await request(app).get(encodeURI("/api/search?hashtag=호"))
+
+    const hashtags = response.body.hashtags;
+
+    expect(response.body.message).toBe("success");
+    expect(Array.isArray(response.body.words)).toBe(true);
+    expect(hashtags.includes("황금색")).toBe(true);
+    expect(hashtags.includes("쌉쌀한맛")).toBe(false);
+});
+
+it ("get auto-complete hashtag search - success", async () => {
+    const response = await request(app).get("/api/search/hashtag")
+        .send({ hashtag: "황금색" })
+
+    const beers = response.body.beers;
+
+    expect(response.body.message).toBe("success");
+    expect(Array.isArray(response.body.beers)).toBe(true);
+    expect(beers.length).toBe(8);
+    expect(beers[0].name_english).toBe("Budweiser");
 });
 
  // Disconnect Mongoose

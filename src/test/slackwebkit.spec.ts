@@ -5,39 +5,30 @@ import { disconnect } from "../schemas";
 // import { secretAPIkey } from '../ssl/secretAPI';
 // const key = secretAPIkey();
 
-let token = "";
+let refresh = "";
+let access = "";
 
 const email = "slackwebkittest@test.com"
-const nickname = "slackwebkittest";
 const password = "recommendationtesttest1234";
-const confirmPassword = "recommendationtesttest1234";
-
-// it ("register success, get beer id, get beercategory id", async () => {
-//     const response = await request(app).post(`/api/user`)
-//         .set('secretkey', key)
-//         .send({ email, nickname, password, confirmPassword });
-
-//     console.log("🍻", email, nickname, password, confirmPassword, response.body);
-
-//     expect(response.body.message).toBe("success");
-//     expect(response.statusCode).toBe(201); 
-// });
 
 it ("login success", async () => {
     const response = await request(app).post(`/api/user/auth`)
         // .set('secretkey', key)
         .send({ email, password });
 
-    token = response.body.token;
+    refresh = response.body.refreshToken;
+    access = response.body.accessToken;
 
     expect(response.body.message).toBe("success");
-    expect(response.body.token).toBeTruthy();
+    expect(response.body.refreshToken).toBeTruthy();
+    expect(response.body.accessToken).toBeTruthy();
 });
 
 it ("send beer recommendation to slack - success", async () => {
     const response = await request(app).post(`/api/recommendation`)
         // .set('secretkey', key)
-        .auth(token, { type: 'bearer' })
+        .set('refresh', `Bearer ${refresh}`)
+        .set('access', `Bearer ${access}`)
         .send({
             beer: "test beer",
             description: "beer recommendation testing",
@@ -52,7 +43,8 @@ it ("send beer recommendation to slack - success", async () => {
 it ("send beer complaint to slack - success", async () => {
     const response = await request(app).post(`/api/complaint`)
         // .set('secretkey', key)  
-        .auth(token, { type: 'bearer' })
+        .set('refresh', `Bearer ${refresh}`)
+        .set('access', `Bearer ${access}`)
         .send({
             title: "test complaint",
             description: "complaint testing"
@@ -61,14 +53,6 @@ it ("send beer complaint to slack - success", async () => {
     expect(response.body.message).toBe("success");
     expect(response.body.result).toBeTruthy();
 });
-
-// it ("signout - success", async () => {
-//     const response = await request(app).delete(`/${key}/api/user`)
-//         .auth(token, { type: 'bearer' })
-//         .send();
-
-//     expect(response.body.message).toBe("success");
-// });
 
  // Disconnect Mongoose
  afterAll( async () => {
