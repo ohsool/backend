@@ -243,13 +243,9 @@ const joiSchema = joi.object({
       }, (err, profile, info) => {
         if (err) return next(err);
 
-        console.log("/google/callback111: ", info);
-
         const tokens = String(info.message);
         const refreshToken = tokens.split("***")[0];
         const accessToken = tokens.split("***")[1];
-
-        console.log("/google/callback222: ", refreshToken, accessToken);
 
         res.redirect(`https://ohsool.com/refresh=${refreshToken}&access=${accessToken}`);
       }
