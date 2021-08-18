@@ -81,7 +81,7 @@ app.use(cors({
         if(!origin) return callback(null, true);
   
         if(allowedOrigins.indexOf(origin) === -1) {
-            const message = "The CORS policy for this site does not allow access from the specified origin";
+            const message = "The CORS policy for this site does not allow access from the " + String(origin);
   
             return callback(new Error(message), false);
       }
