@@ -3,6 +3,11 @@
 #give permission for everything in the ohsool directory
 sudo chmod -R 777 /home/ec2-user/ohsool
 
+
+# security 파일 가져오기
+aws s3 sync s3://ohsool-security/ssl/ /home/ec2-user/ohsool/src/ssl
+aws s3 sync s3://ohsool-security/config/ /home/ec2-user/ohsool/config
+
 # EC2 작업 파일로 이동
 cd /home/ec2-user/ohsool
 
@@ -11,13 +16,8 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # loads nvm	
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # loads nvm bash_completion (node is in path now)
 
-
 #PM2 설치
 npm install -g pm2
-
-# security 파일 가져오기
-aws s3 sync s3://ohsool-security/ssl/ /home/ec2-user/ohsool/src/ssl
-aws s3 sync s3://ohsool-security/config/ /home/ec2-user/ohsool/config
 
 # node_modules 설치
 npm install
