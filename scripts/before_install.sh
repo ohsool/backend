@@ -18,14 +18,7 @@ else
   mkdir ${DIR}
 fi
 
-# security 파일 옮기기
-cp -r /home/ec2-user/security/config /home/ec2-user/ohsool
-cp -r /home/ec2-user/security/ssl /home/ec2-user/ohsool/dist
+# security 파일 가져오기
+aws s3 sync s3://ohsool-security/ssl/ /home/ec2-user/ohsool/src/ssl
+aws s3 sync s3://ohsool-security/config/ /home/ec2-user/ohsool/config
 
-
-# Typescript에서 컴파일된 JS 파일을 저장하는 폴더를 삭제한다. (다시 run build를 통해 생성될 예정)
-# DIST="/home/ec2-user/ohsool/dist"
-# if [ -d "$DIST" ]; then
-#   sudo rm -r /home/ec2-user/ohsool/dist
-#   echo "${DIST} removed"
-# fi
