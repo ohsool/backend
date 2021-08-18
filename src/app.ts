@@ -11,7 +11,9 @@ import passport from "passport";
 import fs from "fs";
 import https from "https";
 import path from "path";
-
+import csrf from "csurf";
+import cookieParser from "cookie-parser";
+import helmet from "helmet";
 
 // importing APIs
 import { userRouter } from './routers/user';
@@ -48,7 +50,10 @@ const app = express();
 connect();
 console.log("mongodb connecting success");
 
-app.use(express.urlencoded({ extended: false }));
+const parseForm = bodyParser.urlencoded({ extended: false });
+
+app.use(parseForm);
+// app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(bodyParser.json());
 
@@ -64,24 +69,37 @@ googlePassportConfig();
 kakaoPassportConfig();
 console.log("passport initializing done");
 
-
 // setting CORS
 const allowOrigins = [
-    "https://ohsool.com",
-    "172.30.160.1",
-    "124.48.159.81"
+    env.page_domain_address,
+    env.jy_ip,
+    env.dh_ip
 ];
-const corsOptions = {
-    origin: (origin: string, callback: any) => {
-        if (allowOrigins.indexOf(origin) !== -1){
-            callback(null, true);
-        } else {
-            callback(new Error());
-        }
-    }
-}
-// app.use(cors(corsOptions));
-app.use(cors());
+// const corsOptions: cors.CorsOptions = {
+//     origin: (origin, callback) => {
+//         if (allowOrigins.indexOf(origin) !== -1){
+//             callback(null, true);
+//         } else {
+//             callback(new Error());
+//         }
+//     }
+// }
+const corsOptions: cors.CorsOptions = {
+    origin: allowOrigins
+};
+app.use(cors(corsOptions));
+// app.use(cors());
+
+// setup csrf protection
+const csrfProtection = csrf({ cookie: true });
+app.use(cookieParser());
+
+// setup helmet
+app.use(helmet());
+app.use(helmet.contentSecurityPolicy());  // prevent from XSS
+app.use(helmet.hpkp());  // add Public Key Pinning header
+app.use(helmet.noCache());  // set Cache-Control, Pragma header. let client not use caching
+app.use(helmet.referrerPolicy());  // 
 
 app.get("/", (req, res) => {
     res.send(`🎉Welcome to BACK!💐 <br>-NODEMEN👨‍👩‍👦`);
