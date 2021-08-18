@@ -76,7 +76,7 @@ const allowedOrigins = [
     env.dh_ip
 ];
 
-console.log(env.page_domain_address, env.jy_ip, env.dh_ip);
+console.log("domain:", env.page_domain_address, env.jy_ip, env.dh_ip);
 
 app.use(cors({
     origin: (origin, callback) => {
