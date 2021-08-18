@@ -15,6 +15,7 @@ import csrf from "csurf";
 import cookieParser from "cookie-parser";
 import helmet from "helmet";
 import featurePolicy from "feature-policy";
+import compression from "compression";
 
 // importing APIs
 import { userRouter } from './routers/user';
@@ -105,13 +106,15 @@ app.use(helmet.noSniff());
 app.use(helmet.frameguard({
     action: "deny"
 }));
-app.use(featurePolicy({
-    features: {
-
-    }
-}));
+// app.use(featurePolicy({
+//     features: {
+//         geolocation: ["'"]
+//     }
+// }));
 
 app.disable("x-powered-by");  // hide express framwrodk
+
+app.use(compression());
 
 app.get("/", (req, res) => {
     res.send(`🎉Welcome to BACK!💐 <br>-NODEMEN👨‍👩‍👦`);
