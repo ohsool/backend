@@ -15,6 +15,10 @@ export NVM_DIR="$HOME/.nvm"
 #PM2 설치
 npm install -g pm2
 
+# security 파일 가져오기
+aws s3 sync s3://ohsool-security/ssl/ /home/ec2-user/ohsool/src/ssl
+aws s3 sync s3://ohsool-security/config/ /home/ec2-user/ohsool/config
+
 # node_modules 설치
 npm install
 
