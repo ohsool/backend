@@ -18,7 +18,4 @@ else
   mkdir ${DIR}
 fi
 
-# security 파일 가져오기
-aws s3 sync s3://ohsool-security/ssl/ /home/ec2-user/ohsool/src/ssl
-aws s3 sync s3://ohsool-security/config/ /home/ec2-user/ohsool/config
 
