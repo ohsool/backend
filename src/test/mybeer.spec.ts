@@ -4,8 +4,6 @@ import { app } from "./test-app";
 import { disconnect } from "../schemas";
 
 import Beers from "../schemas/beer";
-import Users from "../schemas/user";
-import MyBeers from "../schemas/mybeer";
 import BeerCategories from "../schemas/beerCategory";
 
 // import { secretAPIkey } from '../ssl/secretAPI';

@@ -1,7 +1,6 @@
 import express, {Request, Response, NextFunction} from 'express';
 import Beers from "../schemas/beer";
 import mongoose from "mongoose";
-import Beer from '../schemas/beer';
 
 const getBeers = async(req: Request, res: Response) => {
     try {

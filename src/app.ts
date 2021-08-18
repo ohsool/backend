@@ -114,7 +114,8 @@ app.use(helmet.frameguard({
 
 app.disable("x-powered-by");  // hide express framwrodk
 
-app.use(compression());
+// gzip
+// app.use(compression());
 
 app.get("/", (req, res) => {
     res.send(`🎉Welcome to BACK!💐 <br>-NODEMEN👨‍👩‍👦`);
