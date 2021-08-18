@@ -14,22 +14,23 @@ const postMyBeer = async (req: Request, res: Response) => {
     const { beerId } = req.params;
     rate = Math.round(rate);
 
-    
     if (!beerId || !myFeatures || !rate) {
         res.json({ message: "fail", error: "Either beer or myFeatures or rate doesn't exist." });
+
         return;
     } else if (!location) {
         location = "";
     }
 
-    
     if (rate < 1 || rate > 5) {     // 평점이 1 이상 5 이하인지 확인
         res.json({ message: "fail", error: "please input rate 1~4" });
+
         return;
     }
 
     if (String(review).length > 48) {   // 리뷰가 48자 이하인지 확인
         res.json({ message: "fail", error: "the length of the review must be under 48" });
+
         return;
     }
 
@@ -38,7 +39,7 @@ const postMyBeer = async (req: Request, res: Response) => {
 
     try {
         // if the user already write review of this beer, reject it
-        const exist = await MyBeer.findOne({ beerId, userId });
+        const exist = await MyBeer.findOne({ beerId, userId }).lean();
 
         if (exist) {
             res.json({ message: "fail", error: "the user already made review of this beer" });
@@ -60,7 +61,7 @@ const postMyBeer = async (req: Request, res: Response) => {
         }
     }
 
-    const beer = await Beers.findOne({ _id: beerId });
+    const beer = await Beers.findOne({ _id: beerId }).lean();
     if (!beer) {
         res.json({ message: "fail", error: "beer doesn't exist" });
 
@@ -74,7 +75,7 @@ const postMyBeer = async (req: Request, res: Response) => {
 
         const beerCategoryId = beer.categoryId;
         
-        const beerCategory = await BeerCategory.findOne({ _id: beerCategoryId });
+        const beerCategory = await BeerCategory.findOne({ _id: beerCategoryId }).lean();
         const avg = beerCategory.avgRate[myPreference][0];
         const count = beerCategory.avgRate[myPreference][1];
 
@@ -86,17 +87,16 @@ const postMyBeer = async (req: Request, res: Response) => {
         avgRate[myPreference][1] = count + 1;
 
 
-        await BeerCategory.findOneAndUpdate({ _id: beerCategoryId }, {$set: { avgRate }});
+        await BeerCategory.findOneAndUpdate({ _id: beerCategoryId }, {$set: { avgRate }}).lean();
 
         const beerCount = beer.count;
         const beerAvgRate = beer.avgRate;
 
         const newBeerAvgRate = (( beerCount * beerAvgRate) + rate) / (beerCount + 1);
 
-        await Beers.findOneAndUpdate({ _id: beerId }, { $set: { avgRate: newBeerAvgRate, count: beerCount + 1 } });
+        await Beers.findOneAndUpdate({ _id: beerId }, { $set: { avgRate: newBeerAvgRate, count: beerCount + 1 } }).lean();
 
-        //mybeer = mybeer.populate({path: 'userId', select: 'nickname'});
-        mybeer = await MyBeer.findOne({ _id: mybeer._id }).populate({path: 'userId', select: 'nickname'});
+        mybeer = await MyBeer.findOne({ _id: mybeer._id }).populate({path: 'userId', select: 'nickname'}).lean();
 
         res.send({ message: "success", mybeer });
     } catch (error) {
@@ -109,7 +109,7 @@ const postMyBeer = async (req: Request, res: Response) => {
 // 모든 유저의 도감 가져오기
 const getAllMyBeers = async (req: Request, res: Response) => {
     try {
-        const mybeers = await MyBeer.find({}).populate({path: 'userId', select: 'nickname'}).populate({ path: 'beerId', select: 'image' });
+        const mybeers = await MyBeer.find({}).populate({path: 'userId', select: 'nickname'}).lean().populate({ path: 'beerId', select: 'image' });
         res.json({ message: "success", mybeers });
     } catch (error) {
 
@@ -121,7 +121,7 @@ const getAllMyBeers = async (req: Request, res: Response) => {
 const getCurrentMyBeers = async (req: Request, res: Response) => {
     const userId = res.locals.user._id;
     try {
-        const mybeers = await MyBeer.find({ userId }).populate({path: 'userId', select: 'nickname'}).populate({ path: 'beerId', select: 'image' });
+        const mybeers = await MyBeer.find({ userId }).populate({path: 'userId', select: 'nickname'}).lean().populate({ path: 'beerId', select: 'image' });
 
         res.json({ message: "success", mybeers });
     } catch (error) {
@@ -134,14 +134,14 @@ const getCurrentMyBeers = async (req: Request, res: Response) => {
 const getBeerAllReviews = async (req: Request, res: Response) => {
     try {
         const { beerId } = req.params;
-        const beer = await Beers.findOne({ _id: beerId });
+        const beer = await Beers.findOne({ _id: beerId }).lean();
 
         if (!beer) {
             res.json({ message: "fail", error: "beer doesn't exist" });
 
             return;
         }
-        const mybeers = await MyBeer.find({ beerId: beer._id }).populate({path: 'userId', select: 'nickname'}).populate({ path: 'beerId', select: 'image' });
+        const mybeers = await MyBeer.find({ beerId: beer._id }).lean().populate({path: 'userId', select: 'nickname'}).populate({ path: 'beerId', select: 'image' });
 
         res.json({ message: "success", mybeers });
     } catch (error) {
@@ -155,7 +155,7 @@ const getBeerAllReviews = async (req: Request, res: Response) => {
 const getMyBeer = async (req: Request, res: Response) => {
     const { myBeerId } = req.params;
     try {
-        const mybeer = await MyBeer.findOne({ _id: myBeerId }).populate({path: 'userId', select: 'nickname'}).populate({ path: 'beerId', select: 'image' });
+        const mybeer = await MyBeer.findOne({ _id: myBeerId }).lean().populate({path: 'userId', select: 'nickname'}).populate({ path: 'beerId', select: 'image' });
 
         if (!mybeer) {
             res.json({ message: "fail", error: "no existed mybeer" });
@@ -175,7 +175,7 @@ const updateMyBeer = async (req: Request, res: Response) => {
     const { myFeatures, location, rate, review } = req.body;
 
     try {
-        const myBeer = await MyBeer.findOne({ _id: myBeerId });
+        const myBeer = await MyBeer.findOne({ _id: myBeerId }).lean();
         const userId = res.locals.user._id;
 
         if (rate < 1 || rate > 5) {
@@ -206,16 +206,16 @@ const updateMyBeer = async (req: Request, res: Response) => {
         }
 
         const beerId = myBeer.beerId;
-        const beer = await Beers.findOne({ _id: beerId });
+        const beer = await Beers.findOne({ _id: beerId }).lean();
     
-        const mybeer = await MyBeer.findOneAndUpdate({ _id: myBeerId }, { $set: { beerId, myFeatures, location, rate, review } });
+        const mybeer = await MyBeer.findOneAndUpdate({ _id: myBeerId }, { $set: { beerId, myFeatures, location, rate, review } }).lean();
 
         // category rate
         const myPreference = mybeer.preference;
         const beerCategoryId = beer.categoryId;
         const rateOld = myBeer.rate;
 
-        const beerCategory = await BeerCategory.findOne({ _id: beerCategoryId });
+        const beerCategory = await BeerCategory.findOne({ _id: beerCategoryId }).lean();
         const avgRate_ = beerCategory.avgRate[myPreference][0];
         const count = beerCategory.avgRate[myPreference][1];
 
@@ -226,7 +226,7 @@ const updateMyBeer = async (req: Request, res: Response) => {
         avgRate[myPreference][0] = new_avgRate;
         avgRate[myPreference][1] = count;
 
-        await BeerCategory.findOneAndUpdate({ _id: beerCategoryId }, {$set: { avgRate }});
+        await BeerCategory.findOneAndUpdate({ _id: beerCategoryId }, {$set: { avgRate }}).lean();
         
         // beer rate
         const beerCount = beer.count;
@@ -234,7 +234,7 @@ const updateMyBeer = async (req: Request, res: Response) => {
 
         const newBeerAvgRate = ( (beerCount * beerAvgRate) - rateOld + rate) / beerCount;
 
-        await Beers.findOneAndUpdate({ _id: beerId }, { $set: { avgRate: newBeerAvgRate } });
+        await Beers.findOneAndUpdate({ _id: beerId }, { $set: { avgRate: newBeerAvgRate } }).lean();
 
         res.json({ message: "success", myBeerId });
     } catch (error) {
@@ -247,7 +247,7 @@ const deleteMyBeer = async (req: Request, res: Response) => {
     const { myBeerId } = req.params;
 
     try {
-        const mybeer = await MyBeer.findOne({ _id: myBeerId });
+        const mybeer = await MyBeer.findOne({ _id: myBeerId }).lean();
         const userId = res.locals.user._id;
 
         if (String(mybeer.userId) !== String(userId)) {
@@ -261,15 +261,15 @@ const deleteMyBeer = async (req: Request, res: Response) => {
             return;
         }
 
-        await MyBeer.deleteOne({ _id: myBeerId });
+        await MyBeer.deleteOne({ _id: myBeerId }).lean();
 
         // delete beer category rate
         const myPreference = mybeer.preference;
-        const beer = await Beers.findOne({ _id: mybeer.beerId });
+        const beer = await Beers.findOne({ _id: mybeer.beerId }).lean();
         const beerCategoryId = beer.categoryId;
         const rate = mybeer.rate;
         
-        const beerCategory = await BeerCategory.findOne({ _id: beerCategoryId });
+        const beerCategory = await BeerCategory.findOne({ _id: beerCategoryId }).lean();
         const avgRate = beerCategory.avgRate;
         
         const avg = avgRate[myPreference][0];
@@ -282,7 +282,7 @@ const deleteMyBeer = async (req: Request, res: Response) => {
             avgRate[myPreference][1] = count - 1;
         }
 
-        await BeerCategory.findOneAndUpdate({ _id: beerCategoryId }, {$set: { avgRate }});
+        await BeerCategory.findOneAndUpdate({ _id: beerCategoryId }, {$set: { avgRate }}).lean();
 
         // delete beer rate
         const beerCount = beer.count;
@@ -294,7 +294,7 @@ const deleteMyBeer = async (req: Request, res: Response) => {
             newBeerAvgRate = (( beerCount * beerAvgRate) - rate) / (beerCount - 1);
         }
 
-        await Beers.findOneAndUpdate({ name_korean: beer.name_korean }, { $set: { avgRate: newBeerAvgRate, count: beerCount - 1 } });
+        await Beers.findOneAndUpdate({ name_korean: beer.name_korean }, { $set: { avgRate: newBeerAvgRate, count: beerCount - 1 } }).lean();
 
         res.json({ message: "success" });
     } catch (error) {
