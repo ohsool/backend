@@ -60,7 +60,7 @@ function authMiddleware(req: Request, res: Response, next: NextFunction){
 
                     return;
                 } else {
-                    res.json({ message: "fail", error: "all tokens are expired" });
+                    res.json({ message: "fail", error: "all tokens are expired", refreshToken, accessToken, refreshTokenValue, accessTokenValue  });
 
                     return;
                 }
