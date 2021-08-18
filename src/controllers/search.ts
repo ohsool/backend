@@ -80,7 +80,7 @@ const search = async (req: Request, res: Response) => {
 }
 
 const searchHashtag = async (req: Request, res: Response) => {
-    const hashtag = req.body.hashtag;
+    const hashtag = String(req.query.hashtag);
 
     try {
         const beers = await Beers.find({ hashtag: { $in: hashtag } });
