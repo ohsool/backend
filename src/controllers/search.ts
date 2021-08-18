@@ -1,17 +1,41 @@
 import express, { Request, Response, NextFunction, Router } from "express";
+import mongoose, { Schema, model, mongo } from "mongoose";
 import { getRegExp } from "korean-regexp";
 
 import Beers from "../schemas/beer";
 import BeerCategories from "../schemas/beerCategory";
 
 interface Beer {
-    hashtag: Array<String>
+    name_korean: String,
+    name_english: String,
+    image: String,
+    degree: Number,
+    categoryId: mongoose.Schema.Types.ObjectId,
+    hashtag: Array<String>,
+    like_array: Array<mongoose.Schema.Types.ObjectId>,
+    features: Object,
+    count: Number,
+    avgRate: Number,
+    location: Array<Array<String>>,
+    location_report: Array<Array<String>>
+}
+
+interface BeerCategory {
+    name: String,
+    image: String,
+    features: Object,
+    title: String,
+    description: String,
+    avgRate: Object
 }
 
 let hashtags:Array<String> = [""];
+let beers:Array<Beer> = [];
+let beerCategories:Array<BeerCategory> = [];
 
 async function get_beers(): Promise<Array<Beer>> {
-    const beers = await Beers.find({});
+    beers = await Beers.find({}).lean();
+    beerCategories = await BeerCategories.find({}).lean();
 
     return beers;
 }
@@ -45,9 +69,6 @@ const search = async (req: Request, res: Response) => {
 
     try {
         if (word) {
-            const beers = await Beers.find({});
-            const beerCategories = await BeerCategories.find({});
-        
             for (let i = 0; i < beers.length; i ++) {
                 if ( getRegExp(word.replace(/\s+/g, '')).test(beers[i].name_korean.replace(/\s+/g, '')) ) { // korean beer name
                     words.push(beers[i].name_korean);
@@ -81,9 +102,16 @@ const searchHashtag = async (req: Request, res: Response) => {
     const hashtag = String(req.query.hashtag);
 
     try {
-        const beers = await Beers.find({ hashtag: { $in: hashtag } });
+        const newBeers:Array<Beer> = [];
 
-        res.json({ message: "success", beers });
+        // const beers = await Beers.find({ hashtag: { $in: hashtag } }).lean();
+        for (let i = 0; i < beers.length; i ++) {
+            if ( beers[i].hashtag.includes(hashtag) ) {
+                newBeers.push(beers[i]);
+            }
+        }
+
+        res.json({ message: "success", beers: newBeers });
     } catch (error) {
         res.json({ message: "fail", error });
     }
