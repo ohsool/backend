@@ -12,6 +12,7 @@ export const env = {
     atlas_url: String(process.env.ATLAS_URL),
     test_url: String(process.env.TEST_URL),
     page_domain_address: String(process.env.PAGE_DOMAIN_ADDRESS),
+    local_address: String(process.env.LOCAL_ADDRESS),
     jy_ip: String(process.env.JY_IP),
     dh_ip: String(process.env.DH_IP),
     jwt_secret: String(process.env.JWT_SECRET),

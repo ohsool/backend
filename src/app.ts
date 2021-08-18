@@ -72,6 +72,7 @@ console.log("passport initializing done");
 // setting CORS
 const allowedOrigins = [
     env.page_domain_address,
+    env.local_address,
     env.jy_ip,
     env.dh_ip
 ];
