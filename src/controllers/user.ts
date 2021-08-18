@@ -45,7 +45,7 @@ const existedEmail = async(req: Request, res: Response) => {
     }
 
     try {
-      const existedUser = await Users.findOne({ email });
+      const existedUser = await Users.findOne({ email }).lean();
 
       if (existedUser) {
         res.json({ message: "success", existed: true });
@@ -67,7 +67,7 @@ const existedNickname = async(req: Request, res: Response) => {
     }
 
     try {
-      const existedUser = await Users.findOne({ nickname });
+      const existedUser = await Users.findOne({ nickname }).lean();
 
       if (existedUser) {
         res.json({ message: "success", existed: true });
@@ -83,8 +83,8 @@ const register = async(req: Request, res: Response) => {
     const { email, nickname, password, confirmPassword } = req.body;
     
       try {
-        const existUser1 = await Users.findOne({ nickname });
-        const existUser2 = await Users.findOne({ email });
+        const existUser1 = await Users.findOne({ nickname }).lean();
+        const existUser2 = await Users.findOne({ email }).lean();
 
         if (existUser1 || existUser2) {
             res.json({ message: "fail", error: "existed user" });
@@ -115,7 +115,7 @@ const login = async(req: Request, res: Response) => {
 
     const crypted_password = crypto.createHmac("sha256", password).update(env.pass_secret).digest("hex");
     try {
-      const user = await Users.findOne({ email });
+      const user = await Users.findOne({ email }).lean();
 
       if (!user) {
         res.status(401).json({ message: "fail", error: "wrong user" });
@@ -142,7 +142,7 @@ const login = async(req: Request, res: Response) => {
         }
       );
 
-      await Users.findOneAndUpdate({ _id: user._id}, {$set: { refreshToken }} );
+      await Users.findOneAndUpdate({ _id: user._id}, {$set: { refreshToken }} ).lean();
   
       res.json({ message: "success", refreshToken, accessToken, userId: user._id });
     } catch(error) {
@@ -156,7 +156,7 @@ const logout = async (req: Request, res: Response) => {
     const userId = res.locals.user._id;
 
     try {
-      await Users.findOneAndUpdate({ _id: userId }, { refreshToken: "" } );
+      await Users.findOneAndUpdate({ _id: userId }, { refreshToken: "" } ).lean();
 
       res.json({ message: "success" });
     } catch (error) {
@@ -168,7 +168,7 @@ const signout = async (req: Request, res: Response) => {
     const userId = res.locals.user._id;
 
     try {
-      const user = await Users.findOne({ _id: userId });
+      const user = await Users.findOne({ _id: userId }).lean();
 
       if (!user) {
         res.json({ message: "fail", error: "no existed user" });
@@ -180,7 +180,7 @@ const signout = async (req: Request, res: Response) => {
       await MyBeers.deleteMany({ userId: user._id });
 
       // 해달 유저가 한 좋아요들 삭제
-      const liked_beers = await Beers.find({ like_array: mongoose.Types.ObjectId(userId) });
+      const liked_beers = await Beers.find({ like_array: mongoose.Types.ObjectId(userId) }).lean();
 
       for (let i = 0; i < liked_beers.length; i ++) {
         let beerId = liked_beers[i]._id;
@@ -256,30 +256,36 @@ const postTest = async (req: Request, res: Response) => {
     
         if (!result) {
           res.json({ message: "fail", error: "test result doesn't exist" });
+
           return;
         }
     
         /* 1. 카테고리에 대한 정보 추출*/ 
-        const category = await BeerCategories.findOne({ name: result });
+        const category = await BeerCategories.findOne({ name: result }).lean();
+
         // category 에 대한 정보가 없다면 함수 종료
         if (!category) {
           res.json({ message: "fail", error: "Beer Category doesn't exist" });
+
           return;
         }
     
         /* 2. 로그인 유저일 시 preference 변경 */
-        const isExist = await Users.findOne({ _id: userId})
+        const isExist = await Users.findOne({ _id: userId}).lean();
+
         if (isExist) {
           await Users.updateOne({ _id: userId }, { $set: { preference: result }});
+
           user = true
         }
     
     
         /* 3. 추천 맥주 추출 (08/05 기준 동일한 카테고리 상위 2개만 추천) */
-        const beers = await Beers.find({ categoryId: category._id });
+        const beers = await Beers.find({ categoryId: category._id }).lean();
         // 관련맥주에 대한 정보가 없다면 함수 종료
         if (!beers) {
           res.json({ message: "fail", error: "Beer doesn't exist" });
+
           return;
         }
         const recommendations = beers.slice(0,2)

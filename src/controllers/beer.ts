@@ -4,7 +4,8 @@ import mongoose from "mongoose";
 
 const getBeers = async(req: Request, res: Response) => {
     try {
-        const beers = await Beers.find();
+        const beers = await Beers.find().lean();
+
         res.json({ message: "success", beers });
     } catch (error) {
         res.status(400).send({ message: "fail", error });
@@ -15,7 +16,7 @@ const getSomeBeers = async(req: Request, res: Response) => {
     let { pageNo } = req.params;
 
     try {
-        const beers = await Beers.find({});
+        const beers = await Beers.find({}).lean();
 
         if ( Number(pageNo) < 0 || (Number(pageNo) * 8 > beers.length) ) {
             res.status(400).send({ message: "fail", error: "wrong page" });
@@ -42,7 +43,7 @@ const getSomeBeers = async(req: Request, res: Response) => {
 const postBeer = async(req: Request, res: Response) => {
     try {
         const { name_korean, name_english, image, degree, categoryId, hashtag, features } = req.body;
-        const isExist = await Beers.findOne({ name_korean });
+        const isExist = await Beers.findOne({ name_korean }).lean();
 
         if(isExist) {
             res.json({ message: "fail", error: "beer already exists" });
@@ -50,8 +51,8 @@ const postBeer = async(req: Request, res: Response) => {
         }
 
         const beer = await Beers.create({ name_korean, name_english, image, degree, categoryId, hashtag, features });
-        res.status(201).json({ message: "success", beer });
 
+        res.status(201).json({ message: "success", beer });
     } catch (error) {
         res.status(400).send({ message: "fail", error });
     }
@@ -60,12 +61,11 @@ const postBeer = async(req: Request, res: Response) => {
 const getBeer = async(req: Request, res: Response) => {
     try {
         const { beerId } = req.params;
-        const beer = await Beers.findById(beerId).exec();
+        const beer = await Beers.findById(beerId).lean();
         if (beer) {
             res.json({ message:"success", beer });
         } else {
             res.status(400).send({ message: "fail", error: "beer does not exist in the database" });
-            return;
         }
     } catch(error) {
         res.status(400).send({ message: "fail", error: "beer does not exist in the datasbase" });
@@ -77,7 +77,8 @@ const deleteBeer = async(req: Request, res: Response) => {
     const { beerId } = req.params;
 
     try {
-        await Beers.findOneAndDelete({ _id: beerId });
+        await Beers.findOneAndDelete({ _id: beerId }).lean();
+
         res.json({ message: "success"});
     } catch(error) {
         res.status(400).send({ message: "fail", error: "failed deleting beer from the database" });
@@ -87,15 +88,18 @@ const deleteBeer = async(req: Request, res: Response) => {
 const likeBeer = async(req: Request, res: Response) => {
     const userId = res.locals.user._id;
     const { beerId } = req.params;
-    //beer.ts
+
     try {
-        const exists = await Beers.find({_id: beerId, like_array: mongoose.Types.ObjectId(userId) });
+        const exists = await Beers.find({_id: beerId, like_array: mongoose.Types.ObjectId(userId) }).lean();
         let result;
+
         if(exists.length == 0) {
-            await Beers.findOneAndUpdate({_id: beerId}, {$push: {like_array: userId}});
-            result = await Beers.find({_id: beerId, like_array: mongoose.Types.ObjectId(userId) });
+            await Beers.findOneAndUpdate({_id: beerId}, {$push: {like_array: userId}}).lean();
+
+            result = await Beers.find({_id: beerId, like_array: mongoose.Types.ObjectId(userId) }).lean();
         } else if(exists.length) {
             res.status(400).send({ message: "fail", error: "user already liked this beer" });
+
             return;
         }
 
@@ -110,13 +114,16 @@ const unlikeBeer = async(req: Request, res: Response) => {
     const { beerId } = req.params;
 
     try {
-        const exists = await Beers.find({ _id: beerId, like_array: mongoose.Types.ObjectId(userId) });
+        const exists = await Beers.find({ _id: beerId, like_array: mongoose.Types.ObjectId(userId) }).lean();
         let result;
+
         if(exists.length) {
-            await Beers.findOneAndUpdate({_id: beerId}, {$pull: {like_array: userId}});
-            result = await Beers.find({_id: beerId });
+            await Beers.findOneAndUpdate({_id: beerId}, {$pull: {like_array: userId}}).lean();
+
+            result = await Beers.find({_id: beerId }).lean();
         } else if(exists.length == 0) {
             res.status(400).send({ message: "fail", error: "user has never liked this beer" });
+
             return;
         }
         res.json({ message: "success", likes: result[0].like_array });
@@ -130,10 +137,15 @@ const unlikeBeer = async(req: Request, res: Response) => {
 const likedBeer = async(req: Request, res: Response) => {
     try {
         const userId = res.locals.user._id;
+
         if (!userId) {
             res.status(400).send({ message: "fail", error: "userId doesn't exist" });
+
+            return;
         }
-        const likedList = await Beers.find({ like_array: mongoose.Types.ObjectId(userId) });
+
+        const likedList = await Beers.find({ like_array: mongoose.Types.ObjectId(userId) }).lean();
+
         res.json({ message:"success", likedList: likedList });
     } catch (error) {
         res.status(400).send({ message: "fail", error });
@@ -153,7 +165,7 @@ const reportLocation = async(req: Request, res: Response) => {
     }
 
     try {
-        const beer = await Beers.findOne({ _id: beerId });
+        const beer = await Beers.findOne({ _id: beerId }).lean();
         const new_report = [ url, name, address, userId ];
 
         if (!beer) {
@@ -190,12 +202,12 @@ const reportLocation = async(req: Request, res: Response) => {
 
         if (cnt >= 2) {  // reported 3 times. goes to location.
             for (let i = 0; i < cnt; i ++) {
-                await Beers.findOneAndUpdate({_id: beerId}, {$pull: {location_report: new_report}});
+                await Beers.findOneAndUpdate({_id: beerId}, {$pull: {location_report: new_report}}).lean();
             }
 
-            await Beers.findOneAndUpdate({_id: beerId}, {$push: {location: [new_report] }});
+            await Beers.findOneAndUpdate({_id: beerId}, {$push: {location: [new_report] }}).lean();
         } else {  // reported less than 3 times. goes to location_report.
-            await Beers.findOneAndUpdate({_id: beerId}, {$push: {location_report: [new_report] }});
+            await Beers.findOneAndUpdate({_id: beerId}, {$push: {location_report: [new_report] }}).lean();
         }
 
         const new_beer = await Beers.findOne({ _id: beerId });
@@ -210,12 +222,12 @@ const reportLocation = async(req: Request, res: Response) => {
 const getBeerByCategory = async (req: Request, res: Response)=> {
     try {
         const { categoryId } = req.params;
-        const beerByCategory = Beers.find({categoryID: mongoose.Types.ObjectId(categoryId)});
+        const beerByCategory = Beers.find({categoryID: mongoose.Types.ObjectId(categoryId)}).lean();
+
         res.json({message: "success", beers: beerByCategory});
     } catch (error) {
         res.status(400).send({ message: "fail", error });
     }
-
 }
 
 export default {
