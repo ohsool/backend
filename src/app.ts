@@ -75,20 +75,17 @@ const allowOrigins = [
     env.jy_ip,
     env.dh_ip
 ];
-// const corsOptions: cors.CorsOptions = {
-//     origin: (origin, callback) => {
-//         if (allowOrigins.indexOf(origin) !== -1){
-//             callback(null, true);
-//         } else {
-//             callback(new Error());
-//         }
-//     }
-// }
+
 const corsOptions: cors.CorsOptions = {
-    origin: allowOrigins
+    origin: (origin, callback) => {
+        if (allowOrigins.indexOf(String(origin)) !== -1) {
+            callback(null, true);
+        } else {
+            callback(new Error());
+        }
+    }
 };
 app.use(cors(corsOptions));
-// app.use(cors());
 
 // setup csrf protection
 const csrfProtection = csrf({ cookie: true });
@@ -97,7 +94,7 @@ app.use(cookieParser());
 // setup helmet
 app.use(helmet());
 app.use(helmet.contentSecurityPolicy());  // prevent from XSS
-app.use(helmet.hpkp());  // add Public Key Pinning header
+// app.use(helmet.hpkp());  // add Public Key Pinning header
 app.use(helmet.noCache());  // set Cache-Control, Pragma header. let client not use caching
 app.use(helmet.referrerPolicy());  // 
 
