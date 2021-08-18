@@ -99,7 +99,7 @@ app.use(cookieParser());
 // setup helmet
 app.use(helmet());
 app.use(helmet.contentSecurityPolicy());  // prevent from XSS
-app.use(helmet.featurePolicy());
+// app.use(helmet.featurePolicy());
 
 app.get("/", (req, res) => {
     res.send(`🎉Welcome to BACK!💐 <br>-NODEMEN👨‍👩‍👦`);
