@@ -78,11 +78,15 @@ const allowOrigins = [
 
 const corsOptions: cors.CorsOptions = {
     origin: (origin, callback) => {
-        if (allowOrigins.indexOf(String(origin)) !== -1) {
-            callback(null, true);
-        } else {
-            callback(new Error());
-        }
+        if (!origin) return callback(null, true);
+
+        if (allowOrigins.indexOf(String(origin)) === -1) {
+            const message = "The CORS policy for this site does not allow access from the specified origin";
+
+            return callback(new Error(message), false);
+        } 
+
+        return callback(null, true);
     }
 };
 app.use(cors(corsOptions));
