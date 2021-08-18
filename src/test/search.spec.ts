@@ -41,8 +41,7 @@ it ("get auto-complete hashtag search - success", async () => {
 });
 
 it ("get auto-complete hashtag search - success", async () => {
-    const response = await request(app).get("/api/search/hashtag")
-        .send({ hashtag: "황금색" })
+    const response = await request(app).get(encodeURI("/api/search/hashtag?hashtag=황금색"))
 
     const beers = response.body.beers;
 

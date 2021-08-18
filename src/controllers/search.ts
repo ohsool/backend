@@ -30,8 +30,6 @@ get_beers().then((beers) => {
     }
 
     hashtags.shift();
-
-    console.log("hashtags: ", hashtags);
 });
 
 const search = async (req: Request, res: Response) => {
