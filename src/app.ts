@@ -95,8 +95,8 @@ app.use(cookieParser());
 app.use(helmet());
 app.use(helmet.contentSecurityPolicy());  // prevent from XSS
 // app.use(helmet.hpkp());  // add Public Key Pinning header
-app.use(helmet.noCache());  // set Cache-Control, Pragma header. let client not use caching
-app.use(helmet.referrerPolicy());  // 
+// app.use(helmet.noCache());  // set Cache-Control, Pragma header. let client not use caching
+// app.use(helmet.referrerPolicy());  // 
 
 app.get("/", (req, res) => {
     res.send(`🎉Welcome to BACK!💐 <br>-NODEMEN👨‍👩‍👦`);
