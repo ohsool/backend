@@ -57,7 +57,7 @@ function authMiddleware(req: Request, res: Response, next: NextFunction){
 
                 console.log(refreshTokenValue, accessTokenValue, typeof(refreshTokenValue), typeof(accessTokenValue));
 
-                if ( !refreshTokenValue && !accessTokenValue ) {
+                if ( refreshTokenValue == "undefined" && accessTokenValue == "undefined" ) {
                     res.json({ message: "fail", error: "not logged in" });
 
                     return;
