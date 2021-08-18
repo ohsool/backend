@@ -70,26 +70,30 @@ kakaoPassportConfig();
 console.log("passport initializing done");
 
 // setting CORS
-const allowOrigins = [
+const allowedOrigins = [
     env.page_domain_address,
     env.jy_ip,
     env.dh_ip
 ];
 
-const corsOptions: cors.CorsOptions = {
+console.log(env.page_domain_address, env.jy_ip, env.dh_ip);
+
+app.use(cors({
     origin: (origin, callback) => {
-        if (!origin) return callback(null, true);
+        console.log(origin, "is came");
 
-        if (allowOrigins.indexOf(String(origin)) === -1) {
+        if(!origin) return callback(null, true);
+  
+        if(allowedOrigins.indexOf(origin) === -1) {
             const message = "The CORS policy for this site does not allow access from the specified origin";
-
+  
             return callback(new Error(message), false);
-        } 
-
-        return callback(null, true);
+      }
+  
+      return callback(null, true);
     }
-};
-app.use(cors(corsOptions));
+  })
+);
 
 // setup csrf protection
 const csrfProtection = csrf({ cookie: true });
