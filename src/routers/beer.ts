@@ -22,4 +22,6 @@ beerRouter.get("/liked", authMiddleware, BeerController.likedBeer);
 
 beerRouter.post("/report-location", authMiddleware, BeerController.reportLocation);
 
+beerRouter.get("/list/:categoryId", BeerController.getBeerByCategory);
+
 export { beerRouter };
