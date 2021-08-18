@@ -14,6 +14,7 @@ import path from "path";
 import csrf from "csurf";
 import cookieParser from "cookie-parser";
 import helmet from "helmet";
+import featurePolicy from "feature-policy";
 
 // importing APIs
 import { userRouter } from './routers/user';
@@ -96,10 +97,21 @@ app.use(cors({
 const csrfProtection = csrf({ cookie: true });
 app.use(cookieParser());
 
-// setup helmet
+// setup helmet, secure headers
 app.use(helmet());
 app.use(helmet.contentSecurityPolicy());  // prevent from XSS
-// app.use(helmet.featurePolicy());
+app.use(helmet.xssFilter());
+app.use(helmet.noSniff());
+app.use(helmet.frameguard({
+    action: "deny"
+}));
+app.use(featurePolicy({
+    features: {
+
+    }
+}));
+
+app.disable("x-powered-by");  // hide express framwrodk
 
 app.get("/", (req, res) => {
     res.send(`🎉Welcome to BACK!💐 <br>-NODEMEN👨‍👩‍👦`);
