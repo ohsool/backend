@@ -4,6 +4,8 @@ import { getRegExp } from "korean-regexp";
 
 import Beers from "../schemas/beer";
 import BeerCategories from "../schemas/beerCategory";
+import { env } from "../env";
+
 
 interface Beer {
     name_korean: String,
@@ -69,6 +71,11 @@ const search = async (req: Request, res: Response) => {
 
     try {
         if (word) {
+            if (env.modeNow == "test") {
+                beers = await Beers.find({});
+                beerCategories = await BeerCategories.find({});
+            }
+
             for (let i = 0; i < beers.length; i ++) {
                 if ( getRegExp(word.replace(/\s+/g, '')).test(beers[i].name_korean.replace(/\s+/g, '')) ) { // korean beer name
                     words.push(beers[i].name_korean);
@@ -104,7 +111,10 @@ const searchHashtag = async (req: Request, res: Response) => {
     try {
         const newBeers:Array<Beer> = [];
 
-        // const beers = await Beers.find({ hashtag: { $in: hashtag } }).lean();
+        if (env.modeNow == "test") {
+            beers = await Beers.find({ hashtag: { $in: hashtag } }).lean();
+        }
+
         for (let i = 0; i < beers.length; i ++) {
             if ( beers[i].hashtag.includes(hashtag) ) {
                 newBeers.push(beers[i]);
