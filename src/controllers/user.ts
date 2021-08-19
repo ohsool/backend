@@ -232,7 +232,7 @@ const checkAuth = async (req: Request, res: Response) => {
       let preference = String(res.locals.user.preference);
       let image = ""
 
-      if (preference == "Pale Ale") {
+      if (preference != "Pale Ale") {
         image = imagesArray[preference];
       } else {
         image = imagesArray["PaleAle"];
