@@ -230,13 +230,14 @@ const checkAuth = async (req: Request, res: Response) => {
       const userId = res.locals.user._id;
       const nickname = res.locals.user.nickname;
       let preference = String(res.locals.user.preference);
-      let image = ""
+      const image = res.locals.user.image;
+      // let image = ""
 
-      if (preference != "Pale Ale") {
-        image = imagesArray[preference];
-      } else {
-        image = imagesArray["PaleAle"];
-      }
+      // if (preference != "Pale Ale") {
+      //   image = imagesArray[preference];
+      // } else {
+      //   image = imagesArray["PaleAle"];
+      // }
 
       if (res.locals.accessToken) {
         res.json({ message: "success", userId, nickname, preference, image, accessToken: res.locals.accessToken });
