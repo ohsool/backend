@@ -302,9 +302,16 @@ const postTest = async (req: Request, res: Response) => {
     
         /* 2. 로그인 유저일 시 preference 변경 */
         const isExist = await Users.findOne({ _id: userId}).lean();
+        let image = ""
+
+        if (result != "Pale Ale") {
+          image = imagesArray[result];
+        } else {
+          image = imagesArray["PaleAle"];
+        }
 
         if (isExist) {
-          await Users.updateOne({ _id: userId }, { $set: { preference: result }});
+          await Users.updateOne({ _id: userId }, { $set: { preference: result, image }});
 
           user = true
         }

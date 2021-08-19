@@ -15,6 +15,10 @@ const UserSchema: Schema = new Schema({
         type: String,
         default: "Unknown"
     },
+    image: {
+        type: String,
+        default: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerIcon/default.png"
+    },
     passport: {
         type: Array
     },
