@@ -32,7 +32,8 @@ const joiSchema = joi.object({
     Weizen: string,
     Dunkel: string,
     Stout: string,
-    Bock: string
+    Bock: string,
+    ETC: string
   }
 
   const imagesArray: ImageArray = {
@@ -43,7 +44,8 @@ const joiSchema = joi.object({
     Weizen: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerIcon/Weizen.png",
     Dunkel: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerIcon/Dunkel.png",
     Stout: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerIcon/Stout.png",
-    Bock: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerIcon/Bock.png"
+    Bock: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerIcon/Bock.png",
+    ETC: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerIcon/ETC.png"
   }
 
 const existedEmail = async(req: Request, res: Response) => {
