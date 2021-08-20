@@ -112,10 +112,10 @@ beerCategoryCrawlingRouter.post("/", async(req, res) => {
             }
         },
         {
-            name: "ETC",
+            name: "Etc",
             image: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerCategory/etc.png",
-            title: "ETC!",
-            description: "ETC description!!",
+            title: "Etc!",
+            description: "Etc description!!",
             features: {
                 "bitter": 1,
                 "crispy": 1,

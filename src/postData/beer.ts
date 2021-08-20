@@ -7,7 +7,7 @@ import BeerCategories from "../schemas/beerCategory";
 const beerCrawlingRouter = express.Router();
 
 beerCrawlingRouter.post("/", async(req, res) => {
-    const beerCategories = ["Lager", "Pilsner", "Ale", "IPA", "Weizen", "Dunkel", "Stout", "Bock", "ETC"];
+    const beerCategories = ["Lager", "Pilsner", "Ale", "IPA", "Weizen", "Dunkel", "Stout", "Bock", "Etc"];
     let beerCategoryArray: Array <any> = [];
 
     for (let i = 0; i < beerCategories.length; i ++) {
@@ -97,6 +97,437 @@ beerCrawlingRouter.post("/", async(req, res) => {
             ],
             features: beerCategoryArray[0][1]
         },
+        {
+            name_korean: "카스 프레시",
+            name_english: "Cass Fresh",
+            image: "",
+            degree: 4.5,
+            categoryId: beerCategoryArray[0][0],
+            hashtag: [
+                "한국",
+                "4.5",
+                "맥아향",
+                "Lager",
+                "쌉쌀한맛",
+                "강한탄산",
+                "OB"
+            ],
+            features: beerCategoryArray[0][1]
+        },
+        {
+            name_korean: "카스 라이트",
+            name_english: "Cass Light",
+            image: "",
+            degree: 4,
+            categoryId: beerCategoryArray[0][0],
+            hashtag: [
+                "한국",
+                "4.0",
+                "맥아향",
+                "Lager",
+                "강한탄산",
+                "저칼로리",
+                "OB"
+            ],
+            features: beerCategoryArray[0][1]
+        },
+        {
+            name_korean: "하이트",
+            name_english: "Hite",
+            image: "",
+            degree: 4.3,
+            categoryId: beerCategoryArray[0][0],
+            hashtag: [
+                "한국",
+                "4.3",
+                "맥아향",
+                "Lager",
+                "강한탄산",
+                "청량감"
+            ],
+            features: beerCategoryArray[0][1]
+        },
+        {
+            name_korean: "맥스",
+            name_english: "Max",
+            image: "",
+            degree: 4.5,
+            categoryId: beerCategoryArray[0][0],
+            hashtag: [
+                "한국",
+                "4.5",
+                "맥아향",
+                "Lager",
+                "연은단맛",
+                "강한탄산"
+            ],
+            features: beerCategoryArray[0][1]
+        },
+        {
+            name_korean: "테라",
+            name_english: "Terra",
+            image: "",
+            degree: 4.6,
+            categoryId: beerCategoryArray[0][0],
+            hashtag: [
+                "한국",
+                "4.6",
+                "맥아향",
+                "Lager",
+                "토네이도패턴",
+                "강한탄산"
+            ],
+            features: beerCategoryArray[0][1]
+        },
+        {
+            name_korean: "필라이트 프레시",
+            name_english: "Filite Fresh",
+            image: "",
+            degree: 4.5,
+            categoryId: beerCategoryArray[0][0],
+            hashtag: [
+                "한국",
+                "4.5",
+                "맥아향",
+                "Lager",
+                "가벼운맛",
+                "저렴"
+            ],
+            features: beerCategoryArray[0][1]
+        },
+        {
+            name_korean: "클라우드",
+            name_english: "Kloud",
+            image: "",
+            degree: 5,
+            categoryId: beerCategoryArray[0][0],
+            hashtag: [
+                "한국",
+                "5.0",
+                "맥아향",
+                "Lager",
+                "롯데",
+                "강한탄산"
+            ],
+            features: beerCategoryArray[0][1]
+        },
+        {
+            name_korean: "클라우드 드래프트",
+            name_english: "Kloud Draft",
+            image: "",
+            degree: 4.5,
+            categoryId: beerCategoryArray[0][0],
+            hashtag: [
+                "한국",
+                "4.5",
+                "맥아향",
+                "Lager",
+                "강한탄산",
+                "신선한맛",
+                "롯데"
+            ],
+            features: beerCategoryArray[0][1]
+        },
+        {
+            name_korean: "오비라거",
+            name_english: "OB Lager",
+            image: "",
+            degree: 5.2,
+            categoryId: beerCategoryArray[0][0],
+            hashtag: [
+                "한국",
+                "5.2",
+                "맥아향",
+                "Lager",
+                "황금색",
+                "쌉쌀한맛",
+                "고소한맛"
+            ],
+            features: beerCategoryArray[0][1]
+        },
+        {
+            name_korean: "백양 비엔나 라거",
+            name_english: "Backyang BYC Vienna Lager",
+            image: "",
+            degree: 5.2,
+            categoryId: beerCategoryArray[0][0],
+            hashtag: [
+                "한국",
+                "5.2",
+                "맥아향",
+                "Lager",
+                "CU",
+                "붉은호박색"
+            ],
+            features: beerCategoryArray[0][1]
+        },
+        {
+            name_korean: "칭다오",
+            name_english: "Tsingdao",
+            image: "",
+            degree: 4.7,
+            categoryId: beerCategoryArray[0][0],
+            hashtag: [
+                "호주",
+                "4.7",
+                "아로마향",
+                "Lager",
+                "VB",
+                "포스터스"
+            ],
+            features: beerCategoryArray[0][1]
+        },
+        {
+            name_korean: "칭다오",
+            name_english: "Tsingdao",
+            image: "",
+            degree: 4.7,
+            categoryId: beerCategoryArray[0][0],
+            hashtag: [
+                "중국",
+                "4.7",
+                "맥아향",
+                "Lager",
+                "청량감",
+                "쌉쌀한맛"
+            ],
+            features: beerCategoryArray[0][1]
+        },
+        {
+            name_korean: "산 미구엘",
+            name_english: "San Miguel",
+            image: "",
+            degree: 5.0,
+            categoryId: beerCategoryArray[0][0],
+            hashtag: [
+                "필리핀",
+                "5.0",
+                "은은한향",
+                "Lager",
+                "씁쓸함",
+                "청량감"
+            ],
+            features: beerCategoryArray[0][1]
+        },
+        {
+            name_korean: "코로나",
+            name_english: "Corona Extra",
+            image: "",
+            degree: 4.6,
+            categoryId: beerCategoryArray[0][0],
+            hashtag: [
+                "멕시코",
+                "4.6",
+                "라임향",
+                "Lager",
+                "산미",
+                "고소한맛"
+            ],
+            features: beerCategoryArray[0][1]
+        },
+        {
+            name_korean: "삿포로",
+            name_english: "Tsingdao",
+            image: "",
+            degree: 5.0,
+            categoryId: beerCategoryArray[0][0],
+            hashtag: [
+                "일본",
+                "5.0",
+                "맥아향",
+                "Lager",
+                "드라이맥주",
+                "부드러움"
+            ],
+            features: beerCategoryArray[0][1]
+        },
+        {
+            name_korean: "크로넨버그 1664",
+            name_english: "Kronenberg 1664",
+            image: "",
+            degree: 5.0,
+            categoryId: beerCategoryArray[0][0],
+            hashtag: [
+                "프랑스",
+                "5.0",
+                "과일향",
+                "Lager",
+                "호불호",
+                "꽃향기"
+            ],
+            features: beerCategoryArray[0][1]
+        },
+        {
+            name_korean: "타이거",
+            name_english: "Tiger",
+            image: "",
+            degree: 5.0,
+            categoryId: beerCategoryArray[0][0],
+            hashtag: [
+                "싱가포르",
+                "5.0",
+                "맥아향",
+                "Lager",
+                "황금색",
+                "깔끔함",
+                "청량감"
+            ],
+            features: beerCategoryArray[0][1]
+        },
+        {
+            name_korean: "코나 롱보드 아일랜드 라거",
+            name_english: "Kona Longboard Island Lager",
+            image: "",
+            degree: 4.6,
+            categoryId: beerCategoryArray[0][0],
+            hashtag: [
+                "미국",
+                "4.6",
+                "과일향",
+                "Lager",
+                "달콤함",
+                "가벼운바디감"
+            ],
+            features: beerCategoryArray[0][1]
+        },
+        {
+            name_korean: "크로코 후레시",
+            name_english: "Croco Fresh",
+            image: "",
+            degree: 4.5,
+            categoryId: beerCategoryArray[0][0],
+            hashtag: [
+                "네덜란드",
+                "4.5",
+                "맥아향",
+                "Lager",
+                "황금색",
+                "강한탄산",
+                "쌉쌀한맛"
+            ],
+            features: beerCategoryArray[0][1]
+        },
+        {
+            name_korean: "하이네켄",
+            name_english: "Heineken",
+            image: "",
+            degree: 5.0,
+            categoryId: beerCategoryArray[0][0],
+            hashtag: [
+                "네덜란드",
+                "5.0",
+                "맥아향",
+                "Lager",
+                "황금색",
+                "청량감",
+                "깔끔함"
+            ],
+            features: beerCategoryArray[0][1]
+        },
+        {
+            name_korean: "싱하",
+            name_english: "Singha",
+            image: "",
+            degree: 5.0,
+            categoryId: beerCategoryArray[0][0],
+            hashtag: [
+                "태국",
+                "5.0",
+                "맥아향",
+                "Lager",
+                "부드러움",
+                "청량감",
+                "깔끔함"
+            ],
+            features: beerCategoryArray[0][1]
+        },
+        {
+            name_korean: "한맥",
+            name_english: "Hanmac",
+            image: "",
+            degree: 4.6,
+            categoryId: beerCategoryArray[0][0],
+            hashtag: [
+                "한국",
+                "4.6",
+                "맥아향",
+                "Lager",
+                "부드러움",
+                "청량감",
+                "깔끔함"
+            ],
+            features: beerCategoryArray[0][1]
+        },
+        {
+            name_korean: "아사히 드라이 블랙",
+            name_english: "Asahi Dry Black",
+            image: "",
+            degree: 5.5,
+            categoryId: beerCategoryArray[0][0],
+            hashtag: [
+                "일본",
+                "5.5",
+                "맥아향",
+                "Lager",
+                "깔끔함",
+                "흑맥주",
+                "부드러움"
+            ],
+            features: beerCategoryArray[0][1]
+        },
+        {
+            name_korean: "맥스",
+            name_english: "Max",
+            image: "",
+            degree: 5.5,
+            categoryId: beerCategoryArray[0][0],
+            hashtag: [
+                "한국",
+                "5.5",
+                "맥아향",
+                "Lager",
+                "부드러움",
+                "황금색",
+                "깔끔함"
+            ],
+            features: beerCategoryArray[0][1]
+        },
+        {
+            name_korean: "카프리",
+            name_english: "Cafri",
+            image: "",
+            degree: 4.2,
+            categoryId: beerCategoryArray[0][0],
+            hashtag: [
+                "한국",
+                "4.2",
+                "아로마향",
+                "Lager",
+                "청량감",
+                "가벼운바디감"
+            ],
+            features: beerCategoryArray[0][1]
+        },
+        {
+            name_korean: "에베레스트",
+            name_english: "Everest",
+            image: "",
+            degree: 5.5,
+            categoryId: beerCategoryArray[0][0],
+            hashtag: [
+                "네팔",
+                "5.5",
+                "맥아향",
+                "Lager",
+                "황금색",
+                "청량감"
+            ],
+            features: beerCategoryArray[0][1]
+        },
+
+
+
+
 
         {
             name_korean: "필스너우르켈",
@@ -259,6 +690,265 @@ beerCrawlingRouter.post("/", async(req, res) => {
             ],
             features: beerCategoryArray[2][1]
         },
+
+        {
+            name_korean: "곰표 밀맥주",
+            name_english: "Gompyo",
+            image: "",
+            degree: 4.5,
+            categoryId: beerCategoryArray[2][0],
+            hashtag: [
+                "한국",
+                "4.5",
+                "과일향",
+                "Pale Ale",
+                "세븐브로이",
+                "cu",
+                "레트로"
+            ],
+            features: beerCategoryArray[2][1]
+        },
+        {
+            name_korean: "호가든",
+            name_english: "Hoegaarden",
+            image: "",
+            degree: 4.9,
+            categoryId: beerCategoryArray[2][0],
+            hashtag: [
+                "벨기에",
+                "4.9",
+                "감귤향",
+                "Pale Ale",
+                "부드러움"
+            ],
+            features: beerCategoryArray[2][1]
+        },
+        {
+            name_korean: "크로넨버그 1664 블랑",
+            name_english: "Kronenberg 1665 Blanc",
+            image: "",
+            degree: 5.0,
+            categoryId: beerCategoryArray[2][0],
+            hashtag: [
+                "프랑스",
+                "5.0",
+                "과일향",
+                "Pale Ale",
+                "호불호",
+                "오렌지향"
+            ],
+            features: beerCategoryArray[2][1]
+        },
+        {
+            name_korean: "빅웨이브 골든 에일",
+            name_english: "Big Wave Golden Ale",
+            image: "",
+            degree: 4.4,
+            categoryId: beerCategoryArray[2][0],
+            hashtag: [
+                "미국",
+                "4.4",
+                "과일향",
+                "Pale Ale",
+                "적은거품",
+                "가벼운맛"
+            ],
+            features: beerCategoryArray[2][1]
+        },
+        {
+            name_korean: "코나 파이어락 페일에일",
+            name_english: "Kona Fire Rock Pale Ale",
+            image: "",
+            degree: 5.8,
+            categoryId: beerCategoryArray[2][0],
+            hashtag: [
+                "미국",
+                "5.8",
+                "시트러스",
+                "Pale Ale",
+                "고소한맛",
+                "하와이안"
+            ],
+            features: beerCategoryArray[2][1]
+        },
+        {
+            name_korean: "강서",
+            name_english: "Gangseo",
+            image: "",
+            degree: 4.6,
+            categoryId: beerCategoryArray[2][0],
+            hashtag: [
+                "한국",
+                "4.6",
+                "과일향",
+                "Pale Ale",
+                "세븐브로이",
+                "씁슬함"
+            ],
+            features: beerCategoryArray[2][1]
+        },
+        {
+            name_korean: "제주 위트에일",
+            name_english: "Jeju Wit Ale",
+            image: "",
+            degree: 5.3,
+            categoryId: beerCategoryArray[2][0],
+            hashtag: [
+                "한국",
+                "5.3",
+                "감귤향",
+                "Pale Ale",
+                "제주도",
+                "부드러움"
+            ],
+            features: beerCategoryArray[2][1]
+        },
+        {
+            name_korean: "제주 펠롱에일",
+            name_english: "Jeju Pellong Ale",
+            image: "",
+            degree: 5.3,
+            categoryId: beerCategoryArray[2][0],
+            hashtag: [
+                "한국",
+                "5.3",
+                "시트러스",
+                "Pale Ale",
+                "제주도",
+                "씁슬함"
+            ],
+            features: beerCategoryArray[2][1]
+        },
+        {
+            name_korean: "전라 에일",
+            name_english: "Jeolla Ale",
+            image: "",
+            degree: 4.5,
+            categoryId: beerCategoryArray[2][0],
+            hashtag: [
+                "한국",
+                "4.5",
+                "과일향",
+                "Pale Ale",
+                "세븐브로이",
+                "황금색",
+                "꽃향기"
+            ],
+            features: beerCategoryArray[2][1]
+        },
+        {
+            name_korean: "대강 페일에일",
+            name_english: "Taegang Pale Ale",
+            image: "",
+            degree: 4.6,
+            categoryId: beerCategoryArray[2][0],
+            hashtag: [
+                "한국",
+                "4.6",
+                "과일향",
+                "Pale Ale",
+                "감귤향",
+                "부드러움"
+            ],
+            features: beerCategoryArray[2][1]
+        },
+        {
+            name_korean: "블루문",
+            name_english: "Bluemoon",
+            image: "",
+            degree: 5.4,
+            categoryId: beerCategoryArray[2][0],
+            hashtag: [
+                "미국",
+                "5.4",
+                "과일향",
+                "White Ale",
+                "꽃향기",
+                "부드러움"
+            ],
+            features: beerCategoryArray[2][1]
+        },
+        {
+            name_korean: "레페 브라운",
+            name_english: "Leffe Brown",
+            image: "",
+            degree: 6.5,
+            categoryId: beerCategoryArray[2][0],
+            hashtag: [
+                "벨기에",
+                "6.5",
+                "달콤함",
+                "Dark Ale",
+                "높은 도수",
+                "부드러움"
+            ],
+            features: beerCategoryArray[2][1]
+        },
+        {
+            name_korean: "레페 블론드",
+            name_english: "Leffe Blond",
+            image: "",
+            degree: 6.6,
+            categoryId: beerCategoryArray[2][0],
+            hashtag: [
+                "벨기에",
+                "6.6",
+                "바닐라향",
+                "Pale Ale",
+                "부드러움",
+                "옅은단맛",
+                "황금색"
+            ],
+            features: beerCategoryArray[2][1]
+        },
+        {
+            name_korean: "듀벨",
+            name_english: "Devel",
+            image: "",
+            degree: 8.5,
+            categoryId: beerCategoryArray[2][0],
+            hashtag: [
+                "벨기에",
+                "8.5",
+                "과일향",
+                "Golden Ale",
+                "높은도수",
+                "달콤함"
+            ],
+            features: beerCategoryArray[2][1]
+        },
+        {
+            name_korean: "파도",
+            name_english: "Pado",
+            image: "",
+            degree: 4.5,
+            categoryId: beerCategoryArray[2][0],
+            hashtag: [
+                "한국",
+                "4.5",
+                "감귤향",
+                "Pale Ale",
+                "청량감",
+                "부드러움"
+            ],
+            features: beerCategoryArray[2][1]
+        },
+        {
+            name_korean: "에델바이스",
+            name_english: "Edelweiss",
+            image: "",
+            degree: 5.0,
+            categoryId: beerCategoryArray[2][0],
+            hashtag: [
+                "오스트리아",
+                "5.0",
+                "허브향",
+                "Pale Ale",
+                "풍성한 거품",
+                "황금색"
+            ],
+            features: beerCategoryArray[2][1]
+        },
         {
             name_korean: "인디카",
             name_english: "Indica",
@@ -338,6 +1028,70 @@ beerCrawlingRouter.post("/", async(req, res) => {
                 "IPA",
                 "가벼운바디감",
                 "낮은도수"
+            ],
+            features: beerCategoryArray[3][1]
+        },
+        {
+            name_korean: "호랑이형님 순한 IPA",
+            name_english: "Tiger Bro Mild IPA",
+            image: "",
+            degree: 4.7,
+            categoryId: beerCategoryArray[3][0],
+            hashtag: [
+                "한국",
+                "4.7",
+                "과일향",
+                "IPA",
+                "청량감",
+                "황금색"
+            ],
+            features: beerCategoryArray[3][1]
+        },
+        {
+            name_korean: "국민 IPA",
+            name_english: "Kukmin IPA",
+            image: "",
+            degree: 6.5,
+            categoryId: beerCategoryArray[3][0],
+            hashtag: [
+                "한국",
+                "6.5",
+                "과일향",
+                "IPA",
+                "청량감",
+                "무거운바디감"
+            ],
+            features: beerCategoryArray[3][1]
+        },
+        {
+            name_korean: "퇴근길 IPA",
+            name_english: "Platinum craft sunset",
+            image: "",
+            degree: 4.7,
+            categoryId: beerCategoryArray[3][0],
+            hashtag: [
+                "한국",
+                "4.7",
+                "과일향",
+                "IPA",
+                "아로마향",
+                "쌉쌀한맛"
+            ],
+            features: beerCategoryArray[3][1]
+        },
+        {
+            name_korean: "라구니타스 데이타임 IPA",
+            name_english: "Lagunitas Daytime IPA",
+            image: "",
+            degree: 4.0,
+            categoryId: beerCategoryArray[3][0],
+            hashtag: [
+                "미국",
+                "4.0",
+                "과일향",
+                "IPA",
+                "아로마향",
+                "황금색"
             ],
             features: beerCategoryArray[3][1]
         },
@@ -422,7 +1176,22 @@ beerCrawlingRouter.post("/", async(req, res) => {
             ],
             features: beerCategoryArray[4][1]
         },
-
+        {
+            name_korean: "필라이트 바이젠",
+            name_english: "Filte Weizen",
+            image: "",
+            degree: 4.5,
+            categoryId: beerCategoryArray[4][0],
+            hashtag:[
+                "한국",
+                "4.5",
+                "오렌지향",
+                "Weizen",
+                "발포주",
+                "가벼운맛"
+            ],
+            features: beerCategoryArray[4][1]
+        },
 
 
 
@@ -694,6 +1463,148 @@ beerCrawlingRouter.post("/", async(req, res) => {
                 "흑맥주",
             ],
             features: beerCategoryArray[7][1]
+        },
+        {
+            name_korean: "카스 0.0",
+            name_english: "Cass 0.0",
+            image: "",
+            degree: 0,
+            categoryId: beerCategoryArray[8][0],
+            hashtag: [
+                "한국",
+                "0",
+                "맥아향",
+                "논알코올",
+                "오비"
+            ],
+            features: beerCategoryArray[8][1]
+        },
+        {
+            name_korean: "데스페라도스",
+            name_english: "Desperados",
+            image: "",
+            degree: 5.9,
+            categoryId: beerCategoryArray[8][0],
+            hashtag: [
+                "네덜란드",
+                "5.9",
+                "과일향",
+                "데킬라맥주",
+                "가벼운바디감",
+                "달콤함",
+            ],
+            features: beerCategoryArray[8][1]
+        },
+        {
+            name_korean: "호가든 로제",
+            name_english: "Hogaarden Rose",
+            image: "",
+            degree: 3.0,
+            categoryId: beerCategoryArray[8][0],
+            hashtag: [
+                "벨기에",
+                "3.0",
+                "과일향",
+                "과일주",
+                "가벼운맛",
+                "달콤함",
+            ],
+            features: beerCategoryArray[8][1]
+        },
+        {
+            name_korean: "타이거 라들러 자몽",
+            name_english: "Tiger Radler Grapefruit",
+            image: "",
+            degree: 2.0,
+            categoryId: beerCategoryArray[8][0],
+            hashtag: [
+                "싱가포르",
+                "2.0",
+                "과일향",
+                "과일주",
+                "가벼운맛",
+                "달콤함",
+            ],
+            features: beerCategoryArray[8][1]
+        },
+        {
+            name_korean: "타이거 라들러 레몬",
+            name_english: "Tiger Radler Lemon",
+            image: "",
+            degree: 2.0,
+            categoryId: beerCategoryArray[8][0],
+            hashtag: [
+                "싱가포르",
+                "2.0",
+                "과일향",
+                "과일주",
+                "가벼운맛",
+                "달콤함",
+            ],
+            features: beerCategoryArray[8][1]
+        },
+        {
+            name_korean: "피즈 딸기",
+            name_english: "Fizz Strawberry",
+            image: "",
+            degree: 4.0,
+            categoryId: beerCategoryArray[8][0],
+            hashtag: [
+                "스웨덴",
+                "4.0",
+                "과일향",
+                "Cider",
+                "달콤함",
+            ],
+            features: beerCategoryArray[8][1]
+        },
+        {
+            name_korean: "애플 폭스",
+            name_english: "Apple Fox",
+            image: "",
+            degree: 4.5,
+            categoryId: beerCategoryArray[8][0],
+            hashtag: [
+                "싱가포르",
+                "4.5",
+                "과일향",
+                "Cider",
+                "청량감",
+                "강한 탄산"
+            ],
+            features: beerCategoryArray[8][1]
+        },
+        {
+            name_korean: "써머스비 애플",
+            name_english: "Somersby Apple",
+            image: "",
+            degree: 4.5,
+            categoryId: beerCategoryArray[8][0],
+            hashtag: [
+                "덴마크",
+                "4.5",
+                "과일향",
+                "Cider",
+                "사과맛",
+                "달콤함"
+            ],
+            features: beerCategoryArray[8][1]
+        },
+        {
+            name_korean: "매그너스 쥬시애플",
+            name_english: "Magners Juicy Apple",
+            image: "",
+            degree: 4.5,
+            categoryId: beerCategoryArray[8][0],
+            hashtag: [
+                "아일랜드",
+                "4.5",
+                "과일향",
+                "Cider",
+                "청량감",
+                "달콤함"
+            ],
+            features: beerCategoryArray[8][1]
         },
     ]
 
