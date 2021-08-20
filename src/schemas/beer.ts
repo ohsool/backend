@@ -52,6 +52,9 @@ const BeerSchema: Schema = new Schema({
     location_report: {
         type: Array,
         default: []
+    },
+    createDate: {
+        type: String
     }
 })
 
