@@ -222,9 +222,9 @@ const reportLocation = async(req: Request, res: Response) => {
 const getBeerByCategory = async (req: Request, res: Response)=> {
     try {
         const { categoryId } = req.params;
-        const beerByCategory = Beers.find({categoryID: mongoose.Types.ObjectId(categoryId)}).lean();
+        const beers = await Beers.find({ categoryId }).lean();
 
-        res.json({message: "success", beers: beerByCategory});
+        res.json({message: "success", beers});
     } catch (error) {
         res.status(400).send({ message: "fail", error });
     }
