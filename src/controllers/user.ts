@@ -27,7 +27,7 @@ const joiSchema = joi.object({
     [index: string]: string,
     Lager: string,
     Pilsner: string,
-    PaleAle: string,
+    Ale: string,
     IPA: string,
     Weizen: string,
     Dunkel: string,
@@ -38,7 +38,7 @@ const joiSchema = joi.object({
   const imagesArray: ImageArray = {
     Lager: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerIcon/Lager.png",
     Pilsner: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerIcon/Pilsner.png",
-    PaleAle: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerIcon/Pale+Ale.png",
+    Ale: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerIcon/Ale.png",
     IPA: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerIcon/IPA.png",
     Weizen: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerIcon/Weizen.png",
     Dunkel: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerIcon/Dunkel.png",
@@ -231,13 +231,6 @@ const checkAuth = async (req: Request, res: Response) => {
       const nickname = res.locals.user.nickname;
       let preference = String(res.locals.user.preference);
       const image = res.locals.user.image;
-      // let image = ""
-
-      // if (preference != "Pale Ale") {
-      //   image = imagesArray[preference];
-      // } else {
-      //   image = imagesArray["PaleAle"];
-      // }
 
       if (res.locals.accessToken) {
         res.json({ message: "success", userId, nickname, preference, image, accessToken: res.locals.accessToken });
@@ -303,13 +296,7 @@ const postTest = async (req: Request, res: Response) => {
     
         /* 2. 로그인 유저일 시 preference 변경 */
         const isExist = await Users.findOne({ _id: userId}).lean();
-        let image = ""
-
-        if (result != "Pale Ale") {
-          image = imagesArray[result];
-        } else {
-          image = imagesArray["PaleAle"];
-        }
+        let image = imagesArray[result];
 
         if (isExist) {
           await Users.updateOne({ _id: userId }, { $set: { preference: result, image }});
