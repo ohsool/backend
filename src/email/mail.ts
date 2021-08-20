@@ -22,13 +22,22 @@ export const mailSender = async (mailInfo: any) => {
         }
     });
 
+    const script = await readFile(__dirname + `/./${mailInfo.type}.html`, 'utf8')
+    const new_script = script.replace(/USERNAME/gi, mailInfo.nickname)
+    let mail_subject = ""
+
+    if (mailInfo.type === "welcome") {
+        mail_subject = `🍻오늘의술 ${mailInfo.nickname}님, 환영합니다!`
+    } else {
+        mail_subject = `🍻오늘의술 ${mailInfo.nickname}님, 건의사항이 접수되었습니다.`
+    }
+
     // 메일 옵션
     const mailOptions = {
         from: "admin@ohsool.com",
         to: mailInfo.toEmail,
-        subject: mailInfo.subject,
-        // html: `<h1>${mailInfo.nickname} 님 반가워요!</h1>`
-        html: await readFile(__dirname + '/./welcome.html', 'utf8')
+        subject: mail_subject,
+        html: new_script
     }
     // 메일 발송
     transporter.sendMail(mailOptions, (error, info) =>{
