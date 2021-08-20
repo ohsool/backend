@@ -7,7 +7,7 @@ import BeerCategories from "../schemas/beerCategory";
 const beerCrawlingRouter = express.Router();
 
 beerCrawlingRouter.post("/", async(req, res) => {
-    const beerCategories = ["Lager", "Pilsner", "Pale Ale", "IPA", "Weizen", "Dunkel", "Stout", "Bock"]
+    const beerCategories = ["Lager", "Pilsner", "Ale", "IPA", "Weizen", "Dunkel", "Stout", "Bock"]
     let beerCategoryArray: Array <any> = [];
 
     for (let i = 0; i < beerCategories.length; i ++) {
