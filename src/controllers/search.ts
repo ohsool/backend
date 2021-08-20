@@ -60,7 +60,8 @@ get_beers().then((beers) => {
 
 const search = async (req: Request, res: Response) => {
     const word = String(req.query.word).toLowerCase();
-    const words: Array<String> = [];
+    const searched_beers: Array<Beer> = [];
+    const searched_categories: Array<BeerCategory> = [];
 
     const hashtag = String(req.query.hashtag);
     const send_hashtags: Array<String> = [];
@@ -78,14 +79,14 @@ const search = async (req: Request, res: Response) => {
 
             for (let i = 0; i < beers.length; i ++) {
                 if ( getRegExp(word.replace(/\s+/g, '')).test(beers[i].name_korean.replace(/\s+/g, '')) ) { // korean beer name
-                    words.push(beers[i].name_korean);
+                    searched_beers.push(beers[i]);
                 } else if (beers[i].name_english.replace(/\s+/g, '').toLowerCase().includes(word)) {  // english beer name
-                    words.push(beers[i].name_english);
+                    searched_beers.push(beers[i]);
                 }
     
             } for (let i = 0; i < beerCategories.length; i ++) {  // category names only have english name
                 if ( beerCategories[i].name.replace(/\s+/g, '').toLowerCase().includes(word) ) {
-                    words.push(beerCategories[i].name);
+                    searched_categories.push(beerCategories[i]);
                 }
             } 
         }
@@ -97,9 +98,8 @@ const search = async (req: Request, res: Response) => {
                 }
             }
         }
-        
     
-        res.json({ message: "success", words, hashtags: send_hashtags });
+        res.json({ message: "success", beers: searched_beers, beerCategories: searched_categories, hashtags: send_hashtags });
     } catch (error) {
         res.json({ message: "fail", error });
     }
