@@ -219,6 +219,7 @@ const reportLocation = async(req: Request, res: Response) => {
     
 }
 
+// 카테고리별 맥주 출력
 const getBeerByCategory = async (req: Request, res: Response)=> {
     try {
         const { categoryId } = req.params;

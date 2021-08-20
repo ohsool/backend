@@ -10,6 +10,8 @@ import BeerCategories from "../schemas/beerCategory";
 import Users from "../schemas/user";
 import MyBeers from "../schemas/mybeer";
 
+import { mailSender }  from '../email/mail'
+
 import { env } from "../env";
 
 const joiSchema = joi.object({
@@ -128,6 +130,15 @@ const register = async(req: Request, res: Response) => {
           const crypted_password = crypto.createHmac("sha256", password).update(env.pass_secret).digest("hex");
 
           await Users.create({ email, nickname, password: crypted_password });
+
+          const mailInfo = {
+            toEmail: email,     // 수신할 이메일
+            nickname: nickname, //
+            subject: 'Welcome to ohsool',   // 메일 제목              // 메일 내용
+          };
+
+          // 성공 메일 보내기
+          mailSender(mailInfo)
 
           res.status(201).json({ message: "success" });
       } else {
