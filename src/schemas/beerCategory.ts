@@ -32,7 +32,8 @@ const BeerCategorySchema: Schema = new Schema({
             "Dunkel": [0, 0],
             "Stout": [0, 0],
             "Bock": [0, 0],
-            "Unknown": [0, 0]
+            "Unknown": [0, 0],
+            "ETC": [0, 0]
         }
     }
 });
