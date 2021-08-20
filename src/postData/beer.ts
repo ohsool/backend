@@ -626,6 +626,22 @@ beerCrawlingRouter.post("/", async(req, res) => {
             features: beerCategoryArray[2][1]
         },
         {
+            name_korean: "차저 스코티쉬 라거",
+            name_english: "Charger Scottish Lager Beer",
+            image: "",
+            degree: 7.5,
+            categoryId: beerCategoryArray[1][0],
+            hashtag: [
+                "스코틀랜드",
+                "7.5",
+                "위스키향",
+                "라거",
+                "소맥맛",
+                "높은도수"
+            ],
+            features: beerCategoryArray[1][1]
+        },
+        {
             name_korean: "구아야베라",
             name_english: "Guayabera",
             image: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerImage/%EA%B5%AC%EC%95%BC%EC%9D%B4%EB%B2%A0%EB%9D%BC.png",
@@ -1606,6 +1622,106 @@ beerCrawlingRouter.post("/", async(req, res) => {
             ],
             features: beerCategoryArray[8][1]
         },
+        {
+            name_korean: "필굿",
+            name_english: "Fil Good",
+            image: "",
+            degree: 4.5,
+            categoryId: beerCategoryArray[8][0],
+            hashtag: [
+                "한국",
+                "4.5",
+                "아로마향",
+                "Etc",
+                "오비",
+                "저렴"
+            ],
+            features: beerCategoryArray[8][1]
+        },
+        {
+            name_korean: "필굿 세븐",
+            name_english: "Fil Good 7",
+            image: "",
+            degree: 7,
+            categoryId: beerCategoryArray[8][0],
+            hashtag: [
+                "한국",
+                "7",
+                "강한 홉향",
+                "Etc",
+                "높은도수",
+                "청량감",
+                "저렴"
+            ],
+            features: beerCategoryArray[8][1]
+        },
+        {
+            name_korean: "말표 흑맥주",
+            name_english: "Malpyo",
+            image: "",
+            degree: 4.5,
+            categoryId: beerCategoryArray[8][0],
+            hashtag: [
+                "한국",
+                "4.5",
+                "커피향",
+                "Etc",
+                "아로마향",
+                "초콜링향",
+                "스퀴즈브루어리"
+            ],
+            features: beerCategoryArray[8][1]
+        },
+        {
+            name_korean: "하이네켄 무알콜",
+            name_english: "Heineken Non Alcohol",
+            image: "",
+            degree: 0,
+            categoryId: beerCategoryArray[8][0],
+            hashtag: [
+                "네덜란드",
+                "0",
+                "맥아향",
+                "논알코올",
+                "깔끔함",
+                "청량감"
+            ],
+            features: beerCategoryArray[8][1]
+        },
+        {
+            name_korean: "칼스버그 0.0",
+            name_english: "Carlsberg 0.0",
+            image: "",
+            degree: 0,
+            categoryId: beerCategoryArray[8][0],
+            hashtag: [
+                "덴마크",
+                "0",
+                "과일향",
+                "논알코올",
+                "청량감",
+                "깔끔함"
+            ],
+            features: beerCategoryArray[8][1]
+        },
+        {
+            name_korean: "아사히 드라이 제로",
+            name_english: "Asahi Dry Zero",
+            image: "",
+            degree: 0,
+            categoryId: beerCategoryArray[8][0],
+            hashtag: [
+                "일본",
+                "0",
+                "맥아향",
+                "논알코올",
+                "청량감",
+                "깔끔함"
+            ],
+            features: beerCategoryArray[8][1]
+        },
+
+
     ]
 
     try {
