@@ -23,6 +23,31 @@ const joiSchema = joi.object({
   });
   // id 포함 안하게
 
+  type ImageArray = {
+    [index: string]: string,
+    Lager: string,
+    Pilsner: string,
+    Ale: string,
+    IPA: string,
+    Weizen: string,
+    Dunkel: string,
+    Stout: string,
+    Bock: string,
+    ETC: string
+  }
+
+  const imagesArray: ImageArray = {
+    Lager: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerIcon/Lager.png",
+    Pilsner: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerIcon/Pilsner.png",
+    Ale: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerIcon/Ale.png",
+    IPA: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerIcon/IPA.png",
+    Weizen: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerIcon/Weizen.png",
+    Dunkel: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerIcon/Dunkel.png",
+    Stout: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerIcon/Stout.png",
+    Bock: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerIcon/Bock.png",
+    ETC: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerIcon/ETC.png"
+  }
+
 const existedEmail = async(req: Request, res: Response) => {
     const { email } = req.body;
     const test_emails = [
@@ -206,14 +231,15 @@ const checkAuth = async (req: Request, res: Response) => {
       
       const userId = res.locals.user._id;
       const nickname = res.locals.user.nickname;
-      const preference = res.locals.user.preference;
-  
+      let preference = String(res.locals.user.preference);
+      const image = res.locals.user.image;
+
       if (res.locals.accessToken) {
-        res.json({ message: "success", userId, nickname, preference, accessToken: res.locals.accessToken });
+        res.json({ message: "success", userId, nickname, preference, image, accessToken: res.locals.accessToken });
       } else if (res.locals.refreshToken) {
-        res.json({ message: "success", userId, nickname, preference, refreshToken: res.locals.refreshToken });
+        res.json({ message: "success", userId, nickname, preference, image, refreshToken: res.locals.refreshToken });
       } else {
-        res.json({ message: "success", userId, nickname, preference });
+        res.json({ message: "success", userId, nickname, preference, image });
       }
 }
 
@@ -272,9 +298,10 @@ const postTest = async (req: Request, res: Response) => {
     
         /* 2. 로그인 유저일 시 preference 변경 */
         const isExist = await Users.findOne({ _id: userId}).lean();
+        let image = imagesArray[result];
 
         if (isExist) {
-          await Users.updateOne({ _id: userId }, { $set: { preference: result }});
+          await Users.updateOne({ _id: userId }, { $set: { preference: result, image }});
 
           user = true
         }
