@@ -2,6 +2,7 @@ import express, { Request, Response} from "express";
 import webhook, { WebClient, LogLevel } from "@slack/web-api";
 import moment from "moment";
 
+import { mailSender }  from '../email/mail'
 import { env } from "../env";
 import Recommendations from "../schemas/recommendation";
 

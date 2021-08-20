@@ -2,6 +2,7 @@ import express, { Request, Response} from "express";
 import webhook, { WebClient, LogLevel } from "@slack/web-api";
 import moment from "moment";
 
+import { mailSender }  from '../email/mail'
 import { env } from "../env";
 
 import Complaints from "../schemas/complaint";
@@ -14,6 +15,7 @@ const postComplaint = async (req: Request, res: Response) => {
     const { title, description } = req.body;
     let nickname = res.locals.user.nickname;
     const userId = res.locals.user._id;
+    const email = res.locals.user.email
 
     if (!title || !description) {
         res.json({ message: "fail", error: "no title or descripton" });
@@ -38,6 +40,14 @@ const postComplaint = async (req: Request, res: Response) => {
         } else {
             await Complaints.create({ title, description, date });
         }
+
+        const mailInfo = {
+            toEmail: email,    
+            nickname: nickname,
+            subject: '안녕하세욧'
+        };
+
+        mailSender(mailInfo)
 
         res.json({ message: "success", result })
     } catch (error) {
