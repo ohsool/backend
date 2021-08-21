@@ -1,6 +1,10 @@
 import Beers from "../schemas/beer";
 import mongoose from "mongoose";
 
+interface IFeatures {
+    [key: string]: Number
+}
+
 export interface IBeer {
     _id?: mongoose.Schema.Types.ObjectId,
     name_korean: String,
@@ -10,7 +14,7 @@ export interface IBeer {
     categoryId: mongoose.Schema.Types.ObjectId,
     hashtag: Array<String>,
     like_array?: Array<mongoose.Schema.Types.ObjectId>,
-    features: Object,
+    features: IFeatures,
     count?: Number,
     avgRate?: Number,
     location?: Array<Array<String>>,
