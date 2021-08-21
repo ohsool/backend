@@ -1,4 +1,3 @@
-import Beers from "../schemas/beer";
 import mongoose from "mongoose";
 
 interface IFeatures {
