@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-interface IFeatures {
+export interface IFeatures {
     [key: string]: Number
 }
 

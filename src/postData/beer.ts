@@ -8,13 +8,14 @@ import Beers from "../schemas/beer";
 import BeerCategories from "../schemas/beerCategory";
 import { IBeer } from "../interfaces/beer";
 import { IBeerCategory } from "../interfaces/beerCategory";
+import { IFeatures } from "../interfaces/beer";
 
 const beerCrawlingRouter = express.Router();
 
 beerCrawlingRouter.post("/", async(req, res) => {
     const beerCategories: Array<String> = ["Lager", "Pilsner", "Ale", "IPA", "Weizen", "Dunkel", "Stout", "Bock", "Etc"];
     const beerCategoryIds: Array<ObjectId> = [];
-    const beerCategoryFeatures: Array <Array<String>> = [];
+    const beerCategoryFeatures: Array<IFeatures> = [];
 
     for (let i = 0; i < beerCategories.length; i ++) {
         let beerCategory = await BeerCategories.findOne({ name: beerCategories[i] });
