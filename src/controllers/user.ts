@@ -178,9 +178,9 @@ const register = async(req: Request, res: Response) => {
           await Users.create({ email, nickname, password: crypted_password });
 
           const mailInfo = {
-            toEmail: email,     // 수신할 이메일
-            nickname: nickname, //
-            subject: 'Welcome to ohsool',   // 메일 제목              // 메일 내용
+            toEmail: email,     
+            nickname: nickname, 
+            type: 'welcome',   
           };
 
           // 성공 메일 보내기
