@@ -13,6 +13,7 @@ export const env = {
     test_url: String(process.env.TEST_URL),
     page_domain_address: String(process.env.PAGE_DOMAIN_ADDRESS),
     local_address: String(process.env.LOCAL_ADDRESS),
+    local_address_second: String(process.env.LOCAL_ADDRESS_SECOND),
     jy_ip: String(process.env.JY_IP),
     dh_ip: String(process.env.DH_IP),
     jwt_secret: String(process.env.JWT_SECRET),

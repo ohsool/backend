@@ -75,6 +75,7 @@ console.log("passport initializing done");
 const allowedOrigins = [
     env.page_domain_address,
     env.local_address,
+    env.local_address_second,
     env.jy_ip,
     env.dh_ip
 ];
