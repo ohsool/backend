@@ -1,4 +1,4 @@
-import mongoose, { Schema, model, mongo } from "mongoose";
+import mongoose, { Schema, Document } from "mongoose";
 import { IBeer } from "../interfaces/beer";
 
 const BeerSchema: Schema = new Schema({
@@ -16,7 +16,7 @@ const BeerSchema: Schema = new Schema({
         required: true
     },
     categoryId: {
-        type: mongoose.Schema.Types.ObjectId,
+        type: mongoose.Types.ObjectId,
         ref: "BeerCategories",
         required: true
     },
@@ -59,4 +59,4 @@ const BeerSchema: Schema = new Schema({
     }
 })
 
-export default mongoose.model<IBeer>("Beers", BeerSchema);
+export default mongoose.model<IBeer & Document>("Beers", BeerSchema);

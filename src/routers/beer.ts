@@ -21,7 +21,7 @@ beerRouter.put("/unlike/:beerId", authMiddleware, BeerController.unlikeBeer);
 beerRouter.get("/liked", authMiddleware, BeerController.likedBeer);
 
 beerRouter.post("/report-location", authMiddleware, BeerController.reportLocation);
-
+ 
 beerRouter.get("/categorylist", BeerController.getBeerByCategory); // 카테고리별 리스트 출력하기
 
 export { beerRouter };
