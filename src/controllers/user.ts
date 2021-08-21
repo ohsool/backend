@@ -19,11 +19,22 @@ const joiSchema = joi.object({
       .string()
       .email({ minDomainSegments: 2, tlds: { allow: ["com", "net"] } })
       .required(),
-    nickname: joi.string().min(1).max(30).required(),
+    nickname: joi.string().min(1).max(8).required(),
     password: joi.string().min(4).pattern(new RegExp("^[a-zA-Z0-9]{4,30}$")),
     confirmPassword: joi.ref("password")
   });
   // id 포함 안하게
+
+  const emailJoiSchema = joi.object({
+    email: joi
+      .string()
+      .email({ minDomainSegments: 2, tlds: { allow: ["com", "net"] } })
+      .required()
+  })
+
+  const nicknameJoiSchema = joi.object({
+    nickname: joi.string().min(1).max(8).required()
+  })
 
   type ImageArray = {
     [index: string]: string,
@@ -50,15 +61,22 @@ const joiSchema = joi.object({
     Etc: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerIcon/Etc.png"
   }
 
+  const test_emails = [
+    "mybeertest@test.com", 
+    "anothermybeertest@test.com", 
+    "recommendationtest@test.com",
+    "usertest@test.com"
+  ]
+  const test_nicknames = [
+    "mybeertest",
+    "anothermybeertest22",
+    "slackwebkittest",
+    "test"
+  ]
+
 const existedEmail = async(req: Request, res: Response) => {
     const { email } = req.body;
-    const test_emails = [
-      "mybeertest@test.com", 
-      "anothermybeertest@test.com", 
-      "recommendationtest@test.com",
-      "usertest@test.com"
-    ]
-
+    
     if (!email) {
       res.json({ message: "fail", error: "no input" });
 
@@ -75,10 +93,21 @@ const existedEmail = async(req: Request, res: Response) => {
       const existedUser = await Users.findOne({ email }).lean();
 
       if (existedUser) {
-        res.json({ message: "success", existed: true });
-      } else {
-        res.json({ message: "success", existed: false });
+        res.json({ message: "fail", error: "exited email" });
+
+        return
+      } 
+
+      const { value, error } = emailJoiSchema.validate({ email });
+
+      if (error) {
+        res.json({ message: "fail", error: "wrong email", error_detail: error.details[0].message });
+
+        return;
       }
+
+      res.json({ message: "success" });
+
     } catch (error) {
       res.json({ message: "fail", error });
     }
@@ -93,14 +122,31 @@ const existedNickname = async(req: Request, res: Response) => {
       return
     }
 
+    if ( test_nicknames.includes(nickname) ) {
+      res.json({ message: "fail", error: "nickname for test. don't use this" });
+
+      return
+    }
+
     try {
       const existedUser = await Users.findOne({ nickname }).lean();
 
       if (existedUser) {
-        res.json({ message: "success", existed: true });
-      } else {
-        res.json({ message: "success", existed: false });
+        res.json({ message: "fail", error: "exited nickname" });
+
+        return
+      } 
+
+      const { value, error } = nicknameJoiSchema.validate({ nickname });
+
+      if (error) {
+        res.json({ message: "fail", error: "wrong nickname", error_detail: error.details[0].message });
+
+        return;
       }
+
+      res.json({ message: "success" });
+
     } catch (error) {
       res.json({ message: "fail", error });
     }
