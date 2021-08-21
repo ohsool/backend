@@ -5,22 +5,24 @@ import moment from "moment";
 import Beers from "../schemas/beer";
 import BeerCategories from '../schemas/beerCategory';
 
-interface Beer {
-    _id: mongoose.Schema.Types.ObjectId,
-    name_korean: String,
-    name_english: String,
-    image: String,
-    degree: Number,
-    categoryId: mongoose.Schema.Types.ObjectId,
-    hashtag: Array<String>,
-    like_array: Array<mongoose.Schema.Types.ObjectId>,
-    features: Object,
-    count: Number,
-    avgRate: Number,
-    location: Array<Array<String>>,
-    location_report: Array<Array<String>>,
-    createDate: String
-}
+import { IBeer } from "../interfaces/beer";
+
+// interface Beer {
+//     _id: mongoose.Schema.Types.ObjectId,
+//     name_korean: String,
+//     name_english: String,
+//     image: String,
+//     degree: Number,
+//     categoryId: mongoose.Schema.Types.ObjectId,
+//     hashtag: Array<String>,
+//     like_array: Array<mongoose.Schema.Types.ObjectId>,
+//     features: Object,
+//     count: Number,
+//     avgRate: Number,
+//     location: Array<Array<String>>,
+//     location_report: Array<Array<String>>,
+//     createDate: String
+// }
 
 const getBeers = async(req: Request, res: Response) => {
     try {
@@ -35,7 +37,7 @@ const getBeers = async(req: Request, res: Response) => {
 // http://localhost:5209/api/beer/list/all/page?pageNo=0&sort=recent
 const getSomeBeers = async(req: Request, res: Response) => {
     let { pageNo, sort } = req.query;
-    let beers: Array<Beer> = [];
+    let beers: Array<IBeer> = [];
 
     try {
         // later, we should change order of beers with the most famous sort method

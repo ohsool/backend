@@ -6,26 +6,9 @@ import moment from "moment";
 
 import Beers from "../schemas/beer";
 import BeerCategories from "../schemas/beerCategory";
+import { IBeer } from "../interfaces/beer";
 
 const beerCrawlingRouter = express.Router();
-
-interface Beer {
-    // _id: mongoose.Schema.Types.ObjectId,
-    name_korean: String,
-    name_english: String,
-    image: String,
-    degree: Number,
-    categoryId: mongoose.Schema.Types.ObjectId,
-    hashtag: Array<String>,
-    // like_array: Array<mongoose.Schema.Types.ObjectId>,
-    features: Object,
-    // count: Number,
-    // avgRate: Number,
-    // location: Array<Array<String>>,
-    // location_report: Array<Array<String>>,
-    createDate: String
-}
-
 interface BeerCategory {
     _id: mongoose.Schema.Types.ObjectId,
     name: String,
@@ -38,21 +21,19 @@ interface BeerCategory {
 
 beerCrawlingRouter.post("/", async(req, res) => {
     const beerCategories: Array<String> = ["Lager", "Pilsner", "Ale", "IPA", "Weizen", "Dunkel", "Stout", "Bock", "Etc"];
-    const beerCategoryArray: Array <Array<String>> = [];
     const beerCategoryIds: Array<ObjectId> = [];
     const beerCategoryFeatures: Array <Array<String>> = [];
 
     for (let i = 0; i < beerCategories.length; i ++) {
         let beerCategory = await BeerCategories.findOne({ name: beerCategories[i] });
 
-        // beerCategoryArray.push([ String(beerCategory._id), String(beerCategory.features) ]);
         beerCategoryIds.push(beerCategory._id);
         beerCategoryFeatures.push(beerCategory.features);
     }
 
     const date = moment().format("YYYY-MM-DD hh:mm A")
 
-    const beers: Array<Beer> = [
+    const beers: Array<IBeer> = [
         {
             name_korean: "버드와이저",
             name_english: "Budweiser",
