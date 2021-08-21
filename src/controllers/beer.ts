@@ -260,10 +260,44 @@ const reportLocation = async(req: Request, res: Response) => {
 // 카테고리별 맥주 출력
 const getBeerByCategory = async (req: Request, res: Response)=> {
     try {
-        const { categoryId } = req.params;
-        const beers = await Beers.find({ categoryId }).lean();
+        let { categoryId, pageNo, sort } = req.query;
+        let beers: Array<IBeer> = [];
 
-        res.json({message: "success", beers});
+        /* 1. 조건별 정렬 진행 */
+
+        sort = sort ? sort : "_id"; // 'sort' 기준이 없다면 _id 기준으로 정렬 진행.
+
+        // 오름차순 정렬 (1) createDateOld, degreeLess, name_korean,name_english
+        // 내림차순 정렬 (-1) avgRate, createDate, degree, count 
+        let sortOption = 1
+        if (sort === "avgRate" || sort === "createDate" || sort === "degree" || sort === "count") {
+            sortOption = -1
+        }
+        if (sort === 'degreeLess') sort = "degree"
+        else if (sort === 'createDateOld') sort = "createDate"
+        beers = await Beers.find({ categoryId }).lean().sort([[sort, sortOption]]);
+
+        /* 2. 페이지별 맥주 출력 */
+        
+        // 요청 페이지 번호가 0보다 작다면 0으로 대체한다.
+        const curPage = (Number(pageNo) < 0) ? 0 : Number(pageNo);
+        const startIndex = curPage * 8;
+
+        // 요청 페이지의 데이터 인덱스가 실제 데이터보다 크다면 오류를 뱉는다.
+        if (startIndex > beers.length) {
+            res.status(400).send({ message: "fail", error: "wrong page" });
+            return;
+        }
+        
+        // 요청한 페이지 넘버에 위치하는 맥주 배열에 담기
+        const res_beers = [];
+        for (let i = startIndex; i < (startIndex + 8); i++) {
+            if (!beers[i]) break;
+            res_beers.push(beers[i])
+        }
+
+        res.json({message: "success", beers: res_beers});
+
     } catch (error) {
         res.status(400).send({ message: "fail", error });
     }
