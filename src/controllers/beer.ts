@@ -88,7 +88,11 @@ const postBeer = async(req: Request, res: Response) => {
         }
 
         const date = moment().format("YYYY-MM-DD hh:mm A")
-        const beer = await Beers.create({ name_korean, name_english, image, degree, categoryId, features: beerCategory.features , hashtag, date });
+        const new_beer: IBeer = {
+            name_korean, name_english, image, degree, categoryId, features: beerCategory.features , hashtag, createDate: date
+        }
+
+        const beer = await Beers.create(new_beer);
 
         res.status(201).json({ message: "success", beer });
     } catch (error) {
