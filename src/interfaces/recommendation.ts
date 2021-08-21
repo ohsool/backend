@@ -1,10 +1,10 @@
 import mongoose from "mongoose";
 
 export interface IRecommendation {
-    _id?: mongoose.Schema.Types.ObjectId,
+    _id?: mongoose.Types.ObjectId,
     beer: String,
     description: String,
     image?: String,
-    userId?: mongoose.Schema.Types.ObjectId,
+    userId?: mongoose.Types.ObjectId,
     date: String
 }

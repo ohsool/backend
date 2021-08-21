@@ -14,7 +14,7 @@ const beerCrawlingRouter = express.Router();
 
 beerCrawlingRouter.post("/", async(req, res) => {
     const beerCategories: Array<String> = ["Lager", "Pilsner", "Ale", "IPA", "Weizen", "Dunkel", "Stout", "Bock", "Etc"];
-    const beerCategoryIds: Array<ObjectId> = [];
+    const beerCategoryIds: Array<mongoose.Types.ObjectId> = [];
     const beerCategoryFeatures: Array<IFeatures> = [];
 
     for (let i = 0; i < beerCategories.length; i ++) {

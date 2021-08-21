@@ -4,6 +4,6 @@ export interface IComplaint {
     _id?: mongoose.Schema.Types.ObjectId,
     title: String,
     description: String,
-    userId?: mongoose.Schema.Types.ObjectId,
+    userId?: mongoose.Types.ObjectId,
     date: String
 }

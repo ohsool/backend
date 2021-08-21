@@ -2,7 +2,6 @@ import express, {Request, Response, NextFunction} from "express";
 import BeerCategories from "../schemas/beerCategory";
 import Beers from "../schemas/beer";
 
-
 const getBeerCategories = async(req: Request, res: Response) => {
     try {
         const beerCategories = await BeerCategories.find().lean();

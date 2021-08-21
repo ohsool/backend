@@ -84,17 +84,18 @@ const search = async (req: Request, res: Response) => {
 }
 
 const searchHashtag = async (req: Request, res: Response) => {
-    const hashtag = String(req.query.hashtag);
+    const hash_tag: String = String(req.query.hashtag) || "";
+    const hashtag: Array<String> = [hash_tag];
 
     try {
-        const newBeers:Array<IBeer> = [];
+        const newBeers: Array<IBeer> = [];
 
         if (env.modeNow == "test") {
-            beers = await Beers.find({ hashtag: { $in: hashtag } }).lean();
+            beers = await Beers.find({ hashtag: { $in: hashtag } });
         }
 
         for (let i = 0; i < beers.length; i ++) {
-            if ( beers[i].hashtag.includes(hashtag) ) {
+            if ( beers[i].hashtag.includes(hash_tag) ) {
                 newBeers.push(beers[i]);
             }
         }

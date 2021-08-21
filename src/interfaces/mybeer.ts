@@ -5,9 +5,9 @@ interface IFeatures {
 }
 
 export interface IMyBeer {
-    _id?: mongoose.Schema.Types.ObjectId,
-    beerId: mongoose.Schema.Types.ObjectId,
-    userId: mongoose.Schema.Types.ObjectId,
+    _id?: mongoose.Types.ObjectId,
+    beerId: mongoose.Types.ObjectId,
+    userId: mongoose.Types.ObjectId,
     preference: String,
     myFeatures: IFeatures,
     

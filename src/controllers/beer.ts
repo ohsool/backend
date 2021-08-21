@@ -1,7 +1,8 @@
 import express, {Request, Response, NextFunction} from 'express';
-import mongoose from "mongoose";
+import mongoose, { Schema, model, mongo, ObjectId } from "mongoose";
 import moment from "moment";
 
+// import Beers from "../schemas/beer";
 import Beers from "../schemas/beer";
 import BeerCategories from '../schemas/beerCategory';
 
@@ -17,7 +18,7 @@ const getBeers = async(req: Request, res: Response) => {
     }
 }
 
-// http://localhost:5209/api/beer/list/all/page?pageNo=0&sort=recent
+// http://localhost:5209/api/beer/list/all/page?pageNo=0&sort=degree
 const getSomeBeers = async(req: Request, res: Response) => {
     let { pageNo, sort } = req.query;
     let beers: Array<IBeer> = [];
@@ -27,19 +28,19 @@ const getSomeBeers = async(req: Request, res: Response) => {
         // maybe, degree or count will be the one
         if (sort == "avgRate" || sort == "createDate" || sort == "degree" || sort == "count") {
             // sort descending
-            beers = await Beers.find({}).lean().sort([[sort, -1]]);
+            beers = await Beers.find({}).sort([[sort, -1]]);
         } else if (sort == "name_korean" || sort == "name_english") {
             // sort ascending
-            beers = await Beers.find({}).lean().sort(sort);
+            beers = await Beers.find({}).sort(sort);
         } else if (sort == "createDateOld") {
             // sort ascending
-            beers = await Beers.find({}).lean().sort("createDate");
+            beers = await Beers.find({}).sort("createDate");
         } else if (sort == "degreeLess") {
             // sort ascending
-            beers = await Beers.find({}).lean().sort("degree");
+            beers = await Beers.find({}).sort("degree");
         } else if (!sort) {
             // gives basic order
-            beers = await Beers.find({}).lean()
+            beers = await Beers.find({})
         } else {
             res.status(400).send({ message: "fail", error: "wrong sort method" });
 
@@ -116,10 +117,11 @@ const getBeer = async(req: Request, res: Response) => {
 }
 
 const deleteBeer = async(req: Request, res: Response) => {
-    const { beerId } = req.params;
+    let { beerId } = req.params;
+    const _id = mongoose.Types.ObjectId(beerId);
 
     try {
-        await Beers.findOneAndDelete({ _id: beerId }).lean();
+        await Beers.findOneAndDelete({ _id: _id }).lean();
 
         res.json({ message: "success"});
     } catch(error) {
@@ -128,17 +130,18 @@ const deleteBeer = async(req: Request, res: Response) => {
 }
 
 const likeBeer = async(req: Request, res: Response) => {
-    const userId = res.locals.user._id;
+    const userId = mongoose.Types.ObjectId(res.locals.user._id);
     const { beerId } = req.params;
+    const _id = mongoose.Types.ObjectId(beerId);
 
     try {
-        const exists = await Beers.find({_id: beerId, like_array: mongoose.Types.ObjectId(userId) }).lean();
-        let result;
+        const exists = await Beers.find({ _id, like_array: userId });
+        let result: Array<IBeer> = [];
 
         if(exists.length == 0) {
             await Beers.findOneAndUpdate({_id: beerId}, {$push: {like_array: userId}}).lean();
 
-            result = await Beers.find({_id: beerId, like_array: mongoose.Types.ObjectId(userId) }).lean();
+            result = await Beers.find({_id, like_array: userId });
         } else if(exists.length) {
             res.status(400).send({ message: "fail", error: "user already liked this beer" });
 
@@ -156,8 +159,8 @@ const unlikeBeer = async(req: Request, res: Response) => {
     const { beerId } = req.params;
 
     try {
-        const exists = await Beers.find({ _id: beerId, like_array: mongoose.Types.ObjectId(userId) }).lean();
-        let result;
+        const exists = await Beers.find({ _id: beerId, like_array: mongoose.Types.ObjectId(userId) });
+        let result: Array<IBeer> = [];
 
         if(exists.length) {
             await Beers.findOneAndUpdate({_id: beerId}, {$pull: {like_array: userId}}).lean();
@@ -186,7 +189,7 @@ const likedBeer = async(req: Request, res: Response) => {
             return;
         }
 
-        const likedList = await Beers.find({ like_array: mongoose.Types.ObjectId(userId) }).lean();
+        const likedList = await Beers.find({ like_array: mongoose.Types.ObjectId(userId) });
 
         res.json({ message:"success", likedList: likedList });
     } catch (error) {
@@ -199,6 +202,7 @@ const reportLocation = async(req: Request, res: Response) => {
     const { beerId, name, address, url } = req.body;
     const user = res.locals.user;
     const userId = user._id;
+    const _id = mongoose.Types.ObjectId(beerId)
     
     if (!beerId || !name || !address || !url) {
         res.json({ message: "fail", error: "empty value" });
@@ -207,7 +211,7 @@ const reportLocation = async(req: Request, res: Response) => {
     }
 
     try {
-        const beer = await Beers.findOne({ _id: beerId }).lean();
+        const beer: IBeer | null = await Beers.findById(_id);
         const new_report = [ url, name, address, userId ];
 
         if (!beer) {
@@ -216,8 +220,9 @@ const reportLocation = async(req: Request, res: Response) => {
             return;
         }
 
-        const location_report: Array<String> = beer.location_report;  // [[name, address, url], [name, address, url], ...]
-        const locations: Array<String> = beer.location;
+        const location_report: Array<Array<String>> = beer.location_report!;
+        // [[name, address, url], [name, address, url], ...]
+        const locations: Array<Array<String>> = beer.location!;
 
         // is reported location already exist in location list?
         const found = locations.some(e => Array.isArray(e) && e.every((o, i) => Object.is(new_report[i], o)));
@@ -264,7 +269,9 @@ const reportLocation = async(req: Request, res: Response) => {
 // 카테고리별 맥주 출력
 const getBeerByCategory = async (req: Request, res: Response)=> {
     try {
-        let { categoryId, pageNo, sort } = req.query;
+        let categoryId = mongoose.Types.ObjectId(String(req.query.categoryId));
+        let pageNo = req.query.pageNo;
+        let sort = req.query.sort;
         let beers: Array<IBeer> = [];
 
         /* 1. 조건별 정렬 진행 */
@@ -279,7 +286,7 @@ const getBeerByCategory = async (req: Request, res: Response)=> {
         }
         if (sort === 'degreeLess') sort = "degree"
         else if (sort === 'createDateOld') sort = "createDate"
-        beers = await Beers.find({ categoryId }).lean().sort([[sort, sortOption]]);
+        beers = await Beers.find({ categoryId }).sort([[sort, sortOption]]);
 
         /* 2. 페이지별 맥주 출력 */
         

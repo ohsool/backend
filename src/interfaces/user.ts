@@ -5,7 +5,7 @@ interface IPassport {
 }
 
 export interface IUser {
-    _id?: mongoose.Schema.Types.ObjectId,
+    _id?: mongoose.Types.ObjectId,
     email?: String,
     nickname: String,
     password: String,
