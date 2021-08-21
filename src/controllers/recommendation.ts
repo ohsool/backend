@@ -70,5 +70,5 @@ const postRecommendation = async (req: Request, res: Response) => {
 
 export default {
     postRecommendation,
-    test
+    // test
 }
