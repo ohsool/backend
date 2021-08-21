@@ -1,5 +1,9 @@
 import mongoose from "mongoose";
 
+interface IPassport {
+    [key: string]: string
+}
+
 export interface IUser {
     _id?: mongoose.Schema.Types.ObjectId,
     email?: String,
@@ -7,6 +11,6 @@ export interface IUser {
     password: String,
     preference: String,
     image: String,
-    passport?: Array<Object>,
+    passport?: Array<IPassport>,
     refreshToken?: String
 }
