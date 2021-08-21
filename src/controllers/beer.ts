@@ -5,6 +5,23 @@ import moment from "moment";
 import Beers from "../schemas/beer";
 import BeerCategories from '../schemas/beerCategory';
 
+interface Beer {
+    _id: mongoose.Schema.Types.ObjectId,
+    name_korean: String,
+    name_english: String,
+    image: String,
+    degree: Number,
+    categoryId: mongoose.Schema.Types.ObjectId,
+    hashtag: Array<String>,
+    like_array: Array<mongoose.Schema.Types.ObjectId>,
+    features: Object,
+    count: Number,
+    avgRate: Number,
+    location: Array<Array<String>>,
+    location_report: Array<Array<String>>,
+    createDate: String
+}
+
 const getBeers = async(req: Request, res: Response) => {
     try {
         const beers = await Beers.find().lean();
@@ -15,11 +32,35 @@ const getBeers = async(req: Request, res: Response) => {
     }
 }
 
+// http://localhost:5209/api/beer/list/all/page?pageNo=0&sort=recent
 const getSomeBeers = async(req: Request, res: Response) => {
-    let { pageNo } = req.params;
+    let { pageNo, sort } = req.query;
+    let beers: Array<Beer> = [];
 
     try {
-        const beers = await Beers.find({}).lean();
+        // later, we should change order of beers with the most famous sort method
+        // maybe, degree or count will be the one
+        if (sort == "avgRate" || sort == "createDate" || sort == "degree" || sort == "count") {
+            // sort descending
+            beers = await Beers.find({}).lean().sort([[sort, -1]]);
+        } else if (sort == "name_korean" || sort == "name_english") {
+            // sort ascending
+            beers = await Beers.find({}).lean().sort(sort);
+        } else if (sort == "createDateOld") {
+            // sort ascending
+            beers = await Beers.find({}).lean().sort("createDate");
+        } else if (sort == "degreeLess") {
+            // sort ascending
+            beers = await Beers.find({}).lean().sort("degree");
+        } else if (!sort) {
+            // gives basic order
+            beers = await Beers.find({}).lean()
+        } else {
+            res.status(400).send({ message: "fail", error: "wrong sort method" });
+
+            return;
+        }
+        
 
         if ( Number(pageNo) < 0 || (Number(pageNo) * 8 > beers.length) ) {
             res.status(400).send({ message: "fail", error: "wrong page" });
