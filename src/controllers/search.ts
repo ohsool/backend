@@ -4,24 +4,9 @@ import { getRegExp } from "korean-regexp";
 
 import Beers from "../schemas/beer";
 import BeerCategories from "../schemas/beerCategory";
+
+import { IBeer } from "../interfaces/beer";
 import { env } from "../env";
-
-
-interface Beer {
-    name_korean: String,
-    name_english: String,
-    image: String,
-    degree: Number,
-    categoryId: mongoose.Schema.Types.ObjectId,
-    hashtag: Array<String>,
-    like_array: Array<mongoose.Schema.Types.ObjectId>,
-    features: Object,
-    count: Number,
-    avgRate: Number,
-    location: Array<Array<String>>,
-    location_report: Array<Array<String>>
-}
-
 interface BeerCategory {
     name: String,
     image: String,
@@ -32,10 +17,10 @@ interface BeerCategory {
 }
 
 let hashtags:Array<String> = [""];
-let beers:Array<Beer> = [];
+let beers:Array<IBeer> = [];
 let beerCategories:Array<BeerCategory> = [];
 
-async function get_beers(): Promise<Array<Beer>> {
+async function get_beers(): Promise<Array<IBeer>> {
     beers = await Beers.find({}).lean();
     beerCategories = await BeerCategories.find({}).lean();
 
@@ -60,7 +45,7 @@ get_beers().then((beers) => {
 
 const search = async (req: Request, res: Response) => {
     const word = String(req.query.word).toLowerCase();
-    const searched_beers: Array<Beer> = [];
+    const searched_beers: Array<IBeer> = [];
     const searched_categories: Array<BeerCategory> = [];
 
     const hashtag = String(req.query.hashtag);
@@ -109,7 +94,7 @@ const searchHashtag = async (req: Request, res: Response) => {
     const hashtag = String(req.query.hashtag);
 
     try {
-        const newBeers:Array<Beer> = [];
+        const newBeers:Array<IBeer> = [];
 
         if (env.modeNow == "test") {
             beers = await Beers.find({ hashtag: { $in: hashtag } }).lean();
