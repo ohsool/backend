@@ -10,6 +10,8 @@ import BeerCategories from "../schemas/beerCategory";
 import Users from "../schemas/user";
 import MyBeers from "../schemas/mybeer";
 
+import { mailSender }  from '../email/mail'
+
 import { env } from "../env";
 
 const joiSchema = joi.object({
@@ -27,23 +29,25 @@ const joiSchema = joi.object({
     [index: string]: string,
     Lager: string,
     Pilsner: string,
-    PaleAle: string,
+    Ale: string,
     IPA: string,
     Weizen: string,
     Dunkel: string,
     Stout: string,
-    Bock: string
+    Bock: string,
+    Etc: string
   }
 
   const imagesArray: ImageArray = {
     Lager: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerIcon/Lager.png",
     Pilsner: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerIcon/Pilsner.png",
-    PaleAle: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerIcon/Pale+Ale.png",
+    Ale: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerIcon/Ale.png",
     IPA: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerIcon/IPA.png",
     Weizen: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerIcon/Weizen.png",
     Dunkel: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerIcon/Dunkel.png",
     Stout: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerIcon/Stout.png",
-    Bock: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerIcon/Bock.png"
+    Bock: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerIcon/Bock.png",
+    Etc: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerIcon/Etc.png"
   }
 
 const existedEmail = async(req: Request, res: Response) => {
@@ -126,6 +130,15 @@ const register = async(req: Request, res: Response) => {
           const crypted_password = crypto.createHmac("sha256", password).update(env.pass_secret).digest("hex");
 
           await Users.create({ email, nickname, password: crypted_password });
+
+          const mailInfo = {
+            toEmail: email,     // 수신할 이메일
+            nickname: nickname, //
+            subject: 'Welcome to ohsool',   // 메일 제목              // 메일 내용
+          };
+
+          // 성공 메일 보내기
+          mailSender(mailInfo)
 
           res.status(201).json({ message: "success" });
       } else {
@@ -231,13 +244,6 @@ const checkAuth = async (req: Request, res: Response) => {
       const nickname = res.locals.user.nickname;
       let preference = String(res.locals.user.preference);
       const image = res.locals.user.image;
-      // let image = ""
-
-      // if (preference != "Pale Ale") {
-      //   image = imagesArray[preference];
-      // } else {
-      //   image = imagesArray["PaleAle"];
-      // }
 
       if (res.locals.accessToken) {
         res.json({ message: "success", userId, nickname, preference, image, accessToken: res.locals.accessToken });
@@ -303,13 +309,7 @@ const postTest = async (req: Request, res: Response) => {
     
         /* 2. 로그인 유저일 시 preference 변경 */
         const isExist = await Users.findOne({ _id: userId}).lean();
-        let image = ""
-
-        if (result != "Pale Ale") {
-          image = imagesArray[result];
-        } else {
-          image = imagesArray["PaleAle"];
-        }
+        let image = imagesArray[result];
 
         if (isExist) {
           await Users.updateOne({ _id: userId }, { $set: { preference: result, image }});

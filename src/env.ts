@@ -25,5 +25,7 @@ export const env = {
     callbackUrl_google: String(process.env.CALLBACKURL_GOOGLE),
     botUserOAuthToken: String(process.env.BOTUSEROAUTHTOKEN),
     user: String(process.env.USER),
-    pass: String(process.env.PASS)
+    pass: String(process.env.PASS),
+    email_id: String(process.env.EMAIL_ID),
+    email_pw: String(process.env.EMAIL_PASS)
 };

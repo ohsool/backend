@@ -52,6 +52,14 @@ test : 테스트 코드 수정에 대한 커밋
 </details>
 
 <details>
+<summary> nodemailer </summary>
+
+> npm i --save-dev @types/nodemailer<br>
+npm i nodemailer
+<br>
+</details>
+
+<details>
 <summary> mongoose </summary>
 <br>
 </details>

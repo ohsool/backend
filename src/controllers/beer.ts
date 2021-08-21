@@ -1,6 +1,9 @@
 import express, {Request, Response, NextFunction} from 'express';
-import Beers from "../schemas/beer";
 import mongoose from "mongoose";
+import moment from "moment";
+
+import Beers from "../schemas/beer";
+import BeerCategories from '../schemas/beerCategory';
 
 const getBeers = async(req: Request, res: Response) => {
     try {
@@ -42,15 +45,24 @@ const getSomeBeers = async(req: Request, res: Response) => {
 
 const postBeer = async(req: Request, res: Response) => {
     try {
-        const { name_korean, name_english, image, degree, categoryId, hashtag, features } = req.body;
+        const { name_korean, name_english, image, degree, categoryId, hashtag } = req.body;
         const isExist = await Beers.findOne({ name_korean }).lean();
+        const beerCategory = await BeerCategories.findOne({ _id: categoryId });
 
-        if(isExist) {
+        if (isExist) {
             res.json({ message: "fail", error: "beer already exists" });
+
             return;
         }
 
-        const beer = await Beers.create({ name_korean, name_english, image, degree, categoryId, hashtag, features });
+        if (!beerCategory) {
+            res.json({ message: "fail", error: "wrong category" });
+
+            return;
+        }
+
+        const date = moment().format("YYYY-MM-DD hh:mm A")
+        const beer = await Beers.create({ name_korean, name_english, image, degree, categoryId, features: beerCategory.features , hashtag, date });
 
         res.status(201).json({ message: "success", beer });
     } catch (error) {
@@ -219,6 +231,7 @@ const reportLocation = async(req: Request, res: Response) => {
     
 }
 
+// 카테고리별 맥주 출력
 const getBeerByCategory = async (req: Request, res: Response)=> {
     try {
         const { categoryId } = req.params;

@@ -1,11 +1,16 @@
 #!/bin/bash
 
+# EC2 서버에 node와 nvm 설치하기
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.34.0/install.sh | bash
+. ~/.nvm/nvm.sh
+nvm install node
+
 #give permission for everything in the ohsool directory
 sudo chmod -R 777 /home/ec2-user/ohsool
 
-
 # security 파일 가져오기
 aws s3 sync s3://ohsool-security/ssl/ /home/ec2-user/ohsool/src/ssl
+aws s3 sync s3://ohsool-security/ssl/ /home/ec2-user/ohsool/dist/ssl
 aws s3 sync s3://ohsool-security/config/ /home/ec2-user/ohsool/config
 
 # EC2 작업 파일로 이동
@@ -20,7 +25,8 @@ export NVM_DIR="$HOME/.nvm"
 npm install -g pm2
 
 # node_modules 설치
-npm install
+npm install --save --legacy-peer-deps
+# npm install
 
 # typescript를 javascript 로 complie 하기
 npm run build

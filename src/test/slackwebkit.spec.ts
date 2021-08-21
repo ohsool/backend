@@ -32,7 +32,6 @@ it ("send beer recommendation to slack - success", async () => {
         .send({
             beer: "test beer",
             description: "beer recommendation testing",
-            location: "test location",
             image: "https://miro.medium.com/max/796/1*P_zZlof7IhiohKQ7QEaXzA.png"
         });
 

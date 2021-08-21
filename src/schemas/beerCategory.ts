@@ -26,13 +26,14 @@ const BeerCategorySchema: Schema = new Schema({
         default: {
             "Lager": [0, 0],
             "Pilsner": [0, 0],
-            "Pale Ale": [0, 0],
+            "Ale": [0, 0],
             "IPA": [0, 0],
             "Weizen": [0, 0],
             "Dunkel": [0, 0],
             "Stout": [0, 0],
             "Bock": [0, 0],
-            "Unknown": [0, 0]
+            "Unknown": [0, 0],
+            "Etc": [0, 0]
         }
     }
 });

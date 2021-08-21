@@ -34,8 +34,8 @@ beerCategoryCrawlingRouter.post("/", async(req, res) => {
             }
         },
         {
-            name: "Pale Ale",
-            image: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerCategory/paleale.png",
+            name: "Ale",
+            image: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerCategory/ale.png",
             title: "에일을 대표하는 페일 에일!",
             description: "4.4~5.4%의 가벼운 알코올 함량을 가진 페일 에일은 보리에 싹을 틔워 건조시킨 뒤 발효한 맥아를 사용해 주조해 쌉쌀한 맛을 중심으로 허브, 풀내음, 맥아의 달큰함이 조화를 이루는 맥주예요!",
             features: {
@@ -109,6 +109,19 @@ beerCategoryCrawlingRouter.post("/", async(req, res) => {
                 "flavor": 3,
                 "sweet": 5,
                 "nutty": 2
+            }
+        },
+        {
+            name: "Etc",
+            image: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerCategory/etc.png",
+            title: "Etc!",
+            description: "Etc description!!",
+            features: {
+                "bitter": 1,
+                "crispy": 1,
+                "flavor": 1,
+                "sweet": 1,
+                "nutty": 1
             }
         },
     ]
