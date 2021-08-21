@@ -2,11 +2,19 @@ import nodemailer from 'nodemailer';
 import { env } from "../env";
 import fs from "fs";
 import { promisify } from 'util';
+import { string } from 'joi';
 
 
 const readFile = promisify(fs.readFile);
-export const mailSender = async (mailInfo: any) => {
 
+// interface mailInfo {
+//     type: string,
+//     nickname: string,
+//     toEmail: string,
+// }
+
+// mailinfo any 타입 고치기
+export const mailSender = async (mailInfo: any) => {
     // 메일 발송 함수
     const transporter = nodemailer.createTransport({
         service: 'gmail',
@@ -15,10 +23,8 @@ export const mailSender = async (mailInfo: any) => {
         secure: false,
         requireTLS: true,
         auth: {
-            // user: env.email_id,
-            // pass: env.email_pw
-            user: "ysong0504@gmail.com",
-            pass: "dbsthd0724!"
+            user: env.email_id,
+            pass: env.email_pw
         }
     });
 
