@@ -6,19 +6,12 @@ import Beers from "../schemas/beer";
 import BeerCategories from "../schemas/beerCategory";
 
 import { IBeer } from "../interfaces/beer";
+import { IBeerCategory } from "../interfaces/beerCategory";
 import { env } from "../env";
-interface BeerCategory {
-    name: String,
-    image: String,
-    features: Object,
-    title: String,
-    description: String,
-    avgRate: Object
-}
 
 let hashtags:Array<String> = [""];
 let beers:Array<IBeer> = [];
-let beerCategories:Array<BeerCategory> = [];
+let beerCategories:Array<IBeerCategory> = [];
 
 async function get_beers(): Promise<Array<IBeer>> {
     beers = await Beers.find({}).lean();
@@ -46,7 +39,7 @@ get_beers().then((beers) => {
 const search = async (req: Request, res: Response) => {
     const word = String(req.query.word).toLowerCase();
     const searched_beers: Array<IBeer> = [];
-    const searched_categories: Array<BeerCategory> = [];
+    const searched_categories: Array<IBeerCategory> = [];
 
     const hashtag = String(req.query.hashtag);
     const send_hashtags: Array<String> = [];

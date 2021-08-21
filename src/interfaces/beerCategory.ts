@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-interface BeerCategory {
+export interface IBeerCategory {
     _id?: mongoose.Schema.Types.ObjectId,
     name: String,
     image: String,

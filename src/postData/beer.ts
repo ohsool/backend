@@ -7,17 +7,9 @@ import moment from "moment";
 import Beers from "../schemas/beer";
 import BeerCategories from "../schemas/beerCategory";
 import { IBeer } from "../interfaces/beer";
+import { IBeerCategory } from "../interfaces/beerCategory";
 
 const beerCrawlingRouter = express.Router();
-interface BeerCategory {
-    _id: mongoose.Schema.Types.ObjectId,
-    name: String,
-    image: String,
-    features: Object,
-    title: String,
-    description: String,
-    avgRate: Object
-}
 
 beerCrawlingRouter.post("/", async(req, res) => {
     const beerCategories: Array<String> = ["Lager", "Pilsner", "Ale", "IPA", "Weizen", "Dunkel", "Stout", "Bock", "Etc"];
