@@ -10,7 +10,7 @@ import { IBeer } from "../interfaces/beer";
 
 const getBeers = async(req: Request, res: Response) => {
     try {
-        const beers = await Beers.find().lean();
+        const beers: IBeer = await Beers.find().lean();
 
         res.json({ message: "success", beers });
     } catch (error) {
@@ -104,7 +104,8 @@ const postBeer = async(req: Request, res: Response) => {
 const getBeer = async(req: Request, res: Response) => {
     try {
         const { beerId } = req.params;
-        const beer = await Beers.findById(beerId).lean();
+        const beer: IBeer = await Beers.findById(beerId).lean();
+        
         if (beer) {
             res.json({ message:"success", beer });
         } else {
