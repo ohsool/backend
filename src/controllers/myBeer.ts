@@ -41,7 +41,7 @@ const postMyBeer = async (req: Request, res: Response) => {
 
     try {
         // if the user already write review of this beer, reject it
-        const exist = await MyBeer.findOne({ beerId, userId }).lean();
+        const exist: IMyBeer | null = await MyBeer.findOne({ beerId, userId }).lean();
 
         if (exist) {
             res.json({ message: "fail", error: "the user already made review of this beer" });
@@ -72,7 +72,7 @@ const postMyBeer = async (req: Request, res: Response) => {
 
     try {
         const myPreference = res.locals.user.preference;
-        let mybeer = await MyBeer.create({ beerId, userId, preference: myPreference, myFeatures, date, location, rate, review});
+        let mybeer: IMyBeer = await MyBeer.create({ beerId, userId, preference: myPreference, myFeatures, date, location, rate, review});
 
         const beerCategoryId = beer.categoryId;
         
@@ -111,6 +111,7 @@ const postMyBeer = async (req: Request, res: Response) => {
 const getAllMyBeers = async (req: Request, res: Response) => {
     try {
         const mybeers = await MyBeer.find({}).populate({path: 'userId', select: 'nickname'}).lean().populate({ path: 'beerId', select: 'image' });
+        
         res.json({ message: "success", mybeers });
     } catch (error) {
 
@@ -121,6 +122,7 @@ const getAllMyBeers = async (req: Request, res: Response) => {
 // 현재 유저의 도감 가져오기
 const getCurrentMyBeers = async (req: Request, res: Response) => {
     const userId = res.locals.user._id;
+    
     try {
         const mybeers = await MyBeer.find({ userId }).populate({path: 'userId', select: 'nickname'}).lean().populate({ path: 'beerId', select: 'image' });
 

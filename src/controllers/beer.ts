@@ -7,6 +7,7 @@ import Beers from "../schemas/beer";
 import BeerCategories from '../schemas/beerCategory';
 
 import { IBeer } from "../interfaces/beer";
+import { IBeerCategory } from '../interfaces/beerCategory';
 
 const getBeers = async(req: Request, res: Response) => {
     try {
@@ -54,7 +55,7 @@ const getSomeBeers = async(req: Request, res: Response) => {
             return;
         }
 
-        const res_beers = [];
+        const res_beers: Array<IBeer> = [];
 
         for (let i = Number(pageNo) * 8; i < (Number(pageNo) * 8) + 8; i ++) {
             if ( beers[i] ) {
@@ -73,8 +74,8 @@ const getSomeBeers = async(req: Request, res: Response) => {
 const postBeer = async(req: Request, res: Response) => {
     try {
         const { name_korean, name_english, image, degree, categoryId, hashtag } = req.body;
-        const isExist = await Beers.findOne({ name_korean }).lean();
-        const beerCategory = await BeerCategories.findOne({ _id: categoryId });
+        const isExist: IBeer = await Beers.findOne({ name_korean }).lean();
+        const beerCategory: IBeerCategory | null = await BeerCategories.findById(categoryId);
 
         if (isExist) {
             res.json({ message: "fail", error: "beer already exists" });
@@ -136,7 +137,7 @@ const likeBeer = async(req: Request, res: Response) => {
     const _id = mongoose.Types.ObjectId(beerId);
 
     try {
-        const exists = await Beers.find({ _id, like_array: userId });
+        const exists: Array<IBeer> = await Beers.find({ _id, like_array: userId });
         let result: Array<IBeer> = [];
 
         if(exists.length == 0) {
@@ -160,7 +161,7 @@ const unlikeBeer = async(req: Request, res: Response) => {
     const { beerId } = req.params;
 
     try {
-        const exists = await Beers.find({ _id: beerId, like_array: mongoose.Types.ObjectId(userId) });
+        const exists: Array<IBeer> = await Beers.find({ _id: beerId, like_array: mongoose.Types.ObjectId(userId) });
         let result: Array<IBeer> = [];
 
         if(exists.length) {
@@ -190,7 +191,7 @@ const likedBeer = async(req: Request, res: Response) => {
             return;
         }
 
-        const likedList = await Beers.find({ like_array: mongoose.Types.ObjectId(userId) });
+        const likedList: Array<IBeer> = await Beers.find({ like_array: mongoose.Types.ObjectId(userId) });
 
         res.json({ message:"success", likedList: likedList });
     } catch (error) {
@@ -258,7 +259,7 @@ const reportLocation = async(req: Request, res: Response) => {
             await Beers.findOneAndUpdate({_id: beerId}, {$push: {location_report: [new_report] }}).lean();
         }
 
-        const new_beer = await Beers.findOne({ _id: beerId });
+        const new_beer: IBeer | null = await Beers.findOne({ _id: beerId });
 
         res.json({ message: "success", beer: new_beer });
     } catch (error) {
@@ -302,7 +303,7 @@ const getBeerByCategory = async (req: Request, res: Response)=> {
         }
         
         // 요청한 페이지 넘버에 위치하는 맥주 배열에 담기
-        const res_beers = [];
+        const res_beers: Array<IBeer> = [];
         for (let i = startIndex; i < (startIndex + 8); i++) {
             if (!beers[i]) break;
             res_beers.push(beers[i])
