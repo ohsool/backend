@@ -1,4 +1,5 @@
-import mongoose, { Schema, model, mongo } from "mongoose";
+import mongoose, { Schema, Document } from "mongoose";
+import { IBeerCategory } from "../interfaces/beerCategory";
 
 const BeerCategorySchema: Schema = new Schema({
     name: {
@@ -38,4 +39,4 @@ const BeerCategorySchema: Schema = new Schema({
     }
 });
 
-export default mongoose.model("BeerCategories", BeerCategorySchema);
+export default mongoose.model<IBeerCategory & Document>("BeerCategories", BeerCategorySchema);

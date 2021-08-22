@@ -18,10 +18,12 @@ beerCrawlingRouter.post("/", async(req, res) => {
     const beerCategoryFeatures: Array<IFeatures> = [];
 
     for (let i = 0; i < beerCategories.length; i ++) {
-        let beerCategory = await BeerCategories.findOne({ name: beerCategories[i] });
+        const beerCategory: IBeerCategory | null = await BeerCategories.findOne({ name: beerCategories[i] });
+        const id: mongoose.Types.ObjectId = beerCategory!._id!;
+        const features: IFeatures = beerCategory!.features;
 
-        beerCategoryIds.push(beerCategory._id);
-        beerCategoryFeatures.push(beerCategory.features);
+        beerCategoryIds.push(id);
+        beerCategoryFeatures.push(features);
     }
 
     const date = moment().format("YYYY-MM-DD hh:mm A")

@@ -9,7 +9,7 @@ interface IFeatures {
 }
 
 export interface IBeerCategory {
-    _id?: mongoose.Schema.Types.ObjectId,
+    _id?: mongoose.Types.ObjectId,
     name: String,
     image: String,
     features: IFeatures,
