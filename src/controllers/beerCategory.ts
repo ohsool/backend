@@ -1,10 +1,14 @@
 import express, {Request, Response, NextFunction} from "express";
+
 import BeerCategories from "../schemas/beerCategory";
 import Beers from "../schemas/beer";
 
+import { IBeerCategory } from "../interfaces/beerCategory";
+import { IBeer } from "../interfaces/beer";
+
 const getBeerCategories = async(req: Request, res: Response) => {
     try {
-        const beerCategories = await BeerCategories.find().lean();
+        const beerCategories: Array<IBeerCategory> = await BeerCategories.find().lean();
 
         res.json({ message:"success", beerCategories });
     } catch (error) {
@@ -15,14 +19,14 @@ const getBeerCategories = async(req: Request, res: Response) => {
 const postBeerCategory = async(req: Request, res: Response) => {
     try {
         const { name, image, features } = req.body;
-        const isExist = await BeerCategories.findOne({ name, image, features }).lean();
+        const isExist: IBeerCategory | null = await BeerCategories.findOne({ name, image, features }).lean();
 
         if(isExist) {
             res.json({ message: "fail", error: "category already exists" });
 
             return;
         }
-        const beerCategory = await BeerCategories.create({ name, image, features })
+        const beerCategory: IBeerCategory = await BeerCategories.create({ name, image, features })
 
         res.json({ message: "success", beerCategory });
     } catch (error) {
@@ -33,7 +37,7 @@ const postBeerCategory = async(req: Request, res: Response) => {
 const getBeerCategory = async(req: Request, res: Response) => {
     try {
         const { beerCategoryId } = req.params;
-        const beerCategory = await BeerCategories.findById(beerCategoryId).lean();
+        const beerCategory: IBeerCategory | null = await BeerCategories.findById(beerCategoryId).lean();
 
         if(beerCategory) {
             res.json({ message:"success", beerCategory });
@@ -55,7 +59,7 @@ const getTestResult = async(req: Request, res:Response) => {
         }
     
         /* 1. 카테고리에 대한 정보 추출*/ 
-        const category = await BeerCategories.findOne({ name: result }).lean();
+        const category: IBeerCategory | null = await BeerCategories.findOne({ name: result }).lean();
 
         // category 에 대한 정보가 없다면 함수 종료
         if (!category) {
@@ -65,7 +69,7 @@ const getTestResult = async(req: Request, res:Response) => {
         }
         
         /* 2. 추천 맥주 추출 (08/05 기준 동일한 카테고리 상위 2개만 추천) */
-        const beers = await Beers.find({ categoryId: category._id }).lean();
+        const beers: Array<IBeer> | null = await Beers.find({ categoryId: category._id }).lean();
 
         // 관련맥주에 대한 정보가 없다면 함수 종료
         if (!beers) {
