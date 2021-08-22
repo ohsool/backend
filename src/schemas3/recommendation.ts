@@ -1,4 +1,5 @@
-import mongoose, { Schema } from "mongoose";
+import mongoose, { Schema, Document } from "mongoose";
+import { IRecommendation } from "../interfaces/recommendation";
 
 const RecommendationSchema: Schema = new Schema({
     beer: {
@@ -22,4 +23,4 @@ const RecommendationSchema: Schema = new Schema({
     }
 });
 
-export default mongoose.model("Recommendations", RecommendationSchema);
+export default mongoose.model<IRecommendation & Document>("Recommendations", RecommendationSchema);

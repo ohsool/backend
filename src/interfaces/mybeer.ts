@@ -10,5 +10,8 @@ export interface IMyBeer {
     userId: mongoose.Types.ObjectId,
     preference: String,
     myFeatures: IFeatures,
-    
+    date: String,
+    location?: String,
+    rate: Number,
+    review: String
 }

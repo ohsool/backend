@@ -6,6 +6,7 @@ import moment from "moment";
 import { mailSender }  from '../email/mail'
 import { env } from "../env";
 import Recommendations from "../schemas/recommendation";
+import { IRecommendation } from "../interfaces/recommendation";
 
 const client = new WebClient(env.botUserOAuthToken, {
     logLevel: LogLevel.DEBUG
@@ -37,9 +38,17 @@ const postRecommendation = async (req: Request, res: Response) => {
         const date = moment().format("YYYY-MM-DD hh:mm A");
 
         if (userId) {
-            await Recommendations.create({ beer, description, image, userId, date })
+            const recommendation: IRecommendation = {
+                beer, description, image, userId, date
+            };
+
+            await Recommendations.create(recommendation);
         } else {
-            await Recommendations.create({ beer, description, image, date })
+            const recommendation: IRecommendation = { 
+                beer, description, image, date
+            };
+
+            await Recommendations.create(recommendation);
         }
 
         res.json({ message: "success", result })

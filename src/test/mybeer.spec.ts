@@ -7,6 +7,7 @@ import { disconnect } from "../schemas";
 import Beers from "../schemas/beer";
 import BeerCategories from "../schemas/beerCategory";
 import { IBeer } from "../interfaces/beer";
+import { IBeerCategory } from "../interfaces/beerCategory";
 
 // import { secretAPIkey } from '../ssl/secretAPI';
 // const key = secretAPIkey();
@@ -76,9 +77,9 @@ it ("post mybeer - success", async () => {
     const countBefore: Number | undefined = beer!.count!;
     const avgRateBefore: Number | undefined = beer!.avgRate!;
 
-    let beerCategory = await BeerCategories.findOne({ _id: beer!.categoryId });
-    const avgRateCategoryBefore = beerCategory.avgRate["Unknown"][0];
-    const countCategoryBefore = beerCategory.avgRate["Unknown"][1];
+    let beerCategory: IBeerCategory | null = await BeerCategories.findOne({ _id: beer!.categoryId });
+    const avgRateCategoryBefore = beerCategory!.avgRate["Unknown"][0];
+    const countCategoryBefore = beerCategory!.avgRate["Unknown"][1];
 
     const response = await request(app).post(`/api/mybeer/${beerId}`)
         // .set('secretkey', key)
@@ -93,8 +94,8 @@ it ("post mybeer - success", async () => {
     const avgRateAfter: Number = beer!.avgRate!;
 
     beerCategory = await BeerCategories.findOne({ _id: beer!.categoryId });
-    const avgRateCategoryAfter = beerCategory.avgRate["Unknown"][0];
-    const countCategoryAfter = beerCategory.avgRate["Unknown"][1];
+    const avgRateCategoryAfter = beerCategory!.avgRate["Unknown"][0];
+    const countCategoryAfter = beerCategory!.avgRate["Unknown"][1];
 
     const avgRate = (( +countBefore * +avgRateBefore ) + rate) / (+countBefore + 1);
     const avgRateCategory = (( countCategoryBefore * avgRateCategoryBefore ) + rate) / (countCategoryBefore + 1);
@@ -218,9 +219,9 @@ it ("modify one mybeer - success", async () => {
     const countBefore: Number = beer!.count!;
     const avgRateBefore: Number = beer!.avgRate!;
 
-    let beerCategory = await BeerCategories.findOne({ _id: beer!.categoryId });
-    const avgRateCategoryBefore = beerCategory.avgRate["Unknown"][0];
-    const countCategoryBefore = beerCategory.avgRate["Unknown"][1];
+    let beerCategory: IBeerCategory | null = await BeerCategories.findOne({ _id: beer!.categoryId });
+    const avgRateCategoryBefore = beerCategory!.avgRate["Unknown"][0];
+    const countCategoryBefore = beerCategory!.avgRate["Unknown"][1];
 
     const response = await request(app).put(`/api/mybeer/${mybeerId}`)
         // .set('secretkey', key)
@@ -235,8 +236,8 @@ it ("modify one mybeer - success", async () => {
     const avgRateAfter = beer!.avgRate;
 
     beerCategory = await BeerCategories.findOne({ _id: beer!.categoryId });
-    const avgRateCategoryAfter = beerCategory.avgRate["Unknown"][0];
-    const countCategoryAfter = beerCategory.avgRate["Unknown"][1];
+    const avgRateCategoryAfter = beerCategory!.avgRate["Unknown"][0];
+    const countCategoryAfter = beerCategory!.avgRate["Unknown"][1];
 
     const avgRate = (( +countBefore * +avgRateBefore ) - rate + modified_rate) / +countBefore;
     const avgRateCategory = (( countCategoryBefore * avgRateCategoryBefore ) - rate + modified_rate) / countCategoryBefore;
@@ -303,9 +304,9 @@ it ("delete one mybeer - success", async () => {
     const countBefore: Number = beer!.count!;
     const avgRateBefore: Number = beer!.avgRate!;
 
-    let beerCategory = await BeerCategories.findOne({ _id: beer!.categoryId });
-    const avgRateCategoryBefore = beerCategory.avgRate["Unknown"][0];
-    const countCategoryBefore = beerCategory.avgRate["Unknown"][1];
+    let beerCategory: IBeerCategory | null = await BeerCategories.findOne({ _id: beer!.categoryId });
+    const avgRateCategoryBefore = beerCategory!.avgRate["Unknown"][0];
+    const countCategoryBefore = beerCategory!.avgRate["Unknown"][1];
 
     const response = await request(app).delete(`/api/mybeer/${mybeerId}`)
         // .set('secretkey', key)
@@ -318,8 +319,8 @@ it ("delete one mybeer - success", async () => {
     const avgRateAfter = beer!.avgRate!;
 
     beerCategory = await BeerCategories.findOne({ _id: beer!.categoryId });
-    const avgRateCategoryAfter = beerCategory.avgRate["Unknown"][0];
-    const countCategoryAfter = beerCategory.avgRate["Unknown"][1];
+    const avgRateCategoryAfter = beerCategory!.avgRate["Unknown"][0];
+    const countCategoryAfter = beerCategory!.avgRate["Unknown"][1];
 
     let avgRate = 0;
     let avgRateCategory = 0;

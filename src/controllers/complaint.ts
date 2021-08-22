@@ -6,6 +6,7 @@ import { mailSender }  from '../email/mail'
 import { env } from "../env";
 
 import Complaints from "../schemas/complaint";
+import { IComplaint } from "../interfaces/complaint";
 
 const client = new WebClient(env.botUserOAuthToken, {
     logLevel: LogLevel.DEBUG
@@ -36,9 +37,15 @@ const postComplaint = async (req: Request, res: Response) => {
         const date = moment().format("YYYY-MM-DD hh:mm A");
 
         if (userId) {
-            await Complaints.create({ title, description, userId, date });
+            const complaint: IComplaint = {
+                title, description, userId, date
+            }
+            await Complaints.create(complaint);
         } else {
-            await Complaints.create({ title, description, date });
+            const complaint: IComplaint = {
+                title, description, date
+            }
+            await Complaints.create(complaint);
         }
 
         const mailInfo = {

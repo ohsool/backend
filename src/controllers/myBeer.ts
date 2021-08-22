@@ -6,10 +6,8 @@ import MyBeer from "../schemas/mybeer";
 import Beers from "../schemas/beer";
 import BeerCategory from "../schemas/beerCategory";
 import { IBeer } from '../interfaces/beer';
-
-interface avgRate {
-    [key: string]: Array<number>
-}
+import { IBeerCategory } from '../interfaces/beerCategory';
+import { IMyBeer } from '../interfaces/mybeer';
 
 // 도감 업로드하기
 const postMyBeer = async (req: Request, res: Response) => {
@@ -75,11 +73,10 @@ const postMyBeer = async (req: Request, res: Response) => {
     try {
         const myPreference = res.locals.user.preference;
         let mybeer = await MyBeer.create({ beerId, userId, preference: myPreference, myFeatures, date, location, rate, review});
-        const myBeerId = mybeer._id;
 
         const beerCategoryId = beer.categoryId;
         
-        const beerCategory = await BeerCategory.findOne({ _id: beerCategoryId }).lean();
+        const beerCategory: IBeerCategory = await BeerCategory.findOne({ _id: beerCategoryId }).lean();
         const avg = beerCategory.avgRate[myPreference][0];
         const count = beerCategory.avgRate[myPreference][1];
 
@@ -212,18 +209,18 @@ const updateMyBeer = async (req: Request, res: Response) => {
         const beerId = myBeer.beerId;
         const beer: IBeer = await Beers.findOne({ _id: beerId }).lean();
     
-        const mybeer = await MyBeer.findOneAndUpdate({ _id: myBeerId }, { $set: { beerId, myFeatures, location, rate, review } }).lean();
+        const mybeer: IMyBeer = await MyBeer.findOneAndUpdate({ _id: myBeerId }, { $set: { beerId, myFeatures, location, rate, review } }).lean();
 
         // category rate
-        const myPreference = mybeer.preference;
+        const myPreference: any = mybeer.preference; // this should not be any
         const beerCategoryId = beer.categoryId;
         const rateOld = myBeer.rate;
 
-        const beerCategory = await BeerCategory.findOne({ _id: beerCategoryId }).lean();
+        const beerCategory: IBeerCategory = await BeerCategory.findOne({ _id: beerCategoryId }).lean();
         const avgRate_ = beerCategory.avgRate[myPreference][0];
         const count = beerCategory.avgRate[myPreference][1];
 
-        const new_avgRate = ((count * avgRate_) - rateOld + rate ) / count;
+        const new_avgRate = ((count * avgRate_) - +rateOld + rate ) / count;
 
         const avgRate = beerCategory.avgRate;
 
@@ -236,7 +233,7 @@ const updateMyBeer = async (req: Request, res: Response) => {
         const beerCount = Number(beer.count);
         const beerAvgRate = Number(beer.avgRate);
 
-        const newBeerAvgRate = ( (beerCount * beerAvgRate) - rateOld + rate) / beerCount;
+        const newBeerAvgRate = ( (beerCount * beerAvgRate) - +rateOld + rate) / beerCount;
 
         await Beers.findOneAndUpdate({ _id: beerId }, { $set: { avgRate: newBeerAvgRate } }).lean();
 
@@ -251,7 +248,7 @@ const deleteMyBeer = async (req: Request, res: Response) => {
     const { myBeerId } = req.params;
 
     try {
-        const mybeer = await MyBeer.findOne({ _id: myBeerId }).lean();
+        const mybeer: IMyBeer = await MyBeer.findOne({ _id: myBeerId }).lean();
         const userId = res.locals.user._id;
 
         if (String(mybeer.userId) !== String(userId)) {
@@ -268,19 +265,19 @@ const deleteMyBeer = async (req: Request, res: Response) => {
         await MyBeer.deleteOne({ _id: myBeerId }).lean();
 
         // delete beer category rate
-        const myPreference = mybeer.preference;
+        const myPreference: any = mybeer.preference;   // this should not be any
         const beer: IBeer = await Beers.findOne({ _id: mybeer.beerId }).lean();
         const beerCategoryId = beer.categoryId;
         const rate = mybeer.rate;
         
-        const beerCategory = await BeerCategory.findOne({ _id: beerCategoryId }).lean();
+        const beerCategory: IBeerCategory = await BeerCategory.findOne({ _id: beerCategoryId }).lean();
         const avgRate = beerCategory.avgRate;
         
         const avg = avgRate[myPreference][0];
         const count = avgRate[myPreference][1];
 
         if (Number(count) > 1) {
-            const new_avgRate = (( avg * count ) - rate) / (count - 1);
+            const new_avgRate = (( avg * count ) - +rate) / (count - 1);
 
             avgRate[myPreference][0] = new_avgRate;
             avgRate[myPreference][1] = count - 1;
@@ -295,7 +292,7 @@ const deleteMyBeer = async (req: Request, res: Response) => {
         let newBeerAvgRate = 0
 
         if (beerCount > 1) {
-            newBeerAvgRate = (( beerCount * beerAvgRate) - rate) / (beerCount - 1);
+            newBeerAvgRate = (( beerCount * beerAvgRate) - +rate) / (beerCount - 1);
         }
 
         await Beers.findOneAndUpdate({ name_korean: beer.name_korean }, { $set: { avgRate: newBeerAvgRate, count: beerCount - 1 } }).lean();

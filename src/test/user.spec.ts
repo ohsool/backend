@@ -5,6 +5,7 @@ import { disconnect } from "../schemas";
 // import { secretAPIkey } from '../ssl/secretAPI';
 // const key = secretAPIkey();
 import Users from "../schemas/user";
+import { IUser } from "../interfaces/user";
 
 let refresh = "";
 let access = "";
@@ -150,13 +151,13 @@ it ("gives test result - success", async () => {
             result: "IPA"
         });
 
-    const user = await Users.findOne({ _id: userId });
+    const user: IUser | null = await Users.findOne({ _id: userId });
 
     expect(response.body.message).toBe("success");
     expect(response.body.user).toBe(true);
     expect(response.body.category.name).toBe("IPA");
     expect(response.body.recommendations.length).toBe(2);
-    expect(user.preference).toBe("IPA");
+    expect(user!.preference).toBe("IPA");
 });
 
 it ("gives test result - success (no user is fine)", async () => {
