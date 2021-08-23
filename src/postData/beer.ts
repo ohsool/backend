@@ -170,7 +170,7 @@ beerCrawlingRouter.post("/", async(req, res) => {
         {
             name_korean: "맥스",
             name_english: "Max",
-            image: "",
+            image: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerImage/%EB%A7%A5%EC%8A%A4.png",
             degree: 4.5,
             categoryId: beerCategoryIds[0],
             hashtag: [
@@ -781,7 +781,7 @@ beerCrawlingRouter.post("/", async(req, res) => {
         },
         {
             name_korean: "크로넨버그 1664 블랑",
-            name_english: "Kronenberg 1665 Blanc",
+            name_english: "Kronenberg 1664 Blanc",
             image: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerImage/%ED%81%AC%EB%A1%9C%EB%84%A8%EB%B2%84%EA%B7%B8+1664+%EB%B8%94%EB%9E%91.png",
             degree: 5.0,
             categoryId: beerCategoryIds[2],
