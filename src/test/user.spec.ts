@@ -7,8 +7,10 @@ import { disconnect } from "../schemas";
 import Users from "../schemas/user";
 import { IUser } from "../interfaces/user";
 
-let refresh = "";
-let access = "";
+let dlfwh = "";
+let ghkxld = "";
+let dhtnf = "";
+let chlrh = "";
 let userId = "";
 
 
@@ -74,13 +76,17 @@ it ("login success", async () => {
             password: "test1234"
         });
 
-    refresh = response.body.refreshToken;
-    access = response.body.accessToken;
+    dlfwh = response.body.dlfwh;
+    ghkxld = response.body.ghkxld;
+    dhtnf = response.body.dhtnf;
+    chlrh = response.body.chlrh;
     userId = response.body.userId;
 
     expect(response.body.message).toBe("success");
-    expect(response.body.refreshToken).toBeTruthy();
-    expect(response.body.accessToken).toBeTruthy();
+    expect(response.body.dlfwh).toBeTruthy();
+    expect(response.body.ghkxld).toBeTruthy();
+    expect(response.body.dhtnf).toBeTruthy();
+    expect(response.body.chlrh).toBeTruthy();
 });
 
 it ("login fail - wrong email", async () => {
@@ -110,8 +116,10 @@ it ("login fail - wrong password", async () => {
 it ("check if user is authorized - success", async () => {
     const response = await request(app).get(`/api/user/me`)
         // .set('secretkey', key)
-        .set('refresh', `Bearer ${refresh}`)
-        .set('access', `Bearer ${access}`)
+        .set('dlfwh', `Bearer ${dlfwh}`)
+        .set('chlrh', `Bearer ${chlrh}`)
+        .set('dhtnf', `Bearer ${dhtnf}`)
+        .set('ghkxld', `Bearer ${ghkxld}`)
         .send();
 
     expect(response.body.message).toBe("success");
@@ -121,8 +129,10 @@ it ("check if user is authorized - success", async () => {
 it ("check if user is authorized - empty token", async () => {
     const response = await request(app).get(`/api/user/me`)
         // .set('secretkey', key)
-        .set('refresh', `Bearer `)
-        .set('access', `Bearer `)
+        .set('dlfwh', `Bearer`)
+        .set('chlrh', `Bearer`)
+        .set('dhtnf', `Bearer`)
+        .set('ghkxld', `Bearer`)
         .send();
 
     expect(response.body.message).toBe("fail");
@@ -137,21 +147,21 @@ it ("check if user is authorized - empty token scheme", async () => {
         .send();
 
     expect(response.body.message).toBe("fail");
-    expect(response.body.error).toBe("unidentified user");
+    expect(response.body.error).toBe("unidentified token schema");
     expect(response.statusCode).toBe(401);
 });
 
 it ("gives test result - success", async () => {
     const response = await request(app).post(`/api/user/test`)
         // .set('secretkey', key)
-        .set('refresh', `Bearer ${refresh}`)
-        .set('access', `Bearer ${access}`)
+        .set('dlfwh', `Bearer ${dlfwh}`)
+        .set('chlrh', `Bearer ${chlrh}`)
+        .set('dhtnf', `Bearer ${dhtnf}`)
+        .set('ghkxld', `Bearer ${ghkxld}`)
         .send({
             userId: userId,
             result: "IPA"
         });
-
-    console.log("🤔 1. i am", userId);
 
     const user: IUser | null = await Users.findOne({ _id: userId });
 
@@ -203,8 +213,10 @@ it ("gives test result - fail (wrong result)", async () => {
 it ("signout - success", async () => {
     const response = await request(app).delete(`/api/user`)
         // .set('secretkey', key)
-        .set('refresh', `Bearer ${refresh}`)
-        .set('access', `Bearer ${access}`)
+        .set('dlfwh', `Bearer ${dlfwh}`)
+        .set('chlrh', `Bearer ${chlrh}`)
+        .set('dhtnf', `Bearer ${dhtnf}`)
+        .set('ghkxld', `Bearer ${ghkxld}`)
         .send();
 
     expect(response.body.message).toBe("success");
