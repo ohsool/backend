@@ -153,7 +153,7 @@ beerCrawlingRouter.post("/", async(req, res) => {
         {
             name_korean: "하이트",
             name_english: "Hite",
-            image: "",
+            image: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerImage/%ED%95%98%EC%9D%B4%ED%8A%B8.png",
             degree: 4.3,
             categoryId: beerCategoryIds[0],
             hashtag: [
@@ -520,7 +520,7 @@ beerCrawlingRouter.post("/", async(req, res) => {
         {
             name_korean: "에베레스트",
             name_english: "Everest",
-            image: "",
+            image: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerImage/%EC%97%90%EB%B2%A0%EB%A0%88%EC%8A%A4%ED%8A%B8.png",
             degree: 5.5,
             categoryId: beerCategoryIds[0],
             hashtag: [
@@ -1791,7 +1791,7 @@ beerCrawlingRouter.post("/", async(req, res) => {
         {
             name_korean: "아사히 드라이 제로",
             name_english: "Asahi Dry Zero",
-            image: "",
+            image: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerImage/%EC%95%84%EC%82%AC%ED%9E%88%EB%93%9C%EB%9D%BC%EC%9D%B4%EC%A0%9C%EB%A1%9C.png",
             degree: 0,
             categoryId: beerCategoryIds[8],
             hashtag: [
