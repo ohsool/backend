@@ -83,6 +83,51 @@ const search = async (req: Request, res: Response) => {
     }
 }
 
+const searchDeep = async (req: Request, res: Response) => {
+    const word = String(req.query.word).toLowerCase();
+    const searched_beers: Array<IBeer> = [];
+    const searched_categories: Array<IBeerCategory> = [];
+
+    const hashtag = String(req.query.hashtag);
+    const send_hashtags: Array<String> = [];
+
+    if (word.length < 1 || hashtag.length < 1) {
+        return;
+    }
+
+    try {
+        if (word) {
+            beers = await Beers.find({});
+            beerCategories = await BeerCategories.find({});
+
+            for (let i = 0; i < beers.length; i ++) {
+                if ( getRegExp(word.replace(/\s+/g, '')).test(beers[i].name_korean.replace(/\s+/g, '')) ) { // korean beer name
+                    searched_beers.push(beers[i]);
+                } else if (beers[i].name_english.replace(/\s+/g, '').toLowerCase().includes(word)) {  // english beer name
+                    searched_beers.push(beers[i]);
+                }
+    
+            } for (let i = 0; i < beerCategories.length; i ++) {  // category names only have english name
+                if ( beerCategories[i].name.replace(/\s+/g, '').toLowerCase().includes(word) ) {
+                    searched_categories.push(beerCategories[i]);
+                }
+            } 
+        }
+
+        if (hashtag) {
+            for (let i = 0; i < hashtags.length; i ++) {
+                if ( getRegExp(hashtag).test(String(hashtags[i])) ) {
+                    send_hashtags.push(hashtags[i]);
+                }
+            }
+        }
+    
+        res.json({ message: "success", beers: searched_beers, beerCategories: searched_categories, hashtags: send_hashtags });
+    } catch (error) {
+        res.json({ message: "fail", error });
+    }
+}
+
 const searchHashtag = async (req: Request, res: Response) => {
     const hash_tag: String = String(req.query.hashtag) || "";
     const hashtag: Array<String> = [hash_tag];
@@ -108,5 +153,6 @@ const searchHashtag = async (req: Request, res: Response) => {
 
 export default {
     search,
-    searchHashtag
+    searchHashtag,
+    searchDeep
 }
