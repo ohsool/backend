@@ -8,11 +8,11 @@ import { secretKeyMiddleware } from "../middlewares/secretkey-middleware";
 
 const userRouter = express.Router();
 
-// existed email?
-userRouter.post("/email", UserContoller.existedEmail);
+// exist email?
+userRouter.post("/email", UserContoller.existEmail);
 
-// existed nickname?
-userRouter.post("/nickname", secretKeyMiddleware, UserContoller.existedNickname);
+// exist nickname?
+userRouter.post("/nickname", secretKeyMiddleware, UserContoller.existNickname);
 
 // Register
 userRouter.post("/", secretKeyMiddleware, UserContoller.register);

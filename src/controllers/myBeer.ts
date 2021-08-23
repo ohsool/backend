@@ -161,7 +161,7 @@ const getMyBeer = async (req: Request, res: Response) => {
         const mybeer = await MyBeer.findOne({ _id: myBeerId }).lean().populate({path: 'userId', select: 'nickname'}).populate({ path: 'beerId', select: 'image' });
 
         if (!mybeer) {
-            res.json({ message: "fail", error: "no existed mybeer" });
+            res.json({ message: "fail", error: "no exist mybeer" });
 
             return;
         }
