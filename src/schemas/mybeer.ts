@@ -1,13 +1,14 @@
-import mongoose, { Schema, model, mongo } from "mongoose";
+import mongoose, { Schema, Document } from "mongoose";
+import { IMyBeer } from "../interfaces/mybeer";
 
 const MyBeerSchema: Schema = new Schema({
     beerId: {
-        type: mongoose.Schema.Types.ObjectId,
+        type: mongoose.Types.ObjectId,
         ref: "Beers",
         required: true,
     },
     userId: {
-        type: mongoose.Schema.Types.ObjectId,
+        type: mongoose.Types.ObjectId,
         ref: "Users",
         required: true,
     },
@@ -38,8 +39,9 @@ const MyBeerSchema: Schema = new Schema({
         required: true
     },
     review: {
-        type: String
+        type: String,
+        required: true
     }
 });
 
-export default mongoose.model("MyBeers", MyBeerSchema);
+export default mongoose.model<IMyBeer & Document>("MyBeers", MyBeerSchema);

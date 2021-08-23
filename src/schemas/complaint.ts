@@ -1,4 +1,5 @@
-import mongoose, { Schema } from "mongoose";
+import mongoose, { Schema, Document } from "mongoose";
+import { IComplaint } from "../interfaces/complaint";
 
 const ComplaintSchema: Schema = new Schema({
     title: {
@@ -19,4 +20,4 @@ const ComplaintSchema: Schema = new Schema({
     }
 });
 
-export default mongoose.model("Complaints", ComplaintSchema);
+export default mongoose.model<IComplaint & Document>("Complaints", ComplaintSchema);

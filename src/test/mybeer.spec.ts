@@ -1,10 +1,13 @@
 import request from "supertest";
 import { app } from "./test-app";
+import mongoose, { Schema, model, mongo, ObjectId } from "mongoose";
 // import { app } from "../app";
 import { disconnect } from "../schemas";
 
 import Beers from "../schemas/beer";
 import BeerCategories from "../schemas/beerCategory";
+import { IBeer } from "../interfaces/beer";
+import { IBeerCategory } from "../interfaces/beerCategory";
 
 // import { secretAPIkey } from '../ssl/secretAPI';
 // const key = secretAPIkey();
@@ -14,8 +17,8 @@ let access = "";
 let anotherrefresh = "";
 let anotheraccess = "";
 let mybeerId = "";
-let beerId = "";
-let beerCategoryId = "";
+let beerId: mongoose.Types.ObjectId;
+let beerCategoryId: mongoose.Types.ObjectId;
 
 const myFeatures = {
     "bitter": 5, 
@@ -44,9 +47,9 @@ it ("login success", async () => {
     refresh = response.body.refreshToken;
     access = response.body.accessToken;
 
-    const beer = await Beers.findOne({ name_korean: "버드와이저" });
-    beerId = beer._id;
-    beerCategoryId = beer.categoryId;
+    const beer: IBeer | null = await Beers.findOne({ name_korean: "버드와이저" })!;
+    beerId = beer!._id!;
+    beerCategoryId = beer!.categoryId;
 
     expect(response.body.message).toBe("success");
     expect(response.body.refreshToken).toBeTruthy();
@@ -70,13 +73,13 @@ it ("another login success", async () => {
 });
 
 it ("post mybeer - success", async () => {
-    let beer = await Beers.findOne({ _id: beerId });
-    const countBefore = beer.count;
-    const avgRateBefore = beer.avgRate;
+    let beer: IBeer | null = await Beers.findOne({ _id: beerId });
+    const countBefore: Number | undefined = beer!.count!;
+    const avgRateBefore: Number | undefined = beer!.avgRate!;
 
-    let beerCategory = await BeerCategories.findOne({ _id: beer.categoryId });
-    const avgRateCategoryBefore = beerCategory.avgRate["Unknown"][0];
-    const countCategoryBefore = beerCategory.avgRate["Unknown"][1];
+    let beerCategory: IBeerCategory | null = await BeerCategories.findOne({ _id: beer!.categoryId });
+    const avgRateCategoryBefore = beerCategory!.avgRate["Unknown"][0];
+    const countCategoryBefore = beerCategory!.avgRate["Unknown"][1];
 
     const response = await request(app).post(`/api/mybeer/${beerId}`)
         // .set('secretkey', key)
@@ -87,18 +90,18 @@ it ("post mybeer - success", async () => {
     mybeerId = response.body.mybeer._id;
 
     beer = await Beers.findOne({ _id: beerId });
-    const countAfter = beer.count;
-    const avgRateAfter = beer.avgRate;
+    const countAfter: Number = beer!.count!;
+    const avgRateAfter: Number = beer!.avgRate!;
 
-    beerCategory = await BeerCategories.findOne({ _id: beer.categoryId });
-    const avgRateCategoryAfter = beerCategory.avgRate["Unknown"][0];
-    const countCategoryAfter = beerCategory.avgRate["Unknown"][1];
+    beerCategory = await BeerCategories.findOne({ _id: beer!.categoryId });
+    const avgRateCategoryAfter = beerCategory!.avgRate["Unknown"][0];
+    const countCategoryAfter = beerCategory!.avgRate["Unknown"][1];
 
-    const avgRate = (( countBefore * avgRateBefore ) + rate) / (countBefore + 1);
+    const avgRate = (( +countBefore * +avgRateBefore ) + rate) / (+countBefore + 1);
     const avgRateCategory = (( countCategoryBefore * avgRateCategoryBefore ) + rate) / (countCategoryBefore + 1);
 
     expect(response.body.message).toBe("success");
-    expect(countAfter - countBefore).toBe(1);
+    expect(+countAfter - +countBefore).toBe(1);
     expect(avgRate).toBe(avgRateAfter);
     expect(countCategoryAfter - countCategoryBefore).toBe(1);
     expect(avgRateCategory).toBe(avgRateCategoryAfter);
@@ -213,12 +216,12 @@ it ("get one specific mybeer - fail (wrong mybeer id)", async () => {
 
 it ("modify one mybeer - success", async () => {
     let beer = await Beers.findOne({ _id: beerId });
-    const countBefore = beer.count;
-    const avgRateBefore = beer.avgRate;
+    const countBefore: Number = beer!.count!;
+    const avgRateBefore: Number = beer!.avgRate!;
 
-    let beerCategory = await BeerCategories.findOne({ _id: beer.categoryId });
-    const avgRateCategoryBefore = beerCategory.avgRate["Unknown"][0];
-    const countCategoryBefore = beerCategory.avgRate["Unknown"][1];
+    let beerCategory: IBeerCategory | null = await BeerCategories.findOne({ _id: beer!.categoryId });
+    const avgRateCategoryBefore = beerCategory!.avgRate["Unknown"][0];
+    const countCategoryBefore = beerCategory!.avgRate["Unknown"][1];
 
     const response = await request(app).put(`/api/mybeer/${mybeerId}`)
         // .set('secretkey', key)
@@ -229,14 +232,14 @@ it ("modify one mybeer - success", async () => {
         });
 
     beer = await Beers.findOne({ _id: beerId });
-    const countAfter = beer.count;
-    const avgRateAfter = beer.avgRate;
+    const countAfter = beer!.count;
+    const avgRateAfter = beer!.avgRate;
 
-    beerCategory = await BeerCategories.findOne({ _id: beer.categoryId });
-    const avgRateCategoryAfter = beerCategory.avgRate["Unknown"][0];
-    const countCategoryAfter = beerCategory.avgRate["Unknown"][1];
+    beerCategory = await BeerCategories.findOne({ _id: beer!.categoryId });
+    const avgRateCategoryAfter = beerCategory!.avgRate["Unknown"][0];
+    const countCategoryAfter = beerCategory!.avgRate["Unknown"][1];
 
-    const avgRate = (( countBefore * avgRateBefore ) - rate + modified_rate) / countBefore;
+    const avgRate = (( +countBefore * +avgRateBefore ) - rate + modified_rate) / +countBefore;
     const avgRateCategory = (( countCategoryBefore * avgRateCategoryBefore ) - rate + modified_rate) / countCategoryBefore;
 
     expect(response.body.message).toBe("success");
@@ -298,12 +301,12 @@ it ("delete one mybeer - fail (wrong id)", async () => {
 
 it ("delete one mybeer - success", async () => {
     let beer = await Beers.findOne({ _id: beerId });
-    const countBefore = beer.count;
-    const avgRateBefore = beer.avgRate;
+    const countBefore: Number = beer!.count!;
+    const avgRateBefore: Number = beer!.avgRate!;
 
-    let beerCategory = await BeerCategories.findOne({ _id: beer.categoryId });
-    const avgRateCategoryBefore = beerCategory.avgRate["Unknown"][0];
-    const countCategoryBefore = beerCategory.avgRate["Unknown"][1];
+    let beerCategory: IBeerCategory | null = await BeerCategories.findOne({ _id: beer!.categoryId });
+    const avgRateCategoryBefore = beerCategory!.avgRate["Unknown"][0];
+    const countCategoryBefore = beerCategory!.avgRate["Unknown"][1];
 
     const response = await request(app).delete(`/api/mybeer/${mybeerId}`)
         // .set('secretkey', key)
@@ -312,25 +315,25 @@ it ("delete one mybeer - success", async () => {
         .send();
 
     beer = await Beers.findOne({ _id: beerId });
-    const countAfter = beer.count;
-    const avgRateAfter = beer.avgRate;
+    const countAfter = beer!.count!;
+    const avgRateAfter = beer!.avgRate!;
 
-    beerCategory = await BeerCategories.findOne({ _id: beer.categoryId });
-    const avgRateCategoryAfter = beerCategory.avgRate["Unknown"][0];
-    const countCategoryAfter = beerCategory.avgRate["Unknown"][1];
+    beerCategory = await BeerCategories.findOne({ _id: beer!.categoryId });
+    const avgRateCategoryAfter = beerCategory!.avgRate["Unknown"][0];
+    const countCategoryAfter = beerCategory!.avgRate["Unknown"][1];
 
     let avgRate = 0;
     let avgRateCategory = 0;
 
     if (countBefore > 1) {
-        avgRate = (( countBefore * avgRateBefore ) - modified_rate) / ( countBefore - 1);
+        avgRate = (( +countBefore * +avgRateBefore ) - modified_rate) / ( +countBefore - 1);
         avgRateCategory = (( countCategoryBefore * avgRateCategoryBefore ) - modified_rate) / ( countCategoryBefore - 1); 
     }
 
     expect(response.body.message).toBe("success");
     expect(countCategoryBefore - countCategoryAfter).toBe(1);
     // expect(avgRateCategory).toBe(avgRateCategoryAfter);
-    expect(countBefore - countAfter).toBe(1);
+    expect(+countBefore - +countAfter).toBe(1);
     // expect(avgRate).toBe(avgRateAfter);
 });
 

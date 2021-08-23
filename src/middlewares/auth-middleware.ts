@@ -2,12 +2,9 @@ import jwt from "jsonwebtoken";
 import Users from "../schemas/user";
 
 import { env } from "../env";
+import { IUser } from "../interfaces/user";
 
 import express, { Application, Request, Response, NextFunction } from "express";
-
-interface User {
-    _id: String
-}
 
 function authMiddleware(req: Request, res: Response, next: NextFunction){
     let refreshToken = req.headers.refresh;
@@ -70,7 +67,7 @@ function authMiddleware(req: Request, res: Response, next: NextFunction){
                 // console.log("2. refresh token is valid but access token is expired");
 
                 Users.findOne({ refreshToken: refreshTokenValue })
-                    .then(( user: User ) => {
+                    .then(( user: IUser | null ) => {
                         if (user) {
                             accessToken = jwt.sign({ userId: user._id }, 
                                 env.jwt_secret, {
@@ -101,7 +98,7 @@ function authMiddleware(req: Request, res: Response, next: NextFunction){
                 let userId = (<any>userAccessVerified).userId;
 
                 Users.findOne({ _id: userId })
-                    .then((user: User) => {
+                    .then((user: IUser | null) => {
                         if (user) {
                             refreshToken = jwt.sign( {}, 
                                 env.jwt_secret, { 
@@ -111,7 +108,7 @@ function authMiddleware(req: Request, res: Response, next: NextFunction){
                             );
 
                             Users.findOneAndUpdate({ _id: userId }, {$set: {refreshToken}})
-                                .then((user: User) => {
+                                .then((user: IUser | null) => {
                                     res.locals.user = user;
                                     res.locals.refreshToken = refreshToken;
 
@@ -137,7 +134,7 @@ function authMiddleware(req: Request, res: Response, next: NextFunction){
                 let userId = (<any>userAccessVerified).userId;
 
                 Users.findOne({ _id: userId })
-                    .then((user: User) => {
+                    .then((user: IUser | null) => {
                         if (user) {
                             res.locals.user = user;
 

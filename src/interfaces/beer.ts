@@ -1,16 +1,19 @@
-import Beers from "../schemas/beer";
-import mongoose from "mongoose";
+import mongoose, { Document } from "mongoose";
+
+export interface IFeatures {
+    [key: string]: Number
+}
 
 export interface IBeer {
-    _id?: mongoose.Schema.Types.ObjectId,
+    _id?: mongoose.Types.ObjectId,
     name_korean: String,
     name_english: String,
     image: String,
     degree: Number,
-    categoryId: mongoose.Schema.Types.ObjectId,
+    categoryId: mongoose.Types.ObjectId,
     hashtag: Array<String>,
-    like_array?: Array<mongoose.Schema.Types.ObjectId>,
-    features: Object,
+    like_array?: Array<mongoose.Types.ObjectId>,
+    features: IFeatures,
     count?: Number,
     avgRate?: Number,
     location?: Array<Array<String>>,
