@@ -151,6 +151,8 @@ it ("gives test result - success", async () => {
             result: "IPA"
         });
 
+    console.log("🤔 1. i am", userId);
+
     const user: IUser | null = await Users.findOne({ _id: userId });
 
     expect(response.body.message).toBe("success");

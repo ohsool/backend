@@ -14,6 +14,7 @@ const postMyBeer = async (req: Request, res: Response) => {
     let { myFeatures, location, rate, review } = req.body;
     const { beerId } = req.params;
     const _id = mongoose.Types.ObjectId(beerId);
+    // console.log("_id:", _id, typeof(_id));
     rate = Math.round(rate);
 
     if (!beerId || !myFeatures || !rate) {
