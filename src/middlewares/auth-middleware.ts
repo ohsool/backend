@@ -7,40 +7,53 @@ import { IUser } from "../interfaces/user";
 import express, { Application, Request, Response, NextFunction } from "express";
 
 function authMiddleware(req: Request, res: Response, next: NextFunction){
-    let refreshToken = req.headers.refresh;
-    let accessToken = req.headers.access;
+    const refreshToken1 = String(req.headers.dlfwh);
+    const refreshToken2 = String(req.headers.ghkxld);
+    const accessToken1 = String(req.headers.dhtnf);
+    const accessToken2 = String(req.headers.chlrh);
 
-    if (!accessToken || !refreshToken) {
+    if (!refreshToken1 || !refreshToken2 || !accessToken1 || !accessToken2) {
         res.status(401).json({ message: "fail", error: "unidentified user" });
 
         return;
     }
 
-    const refreshTokenArray = (<String>refreshToken).split(" ");
-    const refreshTokenScheme = refreshTokenArray[0];
-    const refreshTokenValue = refreshTokenArray[1];
+    const refreshToken1Array = (<String>refreshToken1).split(" ");
+    const refreshToken1Scheme = refreshToken1Array[0];
+    const refreshToken1Value = refreshToken1Array[1];
 
-    const accessTokenArray = (<String>accessToken).split(" ");
-    const accessTokenScheme = accessTokenArray[0];
-    const accessTokenValue = accessTokenArray[1];
+    const refreshToken2Array = (<String>refreshToken2).split(" ");
+    const refreshToken2Scheme = refreshToken2Array[0];
+    const refreshToken2Value = refreshToken2Array[1];
 
-    if (refreshTokenScheme != "Bearer" || accessTokenScheme != "Bearer") {
+    const accessToken1Array = (<String>accessToken1).split(" ");
+    const accessToken1Scheme = accessToken1Array[0];
+    const accessToken1Value = accessToken1Array[1];
+
+    const accessToken2Array = (<String>accessToken2).split(" ");
+    const accessToken2Scheme = accessToken2Array[0];
+    const accessToken2Value = accessToken2Array[1];
+
+    if (refreshToken1Scheme != "Bearer" || refreshToken2Scheme != "Bearer" || accessToken1Scheme != "Bearer" || accessToken2Scheme != "Bearer") {
         res.status(401).json({ message: "fail", error: "unidentified token schema" });
 
         return;
     }
 
+    let refreshToken = refreshToken1Value + refreshToken2Value;
+    let accessToken = accessToken1Value + accessToken2Value;
+
     let userRefreshVerified;
     let userAccessVerified
 
     try {
-        userRefreshVerified = jwt.verify(refreshTokenValue, env.jwt_secret);
+        userRefreshVerified = jwt.verify(refreshToken, env.jwt_secret);
     } catch (error) {
         userRefreshVerified = null;
     }
 
     try {
-        userAccessVerified = jwt.verify(accessTokenValue, env.jwt_secret);
+        userAccessVerified = jwt.verify(accessToken, env.jwt_secret);
     } catch (error) {
         userAccessVerified = null;
     }
@@ -52,7 +65,7 @@ function authMiddleware(req: Request, res: Response, next: NextFunction){
                 // : gives error
                 // console.log("1. access token, refresh token are all expired");
 
-                if ( refreshTokenValue == "undefined" && accessTokenValue == "undefined" ) {
+                if ( refreshToken == "undefined" && accessToken == "undefined" ) {
                     res.json({ message: "fail", error: "not logged in" });
 
                     return;
@@ -66,7 +79,7 @@ function authMiddleware(req: Request, res: Response, next: NextFunction){
                 // : reissue access token
                 // console.log("2. refresh token is valid but access token is expired");
 
-                Users.findOne({ refreshToken: refreshTokenValue })
+                Users.findOne({ refreshToken })
                     .then(( user: IUser | null ) => {
                         if (user) {
                             accessToken = jwt.sign({ userId: user._id }, 
@@ -81,7 +94,10 @@ function authMiddleware(req: Request, res: Response, next: NextFunction){
 
                             // next();
 
-                            res.status(401).json({ message: "fail", error: "access token is expired", accessToken });
+                            const accessToken1 = accessToken.split(".")[0];
+                            const accessToken2 = "." + accessToken.split(".")[1] + accessToken.split(".")[2];
+
+                            res.status(401).json({ message: "fail", error: "one token is expired", dhtnf: accessToken1, chlrh: accessToken2 });
 
                             return;
                         }
@@ -116,7 +132,12 @@ function authMiddleware(req: Request, res: Response, next: NextFunction){
 
                                     // next();
 
-                                    res.status(401).json({ message: "fail", error: "refresh token is expired", refreshToken });
+                                    refreshToken = String(refreshToken);
+
+                                    const refreshToken1 = refreshToken.split(".")[0];
+                                    const refreshToken2 = "." + refreshToken.split(".")[1] + refreshToken.split(".")[2];
+
+                                    res.status(401).json({ message: "fail", error: "one token is expired", dlfwh: refreshToken1, ghkxld: refreshToken2 });
 
                                     return;
                                 })
