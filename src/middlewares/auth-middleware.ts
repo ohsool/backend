@@ -81,7 +81,7 @@ function authMiddleware(req: Request, res: Response, next: NextFunction){
 
                             // next();
 
-                            res.status(401).json({ message: "fail", error: "access token is expired" });
+                            res.status(401).json({ message: "fail", error: "access token is expired", accessToken });
 
                             return;
                         }
@@ -116,7 +116,7 @@ function authMiddleware(req: Request, res: Response, next: NextFunction){
 
                                     // next();
 
-                                    res.status(401).json({ message: "fail", error: "refresh token is expired" });
+                                    res.status(401).json({ message: "fail", error: "refresh token is expired", refreshToken });
 
                                     return;
                                 })

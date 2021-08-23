@@ -34,7 +34,9 @@ get_beers().then((beers) => {
     }
 
     hashtags.shift();
-});
+}).catch((error) => {
+    console.log("error during getting hashtags");
+})
 
 const search = async (req: Request, res: Response) => {
     const word = String(req.query.word).toLowerCase();

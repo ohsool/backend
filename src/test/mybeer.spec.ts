@@ -73,29 +73,39 @@ it ("another login success", async () => {
 });
 
 it ("post mybeer - success", async () => {
-    let beer: IBeer | null = await Beers.findOne({ _id: beerId });
+    let beer: IBeer | null = await Beers.findById(beerId);
+    const beerCategoryId = beer?.categoryId;
     const countBefore: Number | undefined = beer!.count!;
     const avgRateBefore: Number | undefined = beer!.avgRate!;
 
-    let beerCategory: IBeerCategory | null = await BeerCategories.findOne({ _id: beer!.categoryId });
-    const avgRateCategoryBefore = beerCategory!.avgRate["Unknown"][0];
-    const countCategoryBefore = beerCategory!.avgRate["Unknown"][1];
+    const response1 = await request(app).get(`/api/user/me`)
+        .set('refresh', `Bearer ${refresh}`)
+        .set('access', `Bearer ${access}`)
+    
+    // console.log("🤔2. i am", refresh, access);
+
+    let beerCategory: IBeerCategory | null = await BeerCategories.findById(beerCategoryId);
+    const avgRateCategoryBefore = beerCategory!.avgRate["IPA"][0];
+    const countCategoryBefore = beerCategory!.avgRate["IPA"][1];
+
+    // console.log("🍻 BEFORE:", beerCategory!.avgRate);
 
     const response = await request(app).post(`/api/mybeer/${beerId}`)
-        // .set('secretkey', key)
         .set('refresh', `Bearer ${refresh}`)
         .set('access', `Bearer ${access}`)
         .send({ myFeatures, location, rate, review });
 
     mybeerId = response.body.mybeer._id;
 
-    beer = await Beers.findOne({ _id: beerId });
+    beer = await Beers.findById(beerId);
     const countAfter: Number = beer!.count!;
     const avgRateAfter: Number = beer!.avgRate!;
 
-    beerCategory = await BeerCategories.findOne({ _id: beer!.categoryId });
-    const avgRateCategoryAfter = beerCategory!.avgRate["Unknown"][0];
-    const countCategoryAfter = beerCategory!.avgRate["Unknown"][1];
+    beerCategory = await BeerCategories.findById(beerCategoryId);
+    const avgRateCategoryAfter = beerCategory!.avgRate["IPA"][0]!;
+    const countCategoryAfter = beerCategory!.avgRate["IPA"][1]!;
+
+    // console.log("🍻 AFTER:", beerCategory!.avgRate);
 
     const avgRate = (( +countBefore * +avgRateBefore ) + rate) / (+countBefore + 1);
     const avgRateCategory = (( countCategoryBefore * avgRateCategoryBefore ) + rate) / (countCategoryBefore + 1);
@@ -220,8 +230,8 @@ it ("modify one mybeer - success", async () => {
     const avgRateBefore: Number = beer!.avgRate!;
 
     let beerCategory: IBeerCategory | null = await BeerCategories.findOne({ _id: beer!.categoryId });
-    const avgRateCategoryBefore = beerCategory!.avgRate["Unknown"][0];
-    const countCategoryBefore = beerCategory!.avgRate["Unknown"][1];
+    const avgRateCategoryBefore = beerCategory!.avgRate["IPA"][0];
+    const countCategoryBefore = beerCategory!.avgRate["IPA"][1];
 
     const response = await request(app).put(`/api/mybeer/${mybeerId}`)
         // .set('secretkey', key)
@@ -236,8 +246,8 @@ it ("modify one mybeer - success", async () => {
     const avgRateAfter = beer!.avgRate;
 
     beerCategory = await BeerCategories.findOne({ _id: beer!.categoryId });
-    const avgRateCategoryAfter = beerCategory!.avgRate["Unknown"][0];
-    const countCategoryAfter = beerCategory!.avgRate["Unknown"][1];
+    const avgRateCategoryAfter = beerCategory!.avgRate["IPA"][0];
+    const countCategoryAfter = beerCategory!.avgRate["IPA"][1];
 
     const avgRate = (( +countBefore * +avgRateBefore ) - rate + modified_rate) / +countBefore;
     const avgRateCategory = (( countCategoryBefore * avgRateCategoryBefore ) - rate + modified_rate) / countCategoryBefore;
@@ -305,8 +315,8 @@ it ("delete one mybeer - success", async () => {
     const avgRateBefore: Number = beer!.avgRate!;
 
     let beerCategory: IBeerCategory | null = await BeerCategories.findOne({ _id: beer!.categoryId });
-    const avgRateCategoryBefore = beerCategory!.avgRate["Unknown"][0];
-    const countCategoryBefore = beerCategory!.avgRate["Unknown"][1];
+    const avgRateCategoryBefore = beerCategory!.avgRate["IPA"][0];
+    const countCategoryBefore = beerCategory!.avgRate["IPA"][1];
 
     const response = await request(app).delete(`/api/mybeer/${mybeerId}`)
         // .set('secretkey', key)
@@ -319,8 +329,8 @@ it ("delete one mybeer - success", async () => {
     const avgRateAfter = beer!.avgRate!;
 
     beerCategory = await BeerCategories.findOne({ _id: beer!.categoryId });
-    const avgRateCategoryAfter = beerCategory!.avgRate["Unknown"][0];
-    const countCategoryAfter = beerCategory!.avgRate["Unknown"][1];
+    const avgRateCategoryAfter = beerCategory!.avgRate["IPA"][0];
+    const countCategoryAfter = beerCategory!.avgRate["IPA"][1];
 
     let avgRate = 0;
     let avgRateCategory = 0;
