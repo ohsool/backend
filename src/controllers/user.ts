@@ -288,16 +288,18 @@ const checkAuth = async (req: Request, res: Response) => {
       
       const userId = res.locals.user._id;
       const nickname = res.locals.user.nickname;
-      let preference = String(res.locals.user.preference);
+      const preference = String(res.locals.user.preference);
       const image = res.locals.user.image;
 
-      if (res.locals.accessToken) {
-        res.json({ message: "success", userId, nickname, preference, image, accessToken: res.locals.accessToken });
-      } else if (res.locals.refreshToken) {
-        res.json({ message: "success", userId, nickname, preference, image, refreshToken: res.locals.refreshToken });
-      } else {
-        res.json({ message: "success", userId, nickname, preference, image });
-      }
+      // if (res.locals.accessToken) {
+      //   res.json({ message: "success", userId, nickname, preference, image, accessToken: res.locals.accessToken });
+      // } else if (res.locals.refreshToken) {
+      //   res.json({ message: "success", userId, nickname, preference, image, refreshToken: res.locals.refreshToken });
+      // } else {
+      //   res.json({ message: "success", userId, nickname, preference, image });
+      // }
+
+      res.json({ message: "success", userId, nickname, preference, image });
 }
 
 const googleLogin = (req: Request, res: Response, next: NextFunction) => {
