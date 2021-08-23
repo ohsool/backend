@@ -74,7 +74,7 @@ const joiSchema = joi.object({
     "test"
   ]
 
-const existedEmail = async(req: Request, res: Response) => {
+const existEmail = async(req: Request, res: Response) => {
     const { email } = req.body;
     
     if (!email) {
@@ -90,10 +90,10 @@ const existedEmail = async(req: Request, res: Response) => {
     }
 
     try {
-      const existedUser = await Users.findOne({ email }).lean();
+      const existUser = await Users.findOne({ email }).lean();
 
-      if (existedUser) {
-        res.json({ message: "fail", error: "exited email" });
+      if (existUser) {
+        res.json({ message: "fail", error: "exist email" });
 
         return
       } 
@@ -113,7 +113,7 @@ const existedEmail = async(req: Request, res: Response) => {
     }
 }
 
-const existedNickname = async(req: Request, res: Response) => {
+const existNickname = async(req: Request, res: Response) => {
     const { nickname } = req.body;
 
     if (!nickname) {
@@ -129,10 +129,10 @@ const existedNickname = async(req: Request, res: Response) => {
     }
 
     try {
-      const existedUser = await Users.findOne({ nickname }).lean();
+      const existUser = await Users.findOne({ nickname }).lean();
 
-      if (existedUser) {
-        res.json({ message: "fail", error: "exited nickname" });
+      if (existUser) {
+        res.json({ message: "fail", error: "exist nickname" });
 
         return
       } 
@@ -160,7 +160,7 @@ const register = async(req: Request, res: Response) => {
         const existUser2 = await Users.findOne({ email }).lean();
 
         if (existUser1 || existUser2) {
-            res.json({ message: "fail", error: "existed user" });
+            res.json({ message: "fail", error: "exist user" });
   
             return;
         }
@@ -253,7 +253,7 @@ const signout = async (req: Request, res: Response) => {
       const user = await Users.findOne({ _id: userId }).lean();
 
       if (!user) {
-        res.json({ message: "fail", error: "no existed user" });
+        res.json({ message: "fail", error: "no exist user" });
         
         return;
       }
@@ -382,8 +382,8 @@ const postTest = async (req: Request, res: Response) => {
 }
 
 export default {
-    existedEmail,
-    existedNickname,
+    existEmail,
+    existNickname,
     register,
     login,
     logout,
