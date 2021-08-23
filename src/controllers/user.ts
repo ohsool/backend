@@ -13,6 +13,7 @@ import MyBeers from "../schemas/mybeer";
 import { mailSender }  from '../email/mail'
 
 import { env } from "../env";
+import { access } from "fs";
 
 const joiSchema = joi.object({
     email: joi
@@ -225,8 +226,15 @@ const login = async(req: Request, res: Response) => {
       );
 
       await Users.findOneAndUpdate({ _id: user._id}, {$set: { refreshToken }} ).lean();
+
+      const refreshToken1 = refreshToken.split(".")[0];
+      const refreshToken2 = "." + refreshToken.split(".")[1] + "." + refreshToken.split(".")[2];
+
+      const accessToken1 = accessToken.split(".")[0];
+      const accessToken2 = "." + accessToken.split(".")[1] + "." + accessToken.split(".")[2];
   
-      res.json({ message: "success", refreshToken, accessToken, userId: user._id });
+      // res.json({ message: "success", refreshToken, accessToken, userId: user._id });
+      res.json({ message: "success", dlfwh: refreshToken1, ghkxld: refreshToken2, dhtnf: accessToken1, chlrh: accessToken2, userId: user._id });
     } catch(error) {
       res.status(401).json({ message: "fail", error });
 
