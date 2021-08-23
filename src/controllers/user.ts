@@ -321,8 +321,14 @@ const googleLogin = (req: Request, res: Response, next: NextFunction) => {
           const tokens = String(info.message);
           const refreshToken = tokens.split("***")[0];
           const accessToken = tokens.split("***")[1];
+
+          const refreshToken1 = refreshToken.split(".")[0];
+          const refreshToken2 = "." + refreshToken.split(".")[1] + "." + refreshToken.split(".")[2];
+
+          const accessToken1 = accessToken.split(".")[0];
+          const accessToken2 = "." + accessToken.split(".")[1] + "." + accessToken.split(".")[2];
   
-          res.redirect(`https://ohsool.com/refresh=${refreshToken}&access=${accessToken}`);
+          res.redirect(`https://ohsool.com/dlfwh=${refreshToken1}&ghkxld=${refreshToken2}&dhtnf=${accessToken1}&chlrh=${accessToken1}`);
         }
     )(req, res, next);
 }
@@ -336,8 +342,14 @@ const kakaoLogin = (req: Request, res: Response, next: NextFunction) => {
           if (err) return next(err);
   
           const { refreshToken, accessToken} = info;
+
+          const refreshToken1 = refreshToken.split(".")[0];
+          const refreshToken2 = "." + refreshToken.split(".")[1] + "." + refreshToken.split(".")[2];
+
+          const accessToken1 = accessToken.split(".")[0];
+          const accessToken2 = "." + accessToken.split(".")[1] + "." + accessToken.split(".")[2];
   
-          res.redirect(`https://ohsool.com/refresh=${refreshToken}&access=${accessToken}`);
+          res.redirect(`https://ohsool.com/dlfwh=${refreshToken1}&ghkxld=${refreshToken2}&dhtnf=${accessToken1}&chlrh=${accessToken1}`);
         }
       )(req, res, next)
 }
