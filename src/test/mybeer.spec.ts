@@ -211,7 +211,7 @@ it ("get one specific mybeer - fail (wrong mybeer id)", async () => {
         .send();
 
     expect(response.body.message).toBe("fail");
-    expect(response.body.error).toBe("no existed mybeer");
+    expect(response.body.error).toBe("no exist mybeer");
 });
 
 it ("modify one mybeer - success", async () => {

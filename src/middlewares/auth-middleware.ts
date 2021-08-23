@@ -57,7 +57,7 @@ function authMiddleware(req: Request, res: Response, next: NextFunction){
 
                     return;
                 } else {
-                    res.json({ message: "fail", error: "all tokens are expired" });
+                    res.status(401).json({ message: "fail", error: "all tokens are expired" });
 
                     return;
                 }
@@ -76,10 +76,12 @@ function authMiddleware(req: Request, res: Response, next: NextFunction){
                                 }
                             );
 
-                            res.locals.user = user;
-                            res.locals.accessToken = accessToken;
+                            // res.locals.user = user;
+                            // res.locals.accessToken = accessToken;
 
-                            next();
+                            // next();
+
+                            res.status(401).json({ message: "fail", error: "access token is expired" });
 
                             return;
                         }
@@ -109,16 +111,18 @@ function authMiddleware(req: Request, res: Response, next: NextFunction){
 
                             Users.findOneAndUpdate({ _id: userId }, {$set: {refreshToken}})
                                 .then((user: IUser | null) => {
-                                    res.locals.user = user;
-                                    res.locals.refreshToken = refreshToken;
+                                    // res.locals.user = user;
+                                    // res.locals.refreshToken = refreshToken;
 
-                                    next();
+                                    // next();
+
+                                    res.status(401).json({ message: "fail", error: "refresh token is expired" });
 
                                     return;
                                 })
                             
                         } else {
-                            res.status(401).json({ message: "fail", error: "no existed user" });
+                            res.status(401).json({ message: "fail", error: "no exist user" });
                         }
                         
                     }).catch((error: object) => {
@@ -140,7 +144,7 @@ function authMiddleware(req: Request, res: Response, next: NextFunction){
 
                             next();
                         } else {
-                            res.status(401).json({ message: "fail", error: "no existed user" });
+                            res.status(401).json({ message: "fail", error: "no exist user" });
                         }
                         
                     }).catch((error: object) => {

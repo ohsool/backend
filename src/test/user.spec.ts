@@ -49,7 +49,7 @@ it ("register fail - exited user", async () => {
         });
 
     expect(response.body.message).toBe("fail");
-    expect(response.body.error).toBe("existed user");
+    expect(response.body.error).toBe("exist user");
 });
 
 it ("register fail - wrong email", async () => {
