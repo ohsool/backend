@@ -115,8 +115,6 @@ it ("post mybeer - success", async () => {
     const avgRateCategoryAfter = beerCategory!.avgRate["Unknown"][0]!;
     const countCategoryAfter = beerCategory!.avgRate["Unknown"][1]!;
 
-    // console.log("🍻 AFTER:", beerCategory!.avgRate);
-
     const avgRate = (( +countBefore * +avgRateBefore ) + rate) / (+countBefore + 1);
     const avgRateCategory = (( countCategoryBefore * avgRateCategoryBefore ) + rate) / (countCategoryBefore + 1);
 
@@ -282,9 +280,6 @@ it ("modify one mybeer - success", async () => {
     const avgRate = (( +countBefore * +avgRateBefore ) - rate + modified_rate) / +countBefore;
     const avgRateCategory = (( countCategoryBefore * avgRateCategoryBefore ) - rate + modified_rate) / countCategoryBefore;
 
-    console.log("🍻message: ", response.body.message)
-    console.log("🍻error: ", response.body.error)
-
     expect(response.body.message).toBe("success");
     expect(countAfter).toBe(countBefore);
     // expect(avgRate).toBe(avgRateAfter);
@@ -323,27 +318,14 @@ it ("modify one mybeer - fail (wrong user)", async () => {
     expect(response.body.error).toBe("not the same user");
 });
 
-it ("delete one mybeer - fail (wrong user)", async () => {
-    const response = await request(app).delete(`/api/mybeer/${mybeerId}`)
-        // .set('secretkey', key)
-        .set('dlfwh', `Bearer ${anotherrefresh1}`)
-        .set('chlrh', `Bearer ${anotherrefresh2}`)
-        .set('dhtnf', `Bearer ${anotheraccess1}`)
-        .set('ghkxld', `Bearer ${anotheraccess2}`)
-        .send();
-
-    expect(response.body.message).toBe("fail");
-    expect(response.body.error).toBe("not the same user");
-});
-
 it ("delete one mybeer - success", async () => {
     let beer = await Beers.findOne({ _id: beerId });
     const countBefore: Number = beer!.count!;
     const avgRateBefore: Number = beer!.avgRate!;
 
     let beerCategory: IBeerCategory | null = await BeerCategories.findOne({ _id: beer!.categoryId });
-    const avgRateCategoryBefore = beerCategory!.avgRate["IPA"][0];
-    const countCategoryBefore = beerCategory!.avgRate["IPA"][1];
+    const avgRateCategoryBefore = beerCategory!.avgRate["Unknown"][0];
+    const countCategoryBefore = beerCategory!.avgRate["Unknown"][1];
 
     const response = await request(app).delete(`/api/mybeer/${mybeerId}`)
         // .set('secretkey', key)
@@ -358,8 +340,8 @@ it ("delete one mybeer - success", async () => {
     const avgRateAfter = beer!.avgRate!;
 
     beerCategory = await BeerCategories.findOne({ _id: beer!.categoryId });
-    const avgRateCategoryAfter = beerCategory!.avgRate["IPA"][0];
-    const countCategoryAfter = beerCategory!.avgRate["IPA"][1];
+    const avgRateCategoryAfter = beerCategory!.avgRate["Unknown"][0];
+    const countCategoryAfter = beerCategory!.avgRate["Unknown"][1];
 
     let avgRate = 0;
     let avgRateCategory = 0;
@@ -374,6 +356,19 @@ it ("delete one mybeer - success", async () => {
     // expect(avgRateCategory).toBe(avgRateCategoryAfter);
     expect(+countBefore - +countAfter).toBe(1);
     // expect(avgRate).toBe(avgRateAfter);
+});
+
+it ("delete one mybeer - fail (wrong user)", async () => {
+    const response = await request(app).delete(`/api/mybeer/${mybeerId}`)
+        // .set('secretkey', key)
+        .set('dlfwh', `Bearer ${anotherrefresh1}`)
+        .set('chlrh', `Bearer ${anotherrefresh2}`)
+        .set('dhtnf', `Bearer ${anotheraccess1}`)
+        .set('ghkxld', `Bearer ${anotheraccess2}`)
+        .send();
+
+    expect(response.body.message).toBe("fail");
+    expect(response.body.error).toBe("not the same user");
 });
 
 it ("delete one mybeer - fail (wrong id)", async () => {
