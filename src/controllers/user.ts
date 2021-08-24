@@ -36,6 +36,14 @@ const joiSchema = joi.object({
   const nicknameJoiSchema = joi.object({
     nickname: joi.string().min(1).max(8).required()
   })
+  
+  const emailNicknameJoiSchema = joi.object({
+    email: joi
+      .string()
+      .email({ minDomainSegments: 2, tlds: { allow: ["com", "net"] } })
+      .required(),
+    nickname: joi.string().min(1).max(8).required()
+  })
 
   type ImageArray = {
     [index: string]: string,
@@ -321,6 +329,7 @@ const googleLogin = (req: Request, res: Response, next: NextFunction) => {
           const tokens = String(info.message);
           const refreshToken = tokens.split("***")[0];
           const accessToken = tokens.split("***")[1];
+          const first = tokens.split("***")[2];
 
           const refreshToken1 = refreshToken.split(".")[0];
           const refreshToken2 = "." + refreshToken.split(".")[1] + "." + refreshToken.split(".")[2];
@@ -328,7 +337,7 @@ const googleLogin = (req: Request, res: Response, next: NextFunction) => {
           const accessToken1 = accessToken.split(".")[0];
           const accessToken2 = "." + accessToken.split(".")[1] + "." + accessToken.split(".")[2];
   
-          res.redirect(`https://ohsool.com/dlfwh=${refreshToken1}&ghkxld=${refreshToken2}&dhtnf=${accessToken1}&chlrh=${accessToken1}`);
+          res.redirect(`https://ohsool.com/dlfwh=${refreshToken1}&ghkxld=${refreshToken2}&dhtnf=${accessToken1}&chlrh=${accessToken2}&first=${first}`);
         }
     )(req, res, next);
 }
@@ -341,7 +350,7 @@ const kakaoLogin = (req: Request, res: Response, next: NextFunction) => {
         }, (err, profile, info) => {
           if (err) return next(err);
   
-          const { refreshToken, accessToken} = info;
+          const { refreshToken, accessToken, first } = info;
 
           const refreshToken1 = refreshToken.split(".")[0];
           const refreshToken2 = "." + refreshToken.split(".")[1] + "." + refreshToken.split(".")[2];
@@ -349,58 +358,161 @@ const kakaoLogin = (req: Request, res: Response, next: NextFunction) => {
           const accessToken1 = accessToken.split(".")[0];
           const accessToken2 = "." + accessToken.split(".")[1] + "." + accessToken.split(".")[2];
   
-          res.redirect(`https://ohsool.com/dlfwh=${refreshToken1}&ghkxld=${refreshToken2}&dhtnf=${accessToken1}&chlrh=${accessToken1}`);
+          res.redirect(`https://ohsool.com/dlfwh=${refreshToken1}&ghkxld=${refreshToken2}&dhtnf=${accessToken1}&chlrh=${accessToken2}&first=${first}`);
         }
       )(req, res, next)
 }
 
+// 현재 유저 preference에 테스트 결과 값 반영 & 클라이언트에게 결과에 대한 정보 돌려주기
+/*
+  테스트 결과 추출 단계
+  1. 맥주 카테고리 추출
+  2. 카테고리 내에서 국가 선택
+  3. 국가별 높은 도수/ 낮은 도수/ 랜덤 선택 
+*/
 const postTest = async (req: Request, res: Response) => {
     try {
         const { userId, result } = req.body;
-        let user = false;
-    
+        let user = false; // 로그인 유저와 비로그인 유저를 구분짓는 값
+  
         if (!result) {
           res.json({ message: "fail", error: "test result doesn't exist" });
-
           return;
         }
     
         /* 1. 카테고리에 대한 정보 추출*/ 
-        const category = await BeerCategories.findOne({ name: result }).lean();
-
+        const category = await BeerCategories.findOne({ name: result[0] }).lean();
         // category 에 대한 정보가 없다면 함수 종료
         if (!category) {
           res.json({ message: "fail", error: "Beer Category doesn't exist" });
-
           return;
         }
-    
-        /* 2. 로그인 유저일 시 preference 변경 */
+
+        /* 2. 카테고리 내에서 해당되는 국가 & 도수 선택 */ 
+        let distantOption = result[1] === 'distant' ? true : false;
+        let sortOption = result[2] === 'many' ? -1 : 1;
+        let beers = await Beers.find({ $and: [{ categoryId: category._id }, { isDistant: distantOption }], })
+                                 .sort([[ "degree", sortOption ]])
+                                 .lean();
+        
+        // 만약 위 조건에 맞는 맥주가 2개보다 적다면 '국가' 반영없이 도수 기준으로 리스트를 출력한다.
+        if (beers.length < 2) {
+          beers = await Beers.find({ categoryId: category._id }).sort([[ "degree", sortOption ]]).lean();
+        }
+
+        /* 3. 추천 맥주 추출 */
+        const recommendations = beers.slice(0,2)
+        
+        /* 4. 로그인 유저일 시 preference 변경 */
         const isExist = await Users.findOne({ _id: userId}).lean();
-        let image = imagesArray[result];
-
+        let image = imagesArray[result[0]];
         if (isExist) {
-          await Users.updateOne({ _id: userId }, { $set: { preference: result, image }});
-
+          await Users.updateOne({ _id: userId }, { $set: { preference: result[0], image }});
           user = true
         }
-    
-    
-        /* 3. 추천 맥주 추출 (08/05 기준 동일한 카테고리 상위 2개만 추천) */
-        const beers = await Beers.find({ categoryId: category._id }).lean();
-        // 관련맥주에 대한 정보가 없다면 함수 종료
-        if (!beers) {
-          res.json({ message: "fail", error: "Beer doesn't exist" });
 
-          return;
-        }
-        const recommendations = beers.slice(0,2)
-      
         res.status(200).json({ message: "success", user, category, recommendations })
     
       } catch (error) {
         res.json({ message: "fail", error });
       }
+}
+
+const socialUserSet = async (req: Request, res: Response) => {
+  const { email, nickname } = req.body;
+
+  if ( test_emails.includes(email) ) {
+    res.json({ message: "fail", error: "email for test. don't use this" });
+
+    return
+  }
+
+  if ( test_nicknames.includes(nickname) ) {
+    res.json({ message: "fail", error: "nickname for test. don't use this" });
+
+    return
+  }
+
+  try {
+    const existUser1 = await Users.findOne({ nickname }).lean();
+    const existUser2 = await Users.findOne({ email }).lean();
+
+    if (existUser1) {
+      res.json({ message: "fail", error: "exist nickname" });
+
+      return
+    }
+
+    if (existUser2) {
+      res.json({ message: "fail", error: "exist email" });
+
+      return
+    } 
+
+    const { value, error } = emailNicknameJoiSchema.validate({ email, nickname });
+
+    if (error) {
+      res.json({ message: "fail", error: "wrong email or wrong nickname", error_detail: error.details[0].message });
+
+      return;
+    }
+
+    const user = await Users.findById(res.locals.user._id);
+
+    if (!user) {
+      res.json({ message: "fail", error: "not exist user" });
+
+      return;
+    }
+
+    await Users.findOneAndUpdate({ _id: res.locals.user._id }, {$set: { nickname, email }});
+
+    res.json({ message: "success" });
+  } catch (error) {
+    res.json({ message: "fail", error });
+  }
+}
+
+const changeNickname = async (req: Request, res: Response) => {
+  const { nickname } = req.body;
+
+  if ( test_nicknames.includes(nickname) ) {
+    res.json({ message: "fail", error: "nickname for test. don't use this" });
+
+    return
+  }
+
+  try {
+    const existUser = await Users.findOne({ nickname }).lean();
+
+    if (existUser) {
+      res.json({ message: "fail", error: "exist nickname" });
+
+      return
+    }
+
+    const { value, error } = nicknameJoiSchema.validate({ nickname });
+
+    if (error) {
+      res.json({ message: "fail", error: "wrong nickname", error_detail: error.details[0].message });
+
+      return;
+    }
+
+    const user = await Users.findById(res.locals.user._id);
+
+    if (!user) {
+      res.json({ message: "fail", error: "not exist user" });
+
+      return;
+    }
+
+    await Users.findOneAndUpdate({ _id: res.locals.user._id }, {$set: { nickname }});
+
+    res.json({ message: "success" });
+  } catch (error) {
+    res.json({ message: "fail", error });
+  }
 }
 
 export default {
@@ -413,5 +525,7 @@ export default {
     checkAuth,
     googleLogin,
     kakaoLogin,
-    postTest
+    postTest,
+    socialUserSet,
+    changeNickname
 }

@@ -73,7 +73,7 @@ const getSomeBeers = async(req: Request, res: Response) => {
 
 const postBeer = async(req: Request, res: Response) => {
     try {
-        const { name_korean, name_english, image, degree, categoryId, hashtag } = req.body;
+        const { name_korean, name_english, image, degree, country, isDistant, categoryId, hashtag } = req.body;
         const isExist: IBeer = await Beers.findOne({ name_korean }).lean();
         const beerCategory: IBeerCategory | null = await BeerCategories.findById(categoryId);
 
@@ -91,7 +91,7 @@ const postBeer = async(req: Request, res: Response) => {
 
         const date = moment().format("YYYY-MM-DD hh:mm A")
         const new_beer: IBeer = {
-            name_korean, name_english, image, degree, categoryId, features: beerCategory.features , hashtag, createDate: date
+            name_korean, name_english, image, degree, country, isDistant, categoryId, features: beerCategory.features , hashtag, createDate: date
         }
 
         const beer = await Beers.create(new_beer);
