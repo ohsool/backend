@@ -25,6 +25,7 @@ const kakaoPassportConfig = () => {
         const nickname = profile.username;
         const provider = profile.provider;
         let email:String;
+        let first = false;
 
         if (profile._json.kakao_account.has_email && profile._json.kakao_account.is_email_valid) {
             email = profile._json.kakao_account.email;
@@ -36,6 +37,8 @@ const kakaoPassportConfig = () => {
 
         if (!user) {
             user = await Users.create({ nickname, email, passport: [{ provider: provider }, { id: userId }] });
+
+            first = true;
         }
 
         const _id = user._id;
@@ -54,7 +57,7 @@ const kakaoPassportConfig = () => {
 
         await Users.findOneAndUpdate({ _id: user._id}, {$set: { refreshToken: refresh }} );
 
-        return done(null, profile, { refreshToken: refresh, accessToken: access });
+        return done(null, profile, { refreshToken: refresh, accessToken: access, first });
     }
     ));
 }

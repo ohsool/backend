@@ -24,11 +24,14 @@ const googlePassportConfig = () => {
         const email = profile.email;
         const nickname = profile.name.givenName;
         const provider = profile.provider;
+        let first = false;
 
         let user = await Users.findOne({passport: [{provider: "google"}, {id: userId}]});
 
         if (!user) {
             user = await Users.create({ email, nickname, passport: [{ provider: provider }, { id: userId }] });
+
+            first = true;
         }
 
         const _id = user._id;
@@ -47,7 +50,7 @@ const googlePassportConfig = () => {
 
         await Users.findOneAndUpdate({ _id: user._id}, {$set: { refreshToken: refresh }} );
 
-        const tokens = `${refresh}***${access}`
+        const tokens = `${refresh}***${access}***${first}`
 
         return done(null, profile, { message: tokens });
     }

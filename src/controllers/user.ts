@@ -36,6 +36,14 @@ const joiSchema = joi.object({
   const nicknameJoiSchema = joi.object({
     nickname: joi.string().min(1).max(8).required()
   })
+  
+  const emailNicknameJoiSchema = joi.object({
+    email: joi
+      .string()
+      .email({ minDomainSegments: 2, tlds: { allow: ["com", "net"] } })
+      .required(),
+    nickname: joi.string().min(1).max(8).required()
+  })
 
   type ImageArray = {
     [index: string]: string,
@@ -321,6 +329,7 @@ const googleLogin = (req: Request, res: Response, next: NextFunction) => {
           const tokens = String(info.message);
           const refreshToken = tokens.split("***")[0];
           const accessToken = tokens.split("***")[1];
+          const first = tokens.split("***")[2];
 
           const refreshToken1 = refreshToken.split(".")[0];
           const refreshToken2 = "." + refreshToken.split(".")[1] + "." + refreshToken.split(".")[2];
@@ -328,7 +337,7 @@ const googleLogin = (req: Request, res: Response, next: NextFunction) => {
           const accessToken1 = accessToken.split(".")[0];
           const accessToken2 = "." + accessToken.split(".")[1] + "." + accessToken.split(".")[2];
   
-          res.redirect(`https://ohsool.com/dlfwh=${refreshToken1}&ghkxld=${refreshToken2}&dhtnf=${accessToken1}&chlrh=${accessToken1}`);
+          res.redirect(`https://ohsool.com/dlfwh=${refreshToken1}&ghkxld=${refreshToken2}&dhtnf=${accessToken1}&chlrh=${accessToken2}&first=${first}`);
         }
     )(req, res, next);
 }
@@ -341,7 +350,7 @@ const kakaoLogin = (req: Request, res: Response, next: NextFunction) => {
         }, (err, profile, info) => {
           if (err) return next(err);
   
-          const { refreshToken, accessToken} = info;
+          const { refreshToken, accessToken, first } = info;
 
           const refreshToken1 = refreshToken.split(".")[0];
           const refreshToken2 = "." + refreshToken.split(".")[1] + "." + refreshToken.split(".")[2];
@@ -349,7 +358,7 @@ const kakaoLogin = (req: Request, res: Response, next: NextFunction) => {
           const accessToken1 = accessToken.split(".")[0];
           const accessToken2 = "." + accessToken.split(".")[1] + "." + accessToken.split(".")[2];
   
-          res.redirect(`https://ohsool.com/dlfwh=${refreshToken1}&ghkxld=${refreshToken2}&dhtnf=${accessToken1}&chlrh=${accessToken1}`);
+          res.redirect(`https://ohsool.com/dlfwh=${refreshToken1}&ghkxld=${refreshToken2}&dhtnf=${accessToken1}&chlrh=${accessToken2}&first=${first}`);
         }
       )(req, res, next)
 }
@@ -403,6 +412,55 @@ const postTest = async (req: Request, res: Response) => {
       }
 }
 
+const socialUserSet = async (req: Request, res: Response) => {
+  const { email, nickname } = req.body;
+
+  if ( test_emails.includes(email) ) {
+    res.json({ message: "fail", error: "email for test. don't use this" });
+
+    return
+  }
+
+  if ( test_nicknames.includes(email) ) {
+    res.json({ message: "fail", error: "nickname for test. don't use this" });
+
+    return
+  }
+
+  try {
+    const existUser1 = await Users.findOne({ nickname }).lean();
+    const existUser2 = await Users.findOne({ email }).lean();
+
+    if (existUser1 || existUser2) {
+      res.json({ message: "fail", error: "exist nickname" });
+
+      return
+    } 
+
+    const { value, error } = emailNicknameJoiSchema.validate({ email, nickname });
+
+    if (error) {
+      res.json({ message: "fail", error: "wrong email or wrong nickname", error_detail: error.details[0].message });
+
+      return;
+    }
+
+    const user = await Users.findById(res.locals.user._id);
+
+    if (!user) {
+      res.json({ message: "fail", error: "not exist user" });
+
+      return;
+    }
+
+    await Users.findOneAndUpdate({ _id: res.locals.user._id }, {$set: { nickname, email }});
+
+    res.json({ message: "success" });
+  } catch (error) {
+    res.json({ message: "fail", error });
+  }
+}
+
 export default {
     existEmail,
     existNickname,
@@ -413,5 +471,6 @@ export default {
     checkAuth,
     googleLogin,
     kakaoLogin,
-    postTest
+    postTest,
+    socialUserSet
 }
