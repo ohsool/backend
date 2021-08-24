@@ -421,7 +421,7 @@ const socialUserSet = async (req: Request, res: Response) => {
     return
   }
 
-  if ( test_nicknames.includes(email) ) {
+  if ( test_nicknames.includes(nickname) ) {
     res.json({ message: "fail", error: "nickname for test. don't use this" });
 
     return
@@ -431,8 +431,14 @@ const socialUserSet = async (req: Request, res: Response) => {
     const existUser1 = await Users.findOne({ nickname }).lean();
     const existUser2 = await Users.findOne({ email }).lean();
 
-    if (existUser1 || existUser2) {
+    if (existUser1) {
       res.json({ message: "fail", error: "exist nickname" });
+
+      return
+    }
+
+    if (existUser2) {
+      res.json({ message: "fail", error: "exist email" });
 
       return
     } 
@@ -461,6 +467,48 @@ const socialUserSet = async (req: Request, res: Response) => {
   }
 }
 
+const changeNickname = async (req: Request, res: Response) => {
+  const { nickname } = req.body;
+
+  if ( test_nicknames.includes(nickname) ) {
+    res.json({ message: "fail", error: "nickname for test. don't use this" });
+
+    return
+  }
+
+  try {
+    const existUser = await Users.findOne({ nickname }).lean();
+
+    if (existUser) {
+      res.json({ message: "fail", error: "exist nickname" });
+
+      return
+    }
+
+    const { value, error } = nicknameJoiSchema.validate({ nickname });
+
+    if (error) {
+      res.json({ message: "fail", error: "wrong nickname", error_detail: error.details[0].message });
+
+      return;
+    }
+
+    const user = await Users.findById(res.locals.user._id);
+
+    if (!user) {
+      res.json({ message: "fail", error: "not exist user" });
+
+      return;
+    }
+
+    await Users.findOneAndUpdate({ _id: res.locals.user._id }, {$set: { nickname }});
+
+    res.json({ message: "success" });
+  } catch (error) {
+    res.json({ message: "fail", error });
+  }
+}
+
 export default {
     existEmail,
     existNickname,
@@ -472,5 +520,6 @@ export default {
     googleLogin,
     kakaoLogin,
     postTest,
-    socialUserSet
+    socialUserSet,
+    changeNickname
 }
