@@ -363,48 +363,54 @@ const kakaoLogin = (req: Request, res: Response, next: NextFunction) => {
       )(req, res, next)
 }
 
+// 현재 유저 preference에 테스트 결과 값 반영 & 클라이언트에게 결과에 대한 정보 돌려주기
+/*
+  테스트 결과 추출 단계
+  1. 맥주 카테고리 추출
+  2. 카테고리 내에서 국가 선택
+  3. 국가별 높은 도수/ 낮은 도수/ 랜덤 선택 
+*/
 const postTest = async (req: Request, res: Response) => {
     try {
         const { userId, result } = req.body;
-        let user = false;
-    
+        let user = false; // 로그인 유저와 비로그인 유저를 구분짓는 값
+  
         if (!result) {
           res.json({ message: "fail", error: "test result doesn't exist" });
-
           return;
         }
     
         /* 1. 카테고리에 대한 정보 추출*/ 
-        const category = await BeerCategories.findOne({ name: result }).lean();
-
+        const category = await BeerCategories.findOne({ name: result[0] }).lean();
         // category 에 대한 정보가 없다면 함수 종료
         if (!category) {
           res.json({ message: "fail", error: "Beer Category doesn't exist" });
-
           return;
         }
-    
-        /* 2. 로그인 유저일 시 preference 변경 */
+
+        /* 2. 카테고리 내에서 해당되는 국가 & 도수 선택 */ 
+        let distantOption = result[1] === 'distant' ? true : false;
+        let sortOption = result[2] === 'many' ? -1 : 1;
+        let beers = await Beers.find({ $and: [{ categoryId: category._id }, { isDistant: distantOption }], })
+                                 .sort([[ "degree", sortOption ]])
+                                 .lean();
+        
+        // 만약 위 조건에 맞는 맥주가 2개보다 적다면 '국가' 반영없이 도수 기준으로 리스트를 출력한다.
+        if (beers.length < 2) {
+          beers = await Beers.find({ categoryId: category._id }).sort([[ "degree", sortOption ]]).lean();
+        }
+
+        /* 3. 추천 맥주 추출 */
+        const recommendations = beers.slice(0,2)
+        
+        /* 4. 로그인 유저일 시 preference 변경 */
         const isExist = await Users.findOne({ _id: userId}).lean();
-        let image = imagesArray[result];
-
+        let image = imagesArray[result[0]];
         if (isExist) {
-          await Users.updateOne({ _id: userId }, { $set: { preference: result, image }});
-
+          await Users.updateOne({ _id: userId }, { $set: { preference: result[0], image }});
           user = true
         }
-    
-    
-        /* 3. 추천 맥주 추출 (08/05 기준 동일한 카테고리 상위 2개만 추천) */
-        const beers = await Beers.find({ categoryId: category._id }).lean();
-        // 관련맥주에 대한 정보가 없다면 함수 종료
-        if (!beers) {
-          res.json({ message: "fail", error: "Beer doesn't exist" });
 
-          return;
-        }
-        const recommendations = beers.slice(0,2)
-      
         res.status(200).json({ message: "success", user, category, recommendations })
     
       } catch (error) {
