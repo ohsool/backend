@@ -14,7 +14,6 @@ const postMyBeer = async (req: Request, res: Response) => {
     let { myFeatures, location, rate, review } = req.body;
     const { beerId } = req.params;
     const _id = mongoose.Types.ObjectId(beerId);
-    // console.log("_id:", _id, typeof(_id));
     rate = Math.round(rate);
 
     if (!beerId || !myFeatures || !rate) {
@@ -180,7 +179,7 @@ const updateMyBeer = async (req: Request, res: Response) => {
 
     try {
         const myBeer = await MyBeer.findOne({ _id: myBeerId }).lean();
-        const userId = res.locals.user._id;
+        const userId = mongoose.Types.ObjectId(res.locals.user._id);
 
         if (rate < 1 || rate > 5) {
             res.json({ message: "fail", error: "please input rate 1~4" });

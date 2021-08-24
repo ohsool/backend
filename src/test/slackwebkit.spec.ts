@@ -20,8 +20,10 @@ it ("login success", async () => {
     access = response.body.accessToken;
 
     expect(response.body.message).toBe("success");
-    expect(response.body.refreshToken).toBeTruthy();
-    expect(response.body.accessToken).toBeTruthy();
+    expect(response.body.dlfwh).toBeTruthy();
+    expect(response.body.ghkxld).toBeTruthy();
+    expect(response.body.dhtnf).toBeTruthy();
+    expect(response.body.chlrh).toBeTruthy();
 });
 
 // it ("send beer recommendation to slack - success", async () => {

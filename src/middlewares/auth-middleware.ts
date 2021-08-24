@@ -65,6 +65,8 @@ function authMiddleware(req: Request, res: Response, next: NextFunction){
                 // : gives error
                 // console.log("1. access token, refresh token are all expired");
 
+                console.log("3333");
+
                 if ( refreshToken == "undefined" && accessToken == "undefined" ) {
                     res.json({ message: "fail", error: "not logged in" });
 

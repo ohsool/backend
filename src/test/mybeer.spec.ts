@@ -12,10 +12,16 @@ import { IBeerCategory } from "../interfaces/beerCategory";
 // import { secretAPIkey } from '../ssl/secretAPI';
 // const key = secretAPIkey();
 
-let refresh = "";
-let access = "";
-let anotherrefresh = "";
-let anotheraccess = "";
+let dlfwh = "";
+let ghkxld = "";
+let dhtnf = "";
+let chlrh = "";
+
+let anotherrefresh1 = "";
+let anotherrefresh2 = "";
+let anotheraccess1 = "";
+let anotheraccess2 = "";
+
 let mybeerId = "";
 let beerId: mongoose.Types.ObjectId;
 let beerCategoryId: mongoose.Types.ObjectId;
@@ -44,16 +50,20 @@ it ("login success", async () => {
             password: "mybeertest1234" 
         });
 
-    refresh = response.body.refreshToken;
-    access = response.body.accessToken;
+    dlfwh = response.body.dlfwh;
+    ghkxld = response.body.ghkxld;
+    dhtnf = response.body.dhtnf;
+    chlrh = response.body.chlrh;
 
     const beer: IBeer | null = await Beers.findOne({ name_korean: "버드와이저" })!;
     beerId = beer!._id!;
     beerCategoryId = beer!.categoryId;
 
     expect(response.body.message).toBe("success");
-    expect(response.body.refreshToken).toBeTruthy();
-    expect(response.body.accessToken).toBeTruthy();
+    expect(response.body.dlfwh).toBeTruthy();
+    expect(response.body.ghkxld).toBeTruthy();
+    expect(response.body.dhtnf).toBeTruthy();
+    expect(response.body.chlrh).toBeTruthy();
 });
 
 it ("another login success", async () => {
@@ -64,12 +74,16 @@ it ("another login success", async () => {
             password: "mybeertest1234"
         });
 
-    anotherrefresh = response.body.refreshToken;
-    anotheraccess = response.body.accessToken;
+    anotherrefresh1 = response.body.dlfwh;
+    anotherrefresh2 = response.body.ghkxld;
+    anotheraccess1 = response.body.dhtnf;
+    anotheraccess2 = response.body.chlrh;
 
     expect(response.body.message).toBe("success");
-    expect(response.body.refreshToken).toBeTruthy();
-    expect(response.body.accessToken).toBeTruthy();
+    expect(response.body.dlfwh).toBeTruthy();
+    expect(response.body.ghkxld).toBeTruthy();
+    expect(response.body.dhtnf).toBeTruthy();
+    expect(response.body.chlrh).toBeTruthy();
 });
 
 it ("post mybeer - success", async () => {
@@ -79,20 +93,21 @@ it ("post mybeer - success", async () => {
     const avgRateBefore: Number | undefined = beer!.avgRate!;
 
     const response1 = await request(app).get(`/api/user/me`)
-        .set('refresh', `Bearer ${refresh}`)
-        .set('access', `Bearer ${access}`)
-    
-    // console.log("🤔2. i am", refresh, access);
+        .set('dlfwh', `Bearer ${dlfwh}`)
+        .set('chlrh', `Bearer ${chlrh}`)
+        .set('dhtnf', `Bearer ${dhtnf}`)
+        .set('ghkxld', `Bearer ${ghkxld}`)
 
     let beerCategory: IBeerCategory | null = await BeerCategories.findById(beerCategoryId);
     const avgRateCategoryBefore = beerCategory!.avgRate["IPA"][0];
     const countCategoryBefore = beerCategory!.avgRate["IPA"][1];
 
-    // console.log("🍻 BEFORE:", beerCategory!.avgRate);
 
     const response = await request(app).post(`/api/mybeer/${beerId}`)
-        .set('refresh', `Bearer ${refresh}`)
-        .set('access', `Bearer ${access}`)
+        .set('dlfwh', `Bearer ${dlfwh}`)
+        .set('chlrh', `Bearer ${chlrh}`)
+        .set('dhtnf', `Bearer ${dhtnf}`)
+        .set('ghkxld', `Bearer ${ghkxld}`)
         .send({ myFeatures, location, rate, review });
 
     mybeerId = response.body.mybeer._id;
@@ -121,8 +136,10 @@ it ("post mybeer - success", async () => {
 it ("post mybeer - fail (beer doesn't exist)", async () => {
     const response = await request(app).post(`/api/mybeer/${wrongId}`)
         // .set('secretkey', key)
-        .set('refresh', `Bearer ${refresh}`)
-        .set('access', `Bearer ${access}`)
+        .set('dlfwh', `Bearer ${dlfwh}`)
+        .set('chlrh', `Bearer ${chlrh}`)
+        .set('dhtnf', `Bearer ${dhtnf}`)
+        .set('ghkxld', `Bearer ${ghkxld}`)
         .send({ myFeatures, location, rate, review });
 
     expect(response.body.message).toBe("fail");
@@ -132,8 +149,10 @@ it ("post mybeer - fail (beer doesn't exist)", async () => {
 it ("post mybeer - fail (no rate)", async () => {
     const response = await request(app).post(`/api/mybeer/${beerId}`)
         // .set('secretkey', key)
-        .set('refresh', `Bearer ${refresh}`)
-        .set('access', `Bearer ${access}`)
+        .set('dlfwh', `Bearer ${dlfwh}`)
+        .set('chlrh', `Bearer ${chlrh}`)
+        .set('dhtnf', `Bearer ${dhtnf}`)
+        .set('ghkxld', `Bearer ${ghkxld}`)
         .send({ myFeatures, location, review });
 
     expect(response.body.message).toBe("fail");
@@ -143,8 +162,10 @@ it ("post mybeer - fail (no rate)", async () => {
 it ("post mybeer - fail (review too long)", async () => {
     const response = await request(app).post(`/api/mybeer/${beerId}`)
         // .set('secretkey', key)
-        .set('refresh', `Bearer ${refresh}`)
-        .set('access', `Bearer ${access}`)
+        .set('dlfwh', `Bearer ${dlfwh}`)
+        .set('chlrh', `Bearer ${chlrh}`)
+        .set('dhtnf', `Bearer ${dhtnf}`)
+        .set('ghkxld', `Bearer ${ghkxld}`)
         .send({
             myFeatures, location, rate, review: "test mybeer review too long test mybeer review too long test mybeer review too long test mybeer review too long test mybeer review too long test mybeer review too long test mybeer review too long"
         });
@@ -156,8 +177,10 @@ it ("post mybeer - fail (review too long)", async () => {
 it ("get all mybeers - success", async () => {
     const response = await request(app).get(`/api/mybeer/all`)
         // .set('secretkey', key)
-        .set('refresh', `Bearer ${refresh}`)
-        .set('access', `Bearer ${access}`)
+        .set('dlfwh', `Bearer ${dlfwh}`)
+        .set('chlrh', `Bearer ${chlrh}`)
+        .set('dhtnf', `Bearer ${dhtnf}`)
+        .set('ghkxld', `Bearer ${ghkxld}`)
         .send();
 
     expect(response.body.message).toBe("success");
@@ -168,8 +191,10 @@ it ("get all mybeers - success", async () => {
 it ("get my mybeers - success", async () => {
     const response = await request(app).get(`/api/mybeer/my`)
         // .set('secretkey', key)
-        .set('refresh', `Bearer ${refresh}`)
-        .set('access', `Bearer ${access}`)
+        .set('dlfwh', `Bearer ${dlfwh}`)
+        .set('chlrh', `Bearer ${chlrh}`)
+        .set('dhtnf', `Bearer ${dhtnf}`)
+        .set('ghkxld', `Bearer ${ghkxld}`)
         .send();
 
     expect(response.body.message).toBe("success");
@@ -180,8 +205,10 @@ it ("get my mybeers - success", async () => {
 it ("get specific beer's mybeers - success", async () => {
     const response = await request(app).get(`/api/mybeer/beer/${beerId}`)
         // .set('secretkey', key)
-        .set('refresh', `Bearer ${refresh}`)
-        .set('access', `Bearer ${access}`)
+        .set('dlfwh', `Bearer ${dlfwh}`)
+        .set('chlrh', `Bearer ${chlrh}`)
+        .set('dhtnf', `Bearer ${dhtnf}`)
+        .set('ghkxld', `Bearer ${ghkxld}`)
         .send();
 
     expect(response.body.message).toBe("success");
@@ -192,8 +219,10 @@ it ("get specific beer's mybeers - success", async () => {
 it ("get specific beer's mybeers - fail (wrong beerId)", async () => {
     const response = await request(app).get(`/api/mybeer/beer/${wrongId}`)
         // .set('secretkey', key)
-        .set('refresh', `Bearer ${refresh}`)
-        .set('access', `Bearer ${access}`)
+        .set('dlfwh', `Bearer ${dlfwh}`)
+        .set('chlrh', `Bearer ${chlrh}`)
+        .set('dhtnf', `Bearer ${dhtnf}`)
+        .set('ghkxld', `Bearer ${ghkxld}`)
         .send();
 
     expect(response.body.message).toBe("fail");
@@ -203,8 +232,10 @@ it ("get specific beer's mybeers - fail (wrong beerId)", async () => {
 it ("get one specific mybeer - success", async () => {
     const response = await request(app).get(`/api/mybeer/${mybeerId}`)
         // .set('secretkey', key)
-        .set('refresh', `Bearer ${refresh}`)
-        .set('access', `Bearer ${access}`)
+        .set('dlfwh', `Bearer ${dlfwh}`)
+        .set('chlrh', `Bearer ${chlrh}`)
+        .set('dhtnf', `Bearer ${dhtnf}`)
+        .set('ghkxld', `Bearer ${ghkxld}`)
         .send();
 
     expect(response.body.message).toBe("success");
@@ -216,8 +247,10 @@ it ("get one specific mybeer - success", async () => {
 it ("get one specific mybeer - fail (wrong mybeer id)", async () => {
     const response = await request(app).get(`/api/mybeer/${wrongId}`)
         // .set('secretkey', key)
-        .set('refresh', `Bearer ${refresh}`)
-        .set('access', `Bearer ${access}`)
+        .set('dlfwh', `Bearer ${dlfwh}`)
+        .set('chlrh', `Bearer ${chlrh}`)
+        .set('dhtnf', `Bearer ${dhtnf}`)
+        .set('ghkxld', `Bearer ${ghkxld}`)
         .send();
 
     expect(response.body.message).toBe("fail");
@@ -235,8 +268,10 @@ it ("modify one mybeer - success", async () => {
 
     const response = await request(app).put(`/api/mybeer/${mybeerId}`)
         // .set('secretkey', key)
-        .set('refresh', `Bearer ${refresh}`)
-        .set('access', `Bearer ${access}`)
+        .set('dlfwh', `Bearer ${dlfwh}`)
+        .set('chlrh', `Bearer ${chlrh}`)
+        .set('dhtnf', `Bearer ${dhtnf}`)
+        .set('ghkxld', `Bearer ${ghkxld}`)
         .send({
             myFeatures, location, rate, review: "modified review"
         });
@@ -263,8 +298,10 @@ it ("modify one mybeer - success", async () => {
 it ("modify one mybeer - fail (wrong id)", async () => {
     const response = await request(app).put(`/api/mybeer/${wrongId}`)
         // .set('secretkey', key)
-        .set('refresh', `Bearer ${refresh}`)
-        .set('access', `Bearer ${access}`)
+        .set('dlfwh', `Bearer ${dlfwh}`)
+        .set('chlrh', `Bearer ${chlrh}`)
+        .set('dhtnf', `Bearer ${dhtnf}`)
+        .set('ghkxld', `Bearer ${ghkxld}`)
         .send({
             myFeatures, location, rate: 4, review: "modified review"
         });
@@ -276,11 +313,16 @@ it ("modify one mybeer - fail (wrong id)", async () => {
 it ("modify one mybeer - fail (wrong user)", async () => {
     const response = await request(app).put(`/api/mybeer/${mybeerId}`)
         // .set('secretkey', key)
-        .set('refresh', `Bearer ${anotherrefresh}`)
-        .set('access', `Bearer ${anotheraccess}`)
+        .set('dlfwh', `Bearer ${anotherrefresh1}`)
+        .set('chlrh', `Bearer ${anotherrefresh2}`)
+        .set('dhtnf', `Bearer ${anotheraccess1}`)
+        .set('ghkxld', `Bearer ${anotheraccess2}`)
         .send({
             myFeatures, location, rate: 4, review: "modified review"
         });
+    
+    console.log(chlrh, "\n", anotheraccess2);
+    console.log(ghkxld, "\n", anotherrefresh2);
 
     expect(response.body.message).toBe("fail");
     expect(response.body.error).toBe("not the same user");
@@ -289,8 +331,10 @@ it ("modify one mybeer - fail (wrong user)", async () => {
 it ("delete one mybeer - fail (wrong user)", async () => {
     const response = await request(app).delete(`/api/mybeer/${mybeerId}`)
         // .set('secretkey', key)
-        .set('refresh', `Bearer ${anotherrefresh}`)
-        .set('access', `Bearer ${anotheraccess}`)
+        .set('dlfwh', `Bearer ${anotherrefresh1}`)
+        .set('chlrh', `Bearer ${anotherrefresh2}`)
+        .set('dhtnf', `Bearer ${anotheraccess1}`)
+        .set('ghkxld', `Bearer ${anotheraccess2}`)
         .send();
 
     expect(response.body.message).toBe("fail");
@@ -300,8 +344,10 @@ it ("delete one mybeer - fail (wrong user)", async () => {
 it ("delete one mybeer - fail (wrong id)", async () => {
     const response = await request(app).delete(`/api/mybeer/${wrongId}`)
         // .set('secretkey', key)
-        .set('refresh', `Bearer ${refresh}`)
-        .set('access', `Bearer ${access}`)
+        .set('dlfwh', `Bearer ${dlfwh}`)
+        .set('chlrh', `Bearer ${chlrh}`)
+        .set('dhtnf', `Bearer ${dhtnf}`)
+        .set('ghkxld', `Bearer ${ghkxld}`)
         .send();
 
     expect(response.body.message).toBe("fail");
@@ -320,8 +366,10 @@ it ("delete one mybeer - success", async () => {
 
     const response = await request(app).delete(`/api/mybeer/${mybeerId}`)
         // .set('secretkey', key)
-        .set('refresh', `Bearer ${refresh}`)
-        .set('access', `Bearer ${access}`)
+        .set('dlfwh', `Bearer ${dlfwh}`)
+        .set('chlrh', `Bearer ${chlrh}`)
+        .set('dhtnf', `Bearer ${dhtnf}`)
+        .set('ghkxld', `Bearer ${ghkxld}`)
         .send();
 
     beer = await Beers.findOne({ _id: beerId });
