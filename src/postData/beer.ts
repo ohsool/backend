@@ -34,6 +34,8 @@ beerCrawlingRouter.post("/", async(req, res) => {
             name_english: "Budweiser",
             image: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerImage/%EB%B2%84%EB%93%9C%EC%99%80%EC%9D%B4%EC%A0%80.png",
             degree: 5.0,
+            country: "미국",
+            isDistant: true,
             categoryId: beerCategoryIds[0],
             hashtag: [
                 "미국",
@@ -52,6 +54,8 @@ beerCrawlingRouter.post("/", async(req, res) => {
             name_english: "Miller Lite",
             image: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerImage/%EB%B0%80%EB%9F%AC%EB%9D%BC%EC%9D%B4%ED%8A%B8.png",
             degree: 4.2,
+            country: "미국",
+            isDistant: true,
             categoryId: beerCategoryIds[0],
             hashtag: [
                 "미국",
@@ -69,6 +73,8 @@ beerCrawlingRouter.post("/", async(req, res) => {
             name_english: "Tsingtao",
             image: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerImage/%EC%B9%AD%EB%8B%A4%EC%98%A4.png",
             degree: 4.7,
+            country: "중국",
+            isDistant: false,
             categoryId: beerCategoryIds[0],
             hashtag: [
                 "중국",
@@ -85,6 +91,8 @@ beerCrawlingRouter.post("/", async(req, res) => {
             name_english: "Asahi",
             image: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerImage/%EC%95%84%EC%82%AC%ED%9E%88.png",
             degree: 5.0,
+            country: "일본",
+            isDistant: false,
             categoryId: beerCategoryIds[0],
             hashtag: [
                 "일본",
@@ -102,6 +110,8 @@ beerCrawlingRouter.post("/", async(req, res) => {
             name_english: "Victorian Bitter",
             image: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerImage/%EB%B9%85%ED%86%A0%EB%A6%AC%EC%95%84%EB%B9%84%ED%84%B0.png",
             degree: 4.6,
+            country: "호주",
+            isDistant: true,
             categoryId: beerCategoryIds[0],
             hashtag: [
                 "호주",
@@ -119,6 +129,8 @@ beerCrawlingRouter.post("/", async(req, res) => {
             name_english: "Cass Fresh",
             image: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerImage/%EC%B9%B4%EC%8A%A4%ED%9B%84%EB%A0%88%EC%89%AC.png",
             degree: 4.5,
+            country: "한국",
+            isDistant: false,
             categoryId: beerCategoryIds[0],
             hashtag: [
                 "한국",
@@ -137,6 +149,8 @@ beerCrawlingRouter.post("/", async(req, res) => {
             name_english: "Cass Light",
             image: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerImage/%EC%B9%B4%EC%8A%A4%EB%9D%BC%EC%9D%B4%ED%8A%B8.png",
             degree: 4,
+            country: "한국",
+            isDistant: false,
             categoryId: beerCategoryIds[0],
             hashtag: [
                 "한국",
@@ -155,6 +169,8 @@ beerCrawlingRouter.post("/", async(req, res) => {
             name_english: "Hite",
             image: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerImage/%ED%95%98%EC%9D%B4%ED%8A%B8.png",
             degree: 4.3,
+            country: "한국",
+            isDistant: false,
             categoryId: beerCategoryIds[0],
             hashtag: [
                 "한국",
@@ -170,6 +186,8 @@ beerCrawlingRouter.post("/", async(req, res) => {
         {
             name_korean: "맥스",
             name_english: "Max",
+            country: "한국",
+            isDistant: false,
             image: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerImage/%EB%A7%A5%EC%8A%A4.png",
             degree: 4.5,
             categoryId: beerCategoryIds[0],
@@ -189,6 +207,8 @@ beerCrawlingRouter.post("/", async(req, res) => {
         {
             name_korean: "테라",
             name_english: "Terra",
+            country: "한국",
+            isDistant: false,
             image: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerImage/%ED%85%8C%EB%9D%BC.png",
             degree: 4.6,
             categoryId: beerCategoryIds[0],
@@ -206,6 +226,8 @@ beerCrawlingRouter.post("/", async(req, res) => {
         {
             name_korean: "필라이트 프레시",
             name_english: "Filite Fresh",
+            country: "한국",
+            isDistant: false,
             image: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerImage/%ED%95%84%EB%9D%BC%EC%9D%B4%ED%8A%B8+%ED%9B%84%EB%A0%88%EC%89%AC.png",
             degree: 4.5,
             categoryId: beerCategoryIds[0],
@@ -223,6 +245,8 @@ beerCrawlingRouter.post("/", async(req, res) => {
         {
             name_korean: "클라우드",
             name_english: "Kloud",
+            country: "한국",
+            isDistant: false,
             image: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerImage/%ED%81%B4%EB%9D%BC%EC%9A%B0%EB%93%9C.png",
             degree: 5,
             categoryId: beerCategoryIds[0],
@@ -240,6 +264,8 @@ beerCrawlingRouter.post("/", async(req, res) => {
         {
             name_korean: "클라우드 드래프트",
             name_english: "Kloud Draft",
+            country: "한국",
+            isDistant: false,
             image: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerImage/%ED%81%B4%EB%9D%BC%EC%9A%B0%EB%93%9C+%EB%93%9C%EB%9E%98%ED%94%84%ED%8A%B8.png",
             degree: 4.5,
             categoryId: beerCategoryIds[0],
@@ -258,6 +284,8 @@ beerCrawlingRouter.post("/", async(req, res) => {
         {
             name_korean: "오비라거",
             name_english: "OB Lager",
+            country: "한국",
+            isDistant: false,
             image: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerImage/OB%EB%9D%BC%EA%B1%B0.png",
             degree: 5.2,
             categoryId: beerCategoryIds[0],
@@ -278,6 +306,8 @@ beerCrawlingRouter.post("/", async(req, res) => {
             name_english: "Backyang BYC Vienna Lager",
             image: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerImage/%EB%B0%B1%EC%96%91.png",
             degree: 5.2,
+            country: "한국",
+            isDistant: false,
             categoryId: beerCategoryIds[0],
             hashtag: [
                 "한국",
@@ -295,6 +325,8 @@ beerCrawlingRouter.post("/", async(req, res) => {
             name_english: "Tsingdao",
             image: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerImage/%EC%B9%AD%EB%8B%A4%EC%98%A4.png",
             degree: 4.7,
+            country: "중국",
+            isDistant: false,
             categoryId: beerCategoryIds[0],
             hashtag: [
                 "중국",
@@ -312,6 +344,8 @@ beerCrawlingRouter.post("/", async(req, res) => {
             name_english: "San Miguel",
             image: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerImage/%EC%82%B0%EB%AF%B8%EA%B5%AC%EC%97%98.png",
             degree: 5.0,
+            country: "필리핀",
+            isDistant: false,
             categoryId: beerCategoryIds[0],
             hashtag: [
                 "필리핀",
@@ -329,6 +363,8 @@ beerCrawlingRouter.post("/", async(req, res) => {
             name_english: "Corona Extra",
             image: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerImage/%EC%BD%94%EB%A1%9C%EB%82%98.png",
             degree: 4.6,
+            country: "멕시코",
+            isDistant: true,
             categoryId: beerCategoryIds[0],
             hashtag: [
                 "멕시코",
@@ -346,6 +382,8 @@ beerCrawlingRouter.post("/", async(req, res) => {
             name_english: "Tsingdao",
             image: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerImage/%EC%82%BF%ED%8F%AC%EB%A1%9C.png",
             degree: 5.0,
+            country: "일본",
+            isDistant: false,
             categoryId: beerCategoryIds[0],
             hashtag: [
                 "일본",
@@ -363,6 +401,8 @@ beerCrawlingRouter.post("/", async(req, res) => {
             name_english: "Kronenberg 1664",
             image: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerImage/%ED%81%AC%EB%A1%9C%EB%84%A8%EB%B2%84%EA%B7%B8+1664.png",
             degree: 5.0,
+            country: "프랑스",
+            isDistant: true,
             categoryId: beerCategoryIds[0],
             hashtag: [
                 "프랑스",
@@ -380,6 +420,8 @@ beerCrawlingRouter.post("/", async(req, res) => {
             name_english: "Tiger",
             image: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerImage/%ED%83%80%EC%9D%B4%EA%B1%B0.png",
             degree: 5.0,
+            country: "싱가포르",
+            isDistant: false,
             categoryId: beerCategoryIds[0],
             hashtag: [
                 "싱가포르",
@@ -398,6 +440,8 @@ beerCrawlingRouter.post("/", async(req, res) => {
             name_english: "Kona Longboard Island Lager",
             image: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerImage/%EC%BD%94%EB%82%98+%EB%A1%B1%EB%B3%B4%EB%93%9C+%EC%95%84%EC%9D%BC%EB%9E%9C%EB%93%9C+%EB%9D%BC%EA%B1%B0.png",
             degree: 4.6,
+            country: "미국",
+            isDistant: true,
             categoryId: beerCategoryIds[0],
             hashtag: [
                 "미국",
@@ -415,6 +459,8 @@ beerCrawlingRouter.post("/", async(req, res) => {
             name_english: "Croco Fresh",
             image: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerImage/%ED%81%AC%EB%A1%9C%EC%BD%94+%ED%9B%84%EB%A0%88%EC%89%AC.png",
             degree: 4.5,
+            country: "네덜란드",
+            isDistant: true,
             categoryId: beerCategoryIds[0],
             hashtag: [
                 "네덜란드",
@@ -433,6 +479,8 @@ beerCrawlingRouter.post("/", async(req, res) => {
             name_english: "Heineken",
             image: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerImage/%ED%95%98%EC%9D%B4%EB%84%A4%EC%BC%84.png",
             degree: 5.0,
+            country: "네덜란드",
+            isDistant: true,
             categoryId: beerCategoryIds[0],
             hashtag: [
                 "네덜란드",
@@ -451,6 +499,8 @@ beerCrawlingRouter.post("/", async(req, res) => {
             name_english: "Singha",
             image: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerImage/%EC%8B%B1%ED%95%98.png",
             degree: 5.0,
+            country: "태국",
+            isDistant: false,
             categoryId: beerCategoryIds[0],
             hashtag: [
                 "태국",
@@ -469,6 +519,8 @@ beerCrawlingRouter.post("/", async(req, res) => {
             name_english: "Hanmac",
             image: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerImage/%ED%95%9C%EB%A7%A5.png",
             degree: 4.6,
+            country: "한국",
+            isDistant: false,
             categoryId: beerCategoryIds[0],
             hashtag: [
                 "한국",
@@ -487,6 +539,8 @@ beerCrawlingRouter.post("/", async(req, res) => {
             name_english: "Asahi Dry Black",
             image: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerImage/%EC%95%84%EC%82%AC%ED%9E%88+%EB%93%9C%EB%9D%BC%EC%9D%B4%EB%B8%94%EB%9E%99.png",
             degree: 5.5,
+            country: "일본",
+            isDistant: false,
             categoryId: beerCategoryIds[0],
             hashtag: [
                 "일본",
@@ -505,6 +559,8 @@ beerCrawlingRouter.post("/", async(req, res) => {
             name_english: "Cafri",
             image: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerImage/%EC%B9%B4%ED%94%84%EB%A6%AC.png",
             degree: 4.2,
+            country: "한국",
+            isDistant: false,
             categoryId: beerCategoryIds[0],
             hashtag: [
                 "한국",
@@ -522,6 +578,8 @@ beerCrawlingRouter.post("/", async(req, res) => {
             name_english: "Everest",
             image: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerImage/%EC%97%90%EB%B2%A0%EB%A0%88%EC%8A%A4%ED%8A%B8.png",
             degree: 5.5,
+            country: "네팔",
+            isDistant: false,
             categoryId: beerCategoryIds[0],
             hashtag: [
                 "네팔",
@@ -544,6 +602,8 @@ beerCrawlingRouter.post("/", async(req, res) => {
             name_english: "Pilsner Urquell",
             image: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerImage/%ED%95%84%EC%8A%A4%EB%84%88.png",
             degree: 4.4,
+            country: "체코",
+            isDistant: true,
             categoryId: beerCategoryIds[1],
             hashtag: [
                 "체코",
@@ -561,6 +621,8 @@ beerCrawlingRouter.post("/", async(req, res) => {
             name_english: "Double Aught",
             image: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerImage/%EB%8D%94%EB%B8%94%EC%98%A4%ED%8A%B8.png",
             degree: 5.0,
+            country: "미국",
+            isDistant: true,
             categoryId: beerCategoryIds[1],
             hashtag: [
                 "미국",
@@ -578,6 +640,8 @@ beerCrawlingRouter.post("/", async(req, res) => {
             name_english: "The Gentleman Lager",
             image: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerImage/%EB%8D%94%EC%A0%A0%ED%8B%80%EB%A7%A8%EB%9D%BC%EA%B1%B0.png",
             degree: 7.6,
+            country: "한국",
+            isDistant: false,
             categoryId: beerCategoryIds[1],
             hashtag: [
                 "한국",
@@ -595,6 +659,8 @@ beerCrawlingRouter.post("/", async(req, res) => {
             name_english: "Berliner Kindl Pilsener",
             image: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerImage/%EB%B2%A0%EB%A5%BC%EB%A6%AC%EB%84%88%ED%82%A8%EB%93%A4.png",
             degree: 5.1,
+            country: "독일",
+            isDistant: true,
             categoryId: beerCategoryIds[1],
             hashtag: [
                 "독일",
@@ -612,6 +678,8 @@ beerCrawlingRouter.post("/", async(req, res) => {
             name_english: "The Premium Malt's",
             image: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerImage/%EC%82%B0%ED%86%A0%EB%A6%AC%ED%94%84%EB%A6%AC%EB%AF%B8%EC%97%84.png",
             degree: 5.5,
+            country: "일본",
+            isDistant: false,
             categoryId: beerCategoryIds[1],
             hashtag: [
                 "일본",
@@ -628,6 +696,8 @@ beerCrawlingRouter.post("/", async(req, res) => {
             name_english: "Kirin Ichiban",
             image: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerImage/%EA%B8%B0%EB%A6%B0%EC%9D%B4%EC%B9%98%EB%B0%A9.png",
             degree: 5.0,
+            country: "일본",
+            isDistant: false,
             categoryId: beerCategoryIds[1],
             hashtag: [
                 "일본",
@@ -645,6 +715,8 @@ beerCrawlingRouter.post("/", async(req, res) => {
             name_english: "Platinum",
             image: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerImage/%ED%94%8C%EB%9E%98%ED%8B%B0%EB%84%98.png",
             degree: 5.0,
+            country: "한국",
+            isDistant: false,
             categoryId: beerCategoryIds[2],
             hashtag: [
                 "한국",
@@ -663,6 +735,8 @@ beerCrawlingRouter.post("/", async(req, res) => {
             name_english: "Charger Scottish Lager Beer",
             image: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerImage/%EC%B0%A8%EC%A0%80+%EC%8A%A4%EC%BD%94%ED%8B%B0%EC%89%AC+%EB%9D%BC%EA%B1%B0.png",
             degree: 7.5,
+            country: "스코틀랜드",
+            isDistant: true,
             categoryId: beerCategoryIds[1],
             hashtag: [
                 "스코틀랜드",
@@ -680,6 +754,8 @@ beerCrawlingRouter.post("/", async(req, res) => {
             name_english: "Guayabera",
             image: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerImage/%EA%B5%AC%EC%95%BC%EC%9D%B4%EB%B2%A0%EB%9D%BC.png",
             degree: 5.5,
+            country: "미국",
+            isDistant: true,
             categoryId: beerCategoryIds[2],
             hashtag: [
                 "미국",
@@ -697,6 +773,8 @@ beerCrawlingRouter.post("/", async(req, res) => {
             name_english: "Grunion",
             image: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerImage/%EA%B7%B8%EB%A3%A8%EB%8B%88%EC%96%B8.png",
             degree: 5.5,
+            country: "미국",
+            isDistant: true,
             categoryId: beerCategoryIds[2],
             hashtag: [
                 "미국",
@@ -714,6 +792,8 @@ beerCrawlingRouter.post("/", async(req, res) => {
             name_english: "Auburn",
             image: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerImage/%EC%98%A4%EB%B2%88.png",
             degree: 4.5,
+            country: "미국",
+            isDistant: true,
             categoryId: beerCategoryIds[2],
             hashtag:[
                 "미국",
@@ -732,6 +812,8 @@ beerCrawlingRouter.post("/", async(req, res) => {
             name_english: "Ark Pale Ale",
             image: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerImage/%EC%95%84%ED%81%AC+%ED%8E%98%EC%9D%BC%EC%97%90%EC%9D%BC+%EB%B8%8C%EB%9D%BC%EC%9A%B4.png",
             degree: 5.0,
+            country: "한국",
+            isDistant: false,
             categoryId: beerCategoryIds[2],
             hashtag: [
                 "한국",
@@ -750,6 +832,8 @@ beerCrawlingRouter.post("/", async(req, res) => {
             name_english: "Gompyo",
             image: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerImage/%EA%B3%B0%ED%91%9C%EB%B0%80%EB%A7%A5%EC%A3%BC.png",
             degree: 4.5,
+            country: "한국",
+            isDistant: false,
             categoryId: beerCategoryIds[2],
             hashtag: [
                 "한국",
@@ -768,6 +852,8 @@ beerCrawlingRouter.post("/", async(req, res) => {
             name_english: "Hoegaarden",
             image: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerImage/%ED%98%B8%EA%B0%80%EB%93%A0.png",
             degree: 4.9,
+            country: "벨기에",
+            isDistant: true,
             categoryId: beerCategoryIds[2],
             hashtag: [
                 "벨기에",
@@ -784,6 +870,8 @@ beerCrawlingRouter.post("/", async(req, res) => {
             name_english: "Kronenberg 1664 Blanc",
             image: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerImage/%ED%81%AC%EB%A1%9C%EB%84%A8%EB%B2%84%EA%B7%B8+1664+%EB%B8%94%EB%9E%91.png",
             degree: 5.0,
+            country: "프랑스",
+            isDistant: true,
             categoryId: beerCategoryIds[2],
             hashtag: [
                 "프랑스",
@@ -801,6 +889,8 @@ beerCrawlingRouter.post("/", async(req, res) => {
             name_english: "Big Wave Golden Ale",
             image: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerImage/%EB%B9%85%EC%9B%A8%EC%9D%B4%EB%B8%8C+%EA%B3%A8%EB%93%A0%EC%97%90%EC%9D%BC.png",
             degree: 4.4,
+            country: "미국",
+            isDistant: true,
             categoryId: beerCategoryIds[2],
             hashtag: [
                 "미국",
@@ -818,6 +908,8 @@ beerCrawlingRouter.post("/", async(req, res) => {
             name_english: "Kona Fire Rock Pale Ale",
             image: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerImage/%EC%BD%94%EB%82%98+%ED%8C%8C%EC%9D%B4%EC%96%B4%EB%9D%BD+%ED%8E%98%EC%9D%BC%EC%97%90%EC%9D%BC.png",
             degree: 5.8,
+            country: "미국",
+            isDistant: true,
             categoryId: beerCategoryIds[2],
             hashtag: [
                 "미국",
@@ -835,6 +927,8 @@ beerCrawlingRouter.post("/", async(req, res) => {
             name_english: "Gangseo",
             image: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerImage/%EA%B0%95%EC%84%9C.png",
             degree: 4.6,
+            country: "한국",
+            isDistant: false,
             categoryId: beerCategoryIds[2],
             hashtag: [
                 "한국",
@@ -852,6 +946,8 @@ beerCrawlingRouter.post("/", async(req, res) => {
             name_english: "Jeju Wit Ale",
             image: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerImage/%EC%A0%9C%EC%A3%BC+%EC%9C%84%ED%8A%B8%EC%97%90%EC%9D%BC.png",
             degree: 5.3,
+            country: "한국",
+            isDistant: false,
             categoryId: beerCategoryIds[2],
             hashtag: [
                 "한국",
@@ -869,6 +965,8 @@ beerCrawlingRouter.post("/", async(req, res) => {
             name_english: "Jeju Pellong Ale",
             image: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerImage/%EC%A0%9C%EC%A3%BC+%ED%8E%A0%EB%A1%B1%EC%97%90%EC%9D%BC.png",
             degree: 5.3,
+            country: "한국",
+            isDistant: false,
             categoryId: beerCategoryIds[2],
             hashtag: [
                 "한국",
@@ -886,6 +984,8 @@ beerCrawlingRouter.post("/", async(req, res) => {
             name_english: "Jeolla Ale",
             image: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerImage/%EC%A0%84%EB%9D%BC%EC%97%90%EC%9D%BC.png",
             degree: 4.5,
+            country: "한국",
+            isDistant: false,
             categoryId: beerCategoryIds[2],
             hashtag: [
                 "한국",
@@ -904,6 +1004,8 @@ beerCrawlingRouter.post("/", async(req, res) => {
             name_english: "Taegang Pale Ale",
             image: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerImage/%EB%8C%80%EA%B0%95%ED%8E%98%EC%9D%BC%EC%97%90%EC%9D%BC.png",
             degree: 4.6,
+            country: "한국",
+            isDistant: false,
             categoryId: beerCategoryIds[2],
             hashtag: [
                 "한국",
@@ -921,6 +1023,8 @@ beerCrawlingRouter.post("/", async(req, res) => {
             name_english: "Bluemoon",
             image: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerImage/%EB%B8%94%EB%A3%A8%EB%AC%B8.png",
             degree: 5.4,
+            country: "미국",
+            isDistant: true,
             categoryId: beerCategoryIds[2],
             hashtag: [
                 "미국",
@@ -938,6 +1042,8 @@ beerCrawlingRouter.post("/", async(req, res) => {
             name_english: "Leffe Brown",
             image: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerImage/%EB%A0%88%ED%8E%98%EB%B8%8C%EB%9D%BC%EC%9A%B4.png",
             degree: 6.5,
+            country: "벨기에",
+            isDistant: true,
             categoryId: beerCategoryIds[2],
             hashtag: [
                 "벨기에",
@@ -955,6 +1061,8 @@ beerCrawlingRouter.post("/", async(req, res) => {
             name_english: "Leffe Blond",
             image: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerImage/%EB%A0%88%ED%8E%98+%EB%B8%94%EB%A1%A0%EB%93%9C.png",
             degree: 6.6,
+            country: "벨기에",
+            isDistant: true,
             categoryId: beerCategoryIds[2],
             hashtag: [
                 "벨기에",
@@ -973,6 +1081,8 @@ beerCrawlingRouter.post("/", async(req, res) => {
             name_english: "Devel",
             image: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerImage/%EB%93%80%EB%B2%A8.png",
             degree: 8.5,
+            country: "벨기에",
+            isDistant: true,
             categoryId: beerCategoryIds[2],
             hashtag: [
                 "벨기에",
@@ -990,6 +1100,8 @@ beerCrawlingRouter.post("/", async(req, res) => {
             name_english: "Pado",
             image: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerImage/%ED%8C%8C%EB%8F%84(%EC%9D%B8%EC%B2%9C().png",
             degree: 4.5,
+            country: "한국",
+            isDistant: false,
             categoryId: beerCategoryIds[2],
             hashtag: [
                 "한국",
@@ -1007,6 +1119,8 @@ beerCrawlingRouter.post("/", async(req, res) => {
             name_english: "Edelweiss",
             image: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerImage/%EC%97%90%EB%8D%B8%EB%B0%94%EC%9D%B4%EC%8A%A4.png",
             degree: 5.0,
+            country: "오스트리아",
+            isDistant: true,
             categoryId: beerCategoryIds[2],
             hashtag: [
                 "오스트리아",
@@ -1024,6 +1138,8 @@ beerCrawlingRouter.post("/", async(req, res) => {
             name_english: "Indica",
             image: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerImage/%EC%9D%B8%EB%94%94%EC%B9%B4.png",
             degree: 6.5,
+            country: "미국",
+            isDistant: true,
             categoryId: beerCategoryIds[3],
             hashtag: [
                 "미국",
@@ -1041,6 +1157,8 @@ beerCrawlingRouter.post("/", async(req, res) => {
             name_english: "Goose Island",
             image: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerImage/%EA%B5%AC%EC%8A%A4%EC%95%84%EC%9D%BC%EB%9E%9C%EB%93%9C.png",
             degree: 5.9,
+            country: "미국",
+            isDistant: true,
             categoryId: beerCategoryIds[3],
             hashtag: [
                 "미국",
@@ -1058,6 +1176,8 @@ beerCrawlingRouter.post("/", async(req, res) => {
             name_english: "Vlofas Engelman",
             image: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerImage/%EB%B3%BC%ED%8C%8C%EC%8A%A4%EC%97%94%EC%A0%A4%EB%A7%A8.png",
             degree: 6.0,
+            country: "리투아니아",
+            isDistant: true,
             categoryId: beerCategoryIds[3],
             hashtag: [
                 "리투아니아",
@@ -1076,6 +1196,8 @@ beerCrawlingRouter.post("/", async(req, res) => {
             name_english: "North Coast Steller",
             image: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerImage/%EC%8A%A4%ED%85%94%EB%9D%BC.png",
             degree: 6.7,
+            country: "미국",
+            isDistant: true,
             categoryId: beerCategoryIds[3],
             hashtag: [
                 "미국",
@@ -1094,6 +1216,8 @@ beerCrawlingRouter.post("/", async(req, res) => {
             name_english: "Greene King",
             image: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerImage/%EA%B7%B8%EB%A6%B0%ED%82%B9.png",
             degree: 3.6,
+            country: "영국",
+            isDistant: true,
             categoryId: beerCategoryIds[3],
             hashtag: [
                 "영국",
@@ -1111,6 +1235,8 @@ beerCrawlingRouter.post("/", async(req, res) => {
             name_english: "Tiger Bro Mild IPA",
             image: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerImage/%ED%98%B8%EB%9E%91%EC%9D%B4%ED%98%95%EB%8B%98+%EC%88%9C%ED%95%9CIPA.png",
             degree: 4.7,
+            country: "한국",
+            isDistant: false,
             categoryId: beerCategoryIds[3],
             hashtag: [
                 "한국",
@@ -1128,6 +1254,8 @@ beerCrawlingRouter.post("/", async(req, res) => {
             name_english: "Kukmin IPA",
             image: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerImage/%EA%B5%AD%EB%AF%BCipa.png",
             degree: 6.5,
+            country: "한국",
+            isDistant: false,
             categoryId: beerCategoryIds[3],
             hashtag: [
                 "한국",
@@ -1145,6 +1273,8 @@ beerCrawlingRouter.post("/", async(req, res) => {
             name_english: "Platinum craft sunset",
             image: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerImage/%ED%87%B4%EA%B7%BC%EA%B8%B8+IPA.png",
             degree: 4.7,
+            country: "한국",
+            isDistant: false,
             categoryId: beerCategoryIds[3],
             hashtag: [
                 "한국",
@@ -1162,6 +1292,8 @@ beerCrawlingRouter.post("/", async(req, res) => {
             name_english: "Lagunitas Daytime IPA",
             image: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerImage/%EB%9D%BC%EA%B5%AC%EB%8B%88%ED%83%80%EC%8A%A4+%EB%8D%B0%EC%9D%B4%ED%83%80%EC%9E%84+IPA.png",
             degree: 4.0,
+            country: "미국",
+            isDistant: true,
             categoryId: beerCategoryIds[3],
             hashtag: [
                 "미국",
@@ -1179,6 +1311,8 @@ beerCrawlingRouter.post("/", async(req, res) => {
             name_english: "Weihenstephan",
             image: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerImage/%EB%B0%94%EC%9D%B4%EC%97%94%EC%8A%88%ED%85%8C%ED%8C%90.png",
             degree: 7.7,
+            country: "독일",
+            isDistant: true,
             categoryId: beerCategoryIds[4],
             hashtag:[
                 "독일",
@@ -1197,6 +1331,8 @@ beerCrawlingRouter.post("/", async(req, res) => {
             name_english: "Paulaner Hefe Weizenbier Dunkel",
             image: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerImage/%ED%8C%8C%EC%9A%B8%EB%9D%BC%EB%84%88%ED%97%A4%ED%8E%98.png",
             degree: 5.5,
+            country: "독일",
+            isDistant: true,
             categoryId: beerCategoryIds[4],
             hashtag:[
                 "독일",
@@ -1214,6 +1350,8 @@ beerCrawlingRouter.post("/", async(req, res) => {
             name_english: "Licher Weizen",
             image: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerImage/%EB%A6%AC%ED%97%88+%EB%B0%94%EC%9D%B4%EC%A0%A0.png",
             degree: 5.4,
+            country: "독일",
+            isDistant: true,
             categoryId: beerCategoryIds[4],
             hashtag:[
                 "독일",
@@ -1231,6 +1369,8 @@ beerCrawlingRouter.post("/", async(req, res) => {
             name_english: "L Weizen",
             image: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerImage/%EC%97%98%EB%B0%94%EC%9D%B4%EC%A0%A0.png",
             degree: 4.9,
+            country: "독일",
+            isDistant: true,
             categoryId: beerCategoryIds[4],
             hashtag:[
                 "독일",
@@ -1248,6 +1388,8 @@ beerCrawlingRouter.post("/", async(req, res) => {
             name_english: "Filte Weizen",
             image: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerImage/%ED%95%84%EB%9D%BC%EC%9D%B4%ED%8A%B8+%EB%B0%94%EC%9D%B4%EC%A0%A0.png",
             degree: 4.5,
+            country: "한국",
+            isDistant: false,
             categoryId: beerCategoryIds[4],
             hashtag:[
                 "한국",
@@ -1269,6 +1411,8 @@ beerCrawlingRouter.post("/", async(req, res) => {
             name_english: "Erdinger Dunkel",
             image: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerImage/%EC%97%90%EB%94%A9%EA%B1%B0%EB%91%94%EC%BC%88.png",
             degree: 5.3,
+            country: "독일",
+            isDistant: true,
             categoryId: beerCategoryIds[5],
             hashtag: [
                 "독일",
@@ -1287,6 +1431,8 @@ beerCrawlingRouter.post("/", async(req, res) => {
             name_english: "PAULANER Weissbier Dunkel",
             image: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerImage/%ED%8C%8C%EC%9A%B8%EB%9D%BC%EB%84%88+%EB%B0%94%EC%9D%B4%EC%8A%A4+%EB%B9%84%EC%96%B4%EB%91%94%EC%BC%88.png",
             degree: 5.3,
+            country: "독일",
+            isDistant: true,
             categoryId: beerCategoryIds[5],
             hashtag: [
                 "독일",
@@ -1304,6 +1450,8 @@ beerCrawlingRouter.post("/", async(req, res) => {
             name_english: "Klosterbrauerei Weltenburg GMBH",
             image: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerImage/%EB%B2%A8%ED%85%90%EB%B6%80%EB%A5%B4%EA%B1%B0%EB%B0%94%EB%A1%9C%ED%81%AC%EB%91%94%EC%BC%88.png",
             degree: 4.7,
+            country: "독일",
+            isDistant: true,
             categoryId: beerCategoryIds[5],
             hashtag: [
                 "독일",
@@ -1323,6 +1471,8 @@ beerCrawlingRouter.post("/", async(req, res) => {
             name_english: "Sancheong Brewery Dunkel",
             image: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerImage/%EC%82%B0%EC%B2%AD%EB%A7%A5%EC%A3%BC%EB%91%94%EC%BC%88.png",
             degree: 4.5,
+            country: "한국",
+            isDistant: false,
             categoryId: beerCategoryIds[5],
             hashtag: [
                 "한국",
@@ -1340,6 +1490,8 @@ beerCrawlingRouter.post("/", async(req, res) => {
             name_english: "Kozel Dark",
             image: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerImage/%EC%BD%94%EC%A0%A4%EB%8B%A4%ED%81%AC.png",
             degree: 3.8,
+            country: "체코",
+            isDistant: true,
             categoryId: beerCategoryIds[5],
             hashtag: [
                 "체코",
@@ -1359,6 +1511,8 @@ beerCrawlingRouter.post("/", async(req, res) => {
             name_english: "Guinness Original",
             image: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerImage/%EA%B8%B0%EB%84%A4%EC%8A%A4%EC%98%A4%EB%A6%AC%EC%A7%80%EB%84%90.png",
             degree: 4.2,
+            country: "아일랜드",
+            isDistant: true,
             categoryId: beerCategoryIds[6],
             hashtag: [
                 "아일랜드",
@@ -1378,6 +1532,8 @@ beerCrawlingRouter.post("/", async(req, res) => {
             name_english: "Guinness Draught",
             image: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerImage/%EA%B8%B0%EB%84%A4%EC%8A%A4%EB%93%9C%EB%9E%98%ED%94%84%ED%8A%B8.png",
             degree: 4.2,
+            country: "아일랜드",
+            isDistant: true,
             categoryId: beerCategoryIds[6],
             hashtag: [
                 "아일랜드",
@@ -1396,6 +1552,8 @@ beerCrawlingRouter.post("/", async(req, res) => {
             name_english: "Steam Brew Imperial Stout",
             image: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerImage/%EC%8A%A4%ED%8C%80%EB%B8%8C%EB%A3%A8%EC%9E%84%ED%8E%98%EB%A6%AC%EC%96%BC%EC%8A%A4%ED%83%80%EC%9A%B0%ED%8A%B8.png",
             degree: 7.5,
+            country: "독일",
+            isDistant: true,
             categoryId: beerCategoryIds[6],
             hashtag: [
                 "독일",
@@ -1413,6 +1571,8 @@ beerCrawlingRouter.post("/", async(req, res) => {
             name_english: "The Witch Chocholate Stou",
             image: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerImage/%EC%9C%84%EC%B9%98+%EC%B4%88%EC%BD%9C%EB%A6%BF+%EC%8A%A4%ED%83%80%EC%9A%B0%ED%8A%B8.png",
             degree: 5.7,
+            country: "한국",
+            isDistant: false,
             categoryId: beerCategoryIds[6],
             hashtag: [
                 "한국",
@@ -1430,6 +1590,8 @@ beerCrawlingRouter.post("/", async(req, res) => {
             name_english: "Faxe Stout",
             image: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerImage/%ED%8C%8D%EC%84%B8+%EC%8A%A4%ED%83%80%EC%9A%B0%ED%8A%B8.png",
             degree: 7.7,
+            country: "덴마크",
+            isDistant: true,
             categoryId: beerCategoryIds[6],
             hashtag: [
                 "덴마크",
@@ -1447,6 +1609,8 @@ beerCrawlingRouter.post("/", async(req, res) => {
             name_english: "Sierra Nevada Stout",
             image: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerImage/%EC%8B%9C%EC%97%90%EB%9D%BC%EB%84%A4%EB%B0%94%EB%8B%A4%EC%8A%A4%ED%83%80%EC%9A%B0%ED%8A%B8.png",
             degree: 5.8,
+            country: "미국",
+            isDistant: true,
             categoryId: beerCategoryIds[6],
             hashtag: [
                 "미국",
@@ -1466,6 +1630,8 @@ beerCrawlingRouter.post("/", async(req, res) => {
             name_english: "Paulaner Salvator",
             image: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerImage/%ED%8C%8C%EC%9A%B8%EB%9D%BC%EB%84%88+%EC%82%B4%EB%B0%94%ED%86%A0%EB%A5%B4.png",
             degree: 7.9,
+            country: "독일",
+            isDistant: true,
             categoryId: beerCategoryIds[7],
             hashtag: [
                 "독일",
@@ -1485,6 +1651,8 @@ beerCrawlingRouter.post("/", async(req, res) => {
             name_english: "Malpyo",
             image: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerImage/%EB%A7%90%ED%91%9C%ED%9D%91%EB%A7%A5%EC%A3%BC.png",
             degree: 4.5,
+            country: "한국",
+            isDistant: false,
             categoryId: beerCategoryIds[8],
             hashtag: [
                 "한국",
@@ -1504,6 +1672,8 @@ beerCrawlingRouter.post("/", async(req, res) => {
             name_english: "Super Bock",
             image: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerImage/%EC%8A%88%ED%8D%BC%EB%B3%B4%ED%81%AC.png",
             degree: 5.2,
+            country: "포르투칼",
+            isDistant: true,
             categoryId: beerCategoryIds[7],
             hashtag: [
                 "포르투칼",
@@ -1521,6 +1691,8 @@ beerCrawlingRouter.post("/", async(req, res) => {
             name_english: "Ayinger Celebrator Doppelbock",
             image: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerImage/%EC%95%84%EC%9E%89%EA%B1%B0+%EC%85%80%EB%9F%AC%EB%B8%8C%EB%A0%88%EC%9D%B4%ED%84%B0+%EB%8F%84%ED%8E%A0+%EB%B3%B4%ED%81%AC.png",
             degree: 6.7,
+            country: "독일",
+            isDistant: true,
             categoryId: beerCategoryIds[7],
             hashtag: [
                 "독일",
@@ -1538,6 +1710,8 @@ beerCrawlingRouter.post("/", async(req, res) => {
             name_english: "Weihenstephaner Korbinian",
             image: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerImage/%EB%B0%94%EC%9D%B4%EC%97%94%EC%8A%88%ED%85%8C%ED%8C%90+%EC%BD%94%EB%A5%B4%EB%B9%84%EB%8B%88%EC%95%88.png",
             degree: 7.4,
+            country: "독일",
+            isDistant: true,
             categoryId: beerCategoryIds[7],
             hashtag: [
                 "독일",
@@ -1556,6 +1730,8 @@ beerCrawlingRouter.post("/", async(req, res) => {
             name_english: "Schneider Aventinus Eisbock",
             image: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerImage/%EC%95%84%EB%B2%A4%ED%8B%B0%EB%88%84%EC%8A%A4%EC%95%84%EC%9D%B4%EC%8A%A4%EB%B6%81.png",
             degree: 12.0,
+            country: "독일",
+            isDistant: true,
             categoryId: beerCategoryIds[7],
             hashtag: [
                 "독일",
@@ -1573,6 +1749,8 @@ beerCrawlingRouter.post("/", async(req, res) => {
             name_english: "Cass 0.0",
             image: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerImage/%EC%B9%B4%EC%8A%A4+0.0.png",
             degree: 0,
+            country: "한국",
+            isDistant: false,
             categoryId: beerCategoryIds[8],
             hashtag: [
                 "한국",
@@ -1589,6 +1767,8 @@ beerCrawlingRouter.post("/", async(req, res) => {
             name_english: "Desperados",
             image: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerImage/%EB%8D%B0%EC%8A%A4%ED%8E%98%EB%9D%BC%EB%8F%84%EC%8A%A4.png",
             degree: 5.9,
+            country: "네덜란드",
+            isDistant: true,
             categoryId: beerCategoryIds[8],
             hashtag: [
                 "네덜란드",
@@ -1606,6 +1786,8 @@ beerCrawlingRouter.post("/", async(req, res) => {
             name_english: "Hogaarden Rose",
             image: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerImage/%ED%98%B8%EA%B0%80%EB%93%A0+%EB%A1%9C%EC%A0%9C.png",
             degree: 3.0,
+            country: "벨기에",
+            isDistant: true,
             categoryId: beerCategoryIds[8],
             hashtag: [
                 "벨기에",
@@ -1623,6 +1805,8 @@ beerCrawlingRouter.post("/", async(req, res) => {
             name_english: "Tiger Radler Grapefruit",
             image: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerImage/%ED%83%80%EC%9D%B4%EA%B1%B0%EB%9D%BC%EB%93%A4%EB%9F%AC+%EC%9E%90%EB%AA%BD.png",
             degree: 2.0,
+            country: "싱가포르",
+            isDistant: false,
             categoryId: beerCategoryIds[8],
             hashtag: [
                 "싱가포르",
@@ -1640,6 +1824,8 @@ beerCrawlingRouter.post("/", async(req, res) => {
             name_english: "Tiger Radler Lemon",
             image: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerImage/%ED%83%80%EC%9D%B4%EA%B1%B0+%EB%9D%BC%EB%93%A4%EB%9F%AC+%EB%A0%88%EB%AA%AC.png",
             degree: 2.0,
+            country: "싱가포르",
+            isDistant: false,
             categoryId: beerCategoryIds[8],
             hashtag: [
                 "싱가포르",
@@ -1657,6 +1843,8 @@ beerCrawlingRouter.post("/", async(req, res) => {
             name_english: "Fizz Strawberry",
             image: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerImage/%ED%94%BC%EC%A6%88+%EB%94%B8%EA%B8%B0.png",
             degree: 4.0,
+            country: "스웨덴",
+            isDistant: true,
             categoryId: beerCategoryIds[8],
             hashtag: [
                 "스웨덴",
@@ -1673,6 +1861,8 @@ beerCrawlingRouter.post("/", async(req, res) => {
             name_english: "Apple Fox",
             image: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerImage/%EC%95%A0%ED%94%8C%ED%8F%AD%EC%8A%A4.png",
             degree: 4.5,
+            country: "싱가포르",
+            isDistant: false,
             categoryId: beerCategoryIds[8],
             hashtag: [
                 "싱가포르",
@@ -1690,6 +1880,8 @@ beerCrawlingRouter.post("/", async(req, res) => {
             name_english: "Somersby Apple",
             image: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerImage/%EC%8D%A8%EB%A8%B8%EC%8A%A4%EB%B9%84+%EC%95%A0%ED%94%8C.png",
             degree: 4.5,
+            country: "덴마크",
+            isDistant: true,
             categoryId: beerCategoryIds[8],
             hashtag: [
                 "덴마크",
@@ -1707,6 +1899,8 @@ beerCrawlingRouter.post("/", async(req, res) => {
             name_english: "Magners Juicy Apple",
             image: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerImage/%EB%A7%A4%EA%B7%B8%EB%84%88%EC%8A%A4+%EC%A5%AC%EC%8B%9C%EC%95%A0%ED%94%8C.png",
             degree: 4.5,
+            country: "아일랜드",
+            isDistant: true,
             categoryId: beerCategoryIds[8],
             hashtag: [
                 "아일랜드",
@@ -1724,6 +1918,8 @@ beerCrawlingRouter.post("/", async(req, res) => {
             name_english: "Fil Good",
             image: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerImage/%ED%95%84%EA%B5%BF.png",
             degree: 4.5,
+            country: "한국",
+            isDistant: false,
             categoryId: beerCategoryIds[8],
             hashtag: [
                 "한국",
@@ -1741,6 +1937,8 @@ beerCrawlingRouter.post("/", async(req, res) => {
             name_english: "Fil Good 7",
             image: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerImage/%ED%95%84%EA%B5%BF%EC%84%B8%EB%B8%90.png",
             degree: 7,
+            country: "한국",
+            isDistant: false,
             categoryId: beerCategoryIds[8],
             hashtag: [
                 "한국",
@@ -1759,6 +1957,8 @@ beerCrawlingRouter.post("/", async(req, res) => {
             name_english: "Heineken Non Alcohol",
             image: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerImage/%ED%95%98%EC%9D%B4%EB%84%A4%EC%BC%84+%EB%AC%B4%EC%95%8C%EC%BD%9C.png",
             degree: 0,
+            country: "네덜란드",
+            isDistant: true,
             categoryId: beerCategoryIds[8],
             hashtag: [
                 "네덜란드",
@@ -1776,6 +1976,8 @@ beerCrawlingRouter.post("/", async(req, res) => {
             name_english: "Carlsberg 0.0",
             image: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerImage/%EC%B9%BC%EC%8A%A4%EB%B2%84%EA%B7%B8+0.0.png",
             degree: 0,
+            country: "덴마크",
+            isDistant: true,
             categoryId: beerCategoryIds[8],
             hashtag: [
                 "덴마크",
@@ -1793,6 +1995,8 @@ beerCrawlingRouter.post("/", async(req, res) => {
             name_english: "Asahi Dry Zero",
             image: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerImage/%EC%95%84%EC%82%AC%ED%9E%88%EB%93%9C%EB%9D%BC%EC%9D%B4%EC%A0%9C%EB%A1%9C.png",
             degree: 0,
+            country: "일본",
+            isDistant: false,
             categoryId: beerCategoryIds[8],
             hashtag: [
                 "일본",

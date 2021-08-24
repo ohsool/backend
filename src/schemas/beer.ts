@@ -15,6 +15,14 @@ const BeerSchema: Schema = new Schema({
         type: Number,
         required: true
     },
+    country: {
+        type: String,
+        required: true
+    }, 
+    isDistant: {
+        type: Boolean,
+        required: true
+    },
     categoryId: {
         type: mongoose.Types.ObjectId,
         ref: "BeerCategories",
