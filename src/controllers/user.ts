@@ -228,7 +228,7 @@ const login = async(req: Request, res: Response) => {
       );
       const accessToken = jwt.sign({ userId: user._id }, 
         env.jwt_secret, {
-          expiresIn: '1h',
+          expiresIn: '1m',
           issuer: 'node-avengers'
         }
       );
