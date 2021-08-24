@@ -202,7 +202,7 @@ const updateMyBeer = async (req: Request, res: Response) => {
             }
         }
     
-        if (String(myBeer.userId) !== String(userId)) {
+        if (myBeer.userId !== userId) {
             res.json({  message: "fail", error: "not the same user" });
 
             return;
@@ -248,12 +248,13 @@ const updateMyBeer = async (req: Request, res: Response) => {
 // 특정 도감 삭제하기
 const deleteMyBeer = async (req: Request, res: Response) => {
     const { myBeerId } = req.params;
+    console.log("🤷‍♀️user🤷‍♀️:", res.locals.user);
 
     try {
         const mybeer: IMyBeer = await MyBeer.findOne({ _id: myBeerId }).lean();
         const userId = res.locals.user._id;
 
-        if (String(mybeer.userId) !== String(userId)) {
+        if (mybeer.userId != userId) {
             res.json({ message: "fail", error: "not the same user" });
             return;
         }
