@@ -13,7 +13,6 @@ let dhtnf = "";
 let chlrh = "";
 let userId = "";
 
-
 it ("register success", async () => {
     const response = await request(app).post(`/api/user`)
         // .set('secretkey', key)
