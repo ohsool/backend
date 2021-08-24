@@ -97,7 +97,7 @@ function authMiddleware(req: Request, res: Response, next: NextFunction){
                             const accessToken1 = accessToken.split(".")[0];
                             const accessToken2 = "." + accessToken.split(".")[1] + "." + accessToken.split(".")[2];
 
-                            res.status(401).json({ message: "fail", error: "access token is expired", dhtnf: accessToken1, chlrh: accessToken2 });
+                            res.status(418).json({ message: "fail", error: "I'm a teapot", dhtnf: accessToken1, chlrh: accessToken2 });
 
                             return;
                         }
@@ -137,7 +137,7 @@ function authMiddleware(req: Request, res: Response, next: NextFunction){
                                     const refreshToken1 = refreshToken.split(".")[0];
                                     const refreshToken2 = "." + refreshToken.split(".")[1] + "." + refreshToken.split(".")[2];
 
-                                    res.status(401).json({ message: "fail", error: "refresh token is expired", dlfwh: refreshToken1, ghkxld: refreshToken2 });
+                                    res.status(418).json({ message: "fail", error: "I'm a teapot", dlfwh: refreshToken1, ghkxld: refreshToken2 });
 
                                     return;
                                 })
