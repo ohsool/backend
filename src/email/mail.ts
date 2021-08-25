@@ -28,7 +28,7 @@ export const mailSender = async (mailInfo: any) => {
         }
     });
 
-    const script = await readFile(__dirname + `/./${mailInfo.type}.html`, 'utf8')
+    const script = await readFile(__dirname + `/${mailInfo.type}.html`, 'utf8')
     const new_script = script.replace(/USERNAME/gi, mailInfo.nickname)
     let mail_subject = ""
 
