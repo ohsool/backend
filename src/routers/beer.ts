@@ -12,7 +12,7 @@ beerRouter.post("/list", authMiddleware, BeerController.postBeer);
 
 beerRouter.get("/list/:beerId", BeerController.getBeer);
 
-beerRouter.delete("/list/:beerId", BeerController.deleteBeer);
+beerRouter.delete("/list/:beerId", authMiddleware, BeerController.deleteBeer);
 
 beerRouter.put("/like/:beerId", authMiddleware, BeerController.likeBeer);
 
