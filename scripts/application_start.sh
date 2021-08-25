@@ -21,12 +21,13 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # loads nvm	
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # loads nvm bash_completion (node is in path now)
 
-#PM2 설치
-npm install -g pm2
-
 # node_modules 설치
 npm install --save --legacy-peer-deps
-# npm install
+echo "npm installed"
+
+#PM2 설치
+npm install -g pm2
+echo "pm2 installed"
 
 # typescript를 javascript 로 complie 하기
 npm run build

@@ -6,15 +6,15 @@ files:
 hooks:   
   ApplicationStop: 
     - location: scripts/application_stop.sh
-      timeout: 300
+      timeout: 500
       runas: ec2-user
   BeforeInstall:
     - location: scripts/before_install.sh
-      timeout: 300
+      timeout: 500
       runas: ec2-user
   ApplicationStart:
     - location: scripts/application_start.sh
-      timeout: 300
+      timeout: 500
       runas: ec2-user
   
 
