@@ -65,3 +65,5 @@ const postComplaint = async (req: Request, res: Response) => {
 export default {
     postComplaint
 }
+
+// https://api.slack.com/apps/A029KN5LE84/oauth?

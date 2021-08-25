@@ -128,6 +128,12 @@ const deleteBeer = async(req: Request, res: Response) => {
     let { beerId } = req.params;
     const _id = mongoose.Types.ObjectId(beerId);
 
+    if (res.locals.user != "ohsool") {
+        res.status(401).send({ message: "fail", error: "user not authenticated" });
+
+        return;
+    }
+
     try {
         await Beers.findOneAndDelete({ _id: _id }).lean();
 
