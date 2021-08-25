@@ -8,7 +8,7 @@ beerRouter.get("/list/all", BeerController.getBeers);   // 전체 리스트 출�
 
 beerRouter.get("/list/all/page", BeerController.getSomeBeers);  // 페이지별 리스트 출력하기
 
-beerRouter.post("/list", BeerController.postBeer);
+beerRouter.post("/list", authMiddleware, BeerController.postBeer);
 
 beerRouter.get("/list/:beerId", BeerController.getBeer);
 

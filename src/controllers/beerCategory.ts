@@ -21,6 +21,12 @@ const postBeerCategory = async(req: Request, res: Response) => {
         const { name, image, features } = req.body;
         const isExist: IBeerCategory | null = await BeerCategories.findOne({ name, image, features }).lean();
 
+        if (res.locals.user != "ohsool") {
+            res.status(401).send({ message: "fail", error: "user not authenticated" });
+
+            return;
+        }
+
         if(isExist) {
             res.json({ message: "fail", error: "category already exists" });
 

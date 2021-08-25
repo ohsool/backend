@@ -76,6 +76,12 @@ const postBeer = async(req: Request, res: Response) => {
         const { name_korean, name_english, image, degree, country, isDistant, categoryId, hashtag } = req.body;
         const isExist: IBeer = await Beers.findOne({ name_korean }).lean();
         const beerCategory: IBeerCategory | null = await BeerCategories.findById(categoryId);
+        
+        if (res.locals.user != "ohsool") {
+            res.status(401).send({ message: "fail", error: "user not authenticated" });
+
+            return;
+        }
 
         if (isExist) {
             res.json({ message: "fail", error: "beer already exists" });

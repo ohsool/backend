@@ -180,6 +180,7 @@ const updateMyBeer = async (req: Request, res: Response) => {
     try {
         const myBeer = await MyBeer.findOne({ _id: myBeerId }).lean();
         const userId = mongoose.Types.ObjectId(res.locals.user._id);
+        const nickname = res.locals.user.nickname;
 
         if (rate < 1 || rate > 5) {
             res.json({ message: "fail", error: "please input rate 1~4" });
@@ -202,7 +203,7 @@ const updateMyBeer = async (req: Request, res: Response) => {
             }
         }
 
-        if (String(myBeer.userId) != String(userId)) {
+        if (nickname != "ohsool" && String(myBeer.userId) != String(userId)) {
             res.json({  message: "fail", error: "not the same user" });
 
             return;
@@ -251,9 +252,10 @@ const deleteMyBeer = async (req: Request, res: Response) => {
 
     try {
         const mybeer: IMyBeer = await MyBeer.findOne({ _id: myBeerId }).lean();
-        const userId = res.locals.user._id;
+        const userId = mongoose.Types.ObjectId(res.locals.user._id);
+        const nickname = res.locals.user.nickname;
 
-        if (String(mybeer.userId) != String(userId)) {
+        if (nickname != "ohsool" && String(mybeer.userId) != String(userId)) {
             res.json({ message: "fail", error: "not the same user" });
             return;
         }
