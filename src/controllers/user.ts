@@ -420,6 +420,7 @@ const postTest = async (req: Request, res: Response) => {
 
 const socialUserSet = async (req: Request, res: Response) => {
   const { email, nickname } = req.body;
+  const userId = res.locals.user._id;
 
   if ( test_emails.includes(email) ) {
     res.json({ message: "fail", error: "email for test. don't use this" });
@@ -437,13 +438,13 @@ const socialUserSet = async (req: Request, res: Response) => {
     const existUser1 = await Users.findOne({ nickname }).lean();
     const existUser2 = await Users.findOne({ email }).lean();
 
-    if (existUser1) {
+    if (existUser1 && String(existUser1._id) != String(userId)) {
       res.json({ message: "fail", error: "exist nickname" });
 
       return
     }
 
-    if (existUser2) {
+    if (existUser2 && String(existUser2._id) != String(userId)) {
       res.json({ message: "fail", error: "exist email" });
 
       return
