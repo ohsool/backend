@@ -201,8 +201,8 @@ const updateMyBeer = async (req: Request, res: Response) => {
                 myFeatures[features[i]] = 1;
             }
         }
-    
-        if (myBeer.userId !== userId) {
+
+        if (String(myBeer.userId) != String(userId)) {
             res.json({  message: "fail", error: "not the same user" });
 
             return;
@@ -239,7 +239,7 @@ const updateMyBeer = async (req: Request, res: Response) => {
 
         await Beers.findOneAndUpdate({ _id: beerId }, { $set: { avgRate: newBeerAvgRate } }).lean();
 
-        res.json({ message: "success", myBeerId });
+        res.json({ message: "success", myBeerId, myBeer });
     } catch (error) {
         res.json({ message: "fail", error })
     }
@@ -248,13 +248,12 @@ const updateMyBeer = async (req: Request, res: Response) => {
 // 특정 도감 삭제하기
 const deleteMyBeer = async (req: Request, res: Response) => {
     const { myBeerId } = req.params;
-    console.log("🤷‍♀️user🤷‍♀️:", res.locals.user);
 
     try {
         const mybeer: IMyBeer = await MyBeer.findOne({ _id: myBeerId }).lean();
         const userId = res.locals.user._id;
 
-        if (mybeer.userId != userId) {
+        if (String(mybeer.userId) != String(userId)) {
             res.json({ message: "fail", error: "not the same user" });
             return;
         }
@@ -300,7 +299,7 @@ const deleteMyBeer = async (req: Request, res: Response) => {
 
         await Beers.findOneAndUpdate({ name_korean: beer.name_korean }, { $set: { avgRate: newBeerAvgRate, count: beerCount - 1 } }).lean();
 
-        res.json({ message: "success" });
+        res.json({ message: "success", userId: res.locals.user._id });
     } catch (error) {
         res.json({ message: "fail", error });
     }

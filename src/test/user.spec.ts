@@ -13,7 +13,6 @@ let dhtnf = "";
 let chlrh = "";
 let userId = "";
 
-
 it ("register success", async () => {
     const response = await request(app).post(`/api/user`)
         // .set('secretkey', key)
@@ -160,7 +159,9 @@ it ("gives test result - success", async () => {
         .set('ghkxld', `Bearer ${ghkxld}`)
         .send({
             userId: userId,
-            result: "IPA"
+            result: [
+                "IPA", true, "many"
+            ]
         });
 
     const user: IUser | null = await Users.findOne({ _id: userId });
@@ -176,10 +177,11 @@ it ("gives test result - success (no user is fine)", async () => {
     const response = await request(app).post(`/api/user/test`)
         // .set('secretkey', key)
         .send({
-            result: "IPA"
+            userId: userId,
+            result: [
+                "IPA", true, "many"
+            ]
         });
-
-    const user = await Users.findOne({ _id: userId });
 
     expect(response.body.message).toBe("success");
     expect(response.body.user).toBe(true);
