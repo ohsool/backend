@@ -353,9 +353,9 @@ it ("delete one mybeer - success", async () => {
 
     expect(response.body.message).toBe("success");
     expect(countCategoryBefore - countCategoryAfter).toBe(1);
-    // expect(avgRateCategory).toBe(avgRateCategoryAfter);
+    expect(avgRateCategory).toBe(avgRateCategoryAfter);
     expect(+countBefore - +countAfter).toBe(1);
-    // expect(avgRate).toBe(avgRateAfter);
+    expect(avgRate).toBe(avgRateAfter);
 });
 
 it ("delete one mybeer - fail (wrong user)", async () => {
@@ -382,7 +382,7 @@ it ("delete one mybeer - fail (wrong id)", async () => {
 
     expect(response.body.message).toBe("fail");
     expect(response.body.error).toBeTruthy();
-    //expect(response.body.error).toBe("wrong mybeer id");
+    // expect(response.body.error).toBe("wrong mybeer id");
 });
 
  // Disconnect Mongoose
