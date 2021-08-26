@@ -5,16 +5,16 @@ export interface IAvgRate {
 }
 
 interface IFeatures {
-    [key: string]: Number
+    [key: string]: number
 }
 
 export interface IBeerCategory {
     _id?: mongoose.Types.ObjectId,
-    name: String,
-    image: String,
+    name: string,
+    image: string,
     features: IFeatures,
-    title: String,
-    description: String,
-    avgRate: IAvgRate,
+    title: string,
+    description: string,
+    avgRate?: IAvgRate,
     preferenceCount?: number
 }

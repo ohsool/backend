@@ -6,11 +6,11 @@ interface IPassport {
 
 export interface IUser {
     _id?: mongoose.Types.ObjectId,
-    email?: String,
-    nickname: String,
-    password: String,
+    email?: string,
+    nickname: string,
+    password: string,
     preference: string,
-    image: String,
+    image: string,
     passport?: Array<IPassport>,
-    refreshToken?: String
+    refreshToken?: string
 }

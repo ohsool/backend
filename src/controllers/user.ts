@@ -241,7 +241,6 @@ const login = async(req: Request, res: Response) => {
       const accessToken1 = accessToken.split(".")[0];
       const accessToken2 = "." + accessToken.split(".")[1] + "." + accessToken.split(".")[2];
   
-      // res.json({ message: "success", refreshToken, accessToken, userId: user._id });
       res.json({ message: "success", dlfwh: refreshToken1, ghkxld: refreshToken2, dhtnf: accessToken1, chlrh: accessToken2, userId: user._id });
     } catch(error) {
       res.status(401).json({ message: "fail", error });

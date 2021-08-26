@@ -77,12 +77,12 @@ const postMyBeer = async (req: Request, res: Response) => {
         const beerCategoryId = beer.categoryId;
         
         const beerCategory: IBeerCategory = await BeerCategory.findOne({ _id: beerCategoryId }).lean();
-        const avg = beerCategory.avgRate[myPreference][0];
-        const count = beerCategory.avgRate[myPreference][1];
+        const avg = beerCategory.avgRate![myPreference][0];
+        const count = beerCategory.avgRate![myPreference][1];
 
         const new_avgRate = (( avg * count ) + rate) / (count + 1);
 
-        let avgRate = beerCategory.avgRate;
+        let avgRate = beerCategory.avgRate!;
 
         avgRate[myPreference][0] = new_avgRate;
         avgRate[myPreference][1] = count + 1;
@@ -220,12 +220,12 @@ const updateMyBeer = async (req: Request, res: Response) => {
         const rateOld = myBeer.rate;
 
         const beerCategory: IBeerCategory = await BeerCategory.findOne({ _id: beerCategoryId }).lean();
-        const avgRate_ = beerCategory.avgRate[myPreference][0];
-        const count = beerCategory.avgRate[myPreference][1];
+        const avgRate_ = beerCategory.avgRate![myPreference][0];
+        const count = beerCategory.avgRate![myPreference][1];
 
         const new_avgRate = ((count * avgRate_) - +rateOld + rate ) / count;
 
-        const avgRate = beerCategory.avgRate;
+        const avgRate = beerCategory.avgRate!;
 
         avgRate[myPreference][0] = new_avgRate;
         avgRate[myPreference][1] = count;
@@ -275,7 +275,7 @@ const deleteMyBeer = async (req: Request, res: Response) => {
         const rate = mybeer.rate;
         
         const beerCategory: IBeerCategory = await BeerCategory.findOne({ _id: beerCategoryId }).lean();
-        const avgRate = beerCategory.avgRate;
+        const avgRate = beerCategory.avgRate!;
         
         const avg = avgRate[myPreference][0];
         const count = avgRate[myPreference][1];

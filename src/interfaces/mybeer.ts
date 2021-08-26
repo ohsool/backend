@@ -1,17 +1,17 @@
 import mongoose from "mongoose";
 
 interface IFeatures {
-    [key: string]: Number
+    [key: string]: number
 }
 
 export interface IMyBeer {
     _id?: mongoose.Types.ObjectId,
     beerId: mongoose.Types.ObjectId,
     userId: mongoose.Types.ObjectId,
-    preference: String,
+    preference: string,
     myFeatures: IFeatures,
-    date: String,
-    location?: String,
-    rate: Number,
-    review: String
+    date: string,
+    location?: string,
+    rate: number,
+    review: string
 }

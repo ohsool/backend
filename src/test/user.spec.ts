@@ -167,7 +167,7 @@ it ("gives test result - success", async () => {
     const user: IUser | null = await Users.findOne({ _id: userId });
 
     expect(response.body.message).toBe("success");
-    expect(response.body.user).toBe(true);
+    expect(response.body.isExistUser).toBe(true);
     expect(response.body.category.name).toBe("IPA");
     expect(response.body.recommendations.length).toBe(2);
     expect(user!.preference).toBe("IPA");
@@ -184,7 +184,7 @@ it ("gives test result - success (no user is fine)", async () => {
         });
 
     expect(response.body.message).toBe("success");
-    expect(response.body.user).toBe(true);
+    expect(response.body.isExistUser).toBe(true);
     expect(response.body.category.name).toBe("IPA");
     expect(response.body.recommendations.length).toBe(2);
 });

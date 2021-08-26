@@ -1,12 +1,13 @@
 // crawling beer categories
 
 import express, { Request, Response, NextFunction, Router, response } from "express";
+import { IBeerCategory } from "../interfaces/beerCategory";
 import BeerCategories from "../schemas/beerCategory";
 
 const beerCategoryCrawlingRouter = express.Router();
 
 beerCategoryCrawlingRouter.post("/", async(req, res) => {
-    const beerCategory = [
+    const beerCategory: Array<IBeerCategory> = [
         {
             name: "Lager",
             image: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerCategory/lager.png",

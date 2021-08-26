@@ -13,7 +13,7 @@ import { IFeatures } from "../interfaces/beer";
 const beerCrawlingRouter = express.Router();
 
 beerCrawlingRouter.post("/", async(req, res) => {
-    const beerCategories: Array<String> = ["Lager", "Pilsner", "Ale", "IPA", "Weizen", "Dunkel", "Stout", "Bock", "Etc"];
+    const beerCategories: Array<string> = ["Lager", "Pilsner", "Ale", "IPA", "Weizen", "Dunkel", "Stout", "Bock", "Etc"];
     const beerCategoryIds: Array<mongoose.Types.ObjectId> = [];
     const beerCategoryFeatures: Array<IFeatures> = [];
 
@@ -2033,7 +2033,7 @@ beerCrawlingRouter.post("/", async(req, res) => {
 beerCrawlingRouter.get("/hashtags", async(req, res) => {
     try {
         const beers = await Beers.find({});
-        const hashtags: Array<String> = [];
+        const hashtags: Array<string> = [];
 
         for (let i = 0; i < beers.length; i ++) {
             const hashtag = beers[i].hashtag;

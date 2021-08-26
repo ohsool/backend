@@ -5,8 +5,10 @@ import { disconnect } from "../schemas";
 // import { secretAPIkey } from '../ssl/secretAPI';
 // const key = secretAPIkey();
 
-let refresh = "";
-let access = "";
+let dlfwh = "";
+let ghkxld = "";
+let dhtnf = "";
+let chlrh = "";
 
 const email = "slackwebkittest@test.com"
 const password = "recommendationtesttest1234";
@@ -16,10 +18,13 @@ it ("login success", async () => {
         // .set('secretkey', key)
         .send({ email, password });
 
-    refresh = response.body.refreshToken;
-    access = response.body.accessToken;
+    dlfwh = response.body.dlfwh;
+    ghkxld = response.body.ghkxld;
+    dhtnf = response.body.dhtnf;
+    chlrh = response.body.chlrh;
 
     expect(response.body.message).toBe("success");
+    
     expect(response.body.dlfwh).toBeTruthy();
     expect(response.body.ghkxld).toBeTruthy();
     expect(response.body.dhtnf).toBeTruthy();

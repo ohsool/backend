@@ -9,7 +9,7 @@ import { IBeer } from "../interfaces/beer";
 import { IBeerCategory } from "../interfaces/beerCategory";
 import { env } from "../env";
 
-let hashtags:Array<String> = [""];
+let hashtags:Array<string> = [""];
 let beers:Array<IBeer> = [];
 let beerCategories:Array<IBeerCategory> = [];
 
@@ -44,7 +44,7 @@ const search = async (req: Request, res: Response) => {
     const searched_categories: Array<IBeerCategory> = [];
 
     const hashtag = String(req.query.hashtag);
-    const send_hashtags: Array<String> = [];
+    const send_hashtags: Array<string> = [];
 
     if (word.length < 1 || hashtag.length < 1) {
         return;
@@ -91,7 +91,7 @@ const searchDeep = async (req: Request, res: Response) => {
     const searched_categories: Array<IBeerCategory> = [];
 
     const hashtag = String(req.query.hashtag);
-    const send_hashtags: Array<String> = [];
+    const send_hashtags: Array<string> = [];
 
     if (word.length < 1 || hashtag.length < 1) {
         return;
@@ -131,8 +131,8 @@ const searchDeep = async (req: Request, res: Response) => {
 }
 
 const searchHashtag = async (req: Request, res: Response) => {
-    const hash_tag: String = String(req.query.hashtag) || "";
-    const hashtag: Array<String> = [hash_tag];
+    const hash_tag: string = String(req.query.hashtag) || "";
+    const hashtag: Array<string> = [hash_tag];
 
     try {
         const newBeers: Array<IBeer> = [];
