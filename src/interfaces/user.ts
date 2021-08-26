@@ -9,7 +9,7 @@ export interface IUser {
     email?: String,
     nickname: String,
     password: String,
-    preference: String,
+    preference: string,
     image: String,
     passport?: Array<IPassport>,
     refreshToken?: String

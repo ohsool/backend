@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-interface IAvgRate {
+export interface IAvgRate {
     [key: string]: Array<number>
 }
 
@@ -15,5 +15,6 @@ export interface IBeerCategory {
     features: IFeatures,
     title: String,
     description: String,
-    avgRate: IAvgRate
+    avgRate: IAvgRate,
+    preferenceCount?: number
 }

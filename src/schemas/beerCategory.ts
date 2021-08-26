@@ -36,6 +36,11 @@ const BeerCategorySchema: Schema = new Schema({
             "Unknown": [0, 0],
             "Etc": [0, 0]
         }
+    },
+
+    preferenceCount: {
+        type: Number,
+        default: 0
     }
 });
 

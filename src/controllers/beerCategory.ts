@@ -2,9 +2,11 @@ import express, {Request, Response, NextFunction} from "express";
 
 import BeerCategories from "../schemas/beerCategory";
 import Beers from "../schemas/beer";
+import Users from "../schemas/user";
 
 import { IBeerCategory } from "../interfaces/beerCategory";
 import { IBeer } from "../interfaces/beer";
+import { IAvgRate } from "../interfaces/beerCategory";
 
 const getBeerCategories = async(req: Request, res: Response) => {
     try {
@@ -57,6 +59,7 @@ const getBeerCategory = async(req: Request, res: Response) => {
 
 const getTestResult = async(req: Request, res:Response) => {
     const result = req.body.result;
+
     try {
         if (!result) {
             res.json({ message: "fail", error: "test result doesn't exist" });
@@ -93,9 +96,59 @@ const getTestResult = async(req: Request, res:Response) => {
     }
 }
 
+interface IPreferenceCounts {
+    [index: string]: number,
+    Lager: number,
+    Pilsner: number,
+    Ale: number,
+    IPA: number,
+    Weizen: number,
+    Dunkel: number,
+    Stout: number,
+    Bock: number
+}
+
+const getPreferenceCount = async (req: Request, res: Response) => {
+    try {
+        const preferences = await Users.find({}).select("preference -_id");
+        const preferenceCounts: IPreferenceCounts = {
+            Lager: 0,
+            Pilsner: 0,
+            Ale: 0,
+            IPA: 0,
+            Weizen: 0,
+            Dunkel: 0,
+            Stout: 0,
+            Bock: 0
+        }
+
+        for (let i = 0; i < preferences.length; i ++) {
+            const preference = preferences[i].preference;
+
+            if (preference != "Unknown" ) {
+                preferenceCounts[preference] += 1;
+            }
+        }
+
+        await BeerCategories.updateOne({ name: "Lager" }, { $set: { preferenceCount: preferenceCounts.Lager } });
+        await BeerCategories.updateOne({ name: "Pilsner" }, { $set: { preferenceCount: preferenceCounts.Pilsner } });
+        await BeerCategories.updateOne({ name: "Ale" }, { $set: { preferenceCount: preferenceCounts.Ale } });
+        await BeerCategories.updateOne({ name: "IPA" }, { $set: { preferenceCount: preferenceCounts.IPA } });
+        await BeerCategories.updateOne({ name: "Weizen" }, { $set: { preferenceCount: preferenceCounts.Weizen } });
+        await BeerCategories.updateOne({ name: "Dunkel" }, { $set: { preferenceCount: preferenceCounts.Dunkel } });
+        await BeerCategories.updateOne({ name: "Stout" }, { $set: { preferenceCount: preferenceCounts.Stout } });
+        await BeerCategories.updateOne({ name: "Bock" }, { $set: { preferenceCount: preferenceCounts.Bock } });
+
+        res.json({ message: "success" });
+    } catch (error) {
+        res.json({ message: "fail" });
+    }
+}
+
 export default {
     getBeerCategories,
     postBeerCategory,
     getBeerCategory,
-    getTestResult
+    getTestResult,
+    getPreferenceCount
 }
