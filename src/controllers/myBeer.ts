@@ -12,6 +12,7 @@ import { IMyBeer } from '../interfaces/mybeer';
 // 도감 업로드하기
 const postMyBeer = async (req: Request, res: Response) => {
     let { myFeatures, location, rate, review } = req.body;
+
     const { beerId } = req.params;
     const _id = mongoose.Types.ObjectId(beerId);
     rate = Math.round(rate);
@@ -99,7 +100,7 @@ const postMyBeer = async (req: Request, res: Response) => {
 
         mybeer = await MyBeer.findOne({ _id: mybeer._id }).populate({path: 'userId', select: 'nickname'}).lean();
 
-        res.send({ message: "success", mybeer });
+        res.json({ message: "success", mybeer });
     } catch (error) {
         res.json({ message: "fail", error });
 
