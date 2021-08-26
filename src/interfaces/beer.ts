@@ -17,6 +17,7 @@ export interface IBeer {
     like_array?: Array<mongoose.Types.ObjectId>,
     features: IFeatures,
     count?: number, 
+    calculatedCount?: number,
     avgRate?: number,
     location?: Array<Array<string>>,
     location_report?: Array<Array<string>>,

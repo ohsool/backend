@@ -24,4 +24,8 @@ beerRouter.post("/report-location", authMiddleware, BeerController.reportLocatio
  
 beerRouter.get("/categorylist", BeerController.getBeerByCategory); // 카테고리별 리스트 출력하기
 
+beerRouter.post("/features/all", BeerController.getAllFeatures);
+
+beerRouter.post("/features/:beerId", BeerController.getFeatures);
+
 export { beerRouter };

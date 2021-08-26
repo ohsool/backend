@@ -204,6 +204,12 @@ const register = async(req: Request, res: Response) => {
 const login = async(req: Request, res: Response) => {
     let { email, password } = req.body;
 
+    if (!email || !password) {
+      res.status(401).json({ message: "fail", error: "wrong input" });
+  
+      return;
+    }
+
     const crypted_password = crypto.createHmac("sha256", password).update(env.pass_secret).digest("hex");
     try {
       const user = await Users.findOne({ email }).lean();

@@ -5,8 +5,9 @@ import moment from "moment";
 // import Beers from "../schemas/beer";
 import Beers from "../schemas/beer";
 import BeerCategories from '../schemas/beerCategory';
+import MyBeers from "../schemas/mybeer";
 
-import { IBeer } from "../interfaces/beer";
+import { IBeer, IFeatures } from "../interfaces/beer";
 import { IBeerCategory } from '../interfaces/beerCategory';
 
 const getBeers = async(req: Request, res: Response) => {
@@ -328,6 +329,103 @@ const getBeerByCategory = async (req: Request, res: Response)=> {
     }
 }
 
+const getAllFeatures = async (req: Request, res: Response) => {
+    const modifiedBeers: Array<IBeer> = [];
+
+    try {
+        const beers = await Beers.find({});
+
+        for (let i = 0; i < beers.length; i ++) {
+            const myBeers = await MyBeers.find({ beerId: beers[i]._id }).select("myFeatures -_id");
+
+            if (!myBeers) {
+                continue;
+            }
+
+            const count = myBeers.length;
+            if (count == beers[i].calculatedCount! || count == 0) {  // same as before
+                continue;
+            }
+
+            const newFeatures: IFeatures = {
+                "bitter": 0,
+                "crispy": 0,
+                "flavor": 0,
+                "sweet": 0,
+                "nutty": 0
+            };
+    
+            for (let j = 0; j < count; j ++) {
+                newFeatures.bitter += myBeers[j].myFeatures.bitter;
+                newFeatures.crispy += myBeers[j].myFeatures.crispy;
+                newFeatures.flavor += myBeers[j].myFeatures.flavor;
+                newFeatures.sweet += myBeers[j].myFeatures.sweet;
+                newFeatures.nutty += myBeers[j].myFeatures.nutty;
+            }
+    
+            newFeatures.bitter /= count;
+            newFeatures.crispy /= count;
+            newFeatures.flavor /= count;
+            newFeatures.sweet /= count;
+            newFeatures.nutty /= count;
+
+            const beer = await Beers.findOneAndUpdate({ _id: beers[i]._id }, { $set: { features: newFeatures, calculatedCount: count } }).select("name_korean features");
+
+            modifiedBeers.push(beer!);
+        }
+        
+        res.json({ message: "success", modifiedBeers });
+    } catch (error) {
+        res.json({ message: "fail", error });
+    }
+}
+
+const getFeatures = async (req: Request, res: Response) => {
+    const beerId = req.params.beerId;
+
+    const myBeers = await MyBeers.find({ beerId }).select("myFeatures -_id");
+    const beer = await Beers.findOne({ _id: beerId });
+
+    if (!myBeers) {
+        res.json({ message: "fail", error: "no mybeers with this beer" });
+
+        return;
+    }
+
+    const count = myBeers.length;
+    if (count == beer!.calculatedCount || count == 0) {
+        res.json({ message: "fail", error: "no need to update" });
+
+        return;
+    }
+
+    const newFeatures: IFeatures = {
+        "bitter": 0,
+        "crispy": 0,
+        "flavor": 0,
+        "sweet": 0,
+        "nutty": 0
+    };
+    
+    for (let i = 0; i < count; i ++) {
+        newFeatures.bitter += myBeers[i].myFeatures.bitter;
+        newFeatures.crispy += myBeers[i].myFeatures.crispy;
+        newFeatures.flavor += myBeers[i].myFeatures.flavor;
+        newFeatures.sweet += myBeers[i].myFeatures.sweet;
+        newFeatures.nutty += myBeers[i].myFeatures.nutty;
+    }
+
+    newFeatures.bitter /= count;
+    newFeatures.crispy /= count;
+    newFeatures.flavor /= count;
+    newFeatures.sweet /= count;
+    newFeatures.nutty /= count;
+
+    const res_beer = await Beers.findOneAndUpdate({ _id: beerId }, { $set: { features: newFeatures, calculatedCount: count } }).select("name_korean features");
+
+    res.json({ message: "success", beer: res_beer });
+}
+
 export default {
     getBeers,
     getSomeBeers,
@@ -338,5 +436,7 @@ export default {
     unlikeBeer,
     likedBeer,
     reportLocation,
-    getBeerByCategory
+    getBeerByCategory,
+    getAllFeatures,
+    getFeatures
 }

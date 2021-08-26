@@ -107,7 +107,7 @@ interface IPreferenceCounts {
     Stout: number,
     Bock: number
 }
-
+ 
 const getPreferenceCount = async (req: Request, res: Response) => {
     try {
         const preferences = await Users.find({}).select("preference -_id");
