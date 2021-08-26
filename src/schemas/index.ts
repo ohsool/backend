@@ -6,9 +6,10 @@ console.log("DB mode:", env.modeNow);
 
 if (env.modeNow == "development" || env.modeNow == "production") { // on server
   url = env.atlas_url;
-} else if ( env.modeNow == "test") {  // for jest test code
-  url = env.test_url
-}  
+}
+// else if ( env.modeNow == "test") {  // for jest test code
+//   url = env.test_url
+// }  
 // else it's local
 
 let database : mongoose.Connection;

@@ -18,19 +18,19 @@ function authMiddleware(req: Request, res: Response, next: NextFunction){
         return;
     }
 
-    const refreshToken1Array = (<String>refreshToken1).split(" ");
+    const refreshToken1Array = refreshToken1.split(" ");
     const refreshToken1Scheme = refreshToken1Array[0];
     const refreshToken1Value = refreshToken1Array[1];
 
-    const refreshToken2Array = (<String>refreshToken2).split(" ");
+    const refreshToken2Array = refreshToken2.split(" ");
     const refreshToken2Scheme = refreshToken2Array[0];
     const refreshToken2Value = refreshToken2Array[1];
 
-    const accessToken1Array = (<String>accessToken1).split(" ");
+    const accessToken1Array = accessToken1.split(" ");
     const accessToken1Scheme = accessToken1Array[0];
     const accessToken1Value = accessToken1Array[1];
 
-    const accessToken2Array = (<String>accessToken2).split(" ");
+    const accessToken2Array = accessToken2.split(" ");
     const accessToken2Scheme = accessToken2Array[0];
     const accessToken2Value = accessToken2Array[1];
 

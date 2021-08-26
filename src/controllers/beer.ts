@@ -234,9 +234,9 @@ const reportLocation = async(req: Request, res: Response) => {
             return;
         }
 
-        const location_report: Array<Array<String>> = beer.location_report!;
+        const location_report: Array<Array<string>> = beer.location_report!;
         // [[name, address, url], [name, address, url], ...]
-        const locations: Array<Array<String>> = beer.location!;
+        const locations: Array<Array<string>> = beer.location!;
 
         // is reported location already exist in location list?
         const found = locations.some(e => Array.isArray(e) && e.every((o, i) => Object.is(new_report[i], o)));

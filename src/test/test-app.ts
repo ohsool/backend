@@ -50,5 +50,4 @@ app.use(`/api/search`, [searchRouter]);
 
 console.log("mode:", env.modeNow);
 
-
 export { app };

@@ -13,7 +13,7 @@ it ("get auto-complete beer name search - success", async () => {
 
     const beers: Array<IBeer> = response.body.beers;
     const beerCategories: Array<IBeerCategory> = response.body.beerCategories;
-    const hashtags: Array<Array<String>> = response.body.hashtags;
+    const hashtags: Array<Array<string>> = response.body.hashtags;
 
     expect(response.body.message).toBe("success");
     expect(Array.isArray(response.body.beers)).toBe(true);
@@ -29,7 +29,7 @@ it ("get auto-complete beer category search - success", async () => {
 
     const beers: Array<IBeer> = response.body.beers;
     const beerCategories: Array<IBeerCategory> = response.body.beerCategories;
-    const hashtags: Array<Array<String>> = response.body.hashtags;
+    const hashtags: Array<Array<string>> = response.body.hashtags;
 
     expect(response.body.message).toBe("success");
     expect(Array.isArray(response.body.beers)).toBe(true);
@@ -44,7 +44,7 @@ it ("get auto-complete hashtag search - success", async () => {
 
     const beers: Array<IBeer> = response.body.beers;
     const beerCategories: Array<IBeerCategory> = response.body.beerCategories;
-    const hashtags: Array<String> = response.body.hashtags;
+    const hashtags: Array<string> = response.body.hashtags;
 
     expect(response.body.message).toBe("success");
     expect(Array.isArray(response.body.beers)).toBe(true);
@@ -61,7 +61,7 @@ it ("get auto-complete hashtag search - success", async () => {
 
     expect(response.body.message).toBe("success");
     expect(Array.isArray(response.body.beers)).toBe(true);
-    expect(beers.length).toBe(8);
+    expect(beers.length).toBe(19);
     expect(beers[0].name_english).toBe("Budweiser");
 });
 
