@@ -133,6 +133,20 @@ const getCurrentMyBeers = async (req: Request, res: Response) => {
     
 };
 
+// 현재 유저가 작성한 맥주도감 개수 가져오기
+const getLengthOfMyBeers = async (req: Request, res: Response) => {
+    const userId = res.locals.user._id;
+
+    try {
+        const mybeers = await MyBeer.find({ userId });
+        const length = mybeers.length;
+
+        res.json({ message: "success", length });
+    } catch (error) {
+        res.json({ message: "fail", error });
+    }
+}
+
 // 특정 맥주의 전체 도감 가져오기
 const getBeerAllReviews = async (req: Request, res: Response) => {
     try {
@@ -313,6 +327,7 @@ export default {
     postMyBeer,
     getAllMyBeers,
     getCurrentMyBeers,
+    getLengthOfMyBeers,
     getBeerAllReviews,
     getMyBeer,
     updateMyBeer,

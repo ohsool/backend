@@ -13,6 +13,9 @@ myBeerRouter.get("/all", authMiddleware,  myBeerController.getAllMyBeers);
 // 현재 유저의 도감 가져오기
 myBeerRouter.get("/my", authMiddleware, myBeerController.getCurrentMyBeers);
 
+// 현재 유저가 작성한 맥주도감 개수 가져오기
+myBeerRouter.get("/my/length", authMiddleware, myBeerController.getLengthOfMyBeers);
+
 // 특정 맥주의 전체 도감 가져오기
 myBeerRouter.get("/beer/:beerId", myBeerController.getBeerAllReviews);
 

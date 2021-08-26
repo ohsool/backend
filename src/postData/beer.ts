@@ -19,6 +19,7 @@ beerCrawlingRouter.post("/", async(req, res) => {
 
     for (let i = 0; i < beerCategories.length; i ++) {
         const beerCategory: IBeerCategory | null = await BeerCategories.findOne({ name: beerCategories[i] });
+        
         const id: mongoose.Types.ObjectId = beerCategory!._id!;
         const features: IFeatures = beerCategory!.features;
 
