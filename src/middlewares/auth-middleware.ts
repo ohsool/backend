@@ -57,7 +57,7 @@ function authMiddleware(req: Request, res: Response, next: NextFunction){
     } catch (error) {
         userAccessVerified = null;
     }
-    
+
     try {
         if (!userAccessVerified) {
             if (!userRefreshVerified) { 
@@ -161,11 +161,22 @@ function authMiddleware(req: Request, res: Response, next: NextFunction){
                 // : to next middleware
                 // console.log("4. all are valid");
 
-                let userId = (<any>userAccessVerified).userId;
+                const userId = (<any>userAccessVerified).userId;
+                if (!userId || (<any>userRefreshVerified).userId) {
+                    res.status(401).json({ message: "fail", error: "wrong tokens" });
+
+                    return;
+                }
 
                 Users.findOne({ _id: userId })
                     .then((user: IUser | null) => {
                         if (user) {
+                            if (user.refreshToken != refreshToken) {
+                                res.status(401).json({ message: "fail", error: "wrong tokens" });
+
+                                return;
+                            }
+
                             res.locals.user = user;
 
                             next();

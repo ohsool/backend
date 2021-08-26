@@ -237,5 +237,12 @@ it ("signout - invalid user - fail", async () => {
 
  // Disconnect Mongoose
  afterAll( async () => {
+    await request(app).get("/api/beercategory/preferencecount")
+        .set('dlfwh', `Bearer ${dlfwh}`)
+        .set('chlrh', `Bearer ${chlrh}`)
+        .set('dhtnf', `Bearer ${dhtnf}`)
+        .set('ghkxld', `Bearer ${ghkxld}`)
+        .send()
+
     await disconnect()
 })

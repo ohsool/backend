@@ -315,7 +315,7 @@ it ("modify one mybeer - fail (wrong user)", async () => {
         });
 
     expect(response.body.message).toBe("fail");
-    expect(response.body.error).toBe("not the same user");
+    expect(response.body.error).toBe("wrong tokens");
 });
 
 it ("delete one mybeer - success", async () => {
@@ -368,7 +368,7 @@ it ("delete one mybeer - fail (wrong user)", async () => {
         .send();
 
     expect(response.body.message).toBe("fail");
-    // expect(response.body.error).toBe("not the same user");
+    expect(response.body.error).toBe("not the same user");
 });
 
 it ("delete one mybeer - fail (wrong id)", async () => {
@@ -382,10 +382,17 @@ it ("delete one mybeer - fail (wrong id)", async () => {
 
     expect(response.body.message).toBe("fail");
     expect(response.body.error).toBeTruthy();
-    // expect(response.body.error).toBe("wrong mybeer id");
+    expect(response.body.error).toBe("wrong mybeer id");
 });
 
  // Disconnect Mongoose
  afterAll( async () => {
+    const response = await request(app).delete(`/api/mybeer/${mybeerId}`)
+        .set('dlfwh', `Bearer ${dlfwh}`)
+        .set('chlrh', `Bearer ${chlrh}`)
+        .set('dhtnf', `Bearer ${dhtnf}`)
+        .set('ghkxld', `Bearer ${ghkxld}`)
+        .send();
+
     await disconnect()
 })

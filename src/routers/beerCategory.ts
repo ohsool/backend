@@ -1,9 +1,11 @@
 import express, { Request, Response, NextFunction, Router, response } from "express";
+import https from "https";
+
 import BeerCategoryController from "../controllers/beerCategory";
+import { env } from "../env";
 import { authMiddleware } from "../middlewares/auth-middleware";
 
 const beerCategoryRouter = express.Router();
-
 
 beerCategoryRouter.get("/", BeerCategoryController.getBeerCategories);
 

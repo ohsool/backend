@@ -50,6 +50,10 @@ const BeerSchema: Schema = new Schema({
         type: Number,
         default: 0
     },
+    calculatedCount: {
+        type: Number,
+        default: 0
+    },
     avgRate: {
         type: Number,
         default: 0
