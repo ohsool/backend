@@ -44,6 +44,9 @@ import { connect } from './schemas';
 // importing env
 import { env } from "./env";
 
+// importing logger
+import { logger } from "./logger";
+
 // get secretKeyMiddleware
 import { secretKeyMiddleware } from './middlewares/secretkey-middleware';
 
@@ -158,11 +161,11 @@ if (env.modeNow == "development" || env.modeNow == "production") {  // on server
 
     const secure = https.createServer(options, app);
     secure.listen(port, () => {
-        console.log(`server running.. ${port}`);
+        logger.info(`server running.. ${port}`);
     })
 } else if (!env.modeNow) {  // local
     app.listen(port, () => {
-        console.log(`listening at http://localhost:${port}`);
+        logger.info(`listening at http://localhost:${port}`);
     });
 } 
 
