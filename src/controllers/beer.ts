@@ -45,7 +45,6 @@ const getSomeBeers = async(req: Request, res: Response) => {
             beers = await Beers.find({})
         } else {
             res.status(400).send({ message: "fail", error: "wrong sort method" });
-
             return;
         }
         

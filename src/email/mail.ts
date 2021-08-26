@@ -45,6 +45,7 @@ export const mailSender = async (mailInfo: any) => {
         subject: mail_subject,
         html: new_script
     }
+    
     // 메일 발송
     transporter.sendMail(mailOptions, (error, info) =>{
         if (error) { console.log(error); }

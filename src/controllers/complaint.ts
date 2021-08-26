@@ -48,13 +48,13 @@ const postComplaint = async (req: Request, res: Response) => {
             await Complaints.create(complaint);
         }
 
-        const mailInfo = {
-            toEmail: email,    
-            nickname: nickname,
-            subject: '안녕하세욧'
-        };
+        // const mailInfo = {
+        //     toEmail: email,    
+        //     nickname: nickname,
+        //     subject: '안녕하세욧'
+        // };
 
-        mailSender(mailInfo)
+        // mailSender(mailInfo)
 
         res.json({ message: "success", result })
     } catch (error) {
