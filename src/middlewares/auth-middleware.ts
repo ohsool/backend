@@ -103,8 +103,9 @@ function authMiddleware(req: Request, res: Response, next: NextFunction){
                         }
                     }).catch((error: object) => {
                         res.status(401).json({ message: "fail", error});
-                    }
-                )
+
+                        return;
+                    })
             }
             
         } else {
@@ -144,10 +145,14 @@ function authMiddleware(req: Request, res: Response, next: NextFunction){
                             
                         } else {
                             res.status(401).json({ message: "fail", error: "no exist user" });
+
+                            return;
                         }
                         
                     }).catch((error: object) => {
                         res.status(401).json({ message: "fail", error});
+
+                        return;
                     }
                 );
 
@@ -164,12 +169,18 @@ function authMiddleware(req: Request, res: Response, next: NextFunction){
                             res.locals.user = user;
 
                             next();
+
+                            return;
                         } else {
                             res.status(401).json({ message: "fail", error: "no exist user" });
+
+                            return;
                         }
                         
                     }).catch((error: object) => {
                         res.status(401).json({ message: "fail", error});
+
+                        return;
                     }
                 );
             }
