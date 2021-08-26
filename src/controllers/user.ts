@@ -373,7 +373,7 @@ const kakaoLogin = (req: Request, res: Response, next: NextFunction) => {
 const postTest = async (req: Request, res: Response) => {
     try {
         const { userId, result } = req.body;
-        let user = false; // 로그인 유저와 비로그인 유저를 구분짓는 값
+        let isExistUser = false; // 로그인 유저와 비로그인 유저를 구분짓는 값
   
         if (!result) {
           res.json({ message: "fail", error: "test result doesn't exist" });
@@ -387,6 +387,8 @@ const postTest = async (req: Request, res: Response) => {
           res.json({ message: "fail", error: "Beer Category doesn't exist" });
           return;
         }
+
+        const preferenceCount = category.preferenceCount!;
 
         /* 2. 카테고리 내에서 해당되는 국가 & 도수 선택 */ 
         let distantOption = result[1] === 'distant' ? true : false;
@@ -404,14 +406,33 @@ const postTest = async (req: Request, res: Response) => {
         const recommendations = beers.slice(0,2)
         
         /* 4. 로그인 유저일 시 preference 변경 */
-        const isExist = await Users.findOne({ _id: userId}).lean();
+        const user = await Users.findOne({ _id: userId}).lean();
+        const preference = user!.preference;
         let image = imagesArray[result[0]];
-        if (isExist) {
+
+        if (user) {
           await Users.updateOne({ _id: userId }, { $set: { preference: result[0], image }});
-          user = true
+
+          if (preference != "Unknown") {  // 유저의 preference가 있었다면 그 preference의 count -= 1
+            await BeerCategories.updateOne({ name: preference }, { $inc: { 'preferenceCount': -1 } });
+          }
+          // test 결과 나온 category에 count += 1
+          const beerCategory = await BeerCategories.updateOne({ name: result[0] }, { $inc: { 'preferenceCount': 1 } });
+
+          isExistUser = true;
+        }
+        
+        const preferenceCounts = await BeerCategories.find({}).select("preferenceCount -_id");
+        let sum = 0;
+
+        for (let i = 0; i < preferenceCounts.length; i ++) {
+          const count = preferenceCounts[i]!.preferenceCount!;
+          sum += count;
         }
 
-        res.status(200).json({ message: "success", user, category, recommendations })
+        const percentage = (+preferenceCount / sum) * 100;
+
+        res.status(200).json({ message: "success", isExistUser, category, recommendations, percentage });
     
       } catch (error) {
         res.json({ message: "fail", error });
