@@ -798,7 +798,7 @@ const unfollowUser = async (req: Request, res: Response) => {
 }
 
 const givesFollows = async (req: Request, res: Response) => {
-  const userId = req.body.userId;
+  const userId = req.params.userId;
 
   try {
     const user = await Users.findById(userId);
