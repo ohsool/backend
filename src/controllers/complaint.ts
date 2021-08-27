@@ -23,6 +23,11 @@ const postComplaint = async (req: Request, res: Response) => {
 
         return;
     }
+    if ( title.length > 100 || description.length > 500) {
+        res.json({ message: "fail", error: "length too long" });
+
+        return;
+    }
 
     try {
         const result = await client.chat.postMessage({
