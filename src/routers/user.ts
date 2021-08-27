@@ -69,6 +69,6 @@ userRouter.put("/follow/follow", secretKeyMiddleware, authMiddleware, UserContol
 userRouter.put("/follow/unfollow", secretKeyMiddleware, authMiddleware, UserContoller.unfollowUser);
 
 // 특정 유저의 팔로우, 팔로워 리스트 보내주기
-userRouter.get("/follow/followers", secretKeyMiddleware, UserContoller.givesFollows);
+userRouter.get("/follow/followers/:userId", secretKeyMiddleware, UserContoller.givesFollows);
 
 export { userRouter };
