@@ -15,8 +15,11 @@ const MyBeerSchema: Schema = new Schema({
     preference: {
         type: String,
         required: true
-    }
-    ,
+    },
+    like_array: {
+        type: Array,
+        default: []
+    },
     myFeatures: {
         type: Object,
         default: {

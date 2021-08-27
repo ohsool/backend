@@ -8,6 +8,7 @@ import BeerCategory from "../schemas/beerCategory";
 import { IBeer } from '../interfaces/beer';
 import { IBeerCategory } from '../interfaces/beerCategory';
 import { IMyBeer } from '../interfaces/mybeer';
+import { constants } from 'node:buffer';
 
 async function calculateRates() {
 
@@ -113,11 +114,21 @@ const postMyBeer = async (req: Request, res: Response) => {
 // 모든 유저의 도감 가져오기
 const getAllMyBeers = async (req: Request, res: Response) => {
     try {
-        const mybeers = await MyBeer.find({}).populate({path: 'userId', select: 'nickname image'}).lean().populate({ path: 'beerId', select: 'image' });
-        
+        // 내림차순 정렬 (-1) rate, date, like 
+        const { sort, pageNo } = req.query; 
+        const beers = await MyBeer.find({})
+                                .populate({path: 'userId', select: 'nickname image'})
+                                .populate({ path: 'beerId', select: 'image' })
+                                .sort([[sort, -1]])
+                                .lean();
+
+        const mybeers = pagination(Number(pageNo), beers)
+        if (mybeers === 'wrong page') {
+            res.status(400).send({ message: "fail", error: "wrong page" });
+            return
+        }
         res.json({ message: "success", mybeers });
     } catch (error) {
-
         res.json({ message: "fail", error });
     }
 };
@@ -125,11 +136,22 @@ const getAllMyBeers = async (req: Request, res: Response) => {
 // 현재 유저의 도감 가져오기
 const getCurrentMyBeers = async (req: Request, res: Response) => {
     const userId = res.locals.user._id;
-    
+    // 내림차순 정렬 (-1) rate, date, like 
+    const { sort, pageNo } = req.query; 
     try {
-        const mybeers = await MyBeer.find({ userId }).populate({path: 'userId', select: 'nickname image'}).lean().populate({ path: 'beerId', select: 'image' });
-
+        const beers = await MyBeer.find({ userId })
+                                    .populate({path: 'userId', select: 'nickname image'})
+                                    .populate({ path: 'beerId', select: 'image' })
+                                    .sort([[sort, -1]])
+                                    .lean();
+        
+        const mybeers = pagination(Number(pageNo), beers)
+        if (mybeers === 'wrong page') {
+            res.status(400).send({ message: "fail", error: "wrong page" });
+            return
+        }
         res.json({ message: "success", mybeers });
+
     } catch (error) {
         res.json({ message: "fail", error });
     }
@@ -148,12 +170,62 @@ const getLengthOfMyBeers = async (req: Request, res: Response) => {
     } catch (error) {
         res.json({ message: "fail", error });
     }
-}
+};
+
+
+//  특정 유저의 맥주도감 및 좋아요 리스트 가져오기
+const getUserMyBeers = async (req: Request, res: Response) => {
+    try {
+        /*
+        userId: 조회를 원하는 사용자의 아이디
+        sort: 정렬 기준 ( 내림차순 (-1) rate, date, like)
+        pageNo: 페이지 번호
+        type: tab 종류 (beer / liked)
+        */
+
+        const { sort, pageNo, type } = req.query; 
+        const userId = mongoose.Types.ObjectId(req.params.userId); 
+
+        let beers!:Array<any>;
+
+        if (!userId) {
+            res.status(400).send({ message: "fail", error: "unavailable user Id" });
+            return
+        }
+        
+        // 01. 작성한 맥주 도감 리스트
+        if (type === 'beer') {
+            beers = await MyBeer.find({ userId }, {myFeatures: false, preference: false, location: false} )
+            .populate({path: 'userId', select: 'nickname image'})
+            .populate({ path: 'beerId', select: 'image name_korean' })
+            .sort([[sort, -1]])
+            .lean();
+        } else if (type === 'liked') {
+        // 02. 좋아요한 맥주 리스트
+            beers = await Beers.find({like_array: { $in: [userId] }}, {
+                name_korean: true, name_english: true, image: true, hashtag: true, _id: true,
+            }).sort([[sort, -1]]).lean();
+        }
+
+        const mybeers = pagination(Number(pageNo), beers)
+        if (mybeers === 'wrong page') {
+            res.status(400).send({ message: "fail", error: "wrong page" });
+            return
+        }
+
+        res.json({ message: "success", mybeers });
+
+    } catch (error) {
+        res.json({ message: "fail", error });
+    };                           
+};
+
 
 // 특정 맥주의 전체 도감 가져오기
 const getBeerAllReviews = async (req: Request, res: Response) => {
     try {
-        const { beerId } = req.params;
+        // 내림차순 정렬 (-1) rate, date, like 
+        const { beerId, sort, pageNo } = req.query; 
         const beer = await Beers.findOne({ _id: beerId }).lean();
 
         if (!beer) {
@@ -161,7 +233,17 @@ const getBeerAllReviews = async (req: Request, res: Response) => {
 
             return;
         }
-        const mybeers = await MyBeer.find({ beerId: beer._id }).lean().populate({path: 'userId', select: 'nickname image'}).populate({ path: 'beerId', select: 'image' });
+        const beers = await MyBeer.find({ beerId: beer._id })
+                                .populate({path: 'userId', select: 'nickname image'})
+                                .populate({ path: 'beerId', select: 'image' })
+                                .sort([[sort, -1]])
+                                .lean()
+
+        const mybeers = pagination(Number(pageNo), beers)
+        if (mybeers === 'wrong page') {
+            res.status(400).send({ message: "fail", error: "wrong page" });
+            return
+        }
 
         res.json({ message: "success", mybeers });
     } catch (error) {
@@ -327,12 +409,32 @@ const deleteMyBeer = async (req: Request, res: Response) => {
     }
 };
 
+function pagination(pageNo:number, arrBeer:Array<any>) {
+    // 내림차순 정렬 (-1) rate, createDate, like 
+
+    const curPage = (pageNo < 0) ? 0 : pageNo;
+    const startIndex = curPage * 8;
+
+    if (startIndex > arrBeer.length) {
+        return "wrong page"
+    }
+
+    const res_beers: Array<IBeer> = [];
+    for (let i = startIndex; i < (startIndex + 8); i++) {
+        if (!arrBeer[i]) break;
+        res_beers.push(arrBeer[i])
+    }
+
+    return res_beers;
+}
+
 
 
 export default {
     postMyBeer,
     getAllMyBeers,
     getCurrentMyBeers,
+    getUserMyBeers,
     getLengthOfMyBeers,
     getBeerAllReviews,
     getMyBeer,
