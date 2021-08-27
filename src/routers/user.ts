@@ -53,6 +53,9 @@ userRouter.put("/nickname", secretKeyMiddleware, authMiddleware, UserContoller.c
 // 내 소개(description) 변경하기
 userRouter.put("/description", secretKeyMiddleware, authMiddleware, UserContoller.changeDescription);
 
+// 비밀번호 변경하기
+userRouter.put("/password", secretKeyMiddleware, authMiddleware, UserContoller.changePassword);
+
 // 계정 공개로 설정하기
 userRouter.put("/public/public", secretKeyMiddleware, authMiddleware, UserContoller.setToPublic);
 

@@ -580,6 +580,37 @@ const changeDescription = async (req: Request, res: Response) => {
   
 }
 
+const changePassword = async (req: Request, res: Response) => {
+  const old_password = req.body.password;
+  const new_password = req.body.new_password;
+  const user = res.locals.user;
+  const userId = res.locals.user._id;
+
+  if (!user) {
+    res.json({ message: "fail", error: "no exist user" });
+
+    return;
+  }
+
+  try {
+    const crypted_old_password = crypto.createHmac("sha256", old_password).update(env.pass_secret).digest("hex");
+
+    if (crypted_old_password != user.password) {
+      res.json({ message: "fail", error: "wrong password" });
+
+      return;
+    }
+
+    const crypted_new_password = crypto.createHmac("sha256", new_password).update(env.pass_secret).digest("hex");
+
+    await Users.findByIdAndUpdate(userId, { $set: { password: crypted_new_password } });
+
+    res.json({ message: "success" });
+  } catch (error) {
+    res.json({ message: "fail", error });
+  }
+}
+
 // 계정 공개로 설정하기
 const setToPublic = async (req: Request, res: Response) => {
   const userId = res.locals.user._id;
@@ -779,6 +810,7 @@ export default {
     socialUserSet,
     changeNickname,
     changeDescription,
+    changePassword,
     setToPublic,
     setToPrivate,
     followUser,
