@@ -186,14 +186,14 @@ const register = async(req: Request, res: Response) => {
 
           await Users.create({ email, nickname, password: crypted_password });
 
-          // const mailInfo = {
-          //   toEmail: email,     
-          //   nickname: nickname, 
-          //   type: 'welcome',   
-          // };
+          const mailInfo = {
+            toEmail: email,     
+            nickname: nickname, 
+            type: 'welcome',   
+          };
 
-          // // 성공 메일 보내기
-          // mailSender(mailInfo)
+          // 성공 메일 보내기
+          mailSender(mailInfo)
 
           res.status(201).json({ message: "success" });
       } else {

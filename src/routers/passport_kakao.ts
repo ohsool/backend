@@ -2,7 +2,7 @@ import jwt from "jsonwebtoken";
 import Users from "../schemas/user";
 import passportRouter from "passport";
 import KakaoStrategy, { Strategy } from "passport-kakao";
-
+import { mailSender }  from '../email/mail'
 import { env } from "../env";
 
 const kakaoPassportConfig = () => {
@@ -37,6 +37,15 @@ const kakaoPassportConfig = () => {
 
         if (!user) {
             user = await Users.create({ nickname, email, passport: [{ provider: provider }, { id: userId }] });
+
+            const mailInfo = {
+                toEmail: email,     
+                nickname: nickname ? nickname : "오술 회원님",
+                type: 'welcome',   
+            };
+    
+              // 성공 메일 보내기
+            mailSender(mailInfo)
 
             first = true;
         }
