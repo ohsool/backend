@@ -14,8 +14,9 @@ const client = new WebClient(env.botUserOAuthToken, {
 
 const postRecommendation = async (req: Request, res: Response) => {
     let { beer, description, image } = req.body;
-    let nickname = res.locals.user.nickname;
+    let nickname = res.locals.user.nickname ? res.locals.user.nickname : "Anonymous";
     const userId = res.locals.user._id;
+    const email = res.locals.user.email
 
     if (!beer || !description) {
         res.json({ message: "fail", error: "no beer or descripton" })
@@ -31,7 +32,7 @@ const postRecommendation = async (req: Request, res: Response) => {
     try {
         const result = await client.chat.postMessage({
             channel: "#맥주추천",
-            text: `*:beers:${nickname ? nickname : "Anonymous"} 님의 맥주추천*
+            text: `*:beers:${nickname} 님의 맥주추천*
             *맥주 이름:* ${beer}
             *내용:* ${description}
             *이미지:* ${image}
@@ -55,6 +56,16 @@ const postRecommendation = async (req: Request, res: Response) => {
 
             await Recommendations.create(recommendation);
         }
+
+        
+        const mailInfo = {
+            toEmail: email,     
+            nickname: nickname, 
+            type: 'recommendation',   
+        };
+
+          // 성공 메일 보내기
+        mailSender(mailInfo)
 
         res.json({ message: "success", result })
     } catch (error) {

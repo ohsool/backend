@@ -14,7 +14,7 @@ const client = new WebClient(env.botUserOAuthToken, {
 
 const postComplaint = async (req: Request, res: Response) => {
     const { title, description } = req.body;
-    let nickname = res.locals.user.nickname;
+    let nickname = res.locals.user.nickname ? res.locals.user.nickname : "Anonymous";
     const userId = res.locals.user._id;
     const email = res.locals.user.email
 
@@ -32,7 +32,7 @@ const postComplaint = async (req: Request, res: Response) => {
     try {
         const result = await client.chat.postMessage({
             channel: "#불편사항",
-            text: `*:person_frowning:${nickname ? nickname : "Anonymous"} 님의 불편사항*
+            text: `*:person_frowning:${nickname} 님의 불편사항*
             *제목:* ${title}
             *내용:* ${description}`,
             username: "complaintbot", 
@@ -53,13 +53,15 @@ const postComplaint = async (req: Request, res: Response) => {
             await Complaints.create(complaint);
         }
 
-        // const mailInfo = {
-        //     toEmail: email,    
-        //     nickname: nickname,
-        //     subject: '안녕하세욧'
-        // };
+          
+        const mailInfo = {
+            toEmail: email,     
+            nickname: nickname, 
+            type: 'complaint',   
+        };
 
-        // mailSender(mailInfo)
+          // 성공 메일 보내기
+        mailSender(mailInfo)
 
         res.json({ message: "success", result })
     } catch (error) {

@@ -9,8 +9,12 @@ export interface IUser {
     email?: string,
     nickname: string,
     password: string,
+    description: string,
+    follow_list?: Array<mongoose.Types.ObjectId>,
+    follower_list?: Array<mongoose.Types.ObjectId>,
+    is_public?: boolean,
     preference: string,
     image: string,
     passport?: Array<IPassport>,
-    refreshToken?: string
+    refreshToken?: string,
 }

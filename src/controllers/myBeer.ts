@@ -100,7 +100,7 @@ const postMyBeer = async (req: Request, res: Response) => {
 
         await Beers.findOneAndUpdate({ _id: beerId }, { $set: { avgRate: newBeerAvgRate, count: beerCount + 1 } }).lean();
 
-        mybeer = await MyBeer.findOne({ _id: mybeer._id }).populate({path: 'userId', select: 'nickname'}).lean();
+        mybeer = await MyBeer.findOne({ _id: mybeer._id }).populate({path: 'userId', select: 'nickname image'}).lean();
 
         res.json({ message: "success", mybeer });
     } catch (error) {
@@ -113,7 +113,7 @@ const postMyBeer = async (req: Request, res: Response) => {
 // 모든 유저의 도감 가져오기
 const getAllMyBeers = async (req: Request, res: Response) => {
     try {
-        const mybeers = await MyBeer.find({}).populate({path: 'userId', select: 'nickname'}).lean().populate({ path: 'beerId', select: 'image' });
+        const mybeers = await MyBeer.find({}).populate({path: 'userId', select: 'nickname image'}).lean().populate({ path: 'beerId', select: 'image' });
         
         res.json({ message: "success", mybeers });
     } catch (error) {
@@ -127,7 +127,7 @@ const getCurrentMyBeers = async (req: Request, res: Response) => {
     const userId = res.locals.user._id;
     
     try {
-        const mybeers = await MyBeer.find({ userId }).populate({path: 'userId', select: 'nickname'}).lean().populate({ path: 'beerId', select: 'image' });
+        const mybeers = await MyBeer.find({ userId }).populate({path: 'userId', select: 'nickname image'}).lean().populate({ path: 'beerId', select: 'image' });
 
         res.json({ message: "success", mybeers });
     } catch (error) {
@@ -161,7 +161,7 @@ const getBeerAllReviews = async (req: Request, res: Response) => {
 
             return;
         }
-        const mybeers = await MyBeer.find({ beerId: beer._id }).lean().populate({path: 'userId', select: 'nickname'}).populate({ path: 'beerId', select: 'image' });
+        const mybeers = await MyBeer.find({ beerId: beer._id }).lean().populate({path: 'userId', select: 'nickname image'}).populate({ path: 'beerId', select: 'image' });
 
         res.json({ message: "success", mybeers });
     } catch (error) {
@@ -175,7 +175,7 @@ const getBeerAllReviews = async (req: Request, res: Response) => {
 const getMyBeer = async (req: Request, res: Response) => {
     const { myBeerId } = req.params;
     try {
-        const mybeer = await MyBeer.findOne({ _id: myBeerId }).lean().populate({path: 'userId', select: 'nickname'}).populate({ path: 'beerId', select: 'image' });
+        const mybeer = await MyBeer.findOne({ _id: myBeerId }).lean().populate({path: 'userId', select: 'nickname image'}).populate({ path: 'beerId', select: 'image' });
 
         if (!mybeer) {
             res.json({ message: "fail", error: "no exist mybeer" });

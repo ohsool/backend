@@ -2,7 +2,7 @@ import jwt from "jsonwebtoken";
 import Users from "../schemas/user";
 import passportRouter from "passport";
 import GoogleStrategy, { Strategy } from "passport-google-oauth2";
-
+import { mailSender }  from '../email/mail'
 import { env } from "../env";
 
 const googlePassportConfig = () => {
@@ -30,6 +30,15 @@ const googlePassportConfig = () => {
 
         if (!user) {
             user = await Users.create({ email, nickname, passport: [{ provider: provider }, { id: userId }] });
+
+            const mailInfo = {
+                toEmail: email,     
+                nickname: nickname, 
+                type: 'welcome',   
+            };
+    
+              // 성공 메일 보내기
+            mailSender(mailInfo)
 
             first = true;
         }

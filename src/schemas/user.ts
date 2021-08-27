@@ -1,6 +1,6 @@
 import mongoose, { Schema, Document } from "mongoose";
 import { IUser } from "../interfaces/user";
-
+ 
 const UserSchema: Schema = new Schema({
     email: {
         type: String
@@ -11,6 +11,22 @@ const UserSchema: Schema = new Schema({
     },
     password: {
         type: String
+    },
+    description: {
+        type: String,
+        default: ""
+    },
+    follow_list: {
+        type: Array,
+        default: []
+    },
+    follower_list: {
+        type: Array,
+        default: []
+    },
+    is_public: {
+        type: Boolean,
+        default: true
     },
     preference: {
         type: String,
