@@ -313,6 +313,7 @@ const checkAuth = async (req: Request, res: Response) => {
       const nickname = res.locals.user.nickname;
       const preference = String(res.locals.user.preference);
       const image = res.locals.user.image;
+      const email = res.locals.user.email;
 
       // if (res.locals.accessToken) {
       //   res.json({ message: "success", userId, nickname, preference, image, accessToken: res.locals.accessToken });
@@ -322,7 +323,7 @@ const checkAuth = async (req: Request, res: Response) => {
       //   res.json({ message: "success", userId, nickname, preference, image });
       // }
 
-      res.json({ message: "success", userId, nickname, preference, image });
+      res.json({ message: "success", userId, nickname, preference, image, email });
 }
 
 const googleLogin = (req: Request, res: Response, next: NextFunction) => {
