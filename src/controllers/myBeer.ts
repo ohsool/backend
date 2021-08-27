@@ -416,8 +416,7 @@ const deleteMyBeer = async (req: Request, res: Response) => {
 // 마이비어 좋아요
 const likeMyBeer = async (req: Request, res: Response) => {
     const { myBeerId } = req.params;
-    const userId =  mongoose.Types.ObjectId("610e0d6e25c88b798668a937")
-    // const userId = mongoose.Types.ObjectId(res.locals.user._id);
+    const userId = mongoose.Types.ObjectId(res.locals.user._id);
 
     const isExist = await MyBeer.findOne({ _id: myBeerId, like_array: { $in: [userId] }});
     if(isExist) {   // 이미 좋아요한 내역이 있으면 함수 종료
@@ -433,8 +432,7 @@ const likeMyBeer = async (req: Request, res: Response) => {
 // 마이비어 좋아요 취소
 const unlikeMyBeer = async (req: Request, res: Response) => {
     const { myBeerId } = req.params;
-    const userId =  mongoose.Types.ObjectId("610e0d6e25c88b798668a937")
-    // const userId = mongoose.Types.ObjectId(res.locals.user._id);
+    const userId = mongoose.Types.ObjectId(res.locals.user._id);
 
     const isExist = await MyBeer.findOne({ _id: myBeerId, like_array: { $in: [userId] }});
     if(!isExist) {   // 좋아요한 내역이 없으면 함수 종료
