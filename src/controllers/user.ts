@@ -313,6 +313,7 @@ const checkAuth = async (req: Request, res: Response) => {
       const nickname = res.locals.user.nickname;
       const preference = String(res.locals.user.preference);
       const image = res.locals.user.image;
+      const email = res.locals.user.email;
 
       // if (res.locals.accessToken) {
       //   res.json({ message: "success", userId, nickname, preference, image, accessToken: res.locals.accessToken });
@@ -322,7 +323,7 @@ const checkAuth = async (req: Request, res: Response) => {
       //   res.json({ message: "success", userId, nickname, preference, image });
       // }
 
-      res.json({ message: "success", userId, nickname, preference, image });
+      res.json({ message: "success", userId, nickname, preference, image, email });
 }
 
 const googleLogin = (req: Request, res: Response, next: NextFunction) => {
@@ -796,6 +797,36 @@ const unfollowUser = async (req: Request, res: Response) => {
   }
 }
 
+const givesFollows = async (req: Request, res: Response) => {
+  const userId = req.body.userId;
+
+  try {
+    const user = await Users.findById(userId);
+
+    if (!user) {
+      res.json({ message: "fail", error: "no exist user" });
+
+      return;
+    }
+
+    let follow_list = user.follow_list;
+    let follower_list = user.follower_list;
+
+    if (!follow_list) {
+      follow_list = [];
+    }
+
+    if (!follower_list) {
+      follower_list = [];
+    }
+
+    res.json({ message: "success", follow_list, follower_list });
+
+  } catch (error) {
+    res.json({ message: "fail", error });
+  }
+}
+
 export default {
     existEmail,
     existNickname,
@@ -814,5 +845,6 @@ export default {
     setToPublic,
     setToPrivate,
     followUser,
-    unfollowUser
+    unfollowUser,
+    givesFollows
 }
