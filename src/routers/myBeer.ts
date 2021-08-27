@@ -31,5 +31,11 @@ myBeerRouter.put("/:myBeerId", authMiddleware, myBeerController.updateMyBeer);
 // 특정 도감 삭제하기
 myBeerRouter.delete("/:myBeerId", authMiddleware, myBeerController.deleteMyBeer);
 
+// 도감 좋아요
+myBeerRouter.put("/like/:myBeerId", authMiddleware, myBeerController.likeMyBeer);
+
+// 도감 좋아요 취소
+myBeerRouter.put("/unlike/:myBeerId", authMiddleware, myBeerController.unlikeMyBeer);
+
 
 export { myBeerRouter };

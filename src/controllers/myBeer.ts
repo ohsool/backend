@@ -413,9 +413,41 @@ const deleteMyBeer = async (req: Request, res: Response) => {
     }
 };
 
-function pagination(pageNo:number, arrBeer:Array<any>) {
-    // 내림차순 정렬 (-1) rate, createDate, like 
+// 마이비어 좋아요
+const likeMyBeer = async (req: Request, res: Response) => {
+    const { myBeerId } = req.params;
+    const userId =  mongoose.Types.ObjectId("610e0d6e25c88b798668a937")
+    // const userId = mongoose.Types.ObjectId(res.locals.user._id);
 
+    const isExist = await MyBeer.findOne({ _id: myBeerId, like_array: { $in: [userId] }});
+    if(isExist) {   // 이미 좋아요한 내역이 있으면 함수 종료
+        res.status(400).send({ message: "fail", error: "user already liked this beer" });
+        return
+    }
+
+    const result = await MyBeer.findOneAndUpdate({_id: myBeerId}, {$push: {like_array: userId}}).lean();
+    res.json({ message: "success", result });
+
+};
+
+// 마이비어 좋아요 취소
+const unlikeMyBeer = async (req: Request, res: Response) => {
+    const { myBeerId } = req.params;
+    const userId =  mongoose.Types.ObjectId("610e0d6e25c88b798668a937")
+    // const userId = mongoose.Types.ObjectId(res.locals.user._id);
+
+    const isExist = await MyBeer.findOne({ _id: myBeerId, like_array: { $in: [userId] }});
+    if(!isExist) {   // 좋아요한 내역이 없으면 함수 종료
+        res.status(400).send({ message: "fail", error: "user hasn't liked this beer" });
+        return
+    }
+
+    const result = await MyBeer.findOneAndUpdate({_id: myBeerId}, {$pull: {like_array: userId}}).lean();
+    res.json({ message: "success", result });
+};
+
+
+function pagination(pageNo:number, arrBeer:Array<any>) {
     const curPage = (pageNo < 0) ? 0 : pageNo;
     const startIndex = curPage * 8;
 
@@ -443,6 +475,8 @@ export default {
     getBeerAllReviews,
     getMyBeer,
     updateMyBeer,
-    deleteMyBeer
+    deleteMyBeer,
+    likeMyBeer,
+    unlikeMyBeer
 }
 
