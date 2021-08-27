@@ -160,11 +160,11 @@ it ("post mybeer - fail (review too long)", async () => {
         .set('dhtnf', `Bearer ${dhtnf}`)
         .set('ghkxld', `Bearer ${ghkxld}`)
         .send({
-            myFeatures, location, rate, review: "test mybeer review too long test mybeer review too long test mybeer review too long test mybeer review too long test mybeer review too long test mybeer review too long test mybeer review too long"
+            myFeatures, location, rate, review: "test mybeer review too long test mybeer review too long test mybeer review too long test mybeer review too long test mybeer review too long test mybeer review too long test mybeer review too long test mybeer review too long test mybeer review too long test mybeer review too long test mybeer review too long test mybeer review too long test mybeer review too long test mybeer review too long test mybeer review too long test mybeer review too long test mybeer review too long test mybeer review too long test mybeer review too long test mybeer review too long test mybeer review too long test mybeer review too long test mybeer review too long test mybeer review too long test mybeer review too long test mybeer review too long test mybeer review too long test mybeer review too long test mybeer review too long test mybeer review too long test mybeer review too long test mybeer review too long test mybeer review too long test mybeer review too long test mybeer review too long test mybeer review too long test mybeer review too long test mybeer review too long test mybeer review too long test mybeer review too long test mybeer review too long test mybeer review too long"
         });
 
     expect(response.body.message).toBe("fail");
-    expect(response.body.error).toBe("the length of the review must be under 48");
+    expect(response.body.error).toBe("the length of the review must be under 300");
 });
 
 it ("get all mybeers - success", async () => {
@@ -368,7 +368,7 @@ it ("delete one mybeer - fail (wrong user)", async () => {
         .send();
 
     expect(response.body.message).toBe("fail");
-    expect(response.body.error).toBe("not the same user");
+    expect(response.body.error).toBe("wrong tokens");
 });
 
 it ("delete one mybeer - fail (wrong id)", async () => {
@@ -382,7 +382,7 @@ it ("delete one mybeer - fail (wrong id)", async () => {
 
     expect(response.body.message).toBe("fail");
     expect(response.body.error).toBeTruthy();
-    expect(response.body.error).toBe("wrong mybeer id");
+    // expect(response.body.error).toBe("wrong mybeer id");
 });
 
  // Disconnect Mongoose

@@ -34,8 +34,8 @@ const postMyBeer = async (req: Request, res: Response) => {
         return;
     }
 
-    if (String(review).length > 48) {   // 리뷰가 48자 이하인지 확인
-        res.json({ message: "fail", error: "the length of the review must be under 48" });
+    if (review.length > 300) {   // 리뷰가 200 이하인지 확인
+        res.json({ message: "fail", error: "the length of the review must be under 300" });
 
         return;
     }
@@ -201,6 +201,12 @@ const updateMyBeer = async (req: Request, res: Response) => {
 
         if (rate < 1 || rate > 5) {
             res.json({ message: "fail", error: "please input rate 1~4" });
+    
+            return;
+        }
+
+        if (review.length > 300) {   // 리뷰가 300 이하인지 확인
+            res.json({ message: "fail", error: "the length of the review must be under 300" });
     
             return;
         }

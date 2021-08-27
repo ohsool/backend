@@ -30,19 +30,19 @@ const getSomeBeers = async(req: Request, res: Response) => {
         // maybe, degree or count will be the one
         if (sort == "avgRate" || sort == "createDate" || sort == "degree" || sort == "count") {
             // sort descending
-            beers = await Beers.find({}).sort([[sort, -1]]);
+            beers = await Beers.find({}).sort([[sort, -1]]).select("hashtag like_array name_korean name_english image");
         } else if (sort == "name_korean" || sort == "name_english") {
             // sort ascending
-            beers = await Beers.find({}).sort(sort);
+            beers = await Beers.find({}).sort(sort).select("hashtag like_array name_korean name_english image");
         } else if (sort == "createDateOld") {
             // sort ascending
-            beers = await Beers.find({}).sort("createDate");
+            beers = await Beers.find({}).sort("createDate").select("hashtag like_array name_korean name_english image");
         } else if (sort == "degreeLess") {
             // sort ascending
-            beers = await Beers.find({}).sort("degree");
+            beers = await Beers.find({}).sort("degree").select("hashtag like_array name_korean name_english image");
         } else if (!sort) {
             // gives basic order
-            beers = await Beers.find({})
+            beers = await Beers.find({}).select("hashtag like_array name_korean name_english image")
         } else {
             res.status(400).send({ message: "fail", error: "wrong sort method" });
 
