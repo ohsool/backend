@@ -314,6 +314,11 @@ const checkAuth = async (req: Request, res: Response) => {
       const preference = String(res.locals.user.preference);
       const image = res.locals.user.image;
       const email = res.locals.user.email;
+      let description = res.locals.user.description;
+
+      if (!description) {
+        description = "";
+      }
 
       // if (res.locals.accessToken) {
       //   res.json({ message: "success", userId, nickname, preference, image, accessToken: res.locals.accessToken });
@@ -323,7 +328,7 @@ const checkAuth = async (req: Request, res: Response) => {
       //   res.json({ message: "success", userId, nickname, preference, image });
       // }
 
-      res.json({ message: "success", userId, nickname, preference, image, email });
+      res.json({ message: "success", userId, nickname, preference, image, email, description });
 }
 
 const googleLogin = (req: Request, res: Response, next: NextFunction) => {
