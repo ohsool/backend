@@ -10,6 +10,8 @@ import BeerCategories from "../schemas/beerCategory";
 import Users from "../schemas/user";
 import MyBeers from "../schemas/mybeer";
 
+import { IUser } from "../interfaces/user";
+
 import { mailSender }  from '../email/mail'
 
 import { env } from "../env";
@@ -542,6 +544,227 @@ const changeNickname = async (req: Request, res: Response) => {
   }
 }
 
+// 내 소개(description) 변경하기
+const changeDescription = async (req: Request, res: Response) => {
+  const description = req.body.description;
+  const old_description = res.locals.user.description;
+  const userId = res.locals.user._id;
+
+  try {
+    let user = await Users.findById(userId);
+
+    if (!user) {
+      res.json({ message: "fail", error: "no exist user" });
+
+      return;
+    }
+
+    if (old_description == description) {
+      res.json({ message: "fail", error: "not changed" });
+
+      return;
+    }
+
+    if (description.length > 60) {
+      res.json({ message: "fail", error: "too long" });
+
+      return;
+    }
+    
+    user = await Users.findByIdAndUpdate(userId, { $set: { description } });
+
+    res.json({ message: "success" });
+  } catch (error) {
+    res.json({ message: "fail", error });
+  }
+  
+}
+
+// 계정 공개로 설정하기
+const setToPublic = async (req: Request, res: Response) => {
+  const userId = res.locals.user._id;
+  const is_public = res.locals.user.is_public;
+
+  try {
+    let user = await Users.findById(userId);
+
+    if (!user) {
+      res.json({ message: "fail", error: "no exist user" });
+  
+      return;
+    }
+
+    // is_public == true: 공개
+    // is_public == false: 비공개
+    // is_public == undefined: 공개
+    if (is_public || is_public == null) {
+      res.json({ message: "fail", error: "user is already public" });
+  
+      return;
+    }
+
+    user = await Users.findByIdAndUpdate(userId, { $set: { is_public: true } });
+
+    res.json({ message: "success" });
+  } catch (error) {
+    res.json({ message: "fail", error });
+  }
+}
+
+// 계정 비공개로 설정하기
+const setToPrivate = async (req: Request, res: Response) => {
+  const userId = res.locals.user._id;
+  const is_public = res.locals.user.is_public;
+
+  try {
+    let user = await Users.findById(userId);
+
+    if (!user) {
+      res.json({ message: "fail", error: "no exist user" });
+  
+      return;
+    }
+
+    // is_public == true: 공개
+    // is_public == false: 비공개
+    // is_public == undefined: 공개
+    if (is_public == false) {
+      res.json({ message: "fail", error: "user is already private" });
+  
+      return;
+    }
+
+    user = await Users.findByIdAndUpdate(userId, { $set: { is_public: false } });
+
+    res.json({ message: "success" });
+  } catch (error) {
+    res.json({ message: "fail", error });
+  }
+}
+
+// 특정 유저 팔로우하기
+// follow_list: 내가 팔로우 하는 유저 리스트
+// follower_list: 나를 팔로우 하는 유저 리스트
+const followUser = async (req: Request, res: Response) => {
+  const userId = res.locals.user._id;
+  const myFollowList = res.locals.user.follow_list;
+  const followUserId = req.body.userId;
+
+  if (userId == followUserId) {
+    res.json({ message: "fail", error: "cannot follow myself" });
+
+      return;
+  }
+
+  try {
+    const user = await Users.findById(userId);
+    const followUser = await Users.findById(followUserId);
+    
+    if (!user || !followUser) {
+      res.json({ message: "fail", error: "no exist user" });
+
+      return;
+    }
+
+    const userFollowerList = followUser!.follower_list;
+
+    if (!myFollowList) {  // 내 팔로우 리스트가 비어있다면 (첫번째 팔로우라면)
+      await Users.findByIdAndUpdate(userId, { $set: { follow_list: [followUserId] } } );
+
+      if (!userFollowerList) {  // 상대방의 팔로워 리스트도 비어있다면 (첫번째 팔로워라면)
+        await Users.findByIdAndUpdate(followUserId, { $set: { follower_list: [userId] } } );
+      } else if (userFollowerList?.includes(userId) == false) {
+        await Users.findByIdAndUpdate(followUserId, { $push: { follower_list: [userId] } } );
+      }
+
+      res.json({ message: "success" });
+
+      return;
+    }
+
+    if (myFollowList.includes(followUserId)) { // 내 팔로우 리스트에 그 유저가 이미 있다면
+      if (userFollowerList?.includes(userId) == false) {  // 근데 상대방 팔로워 리스트에 내가 없다면 (오류)
+        await Users.findByIdAndUpdate(followUserId, { $push: { follower_list: [userId] } } );
+      } else if (!userFollowerList) {
+        await Users.findByIdAndUpdate(followUserId, { $set: { follower_list: [userId] } } );
+      }
+
+      res.json({ message: "fail", error: "user already follow this user" });
+
+      return;
+    }
+
+    if (userFollowerList?.includes(userId)) { // 그 유저 팔로우 리스트에 내가 이미 있다면
+      if (myFollowList.includes(followUserId) == false) { // 근데 내 팔로우 리스트에 그 유저가 없다면 (오류)
+        await Users.findByIdAndUpdate(userId, { $push: { follow_list: [followUserId] } } );
+      } else if (!myFollowList) {
+        await Users.findByIdAndUpdate(userId, { $set: { follow_list: [followUserId] } } );
+      }
+
+      res.json({ message: "fail", error: "user already follow this user" });
+
+      return;
+    }
+
+    await Users.findByIdAndUpdate(userId, { $push: { follow_list: [followUserId] } } );
+    await Users.findByIdAndUpdate(followUserId, { $push: { follower_list: [userId] } } );
+
+    res.json({ message: "success" });
+  } catch (error) {
+    res.json({ message: "fail", error });
+  }
+}
+
+// 특정 유저 팔로우 취소하기
+const unfollowUser = async (req: Request, res: Response) => {
+  const userId = res.locals.user._id;
+  const myFollowList = res.locals.user.follow_list;
+  const followUserId = req.body.userId;
+
+  if (userId == followUserId) {
+    res.json({ message: "fail", error: "cannot unfollow myself" });
+
+      return;
+  }
+
+  try {
+    const user = await Users.findById(userId);
+    const followUser = await Users.findById(followUserId);
+
+    if (!user || !followUser) {
+      res.json({ message: "fail", error: "no exist user" });
+
+      return;
+    }
+
+    const userFollowerList = followUser!.follower_list;
+
+    if (!myFollowList || myFollowList.length == 0 || myFollowList.includes(followUserId) == false) {
+      // 팔로우 리스트가 비어있거나 팔로우 리스트에 그 유저가 없다면
+      res.json({ message: "fail", error: "user is not following this user" });
+
+      return;
+    }
+
+    if (myFollowList.includes(followUserId)) {  // 팔로우 리스트에 그 유저가 있다면
+      await Users.findByIdAndUpdate(userId, { $pull: { follow_list: followUserId } } );
+
+      if (!userFollowerList || userFollowerList.length == 0 || userFollowerList?.includes(userId) == false) {
+        // 그 유저 팔로워 리스트가 비어있거나 그 유저 팔로워 리스트에 내가 없다면
+        res.json({ message: "success" });
+
+        return;
+      }
+      
+      await Users.findByIdAndUpdate(followUserId, { $pull: { follower_list: userId } } );
+    }
+
+    res.json({ message: "success" });
+  } catch (error) {
+    res.json({ message: "fail", error });
+  }
+}
+
 export default {
     existEmail,
     existNickname,
@@ -554,5 +777,10 @@ export default {
     kakaoLogin,
     postTest,
     socialUserSet,
-    changeNickname
+    changeNickname,
+    changeDescription,
+    setToPublic,
+    setToPrivate,
+    followUser,
+    unfollowUser
 }
