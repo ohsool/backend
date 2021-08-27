@@ -195,7 +195,7 @@ const getUserMyBeers = async (req: Request, res: Response) => {
         
         // 01. 작성한 맥주 도감 리스트
         if (type === 'beer') {
-            beers = await MyBeer.find({ userId }, {myFeatures: false, preference: false, location: false} )
+            beers = await MyBeer.find({ userId: userId }, {myFeatures: false, preference: false, location: false} )
             .populate({path: 'userId', select: 'nickname image'})
             .populate({ path: 'beerId', select: 'image name_korean' })
             .sort([[sort, -1]])
@@ -205,7 +205,11 @@ const getUserMyBeers = async (req: Request, res: Response) => {
             beers = await Beers.find({like_array: { $in: [userId] }}, {
                 name_korean: true, name_english: true, image: true, hashtag: true, _id: true,
             }).sort([[sort, -1]]).lean();
+        } else {
+            res.status(400).send({ message: "fail", error: "wrong type" });
+            return 
         }
+        console.log(type, beers, userId)
 
         const mybeers = pagination(Number(pageNo), beers)
         if (mybeers === 'wrong page') {
