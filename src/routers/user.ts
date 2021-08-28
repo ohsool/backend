@@ -56,6 +56,9 @@ userRouter.put("/nickname", secretKeyMiddleware, authMiddleware, UserContoller.c
 // 내 소개(description) 변경하기
 userRouter.put("/description", secretKeyMiddleware, authMiddleware, UserContoller.changeDescription);
 
+// 비밀번호 리셋하기
+userRouter.put("/password/reset", secretKeyMiddleware, UserContoller.resetPassword);
+
 // 비밀번호 변경하기
 userRouter.put("/password", secretKeyMiddleware, authMiddleware, UserContoller.changePassword);
 
