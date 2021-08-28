@@ -508,6 +508,27 @@ const socialUserSet = async (req: Request, res: Response) => {
   }
 }
 
+// 유저 정보 가져오기
+const getUserInfo = async (req: Request, res: Response) => {
+  const userId = req.params.userId;
+
+  try {
+    const user = await Users.findById(userId).select("nickname email image preference description follow_list follower_list");
+
+    if (!user) {
+      res.json({ message: "fail", error: "no exist user" });
+  
+      return;
+    }
+
+    res.json({ message: "success", user });
+
+  } catch (error) {
+    res.json({ message: "fail", error })
+  }
+}
+
+// 닉네임 바꾸기
 const changeNickname = async (req: Request, res: Response) => {
   const { nickname } = req.body;
 
@@ -851,5 +872,6 @@ export default {
     setToPrivate,
     followUser,
     unfollowUser,
-    givesFollows
+    givesFollows,
+    getUserInfo
 }
