@@ -193,14 +193,14 @@ const getUserMyBeers = async (req: Request, res: Response) => {
     try {
         /*
         userId: 조회를 원하는 사용자의 아이디
-        sort: 정렬 기준 ( 내림차순 (-1) rate, date, like)
+        sort: 정렬 기준 ( 내림차순 (-1) rate, date, like_count)
         pageNo: 페이지 번호
         type: tab 종류 (beer / liked)
         */
 
         const { sort, pageNo, type } = req.query; 
         const userId = mongoose.Types.ObjectId(req.params.userId); 
-
+        
         let beers!:Array<any>;
 
         if (!userId) {
@@ -208,17 +208,14 @@ const getUserMyBeers = async (req: Request, res: Response) => {
             return
         }
 
-        if(sort === 'like') {
-
-        }
-        
         // 01. 작성한 맥주 도감 리스트
         if (type === 'beer') {
-            beers = await MyBeer.find({ userId: userId }, {preference: false, location: false} )
-            .populate({path: 'userId', select: 'nickname image'})
-            .populate({ path: 'beerId', select: 'image name_korean'})
-            .sort([[sort, -1]])
-            .lean();
+            beers = await MyBeer        
+                .find({ userId: userId }, {preference: false, location: false} )
+                .populate({path: 'userId', select: 'nickname image'})
+                .populate({ path: 'beerId', select: 'image name_korean'})
+                .sort([[sort, -1]])
+                .lean();
         } else if (type === 'liked') {
         // 02. 좋아요한 맥주 리스트
             beers = await Beers.find({like_array: { $in: [userId] }}, {
@@ -443,7 +440,8 @@ const likeMyBeer = async (req: Request, res: Response) => {
         return
     }
 
-    const result = await MyBeer.findOneAndUpdate({_id: myBeerId}, {$push: {like_array: userId}}).lean();
+    const result = await MyBeer.findOneAndUpdate({_id: myBeerId}, { $push: {like_array: userId}, $inc: {like_count: 1} })
+                                .lean();
     res.json({ message: "success", result });
 
 };
@@ -459,7 +457,7 @@ const unlikeMyBeer = async (req: Request, res: Response) => {
         return
     }
 
-    const result = await MyBeer.findOneAndUpdate({_id: myBeerId}, {$pull: {like_array: userId}}).lean();
+    const result = await MyBeer.findOneAndUpdate({_id: myBeerId}, {$pull: {like_array: userId},  $inc: {like_count: -1}}).lean();
     res.json({ message: "success", result });
 };
 

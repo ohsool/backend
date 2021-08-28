@@ -14,5 +14,6 @@ export interface IMyBeer {
     date: string,
     location?: string,
     rate: number,
-    review: string
+    review: string,
+    like_count: number
 }
