@@ -31,13 +31,22 @@ export const mailSender = async (mailInfo: IMailInfo) => {
     if (mailInfo.beerId) {
         new_script = new_script.replace(/BEERID/gi, mailInfo.beerId);
     }
+    if (mailInfo.feedback) {
+        new_script = new_script.replace(/FEEDBACK/gi, mailInfo.feedback);
+    }
+    if (mailInfo.complaint_title) {
+        new_script = new_script.replace(/COMPLAINTTITLE/gi, mailInfo.complaint_title);
+    }
+    if (mailInfo.complaint_description) {
+        new_script = new_script.replace(/COMPLAINTDESCRIPTION/gi, mailInfo.complaint_description);
+    }
     
 
     let mail_subject = ""
 
     if (mailInfo.type === "welcome") {
         mail_subject = `🍻오늘의술 ${mailInfo.nickname}님, 환영합니다!`
-    } else if (mailInfo.type === "beerfeedback") {
+    } else if (mailInfo.type === "beerfeedback" || mailInfo.type == "complaintfeedback") {
         mail_subject = `🍻오늘의술 ${mailInfo.nickname}님, 건의 내용에 대한 답변입니다.`
     } else {
         mail_subject = `🍻오늘의술 ${mailInfo.nickname}님, 건의사항이 접수되었습니다.`

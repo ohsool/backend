@@ -4,6 +4,9 @@ export interface IMailInfo {
     type: string,
     beer?: string,
     beerId?: string,
+    feedback?: string,
+    complaint_title?: string,
+    complaint_description?: string,
 }
 
 export interface IMailOption {
