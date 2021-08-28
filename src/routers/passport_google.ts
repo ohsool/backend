@@ -4,6 +4,7 @@ import passportRouter from "passport";
 import GoogleStrategy, { Strategy } from "passport-google-oauth2";
 import { mailSender }  from '../email/mail'
 import { env } from "../env";
+import { IMailInfo } from "../interfaces/mail";
 
 const googlePassportConfig = () => {
     passportRouter.serializeUser((user, done) => {
@@ -31,7 +32,7 @@ const googlePassportConfig = () => {
         if (!user) {
             user = await Users.create({ email, nickname, passport: [{ provider: provider }, { id: userId }] });
 
-            const mailInfo = {
+            const mailInfo: IMailInfo = {
                 toEmail: email,     
                 nickname: nickname, 
                 type: 'welcome',   

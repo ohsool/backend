@@ -44,6 +44,10 @@ const MyBeerSchema: Schema = new Schema({
     review: {
         type: String,
         required: true
+    },
+    like_count: {
+        type: Number,
+        default: 0
     }
 });
 
