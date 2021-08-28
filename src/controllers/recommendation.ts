@@ -5,9 +5,11 @@ import moment from "moment";
 
 import { mailSender }  from '../email/mail'
 import { env } from "../env";
+
 import Recommendations from "../schemas/recommendation";
 import Users from "../schemas/user";
 import Beers from "../schemas/beer";
+
 import { IRecommendation } from "../interfaces/recommendation";
 import { IMailInfo } from "../interfaces/mail";
 
@@ -124,7 +126,7 @@ const sendFeedback = async (req: Request, res: Response) => {
     } catch (error) {
         res.json({ message: "fail", error });
     }
-}
+} 
 
 export default {
     postRecommendation,
