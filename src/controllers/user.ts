@@ -16,6 +16,7 @@ import { mailSender }  from '../email/mail'
 
 import { env } from "../env";
 import { access } from "fs";
+import { IMailInfo } from "../interfaces/mail";
 
 const joiSchema = joi.object({
     email: joi
@@ -188,7 +189,7 @@ const register = async(req: Request, res: Response) => {
 
           await Users.create({ email, nickname, password: crypted_password });
 
-          const mailInfo = {
+          const mailInfo: IMailInfo = {
             toEmail: email,     
             nickname: nickname, 
             type: 'welcome',   
@@ -513,7 +514,7 @@ const getUserInfo = async (req: Request, res: Response) => {
   const userId = req.params.userId;
 
   try {
-    const user = await Users.findById(userId).select("nickname email image preference description follow_list follower_list");
+    const user = await Users.findById(userId).select("nickname email image preference description follow_list follower_list is_public");
 
     if (!user) {
       res.json({ message: "fail", error: "no exist user" });
