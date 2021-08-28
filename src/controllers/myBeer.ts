@@ -202,30 +202,34 @@ const getUserMyBeers = async (req: Request, res: Response) => {
             res.status(400).send({ message: "fail", error: "unavailable user Id" });
             return
         }
+
+        if(sort === 'like') {
+
+        }
         
         // 01. 작성한 맥주 도감 리스트
         if (type === 'beer') {
             beers = await MyBeer.find({ userId: userId }, {myFeatures: false, preference: false, location: false} )
             .populate({path: 'userId', select: 'nickname image'})
-            .populate({ path: 'beerId', select: 'image name_korean' })
+            .populate({ path: 'beerId', select: 'image name_korean features' })
             .sort([[sort, -1]])
             .lean();
         } else if (type === 'liked') {
         // 02. 좋아요한 맥주 리스트
             beers = await Beers.find({like_array: { $in: [userId] }}, {
-                name_korean: true, name_english: true, image: true, hashtag: true, _id: true,
+                name_korean: true, name_english: true, image: true, hashtag: true, _id: true, like_array: true
             }).sort([[sort, -1]]).lean();
         } else {
             res.status(400).send({ message: "fail", error: "wrong type" });
             return 
         }
-        console.log(type, beers, userId)
+        // console.log(type, beers, userId)
 
         const mybeers = pagination(Number(pageNo), beers)
         if (mybeers === 'wrong page') {
             res.status(400).send({ message: "fail", error: "wrong page" });
             return
-        }
+        };
 
         res.json({ message: "success", mybeers });
 
@@ -244,9 +248,9 @@ const getBeerAllReviews = async (req: Request, res: Response) => {
 
         if (!beer) {
             res.json({ message: "fail", error: "beer doesn't exist" });
-
             return;
         }
+
         const beers = await MyBeer.find({ beerId: beer._id })
                                 .populate({path: 'userId', select: 'nickname image'})
                                 .populate({ path: 'beerId', select: 'image' })
@@ -456,6 +460,11 @@ const unlikeMyBeer = async (req: Request, res: Response) => {
 
 
 function pagination(pageNo:number, arrBeer:Array<any>) {
+
+    if (!pageNo) { // 페이지번호가 없을 시 전체 리스트 출력
+        return arrBeer;
+    }
+
     const curPage = (pageNo < 0) ? 0 : pageNo;
     const startIndex = curPage * 8;
 
