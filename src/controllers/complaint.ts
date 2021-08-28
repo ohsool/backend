@@ -7,6 +7,7 @@ import { env } from "../env";
 
 import Complaints from "../schemas/complaint";
 import { IComplaint } from "../interfaces/complaint";
+import { IMailInfo } from "../interfaces/mail";
 
 const client = new WebClient(env.botUserOAuthToken, {
     logLevel: LogLevel.DEBUG
@@ -53,8 +54,7 @@ const postComplaint = async (req: Request, res: Response) => {
             await Complaints.create(complaint);
         }
 
-          
-        const mailInfo = {
+        const mailInfo: IMailInfo = {
             toEmail: email,     
             nickname: nickname, 
             type: 'complaint',   

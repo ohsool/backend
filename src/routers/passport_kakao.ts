@@ -4,6 +4,7 @@ import passportRouter from "passport";
 import KakaoStrategy, { Strategy } from "passport-kakao";
 import { mailSender }  from '../email/mail'
 import { env } from "../env";
+import { IMailInfo } from "../interfaces/mail";
 
 const kakaoPassportConfig = () => {
     passportRouter.serializeUser((user, done) => {
@@ -21,10 +22,10 @@ const kakaoPassportConfig = () => {
         callbackURL: env.callbackUrl_kakao
     },
     async function(accessToken, refreshToken, profile, done) {
-        const userId = String(profile.id);
+        const userId = profile.id;
         const nickname = profile.username;
         const provider = profile.provider;
-        let email:String;
+        let email:string;
         let first = false;
 
         if (profile._json.kakao_account.has_email && profile._json.kakao_account.is_email_valid) {
@@ -38,7 +39,7 @@ const kakaoPassportConfig = () => {
         if (!user) {
             user = await Users.create({ nickname, email, passport: [{ provider: provider }, { id: userId }] });
 
-            const mailInfo = {
+            const mailInfo: IMailInfo = {
                 toEmail: email,     
                 nickname: nickname ? nickname : "오술 회원님",
                 type: 'welcome',   

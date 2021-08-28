@@ -6,12 +6,16 @@ import moment from "moment";
 import { mailSender }  from '../email/mail'
 import { env } from "../env";
 import Recommendations from "../schemas/recommendation";
+import Users from "../schemas/user";
+import Beers from "../schemas/beer";
 import { IRecommendation } from "../interfaces/recommendation";
+import { IMailInfo } from "../interfaces/mail";
 
 const client = new WebClient(env.botUserOAuthToken, {
     logLevel: LogLevel.DEBUG
 });
 
+// 슬랙을 통해 맥주 추천 전달하기
 const postRecommendation = async (req: Request, res: Response) => {
     let { beer, description, image } = req.body;
     let nickname = res.locals.user.nickname ? res.locals.user.nickname : "Anonymous";
@@ -58,10 +62,11 @@ const postRecommendation = async (req: Request, res: Response) => {
         }
 
         
-        const mailInfo = {
+        const mailInfo: IMailInfo = {
             toEmail: email,     
             nickname: nickname, 
-            type: 'recommendation',   
+            type: 'recommendation',
+            beer: beer
         };
 
           // 성공 메일 보내기
@@ -73,29 +78,57 @@ const postRecommendation = async (req: Request, res: Response) => {
     }
 };
 
-// const test = async (req: Request, res: Response) => {
-//     const apiKey = "051c1b730a72fbb7ffe1ef26aac8878a";
-//     const city = "Gwangju, KR";
-//     const lat = "";
-//     const lon = "";
-//     const url = `http://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}`;
+// 맥주 추천 반영사항 메일 보내기
+const sendFeedback = async (req: Request, res: Response) => {
+    const recommendationId = req.body.recommendationId;
+    const beerId = req.body.beerId;
 
-//     request(url, (error, response, body) => {
-//         if (!error) {
-//             console.log(body);
+    try {
+        const recommendation = await Recommendations.findById(recommendationId);
+        
+        if (!recommendation) {
+            res.json({ message: "fail", error: "no exist recommendation" });
 
-//             res.json({ message: "success", body });
-//         } else {
-//             console.log(error)
+            return;
+        }
 
-//             res.json({ message: "fail", error });
-//         }
-//     });
-// }
+        const user = await Users.findById(recommendation.userId);
+
+        if (!user) {
+            res.json({ meaasge: "fail", error: "no exist user" });
+
+            return;
+        }
+
+        const email: string = user!.email!;
+        const nickname: string = user!.nickname!;
+        const beer = await Beers.findById(beerId);
+        
+        if (!beer) {
+            res.json({ message: "fail", error: "no exist beer" });
+
+            return;
+        }
+
+        const mailInfo: IMailInfo = {
+            toEmail: email,
+            nickname: nickname,
+            type: "beerfeedback",
+            beer: beer.name_korean,
+            beerId: beerId
+        }
+
+        mailSender(mailInfo);
+
+        res.json({ message: "success" });
+    } catch (error) {
+        res.json({ message: "fail", error });
+    }
+}
 
 export default {
     postRecommendation,
-    // test
+    sendFeedback
 }
 
 // https://api.slack.com/apps/A029KN5LE84/oauth?

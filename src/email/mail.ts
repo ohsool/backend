@@ -3,18 +3,12 @@ import { env } from "../env";
 import fs from "fs";
 import { promisify } from 'util';
 import { string } from 'joi';
+import { IMailInfo, IMailOption } from '../interfaces/mail';
 
 
 const readFile = promisify(fs.readFile);
 
-// interface mailInfo {
-//     type: string,
-//     nickname: string,
-//     toEmail: string,
-// }
-
-// mailinfo any 타입 고치기
-export const mailSender = async (mailInfo: any) => {
+export const mailSender = async (mailInfo: IMailInfo) => {
     // 메일 발송 함수
     const transporter = nodemailer.createTransport({
         service: 'gmail',
@@ -29,17 +23,28 @@ export const mailSender = async (mailInfo: any) => {
     });
 
     const script = await readFile(__dirname + `/${mailInfo.type}.html`, 'utf8')
-    const new_script = script.replace(/USERNAME/gi, mailInfo.nickname)
+    let new_script = script.replace(/USERNAME/gi, mailInfo.nickname);
+    
+    if (mailInfo.beer) {
+        new_script = new_script.replace(/BEERNAME/gi, mailInfo.beer);
+    }
+    if (mailInfo.beerId) {
+        new_script = new_script.replace(/BEERID/gi, mailInfo.beerId);
+    }
+    
+
     let mail_subject = ""
 
     if (mailInfo.type === "welcome") {
         mail_subject = `🍻오늘의술 ${mailInfo.nickname}님, 환영합니다!`
+    } else if (mailInfo.type === "beerfeedback") {
+        mail_subject = `🍻오늘의술 ${mailInfo.nickname}님, 건의 내용에 대한 답변입니다.`
     } else {
         mail_subject = `🍻오늘의술 ${mailInfo.nickname}님, 건의사항이 접수되었습니다.`
     }
 
     // 메일 옵션
-    const mailOptions = {
+    const mailOptions: IMailOption = {
         from: "admin@ohsool.com",
         to: mailInfo.toEmail,
         subject: mail_subject,
