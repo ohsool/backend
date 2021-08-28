@@ -21,7 +21,7 @@ const googlePassportConfig = () => {
         callbackURL: env.callbackUrl_google
     },
     async function(accessToken, refreshToken, profile, done: GoogleStrategy.VerifyCallback) {
-        const userId = profile.id;
+        const userId = String(profile.id);
         const email = profile.email;
         const nickname = profile.name.givenName;
         const provider = profile.provider;

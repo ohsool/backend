@@ -22,7 +22,7 @@ const kakaoPassportConfig = () => {
         callbackURL: env.callbackUrl_kakao
     },
     async function(accessToken, refreshToken, profile, done) {
-        const userId = profile.id;
+        const userId = String(profile.id);
         const nickname = profile.username;
         const provider = profile.provider;
         let email:string;
