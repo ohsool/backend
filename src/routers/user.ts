@@ -47,6 +47,9 @@ userRouter.post("/test", secretKeyMiddleware, UserContoller.postTest);
 // 첫 소셜 로그인시에만 닉네임, 이메일이 중복되거나 없을 수 있기 때문에 다시 받기
 userRouter.post("/socialuser", secretKeyMiddleware, authMiddleware, UserContoller.socialUserSet);
 
+// 유저 정보 가져오기
+userRouter.get("/user-info/:userId", secretKeyMiddleware, UserContoller.getUserInfo);
+
 // 닉네임 바꾸기
 userRouter.put("/nickname", secretKeyMiddleware, authMiddleware, UserContoller.changeNickname);
 

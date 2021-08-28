@@ -20,7 +20,7 @@ myBeerRouter.get("/others/:userId", myBeerController.getUserMyBeers);
 myBeerRouter.get("/my/length/:userId", authMiddleware, myBeerController.getLengthOfMyBeers);
 
 // 특정 맥주의 전체 도감 가져오기
-myBeerRouter.get("/beer/:beerId", myBeerController.getBeerAllReviews);
+myBeerRouter.get("/beer", myBeerController.getBeerAllReviews);
 
 // 특정 도감의 상세 정보 가져오기
 myBeerRouter.get("/:myBeerId", authMiddleware, myBeerController.getMyBeer);
@@ -30,6 +30,12 @@ myBeerRouter.put("/:myBeerId", authMiddleware, myBeerController.updateMyBeer);
 
 // 특정 도감 삭제하기
 myBeerRouter.delete("/:myBeerId", authMiddleware, myBeerController.deleteMyBeer);
+
+// 도감 좋아요
+myBeerRouter.put("/like/:myBeerId", authMiddleware, myBeerController.likeMyBeer);
+
+// 도감 좋아요 취소
+myBeerRouter.put("/unlike/:myBeerId", authMiddleware, myBeerController.unlikeMyBeer);
 
 
 export { myBeerRouter };
