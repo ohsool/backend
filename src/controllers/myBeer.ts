@@ -117,6 +117,11 @@ const getAllMyBeers = async (req: Request, res: Response) => {
     try {
         // 내림차순 정렬 (-1) rate, date, like 
         const { sort, pageNo } = req.query; 
+
+        if(sort==='like') {
+
+        }
+
         const beers = await MyBeer.find({})
                                 .populate({path: 'userId', select: 'nickname image'})
                                 .populate({ path: 'beerId', select: 'image' })
@@ -209,9 +214,9 @@ const getUserMyBeers = async (req: Request, res: Response) => {
         
         // 01. 작성한 맥주 도감 리스트
         if (type === 'beer') {
-            beers = await MyBeer.find({ userId: userId }, {myFeatures: false, preference: false, location: false} )
+            beers = await MyBeer.find({ userId: userId }, {preference: false, location: false} )
             .populate({path: 'userId', select: 'nickname image'})
-            .populate({ path: 'beerId', select: 'image name_korean features' })
+            .populate({ path: 'beerId', select: 'image name_korean'})
             .sort([[sort, -1]])
             .lean();
         } else if (type === 'liked') {
