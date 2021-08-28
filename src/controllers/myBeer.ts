@@ -5,6 +5,7 @@ import mongoose, { Schema, model, mongo, ObjectId } from "mongoose";
 import MyBeer from "../schemas/mybeer";
 import Beers from "../schemas/beer";
 import BeerCategory from "../schemas/beerCategory";
+import Users from "../schemas/user";
 import { IBeer } from '../interfaces/beer';
 import { IBeerCategory } from '../interfaces/beerCategory';
 import { IMyBeer } from '../interfaces/mybeer';
@@ -158,12 +159,21 @@ const getCurrentMyBeers = async (req: Request, res: Response) => {
     
 };
 
-// 현재 유저가 작성한 맥주도감 개수 가져오기
+// 특정 유저가 작성한 맥주도감 개수 가져오기
 const getLengthOfMyBeers = async (req: Request, res: Response) => {
-    const userId = res.locals.user._id;
+    const userId = req.params.userId;
 
     try {
+        const user = await Users.findById(userId);
+
+        if (!user) {
+            res.json({ message: "fail", error: "no exist user" });
+
+            return;
+        }
+
         const mybeers = await MyBeer.find({ userId });
+
         const length = mybeers.length;
 
         res.json({ message: "success", length });
