@@ -130,9 +130,8 @@ const secretKey = secretAPIkey();
 console.log("secret key now: ", secretKey);
 
 app.use(`/api/user`, [userRouter]);
-
-app.use(secretKeyMiddleware);
 app.use('/swagger', swaggerUi.serve, swaggerUi.setup(swaggerFile))
+app.use(secretKeyMiddleware);
 app.get("/search", (req, res) => {
     res.render("index")
 })

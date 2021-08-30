@@ -23,7 +23,7 @@ myBeerRouter.get("/length/:userId", myBeerController.getLengthOfMyBeers);
 myBeerRouter.get("/beer", myBeerController.getBeerAllReviews);
 
 // 특정 도감의 상세 정보 가져오기
-myBeerRouter.get("/:myBeerId", authMiddleware, myBeerController.getMyBeer);
+myBeerRouter.get("/:myBeerId", myBeerController.getMyBeer);
 
 // 특정 도감 수정하기
 myBeerRouter.put("/:myBeerId", authMiddleware, myBeerController.updateMyBeer);
