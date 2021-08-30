@@ -25,6 +25,12 @@ const getSomeBeers = async(req: Request, res: Response) => {
     let { pageNo, sort } = req.query;
     let beers: Array<IBeer> = [];
 
+    if ( Number(pageNo) < 0 || (Number(pageNo) * 8 > beers.length) ) {
+        res.status(400).send({ message: "fail", error: "wrong page" });
+
+        return;
+    }
+
     try {
         // later, we should change order of beers with the most famous sort method
         // maybe, degree or count will be the one
@@ -45,13 +51,6 @@ const getSomeBeers = async(req: Request, res: Response) => {
             beers = await Beers.find({}).select("hashtag like_array name_korean name_english image")
         } else {
             res.status(400).send({ message: "fail", error: "wrong sort method" });
-            return;
-        }
-        
-
-        if ( Number(pageNo) < 0 || (Number(pageNo) * 8 > beers.length) ) {
-            res.status(400).send({ message: "fail", error: "wrong page" });
-
             return;
         }
 
@@ -139,7 +138,7 @@ const deleteBeer = async(req: Request, res: Response) => {
 
         res.status(204).json({ message: "success"});
     } catch(error) {
-        res.status(400).send({ message: "fail" });
+        res.status(400).send({ message: "fail", error });
     }
 }
 
