@@ -81,7 +81,7 @@ const search = async (req: Request, res: Response) => {
     
         res.json({ message: "success", beers: searched_beers, beerCategories: searched_categories, hashtags: send_hashtags });
     } catch (error) {
-        res.json({ message: "fail", error });
+        res.status(400).json({ message: "fail", error });
     }
 }
 
@@ -126,7 +126,7 @@ const searchDeep = async (req: Request, res: Response) => {
     
         res.json({ message: "success", beers: searched_beers, beerCategories: searched_categories, hashtags: send_hashtags });
     } catch (error) {
-        res.json({ message: "fail", error });
+        res.status(400).json({ message: "fail", error });
     }
 }
 
@@ -149,7 +149,7 @@ const searchHashtag = async (req: Request, res: Response) => {
 
         res.json({ message: "success", beers: newBeers });
     } catch (error) {
-        res.json({ message: "fail", error });
+        res.status(400).json({ message: "fail", error });
     }
 }
 

@@ -18,13 +18,13 @@ function secretKeyMiddleware(req: Request, res: Response, next: NextFunction){
         if (received_key == secretkey) {
             next();
         } else {
-            res.json({ message: "fail", error: "wrong key"});
+            res.status(401).json({ message: "fail", error: "wrong key"});
 
             return;
         }
 
     } catch (error) {
-        res.json({ message: "fail", error});
+        res.status(401).json({ message: "fail", error});
     }
 }
 

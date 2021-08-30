@@ -22,12 +22,12 @@ const postComplaint = async (req: Request, res: Response) => {
     const email = res.locals.user.email
 
     if (!title || !description) {
-        res.json({ message: "fail", error: "no title or descripton" });
+        res.status(400).json({ message: "fail", error: "no title or descripton" });
 
         return;
     }
     if ( title.length > 100 || description.length > 500) {
-        res.json({ message: "fail", error: "length too long" });
+        res.status(400).json({ message: "fail", error: "length too long" });
 
         return;
     }
@@ -65,9 +65,9 @@ const postComplaint = async (req: Request, res: Response) => {
           // 성공 메일 보내기
         mailSender(mailInfo)
 
-        res.json({ message: "success", result })
+        res.status(201).json({ message: "success", result })
     } catch (error) {
-        res.json({ message: "fail", error });
+        res.status(400).json({ message: "fail", error });
     }
 };
 
@@ -77,7 +77,7 @@ const sendFeedback = async (req: Request, res: Response) => {
     const feedback: string = req.body.feedback;
 
     if (!feedback || feedback.length < 10) {
-        res.json({ message: "fail", error: "no or too short feed back" });
+        res.status(400).json({ message: "fail", error: "no or too short feed back" });
             
         return;
     }
@@ -86,7 +86,7 @@ const sendFeedback = async (req: Request, res: Response) => {
         const complaint = await Complaints.findById(complaintId);
 
         if (!complaint) {
-            res.json({ message: "fail", error: "no exist complaint" });
+            res.status(406).json({ message: "fail", error: "no exist complaint" });
             
             return;
         }
@@ -94,7 +94,7 @@ const sendFeedback = async (req: Request, res: Response) => {
         const user = await Users.findById(complaint.userId);
 
         if (!user) {
-            res.json({ meaasge: "fail", error: "no exist user" });
+            res.status(406).json({ meaasge: "fail", error: "no exist user" });
 
             return;
         }
@@ -116,9 +116,9 @@ const sendFeedback = async (req: Request, res: Response) => {
         mailSender(mailInfo);
 
         res.json({ message: "success" });
-
+ 
     } catch (error) {
-        res.json({ message: "fail", error });
+        res.status(400).json({ message: "fail", error });
     }
 }
 
