@@ -1,7 +1,7 @@
 # 맥주계의 왓챠, 오늘의술 🍻
 
 ## 목차 | Contents
-1. [오술 소개 | About Ohsool](#오술-소개)
+1. [오술 소개 | About Ohsool](#오술-소개-|-About-Ohsool)
 2. [웹사이트 | Webstie](#🌎-웹사이트-|-Webstie)
 3. [개발기간 | Project Period](#⌚-개발기간-|-Project-Period)
 4. [팀원 | Team](#🤸🏻‍♀️-팀원-|-Team)
