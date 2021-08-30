@@ -11,10 +11,12 @@ import Users from "../schemas/user"
 import { IComplaint } from "../interfaces/complaint";
 import { IMailInfo } from "../interfaces/mail";
 
+// 슬랙 봇 설정
 const client = new WebClient(env.botUserOAuthToken, {
     logLevel: LogLevel.DEBUG
 });
 
+// 불편사항 보내기
 const postComplaint = async (req: Request, res: Response) => {
     const { title, description } = req.body;
     let nickname = res.locals.user.nickname ? res.locals.user.nickname : "Anonymous";
@@ -33,6 +35,7 @@ const postComplaint = async (req: Request, res: Response) => {
     }
 
     try {
+        // 슬랙 불편사항 채널에 업로드
         const result = await client.chat.postMessage({
             channel: "#불편사항",
             text: `*:person_frowning:${nickname} 님의 불편사항*
@@ -62,7 +65,7 @@ const postComplaint = async (req: Request, res: Response) => {
             type: 'complaint',   
         };
 
-          // 성공 메일 보내기
+        // 성공 메일 보내기
         mailSender(mailInfo)
 
         res.status(201).json({ message: "success", result })
@@ -84,7 +87,7 @@ const sendFeedback = async (req: Request, res: Response) => {
 
     try {
         const complaint = await Complaints.findById(complaintId);
-
+        
         if (!complaint) {
             res.status(406).json({ message: "fail", error: "no exist complaint" });
             
@@ -104,6 +107,7 @@ const sendFeedback = async (req: Request, res: Response) => {
         const complaint_title: string = complaint.title!;
         const complaint_description: string = complaint.description!;
 
+        // 불편사항에 관한 피드백을 해당 유저의 메일로 전송
         const mailInfo: IMailInfo = {
             toEmail: email,
             nickname: nickname,
@@ -113,7 +117,10 @@ const sendFeedback = async (req: Request, res: Response) => {
             complaint_description: complaint_description
         }
 
+        // 성공 메일 보내기
         mailSender(mailInfo);
+
+        await Complaints.findByIdAndUpdate(complaintId, { $set: { isSolved: true } });
 
         res.json({ message: "success" });
  

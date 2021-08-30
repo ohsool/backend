@@ -17,6 +17,10 @@ const ComplaintSchema: Schema = new Schema({
     date: {
         type: String,
         required: true
+    },
+    isSolved: {
+        type: Boolean,
+        default: false
     }
 });
 
