@@ -4,7 +4,7 @@
 1. [오술 소개 | About Ohsool](#오술-소개--About-Ohsool)
 2. [웹사이트 | Webstie](#웹사이트--Webstie)
 3. [개발기간 | Project Period](#개발기간--Project-Period)
-4. [팀원 | Team](#팀원----Team)
+4. [팀원 | Team](#팀원-Team)
 5. [개발환경 | Development Enviornment](#개발환경--Development-Enviornment)
 6. [주요 API 기능 | Main API]
 7. [주요 라이브러리 | Main Library](#주요-라이브러리--Main-Library)
