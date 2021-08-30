@@ -2,13 +2,13 @@
 
 ## 목차 | Contents
 1. [오술 소개 | About Ohsool](#오술-소개--About-Ohsool)
-2. [웹사이트 | Webstie](#🌎-웹사이트-|-Webstie)
-3. [개발기간 | Project Period](#⌚-개발기간-|-Project-Period)
+2. [웹사이트 | Webstie](#웹사이트--Webstie)
+3. [개발기간 | Project Period](#개발기간--Project-Period)
 4. [팀원 | Team](#🤸🏻‍♀️-팀원-|-Team)
-5. [개발환경 | Development Enviornment](#⛏-개발환경-|-Development-Enviornment)
+5. [개발환경 | Development Enviornment](#개발환경--Development-Enviornment)
 6. [주요 API 기능 | Main API]
-7. [주요 라이브러리 | Main Library](#🎨-주요-라이브러리-Main-Library)
-8. [기타 | etc](#🧾-기타-|-etc)
+7. [주요 라이브러리 | Main Library](#주요-라이브러리--Main-Library)
+8. [기타 | etc](#기타--etc)
 <br>
 
 <hr>
@@ -23,17 +23,17 @@
 
 <br>
 
-## 🌎 웹사이트 | Webstie
+## 🌎웹사이트 | Webstie
 https://ohsool.com/
 
 <br>
 
-## ⌚ 개발기간 | Project Period
+## ⌚개발기간 | Project Period
 2021년 07월 23일 ~ 2021년 08월 31일
 
 <br>
 
-## 🤸🏻‍♀️ 팀원 | Team
+## 🤸🏻‍♀️팀원 | Team
 * **Backend (Node.js)** 
 <br> 이정원, 문진영, 윤송
 * **Frontend (React)** (https://github.com/ohsool/front-end)
@@ -46,7 +46,7 @@ https://ohsool.com/
 
 <br>
 
-## ⛏ 개발환경 | Development Enviornment
+## ⛏개발환경 | Development Enviornment
 
 | 이름 | 구분 | 
 |:----------:|:----------:|
@@ -68,7 +68,7 @@ https://ohsool.com/
 
 <br>
 
-## ⚔ 주요 API 기능 (위키로 정리하기) | Main API
+## ⚔주요 API 기능 (위키로 정리하기) | Main API
 1. 테스트 기반으로 사용자의 맥주 취향 보여주기
 2. 각자 다른 맥주 취향을 가진 사용자들이 남긴 평점을 맥주 종류 별로 평균을 내어 타 사용자의 취향에 맞는 맥주 추천하기 
 3. 맥주 판매처 제보하기
@@ -77,7 +77,7 @@ https://ohsool.com/
 
 <br>
 
-## 🎨 주요 라이브러리 | Main Library
+## 🎨주요 라이브러리 | Main Library
 <details>
 <summary> jsonwebtoken </summary>
 <br>
@@ -152,7 +152,7 @@ npm i nodemailer
 
 <br>
 
-## 🧾 기타 | etc
+## 🧾기타 | etc
 
 <details>
 <summary>Git Commit Message Rule</summary>
