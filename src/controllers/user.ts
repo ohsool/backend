@@ -566,7 +566,7 @@ const changeNickname = async (req: Request, res: Response) => {
     const user = await Users.findById(res.locals.user._id);
 
     if (!user) {
-      res.status(409).json({ message: "fail", error: "no exist user" });
+      res.status(406).json({ message: "fail", error: "no exist user" });
 
       return;
     }
@@ -589,7 +589,7 @@ const changeDescription = async (req: Request, res: Response) => {
     let user = await Users.findById(userId);
 
     if (!user) {
-      res.status(409).json({ message: "fail", error: "no exist user" });
+      res.status(406).json({ message: "fail", error: "no exist user" });
 
       return;
     }
