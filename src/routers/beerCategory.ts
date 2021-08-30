@@ -7,16 +7,19 @@ import { authMiddleware } from "../middlewares/auth-middleware";
 
 const beerCategoryRouter = express.Router();
 
+// 모든 맥주 카테고리 가져오기
 beerCategoryRouter.get("/", BeerCategoryController.getBeerCategories);
 
-// get preference count of all categories in one time
+// 모든 유저의 맥주 카테고리 취향에 관한 preference count 계산해서 데이터베이스에 저장하기
 beerCategoryRouter.get("/preferencecount", BeerCategoryController.getPreferenceCount);
 
+// 맥주 카테고리 추가하기
 beerCategoryRouter.post("/", authMiddleware, BeerCategoryController.postBeerCategory);
 
-// get one category specified by parameter
+// 특정 맥주 카테고리 가져오기
 beerCategoryRouter.get("/:beerCategoryId", BeerCategoryController.getBeerCategory);
 
+// 취향 테스트 결과 보여주기
 beerCategoryRouter.post("/result", BeerCategoryController.getTestResult);
 
 
