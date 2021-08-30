@@ -7,7 +7,7 @@
 4. [팀원 | Team](#🤸🏻‍♀️-팀원-|-Team)
 5. [개발환경 | Development Enviornment](#⛏-개발환경-|-Development-Enviornment)
 6. [주요 API 기능 | Main API]
-7. [주요 라이브러리 | Main Library](#🎨-주요-라이브러리-|-Main-Library)
+7. [주요 라이브러리 | Main Library](#🎨-주요-라이브러리-Main-Library)
 8. [기타 | etc](#🧾-기타-|-etc)
 <br>
 
