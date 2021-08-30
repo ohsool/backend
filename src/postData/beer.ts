@@ -322,8 +322,8 @@ beerCrawlingRouter.post("/", async(req, res) => {
             createDate: date
         },
         {
-            name_korean: "칭다오",
-            name_english: "Tsingdao",
+            name_korean: "칭다오 퓨어 드라프트",
+            name_english: "Tsingdao Pure Draft",
             image: "https://ohsool-storage.s3.ap-northeast-2.amazonaws.com/beerImage/%EC%B9%AD%EB%8B%A4%EC%98%A4.png",
             degree: 4.7,
             country: "중국",
