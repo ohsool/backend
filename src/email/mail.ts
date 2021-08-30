@@ -9,7 +9,7 @@ import { IMailInfo, IMailOption } from '../interfaces/mail';
 const readFile = promisify(fs.readFile);
 
 export const mailSender = async (mailInfo: IMailInfo) => {
-    // 메일 발송 함수
+    // 메일 발송 함수 
     const transporter = nodemailer.createTransport({
         service: 'gmail',
         port: 486,
@@ -40,6 +40,9 @@ export const mailSender = async (mailInfo: IMailInfo) => {
     if (mailInfo.complaint_description) {
         new_script = new_script.replace(/COMPLAINTDESCRIPTION/gi, mailInfo.complaint_description);
     }
+    if (mailInfo.password) {
+        new_script = new_script.replace(/PASSWORD/gi, mailInfo.password);
+    }
     
 
     let mail_subject = ""
@@ -48,6 +51,8 @@ export const mailSender = async (mailInfo: IMailInfo) => {
         mail_subject = `🍻오늘의술 ${mailInfo.nickname}님, 환영합니다!`
     } else if (mailInfo.type === "beerfeedback" || mailInfo.type == "complaintfeedback") {
         mail_subject = `🍻오늘의술 ${mailInfo.nickname}님, 건의 내용에 대한 답변입니다.`
+    } else if (mailInfo.type == "resetpassword") {
+        mail_subject = `🍻오늘의술 ${mailInfo.nickname}님, 재발급된 비밀번호입니다.`
     } else {
         mail_subject = `🍻오늘의술 ${mailInfo.nickname}님, 건의사항이 접수되었습니다.`
     }
