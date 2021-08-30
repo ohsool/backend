@@ -12,7 +12,7 @@ const getBeerCategories = async(req: Request, res: Response) => {
     try {
         const beerCategories: Array<IBeerCategory> = await BeerCategories.find().lean();
 
-        res.json({ message:"success", beerCategories });
+        res.json({ message: "success", beerCategories });
     } catch (error) {
         res.status(400).send({ message: "fail", error });
     }
@@ -24,19 +24,19 @@ const postBeerCategory = async(req: Request, res: Response) => {
         const isExist: IBeerCategory | null = await BeerCategories.findOne({ name, image, features }).lean();
 
         if (res.locals.user != "ohsool") {
-            res.status(401).send({ message: "fail", error: "user not authenticated" });
+            res.status(403).send({ message: "fail", error: "user not authenticated" });
 
             return;
         }
 
         if(isExist) {
-            res.json({ message: "fail", error: "category already exists" });
+            res.json(409).json({ message: "fail", error: "category already exists" });
 
             return;
         }
         const beerCategory: IBeerCategory = await BeerCategories.create({ name, image, features })
 
-        res.json({ message: "success", beerCategory });
+        res.status(201).json({ message: "success", beerCategory });
     } catch (error) {
         res.status(400).send({ message: "fail" , error });
     }
@@ -47,10 +47,10 @@ const getBeerCategory = async(req: Request, res: Response) => {
         const { beerCategoryId } = req.params;
         const beerCategory: IBeerCategory | null = await BeerCategories.findById(beerCategoryId).lean();
 
-        if(beerCategory) {
-            res.json({ message:"success", beerCategory });
+        if( beerCategory ) {
+            res.json({ message: "success", beerCategory });
         } else {
-            res.json({ message: "fail", error: "category does not exist in the database" });
+            res.status(406).json({ message: "fail", error: "no exist category" });
         }
     } catch (error) {
         res.status(400).send({ message: "fail", error });
@@ -62,7 +62,7 @@ const getTestResult = async(req: Request, res:Response) => {
 
     try {
         if (!result) {
-            res.json({ message: "fail", error: "test result doesn't exist" });
+            res.status(400).json({ message: "fail", error: "test result doesn't exist" });
     
             return;
         }
@@ -72,7 +72,7 @@ const getTestResult = async(req: Request, res:Response) => {
 
         // category 에 대한 정보가 없다면 함수 종료
         if (!category) {
-            res.json({ message: "fail", error: "Beer Category doesn't exist" });
+            res.status(406).json({ message: "fail", error: "no exist category" });
 
             return;
         }
@@ -82,7 +82,7 @@ const getTestResult = async(req: Request, res:Response) => {
 
         // 관련맥주에 대한 정보가 없다면 함수 종료
         if (!beers) {
-            res.json({ message: "fail", error: "Beer doesn't exist" });
+            res.status(406).json({ message: "fail", error: "no exist beer" });
 
             return;
         }
@@ -92,7 +92,7 @@ const getTestResult = async(req: Request, res:Response) => {
         res.status(200).json({ message: "success", category, recommendations });
 
     } catch (error) {
-        res.json({ message: "fail", error });
+        res.status(400).json({ message: "fail", error });
     }
 }
 
@@ -139,9 +139,9 @@ const getPreferenceCount = async (req: Request, res: Response) => {
         await BeerCategories.updateOne({ name: "Stout" }, { $set: { preferenceCount: preferenceCounts.Stout } });
         await BeerCategories.updateOne({ name: "Bock" }, { $set: { preferenceCount: preferenceCounts.Bock } });
 
-        res.json({ message: "success" });
+        res.status(204).json({ message: "success" });
     } catch (error) {
-        res.json({ message: "fail" });
+        res.status(400).json({ message: "fail" });
     }
 }
 

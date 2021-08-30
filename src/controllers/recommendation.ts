@@ -25,12 +25,12 @@ const postRecommendation = async (req: Request, res: Response) => {
     const email = res.locals.user.email
 
     if (!beer || !description) {
-        res.json({ message: "fail", error: "no beer or descripton" })
+        res.status(400).json({ message: "fail", error: "no beer or descripton" })
 
         return;
     }
     if ( beer.length > 100 || description.length > 500) {
-        res.json({ message: "fail", error: "length too long" });
+        res.status(400).json({ message: "fail", error: "length too long" });
 
         return;
     }
@@ -74,9 +74,9 @@ const postRecommendation = async (req: Request, res: Response) => {
           // 성공 메일 보내기
         mailSender(mailInfo)
 
-        res.json({ message: "success", result })
+        res.status(201).json({ message: "success", result })
     } catch (error) {
-        res.json({ message: "fail", error });
+        res.status(400).json({ message: "fail", error });
     }
 };
 
@@ -89,7 +89,7 @@ const sendFeedback = async (req: Request, res: Response) => {
         const recommendation = await Recommendations.findById(recommendationId);
         
         if (!recommendation) {
-            res.json({ message: "fail", error: "no exist recommendation" });
+            res.status(406).json({ message: "fail", error: "no exist recommendation" });
 
             return;
         }
@@ -97,7 +97,7 @@ const sendFeedback = async (req: Request, res: Response) => {
         const user = await Users.findById(recommendation.userId);
 
         if (!user) {
-            res.json({ meaasge: "fail", error: "no exist user" });
+            res.status(406).json({ meaasge: "fail", error: "no exist user" });
 
             return;
         }
@@ -107,7 +107,7 @@ const sendFeedback = async (req: Request, res: Response) => {
         const beer = await Beers.findById(beerId);
         
         if (!beer) {
-            res.json({ message: "fail", error: "no exist beer" });
+            res.status(406).json({ message: "fail", error: "no exist beer" });
 
             return;
         }
@@ -124,7 +124,7 @@ const sendFeedback = async (req: Request, res: Response) => {
 
         res.json({ message: "success" });
     } catch (error) {
-        res.json({ message: "fail", error });
+        res.status(400).json({ message: "fail", error });
     }
 } 
 
