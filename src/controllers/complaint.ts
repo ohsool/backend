@@ -6,6 +6,8 @@ import { mailSender }  from '../email/mail'
 import { env } from "../env";
 
 import Complaints from "../schemas/complaint";
+import Users from "../schemas/user"
+
 import { IComplaint } from "../interfaces/complaint";
 import { IMailInfo } from "../interfaces/mail";
 
@@ -69,8 +71,60 @@ const postComplaint = async (req: Request, res: Response) => {
     }
 };
 
+// 불편사항 반영사항 메일 보내기
+const sendFeedback = async (req: Request, res: Response) => {
+    const complaintId = req.body.complaintId;
+    const feedback: string = req.body.feedback;
+
+    if (!feedback || feedback.length < 10) {
+        res.json({ message: "fail", error: "no or too short feed back" });
+            
+        return;
+    }
+
+    try {
+        const complaint = await Complaints.findById(complaintId);
+
+        if (!complaint) {
+            res.json({ message: "fail", error: "no exist complaint" });
+            
+            return;
+        }
+
+        const user = await Users.findById(complaint.userId);
+
+        if (!user) {
+            res.json({ meaasge: "fail", error: "no exist user" });
+
+            return;
+        }
+
+        const email: string = user!.email!;
+        const nickname: string = user!.nickname!;
+        const complaint_title: string = complaint.title!;
+        const complaint_description: string = complaint.description!;
+
+        const mailInfo: IMailInfo = {
+            toEmail: email,
+            nickname: nickname,
+            type: "complaintfeedback",
+            feedback: feedback,
+            complaint_title: complaint_title,
+            complaint_description: complaint_description
+        }
+
+        mailSender(mailInfo);
+
+        res.json({ message: "success" });
+
+    } catch (error) {
+        res.json({ message: "fail", error });
+    }
+}
+
 export default {
-    postComplaint
+    postComplaint,
+    sendFeedback
 }
 
 // https://api.slack.com/apps/A029KN5LE84/oauth?

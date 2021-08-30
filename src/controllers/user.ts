@@ -608,6 +608,46 @@ const changeDescription = async (req: Request, res: Response) => {
   
 }
 
+// 비밀번호 리셋하기
+const resetPassword = async (req: Request, res: Response) => {
+  const email = req.body.email;
+  
+  try {
+    const user = await Users.findOne({ email });
+
+    if (!user) {
+      res.json({ message: "fail", error: "no exist user" });
+
+      return;
+    }
+
+    const time = new Date();
+    let newPassword = String(time.getMilliseconds() + String(time.getDate()) + String(time.getMinutes()) + String(time.getSeconds()));
+    newPassword = newPassword.replace("1", "a");
+    newPassword = newPassword.replace("5", "x");
+    newPassword = newPassword.replace("9", "b");
+    newPassword = newPassword.replace("0", "z");
+
+    const cryptedPassword = crypto.createHmac("sha256", newPassword).update(env.pass_secret).digest("hex");
+
+    await Users.findOneAndUpdate({ _id: user._id }, { $set: { password: cryptedPassword } });
+
+    const mailInfo: IMailInfo = {
+      toEmail: user.email!,
+      nickname: user.nickname,
+      type: "resetpassword",
+      password: newPassword
+    }
+
+    mailSender(mailInfo);
+
+    res.json({ message: "success" });
+  } catch (error) {
+    res.json({ message: "fail", error });
+  }
+}
+
+// 비밀번호 변경하기
 const changePassword = async (req: Request, res: Response) => {
   const old_password = req.body.password;
   const new_password = req.body.new_password;
@@ -868,6 +908,7 @@ export default {
     socialUserSet,
     changeNickname,
     changeDescription,
+    resetPassword,
     changePassword,
     setToPublic,
     setToPrivate,

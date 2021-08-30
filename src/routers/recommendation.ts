@@ -8,6 +8,6 @@ const recommendationRouter = express.Router();
 recommendationRouter.post("/", authMiddleware, recommendController.postRecommendation); 
 
 // 맥주 추천 반영사항 메일 보내기
-recommendationRouter.post("/feedback", recommendController.sendFeedback); 
+recommendationRouter.post("/feedback/success", recommendController.sendFeedback); 
 
 export { recommendationRouter };
