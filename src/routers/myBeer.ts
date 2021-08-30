@@ -8,7 +8,7 @@ const myBeerRouter = express.Router();
 myBeerRouter.post("/:beerId", authMiddleware, myBeerController.postMyBeer); 
 
 // 모든 유저의 도감 가져오기
-myBeerRouter.get("/all", authMiddleware,  myBeerController.getAllMyBeers);
+myBeerRouter.get("/all", myBeerController.getAllMyBeers);
 
 // 현재 유저의 도감 가져오기
 myBeerRouter.get("/my", authMiddleware, myBeerController.getCurrentMyBeers);
