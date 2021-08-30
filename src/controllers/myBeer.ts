@@ -310,12 +310,20 @@ const getMyBeer = async (req: Request, res: Response) => {
 // 특정 도감 수정하기
 const updateMyBeer = async (req: Request, res: Response) => {
     const { myBeerId } = req.params;
-    const { myFeatures, location, rate, review } = req.body;
+    let { myFeatures, location, rate, review } = req.body;
 
     try {
         const myBeer : IMyBeer = await MyBeer.findOne({ _id: myBeerId }).lean();
         const userId = res.locals.user._id;
         const nickname = res.locals.user.nickname;
+
+        if (!myFeatures || !rate) {
+            res.status(400).json({ message: "fail", error: "Either myFeatures or rate doesn't exist." });
+    
+            return;
+        } else if (!location) {
+            location = "";
+        }
 
         if (rate < 1 || rate > 5) {
             res.status(400).json({ message: "fail", error: "please input rate 1~4" });
