@@ -480,7 +480,7 @@ const unlikeMyBeer = async (req: Request, res: Response) => {
 
 function pagination(pageNo:number, arrBeer:Array<IMyBeer> ) {
 
-    if (!pageNo) { // 페이지번호가 없을 시 전체 리스트 출력
+    if (pageNo != 0 && !pageNo) { // 페이지번호가 없을 시 전체 리스트 출력
         return arrBeer;
     }
 
