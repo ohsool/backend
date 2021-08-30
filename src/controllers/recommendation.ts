@@ -13,6 +13,7 @@ import Beers from "../schemas/beer";
 import { IRecommendation } from "../interfaces/recommendation";
 import { IMailInfo } from "../interfaces/mail";
 
+// 슬랙 봇 설정
 const client = new WebClient(env.botUserOAuthToken, {
     logLevel: LogLevel.DEBUG
 });
@@ -36,6 +37,7 @@ const postRecommendation = async (req: Request, res: Response) => {
     }
 
     try {
+        // 슬랙 맥주추천 채널에 업로드
         const result = await client.chat.postMessage({
             channel: "#맥주추천",
             text: `*:beers:${nickname} 님의 맥주추천*
@@ -112,6 +114,7 @@ const sendFeedback = async (req: Request, res: Response) => {
             return;
         }
 
+        // 맥주 추천에 관한 피드백을 해당 유저의 메일로 전송
         const mailInfo: IMailInfo = {
             toEmail: email,
             nickname: nickname,
@@ -120,7 +123,10 @@ const sendFeedback = async (req: Request, res: Response) => {
             beerId: beerId
         }
 
+        // 성공 메일 보내기
         mailSender(mailInfo);
+
+        await Recommendations.findByIdAndUpdate(recommendationId, { $set: { isSolved: true } });
 
         res.json({ message: "success" });
     } catch (error) {

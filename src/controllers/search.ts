@@ -9,6 +9,9 @@ import { IBeer } from "../interfaces/beer";
 import { IBeerCategory } from "../interfaces/beerCategory";
 import { env } from "../env";
 
+// 서버가 시작될 때 이미 데이터베이스에 있는 맥주, 맥주 카테고리, 해시태그에 관한 정보들을 모아둠
+// 대신 새로 바뀐 좋아요 정보, 평점은 업데이트 되지 않음
+// 이름만 보여주는 용도
 let hashtags:Array<string> = [""];
 let beers:Array<IBeer> = [];
 let beerCategories:Array<IBeerCategory> = [];
@@ -38,6 +41,7 @@ get_beers().then((beers) => {
     console.log("error during getting hashtags");
 })
 
+// 맥주, 맥주 카테고리, 해시태그 검색 -> 사용자가 한 글자씩 칠때마다 들어오는 API
 const search = async (req: Request, res: Response) => {
     const word = String(req.query.word).toLowerCase();
     const searched_beers: Array<IBeer> = [];
@@ -51,7 +55,7 @@ const search = async (req: Request, res: Response) => {
     }
 
     try {
-        if (word) {
+        if (word) {  // 맥주, 맥주 카테고리 검색용
             if (env.modeNow == "test") {
                 beers = await Beers.find({});
                 beerCategories = await BeerCategories.find({});
@@ -71,7 +75,7 @@ const search = async (req: Request, res: Response) => {
             } 
         }
 
-        if (hashtag) {
+        if (hashtag) {  // 해시태그 검색용
             for (let i = 0; i < hashtags.length; i ++) {
                 if ( getRegExp(hashtag).test(String(hashtags[i])) ) {
                     send_hashtags.push(hashtags[i]);
@@ -85,6 +89,8 @@ const search = async (req: Request, res: Response) => {
     }
 }
 
+// 맥주, 맥주 카테고리, 해시태그 검색 -> 사용자가 엔터 치면 들어오는 API
+// 새롭게 반영된 정보들이 필요하기 때문에 데이터베이스 방문
 const searchDeep = async (req: Request, res: Response) => {
     const word = String(req.query.word).toLowerCase();
     const searched_beers: Array<IBeer> = [];
@@ -98,7 +104,7 @@ const searchDeep = async (req: Request, res: Response) => {
     }
 
     try {
-        if (word) {
+        if (word) {  // 맥주, 맥주 카테고리 검색용
             beers = await Beers.find({});
             beerCategories = await BeerCategories.find({});
 
@@ -116,7 +122,7 @@ const searchDeep = async (req: Request, res: Response) => {
             } 
         }
 
-        if (hashtag) {
+        if (hashtag) {  // 해시태그 검색용
             for (let i = 0; i < hashtags.length; i ++) {
                 if ( getRegExp(hashtag).test(String(hashtags[i])) ) {
                     send_hashtags.push(hashtags[i]);
@@ -130,6 +136,7 @@ const searchDeep = async (req: Request, res: Response) => {
     }
 }
 
+// 해시태그 클릭
 const searchHashtag = async (req: Request, res: Response) => {
     const hash_tag: string = String(req.query.hashtag) || "";
     const hashtag: Array<string> = [hash_tag];

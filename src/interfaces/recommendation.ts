@@ -6,5 +6,6 @@ export interface IRecommendation {
     description: string,
     image?: string,
     userId?: mongoose.Types.ObjectId,
-    date: string
+    date: string,
+    isSolved?: boolean
 }

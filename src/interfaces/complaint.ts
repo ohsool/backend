@@ -5,5 +5,6 @@ export interface IComplaint {
     title: string,
     description: string,
     userId?: mongoose.Types.ObjectId,
-    date: string
+    date: string,
+    isSolved?: boolean
 }
