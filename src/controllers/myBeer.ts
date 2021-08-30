@@ -9,6 +9,7 @@ import Users from "../schemas/user";
 import { IBeer } from '../interfaces/beer';
 import { IBeerCategory } from '../interfaces/beerCategory';
 import { IMyBeer } from '../interfaces/mybeer';
+
 import { constants } from 'node:buffer';
 
 async function calculateRates() {
@@ -117,15 +118,16 @@ const getAllMyBeers = async (req: Request, res: Response) => {
     try {
         // 내림차순 정렬 (-1) rate, date, like 
         const { sort, pageNo } = req.query; 
+        let sortOption = -1;
 
-        if(sort==='like') {
-
+        if (!sort) {
+            sortOption = 1;
         }
 
-        const beers = await MyBeer.find({})
+        const beers: Array<IMyBeer>  = await MyBeer.find({})
                                 .populate({path: 'userId', select: 'nickname image'})
                                 .populate({ path: 'beerId', select: 'image' })
-                                .sort([[sort, -1]])
+                                .sort([[sort, sortOption]])
                                 .lean();
 
         const mybeers = pagination(Number(pageNo), beers)
@@ -142,13 +144,18 @@ const getAllMyBeers = async (req: Request, res: Response) => {
 // 현재 유저의 도감 가져오기
 const getCurrentMyBeers = async (req: Request, res: Response) => {
     const userId = res.locals.user._id;
-    // 내림차순 정렬 (-1) rate, date, like 
+    // 내림차순 정렬 (-1) rate, date, like_count
     const { sort, pageNo } = req.query; 
+    let sortOption = -1;
+
+    if (!sort) {
+        sortOption = 1;
+    }
     try {
-        const beers = await MyBeer.find({ userId })
+        const beers: Array<IMyBeer>  = await MyBeer.find({ userId })
                                     .populate({path: 'userId', select: 'nickname image'})
                                     .populate({ path: 'beerId', select: 'image' })
-                                    .sort([[sort, -1]])
+                                    .sort([[sort, sortOption]])
                                     .lean();
         
         const mybeers = pagination(Number(pageNo), beers)
@@ -200,8 +207,13 @@ const getUserMyBeers = async (req: Request, res: Response) => {
 
         const { sort, pageNo, type } = req.query; 
         const userId = mongoose.Types.ObjectId(req.params.userId); 
+        let sortOption = -1;
+
+        if (!sort) {
+            sortOption = 1;
+        }
         
-        let beers!:Array<any>;
+        let beers!: Array<IMyBeer> ;
 
         if (!userId) {
             res.status(400).send({ message: "fail", error: "unavailable user Id" });
@@ -214,13 +226,13 @@ const getUserMyBeers = async (req: Request, res: Response) => {
                 .find({ userId: userId }, {preference: false, location: false} )
                 .populate({path: 'userId', select: 'nickname image'})
                 .populate({ path: 'beerId', select: 'image name_korean'})
-                .sort([[sort, -1]])
+                .sort([[sort, sortOption]])
                 .lean();
         } else if (type === 'liked') {
         // 02. 좋아요한 맥주 리스트
             beers = await Beers.find({like_array: { $in: [userId] }}, {
                 name_korean: true, name_english: true, image: true, hashtag: true, _id: true, like_array: true
-            }).sort([[sort, -1]]).lean();
+            }).sort([[sort, sortOption]]).lean();
         } else {
             res.status(400).send({ message: "fail", error: "wrong type" });
             return 
@@ -244,19 +256,24 @@ const getUserMyBeers = async (req: Request, res: Response) => {
 // 특정 맥주의 전체 도감 가져오기
 const getBeerAllReviews = async (req: Request, res: Response) => {
     try {
-        // 내림차순 정렬 (-1) rate, date, like 
+        // 내림차순 정렬 (-1) rate, date, like_count 
         const { beerId, sort, pageNo } = req.query; 
-        const beer = await Beers.findOne({ _id: beerId }).lean();
+        const beer:IBeer = await Beers.findOne({ _id: beerId }).lean();
+        let sortOption = -1;
+
+        if (!sort) {
+            sortOption = 1;
+        }
 
         if (!beer) {
             res.json({ message: "fail", error: "beer doesn't exist" });
             return;
         }
 
-        const beers = await MyBeer.find({ beerId: beer._id })
+        const beers: Array<IMyBeer> = await MyBeer.find({ beerId: beer._id })
                                 .populate({path: 'userId', select: 'nickname image'})
                                 .populate({ path: 'beerId', select: 'image' })
-                                .sort([[sort, -1]])
+                                .sort([[sort, sortOption]])
                                 .lean()
 
         const mybeers = pagination(Number(pageNo), beers)
@@ -281,7 +298,6 @@ const getMyBeer = async (req: Request, res: Response) => {
 
         if (!mybeer) {
             res.json({ message: "fail", error: "no exist mybeer" });
-
             return;
         }
 
@@ -297,7 +313,7 @@ const updateMyBeer = async (req: Request, res: Response) => {
     const { myFeatures, location, rate, review } = req.body;
 
     try {
-        const myBeer = await MyBeer.findOne({ _id: myBeerId }).lean();
+        const myBeer : IMyBeer = await MyBeer.findOne({ _id: myBeerId }).lean();
         const userId = res.locals.user._id;
         const nickname = res.locals.user.nickname;
 
@@ -440,7 +456,7 @@ const likeMyBeer = async (req: Request, res: Response) => {
         return
     }
 
-    const result = await MyBeer.findOneAndUpdate({_id: myBeerId}, { $push: {like_array: userId}, $inc: {like_count: 1} })
+    const result : IMyBeer = await MyBeer.findOneAndUpdate({_id: myBeerId}, { $push: {like_array: userId}, $inc: {like_count: 1} })
                                 .lean();
     res.json({ message: "success", result });
 
@@ -457,12 +473,12 @@ const unlikeMyBeer = async (req: Request, res: Response) => {
         return
     }
 
-    const result = await MyBeer.findOneAndUpdate({_id: myBeerId}, {$pull: {like_array: userId},  $inc: {like_count: -1}}).lean();
+    const result: IMyBeer = await MyBeer.findOneAndUpdate({_id: myBeerId}, {$pull: {like_array: userId},  $inc: {like_count: -1}}).lean();
     res.json({ message: "success", result });
 };
 
 
-function pagination(pageNo:number, arrBeer:Array<any>) {
+function pagination(pageNo:number, arrBeer:Array<IMyBeer> ) {
 
     if (!pageNo) { // 페이지번호가 없을 시 전체 리스트 출력
         return arrBeer;
@@ -475,7 +491,7 @@ function pagination(pageNo:number, arrBeer:Array<any>) {
         return "wrong page"
     }
 
-    const res_beers: Array<IBeer> = [];
+    const res_beers: Array<IMyBeer> = [];
     for (let i = startIndex; i < (startIndex + 8); i++) {
         if (!arrBeer[i]) break;
         res_beers.push(arrBeer[i])
