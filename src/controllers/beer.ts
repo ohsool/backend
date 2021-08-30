@@ -78,19 +78,19 @@ const postBeer = async(req: Request, res: Response) => {
         const beerCategory: IBeerCategory | null = await BeerCategories.findById(categoryId);
         
         if (res.locals.user != "ohsool") {
-            res.status(401).send({ message: "fail", error: "user not authenticated" });
+            res.status(403).send({ message: "fail", error: "user not authenticated" });
 
             return;
         }
 
         if (isExist) {
-            res.json({ message: "fail", error: "beer already exists" });
+            res.status(409).json({ message: "fail", error: "beer already exists" });
 
             return;
         }
 
         if (!beerCategory) {
-            res.json({ message: "fail", error: "wrong category" });
+            res.status(406).json({ message: "fail", error: "no exist category" });
 
             return;
         }
@@ -116,10 +116,10 @@ const getBeer = async(req: Request, res: Response) => {
         if (beer) {
             res.json({ message:"success", beer });
         } else {
-            res.status(400).send({ message: "fail", error: "beer does not exist in the database" });
+            res.status(406).send({ message: "fail", error: "no exist beer" });
         }
     } catch(error) {
-        res.status(400).send({ message: "fail", error: "beer does not exist in the datasbase" });
+        res.status(400).send({ message: "fail", error });
     }
 
 }
@@ -129,7 +129,7 @@ const deleteBeer = async(req: Request, res: Response) => {
     const _id = mongoose.Types.ObjectId(beerId);
 
     if (res.locals.user != "ohsool") {
-        res.status(401).send({ message: "fail", error: "user not authenticated" });
+        res.status(403).send({ message: "fail", error: "user not authenticated" });
 
         return;
     }
@@ -137,9 +137,9 @@ const deleteBeer = async(req: Request, res: Response) => {
     try {
         await Beers.findOneAndDelete({ _id: _id }).lean();
 
-        res.json({ message: "success"});
+        res.status(204).json({ message: "success"});
     } catch(error) {
-        res.status(400).send({ message: "fail", error: "failed deleting beer from the database" });
+        res.status(400).send({ message: "fail" });
     }
 }
 
@@ -157,7 +157,7 @@ const likeBeer = async(req: Request, res: Response) => {
 
             result = await Beers.find({_id, like_array: userId });
         } else if(exists.length) {
-            res.status(400).send({ message: "fail", error: "user already liked this beer" });
+            res.status(409).send({ message: "fail", error: "user already liked this beer" });
 
             return;
         }
@@ -181,7 +181,7 @@ const unlikeBeer = async(req: Request, res: Response) => {
 
             result = await Beers.find({_id: beerId }).lean();
         } else if(exists.length == 0) {
-            res.status(400).send({ message: "fail", error: "user has never liked this beer" });
+            res.status(409).send({ message: "fail", error: "user has never liked this beer" });
 
             return;
         }
@@ -198,7 +198,7 @@ const likedBeer = async(req: Request, res: Response) => {
         const userId = res.locals.user._id;
 
         if (!userId) {
-            res.status(400).send({ message: "fail", error: "userId doesn't exist" });
+            res.status(406).send({ message: "fail", error: "no exist user" });
 
             return;
         }
@@ -219,7 +219,7 @@ const reportLocation = async(req: Request, res: Response) => {
     const _id = mongoose.Types.ObjectId(beerId)
     
     if (!beerId || !name || !address || !url) {
-        res.json({ message: "fail", error: "empty value" });
+        res.status(400).json({ message: "fail", error: "empty value" });
 
         return;
     }
@@ -229,7 +229,7 @@ const reportLocation = async(req: Request, res: Response) => {
         const new_report = [ url, name, address, userId ];
 
         if (!beer) {
-            res.json({ message: "fail", error: "wrong beer" });
+            res.status(406).json({ message: "fail", error: "no exist beer" });
 
             return;
         }
@@ -242,7 +242,7 @@ const reportLocation = async(req: Request, res: Response) => {
         const found = locations.some(e => Array.isArray(e) && e.every((o, i) => Object.is(new_report[i], o)));
     
         if ( found ) {
-            res.send({ message: "fail", error: "location already reported" });
+            res.status(409).send({ message: "fail", error: "location already reported" });
 
             return;
         } 
@@ -252,7 +252,7 @@ const reportLocation = async(req: Request, res: Response) => {
         for (let i = 0; i < location_report.length; i ++) {
             if (new_report[0] == location_report[i][0]) {
                 if ( String(new_report[3]) == String(location_report[i][3]) ) {
-                    res.send({ message: "fail", error: "user already reported this location" });
+                    res.status(409).send({ message: "fail", error: "user already reported this location" });
 
                     return;
                 }
@@ -273,7 +273,7 @@ const reportLocation = async(req: Request, res: Response) => {
 
         const new_beer: IBeer | null = await Beers.findOne({ _id: beerId });
 
-        res.json({ message: "success", beer: new_beer });
+        res.status(201).json({ message: "success", beer: new_beer });
     } catch (error) {
         res.status(400).send({ message: "fail", error });
     }
@@ -301,6 +301,12 @@ const getBeerByCategory = async (req: Request, res: Response)=> {
         if (sort === 'degreeLess') sort = "degree"
         else if (sort === 'createDateOld') sort = "createDate"
         beers = await Beers.find({ categoryId }).sort([[sort, sortOption]]);
+
+        if ( !beers ) {
+            res.status(406).json({ message: "fail", error: "no exist category" });
+
+            return;
+        }
 
         /* 2. 페이지별 맥주 출력 */
         
@@ -373,56 +379,66 @@ const getAllFeatures = async (req: Request, res: Response) => {
             modifiedBeers.push(beer!);
         }
         
-        res.json({ message: "success", modifiedBeers });
+        res.status(201).json({ message: "success", modifiedBeers });
     } catch (error) {
-        res.json({ message: "fail", error });
+        res.status(400).json({ message: "fail", error });
     }
 }
 
 const getFeatures = async (req: Request, res: Response) => {
     const beerId = req.params.beerId;
 
-    const myBeers = await MyBeers.find({ beerId }).select("myFeatures -_id");
-    const beer = await Beers.findOne({ _id: beerId });
-
-    if (!myBeers) {
-        res.json({ message: "fail", error: "no mybeers with this beer" });
-
-        return;
-    }
-
-    const count = myBeers.length;
-    if (count == beer!.calculatedCount || count == 0) {
-        res.json({ message: "fail", error: "no need to update" });
-
-        return;
-    }
-
-    const newFeatures: IFeatures = {
-        "bitter": 0,
-        "crispy": 0,
-        "flavor": 0,
-        "sweet": 0,
-        "nutty": 0
-    };
+    try {
+        const myBeers = await MyBeers.find({ beerId }).select("myFeatures -_id");
+        const beer = await Beers.findOne({ _id: beerId });
     
-    for (let i = 0; i < count; i ++) {
-        newFeatures.bitter += myBeers[i].myFeatures.bitter;
-        newFeatures.crispy += myBeers[i].myFeatures.crispy;
-        newFeatures.flavor += myBeers[i].myFeatures.flavor;
-        newFeatures.sweet += myBeers[i].myFeatures.sweet;
-        newFeatures.nutty += myBeers[i].myFeatures.nutty;
+        if (!myBeers) {
+            res.status(204).json({ message: "fail", error: "no mybeers with this beer" });
+    
+            return;
+        }
+    
+        if (!beer) {
+            res.status(406).json({ message: "fail", error: "no exist beer" });
+    
+            return;
+        }
+    
+        const count = myBeers.length;
+        if (count == beer!.calculatedCount || count == 0) {
+            res.status(409).json({ message: "fail", error: "no need to update" });
+    
+            return;
+        }
+    
+        const newFeatures: IFeatures = {
+            "bitter": 0,
+            "crispy": 0,
+            "flavor": 0,
+            "sweet": 0,
+            "nutty": 0
+        };
+        
+        for (let i = 0; i < count; i ++) {
+            newFeatures.bitter += myBeers[i].myFeatures.bitter;
+            newFeatures.crispy += myBeers[i].myFeatures.crispy;
+            newFeatures.flavor += myBeers[i].myFeatures.flavor;
+            newFeatures.sweet += myBeers[i].myFeatures.sweet;
+            newFeatures.nutty += myBeers[i].myFeatures.nutty;
+        }
+    
+        newFeatures.bitter /= count;
+        newFeatures.crispy /= count;
+        newFeatures.flavor /= count;
+        newFeatures.sweet /= count;
+        newFeatures.nutty /= count;
+    
+        const res_beer = await Beers.findOneAndUpdate({ _id: beerId }, { $set: { features: newFeatures, calculatedCount: count } }).select("name_korean features");
+    
+        res.status(201).json({ message: "success", beer: res_beer });
+    } catch (error) {
+        res.status(400).json({ message: "fail", error });
     }
-
-    newFeatures.bitter /= count;
-    newFeatures.crispy /= count;
-    newFeatures.flavor /= count;
-    newFeatures.sweet /= count;
-    newFeatures.nutty /= count;
-
-    const res_beer = await Beers.findOneAndUpdate({ _id: beerId }, { $set: { features: newFeatures, calculatedCount: count } }).select("name_korean features");
-
-    res.json({ message: "success", beer: res_beer });
 }
 
 export default {

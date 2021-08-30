@@ -90,13 +90,13 @@ const existEmail = async(req: Request, res: Response) => {
     const { email } = req.body;
     
     if (!email) {
-      res.json({ message: "fail", error: "no input" });
+      res.status(400).json({ message: "fail", error: "no input" });
 
       return
     }
 
     if ( test_emails.includes(email) ) {
-      res.json({ message: "fail", error: "email for test. don't use this" });
+      res.status(205).json({ message: "fail", error: "email for test. don't use this" });
 
       return
     }
@@ -105,7 +105,7 @@ const existEmail = async(req: Request, res: Response) => {
       const existUser = await Users.findOne({ email }).lean();
 
       if (existUser) {
-        res.json({ message: "fail", error: "exist email" });
+        res.status(205).json({ message: "fail", error: "exist email" });
 
         return
       } 
@@ -113,15 +113,14 @@ const existEmail = async(req: Request, res: Response) => {
       const { value, error } = emailJoiSchema.validate({ email });
 
       if (error) {
-        res.json({ message: "fail", error: "wrong email", error_detail: error.details[0].message });
+        res.status(205).json({ message: "fail", error: "wrong email", error_detail: error.details[0].message });
 
         return;
       }
 
       res.json({ message: "success" });
-
     } catch (error) {
-      res.json({ message: "fail", error });
+      res.status(400).json({ message: "fail", error });
     }
 }
 
@@ -129,13 +128,13 @@ const existNickname = async(req: Request, res: Response) => {
     const { nickname } = req.body;
 
     if (!nickname) {
-      res.json({ message: "fail", error: "no input" });
+      res.status(400).json({ message: "fail", error: "no input" });
 
       return
     }
 
     if ( test_nicknames.includes(nickname) ) {
-      res.json({ message: "fail", error: "nickname for test. don't use this" });
+      res.status(205).json({ message: "fail", error: "nickname for test. don't use this" });
 
       return
     }
@@ -144,7 +143,7 @@ const existNickname = async(req: Request, res: Response) => {
       const existUser = await Users.findOne({ nickname }).lean();
 
       if (existUser) {
-        res.json({ message: "fail", error: "exist nickname" });
+        res.status(205).json({ message: "fail", error: "exist nickname" });
 
         return
       } 
@@ -152,7 +151,7 @@ const existNickname = async(req: Request, res: Response) => {
       const { value, error } = nicknameJoiSchema.validate({ nickname });
 
       if (error) {
-        res.json({ message: "fail", error: "wrong nickname", error_detail: error.details[0].message });
+        res.status(205).json({ message: "fail", error: "wrong nickname", error_detail: error.details[0].message });
 
         return;
       }
@@ -160,7 +159,7 @@ const existNickname = async(req: Request, res: Response) => {
       res.json({ message: "success" });
 
     } catch (error) {
-      res.json({ message: "fail", error });
+      res.status(400).json({ message: "fail", error });
     }
 }
 
@@ -172,12 +171,12 @@ const register = async(req: Request, res: Response) => {
         const existUser2 = await Users.findOne({ email }).lean();
 
         if (existUser1 || existUser2) {
-            res.json({ message: "fail", error: "exist user" });
+            res.status(409).json({ message: "fail", error: "exist user" });
   
             return;
         }
       } catch(error) {
-          res.json({ message: "fail", error });
+          res.status(400).json({ message: "fail", error });
       }
 
       const { value, error } = joiSchema.validate({
@@ -200,7 +199,7 @@ const register = async(req: Request, res: Response) => {
 
           res.status(201).json({ message: "success" });
       } else {
-          res.json({ message: "fail", error: error.details[0].message });
+          res.status(400).json({ message: "fail", error: error.details[0].message });
       }
 }
 
@@ -208,7 +207,7 @@ const login = async(req: Request, res: Response) => {
     let { email, password } = req.body;
 
     if (!email || !password) {
-      res.status(401).json({ message: "fail", error: "wrong input" });
+      res.status(400).json({ message: "fail", error: "wrong input" });
   
       return;
     }
@@ -218,13 +217,13 @@ const login = async(req: Request, res: Response) => {
       const user = await Users.findOne({ email }).lean();
 
       if (!user) {
-        res.status(401).json({ message: "fail", error: "wrong user" });
+        res.status(401).json({ message: "fail", error: "no exist user" });
   
         return;
       }
 
       if (user.password != crypted_password) {
-        res.status(401).json({ message: "fail", error: "wrong password" });
+        res.status(205).json({ message: "fail", error: "wrong password" });
   
         return;
       }
@@ -252,7 +251,7 @@ const login = async(req: Request, res: Response) => {
   
       res.json({ message: "success", dlfwh: refreshToken1, ghkxld: refreshToken2, dhtnf: accessToken1, chlrh: accessToken2, userId: user._id });
     } catch(error) {
-      res.status(401).json({ message: "fail", error });
+      res.status(400).json({ message: "fail", error });
 
       return;
     }
@@ -262,11 +261,17 @@ const logout = async (req: Request, res: Response) => {
     const userId = res.locals.user._id;
 
     try {
-      await Users.findOneAndUpdate({ _id: userId }, { refreshToken: "" } ).lean();
+      const user = await Users.findOneAndUpdate({ _id: userId }, { refreshToken: "" } ).lean();
+
+      if ( !user ) {
+        res.status(406).json({ message: "fail", error: "no exist user" });
+
+        return
+      }
 
       res.json({ message: "success" });
     } catch (error) {
-      res.status(401).json({ message: "fail", error });
+      res.status(400).json({ message: "fail", error });
     }
 }
 
@@ -277,7 +282,7 @@ const signout = async (req: Request, res: Response) => {
       const user = await Users.findOne({ _id: userId }).lean();
 
       if (!user) {
-        res.json({ message: "fail", error: "no exist user" });
+        res.status(406).json({ message: "fail", error: "no exist user" });
         
         return;
       }
@@ -297,15 +302,15 @@ const signout = async (req: Request, res: Response) => {
       // 회원 탈퇴
       await Users.deleteOne({ _id: userId });
 
-      res.json({ message: "success" });
+      res.status(204).json({ message: "success" });
     } catch (error) {
-      res.status(401).json({ message: "fail", error });
+      res.status(400).json({ message: "fail", error });
     }
 }
 
 const checkAuth = async (req: Request, res: Response) => {
     if (!res.locals.user) {
-        res.status(401).json({ message: "fail", error: "unidentified user" });
+        res.status(403).json({ message: "fail", error: "unidentified user" });
   
         return;
       }
@@ -390,7 +395,8 @@ const postTest = async (req: Request, res: Response) => {
         let isExistUser = false; // 로그인 유저와 비로그인 유저를 구분짓는 값
   
         if (!result) {
-          res.json({ message: "fail", error: "test result doesn't exist" });
+          res.status(400).json({ message: "fail", error: "test result doesn't exist" });
+          
           return;
         }
     
@@ -398,7 +404,8 @@ const postTest = async (req: Request, res: Response) => {
         const category = await BeerCategories.findOne({ name: result[0] }).lean();
         // category 에 대한 정보가 없다면 함수 종료
         if (!category) {
-          res.json({ message: "fail", error: "Beer Category doesn't exist" });
+          res.status(406).json({ message: "fail", error: "no exist category" });
+          
           return;
         }
 
@@ -446,10 +453,10 @@ const postTest = async (req: Request, res: Response) => {
 
         const percentage = (+preferenceCount / sum) * 100;
 
-        res.status(200).json({ message: "success", isExistUser, category, recommendations, percentage });
+        res.status(201).json({ message: "success", isExistUser, category, recommendations, percentage });
     
       } catch (error) {
-        res.json({ message: "fail", error });
+        res.status(400).json({ message: "fail", error });
       }
 }
 
@@ -458,13 +465,13 @@ const socialUserSet = async (req: Request, res: Response) => {
   const userId = res.locals.user._id;
 
   if ( test_emails.includes(email) ) {
-    res.json({ message: "fail", error: "email for test. don't use this" });
+    res.status(205).json({ message: "fail", error: "email for test. don't use this" });
 
     return
   }
 
   if ( test_nicknames.includes(nickname) ) {
-    res.json({ message: "fail", error: "nickname for test. don't use this" });
+    res.status(205).json({ message: "fail", error: "nickname for test. don't use this" });
 
     return
   }
@@ -474,13 +481,13 @@ const socialUserSet = async (req: Request, res: Response) => {
     const existUser2 = await Users.findOne({ email }).lean();
 
     if (existUser1 && String(existUser1._id) != String(userId)) {
-      res.json({ message: "fail", error: "exist nickname" });
+      res.status(205).json({ message: "fail", error: "exist nickname" });
 
       return
     }
 
     if (existUser2 && String(existUser2._id) != String(userId)) {
-      res.json({ message: "fail", error: "exist email" });
+      res.status(205).json({ message: "fail", error: "exist email" });
 
       return
     } 
@@ -488,7 +495,7 @@ const socialUserSet = async (req: Request, res: Response) => {
     const { value, error } = emailNicknameJoiSchema.validate({ email, nickname });
 
     if (error) {
-      res.json({ message: "fail", error: "wrong email or wrong nickname", error_detail: error.details[0].message });
+      res.status(205).json({ message: "fail", error: "wrong email or wrong nickname", error_detail: error.details[0].message });
 
       return;
     }
@@ -496,7 +503,7 @@ const socialUserSet = async (req: Request, res: Response) => {
     const user = await Users.findById(res.locals.user._id);
 
     if (!user) {
-      res.json({ message: "fail", error: "not exist user" });
+      res.status(409).json({ message: "fail", error: "no exist user" });
 
       return;
     }
@@ -505,7 +512,7 @@ const socialUserSet = async (req: Request, res: Response) => {
 
     res.json({ message: "success" });
   } catch (error) {
-    res.json({ message: "fail", error });
+    res.status(400).json({ message: "fail", error });
   }
 }
 
@@ -517,7 +524,7 @@ const getUserInfo = async (req: Request, res: Response) => {
     const user = await Users.findById(userId).select("nickname email image preference description follow_list follower_list is_public");
 
     if (!user) {
-      res.json({ message: "fail", error: "no exist user" });
+      res.status(409).json({ message: "fail", error: "no exist user" });
   
       return;
     }
@@ -525,7 +532,7 @@ const getUserInfo = async (req: Request, res: Response) => {
     res.json({ message: "success", user });
 
   } catch (error) {
-    res.json({ message: "fail", error })
+    res.status(400).json({ message: "fail", error })
   }
 }
 
@@ -534,7 +541,7 @@ const changeNickname = async (req: Request, res: Response) => {
   const { nickname } = req.body;
 
   if ( test_nicknames.includes(nickname) ) {
-    res.json({ message: "fail", error: "nickname for test. don't use this" });
+    res.status(205).json({ message: "fail", error: "nickname for test. don't use this" });
 
     return
   }
@@ -543,7 +550,7 @@ const changeNickname = async (req: Request, res: Response) => {
     const existUser = await Users.findOne({ nickname }).lean();
 
     if (existUser) {
-      res.json({ message: "fail", error: "exist nickname" });
+      res.status(205).json({ message: "fail", error: "exist nickname" });
 
       return
     }
@@ -551,7 +558,7 @@ const changeNickname = async (req: Request, res: Response) => {
     const { value, error } = nicknameJoiSchema.validate({ nickname });
 
     if (error) {
-      res.json({ message: "fail", error: "wrong nickname", error_detail: error.details[0].message });
+      res.status(205).json({ message: "fail", error: "wrong nickname", error_detail: error.details[0].message });
 
       return;
     }
@@ -559,7 +566,7 @@ const changeNickname = async (req: Request, res: Response) => {
     const user = await Users.findById(res.locals.user._id);
 
     if (!user) {
-      res.json({ message: "fail", error: "not exist user" });
+      res.status(409).json({ message: "fail", error: "no exist user" });
 
       return;
     }
@@ -568,7 +575,7 @@ const changeNickname = async (req: Request, res: Response) => {
 
     res.json({ message: "success" });
   } catch (error) {
-    res.json({ message: "fail", error });
+    res.status(400).json({ message: "fail", error });
   }
 }
 
@@ -582,19 +589,19 @@ const changeDescription = async (req: Request, res: Response) => {
     let user = await Users.findById(userId);
 
     if (!user) {
-      res.json({ message: "fail", error: "no exist user" });
+      res.status(409).json({ message: "fail", error: "no exist user" });
 
       return;
     }
 
     if (old_description == description) {
-      res.json({ message: "fail", error: "not changed" });
+      res.status(409).json({ message: "fail", error: "not changed" });
 
       return;
     }
 
     if (description.length > 60) {
-      res.json({ message: "fail", error: "too long" });
+      res.status(400).json({ message: "fail", error: "too long" });
 
       return;
     }
@@ -603,7 +610,7 @@ const changeDescription = async (req: Request, res: Response) => {
 
     res.json({ message: "success" });
   } catch (error) {
-    res.json({ message: "fail", error });
+    res.status(400).json({ message: "fail", error });
   }
   
 }
@@ -616,7 +623,7 @@ const resetPassword = async (req: Request, res: Response) => {
     const user = await Users.findOne({ email });
 
     if (!user) {
-      res.json({ message: "fail", error: "no exist user" });
+      res.status(406).json({ message: "fail", error: "no exist user" });
 
       return;
     }
@@ -643,7 +650,7 @@ const resetPassword = async (req: Request, res: Response) => {
 
     res.json({ message: "success" });
   } catch (error) {
-    res.json({ message: "fail", error });
+    res.status(400).json({ message: "fail", error });
   }
 }
 
@@ -655,7 +662,7 @@ const changePassword = async (req: Request, res: Response) => {
   const userId = res.locals.user._id;
 
   if (!user) {
-    res.json({ message: "fail", error: "no exist user" });
+    res.status(406).json({ message: "fail", error: "no exist user" });
 
     return;
   }
@@ -664,7 +671,7 @@ const changePassword = async (req: Request, res: Response) => {
     const crypted_old_password = crypto.createHmac("sha256", old_password).update(env.pass_secret).digest("hex");
 
     if (crypted_old_password != user.password) {
-      res.json({ message: "fail", error: "wrong password" });
+      res.status(400).json({ message: "fail", error: "wrong password" });
 
       return;
     }
@@ -675,7 +682,7 @@ const changePassword = async (req: Request, res: Response) => {
 
     res.json({ message: "success" });
   } catch (error) {
-    res.json({ message: "fail", error });
+    res.status(400).json({ message: "fail", error });
   }
 }
 
@@ -688,7 +695,7 @@ const setToPublic = async (req: Request, res: Response) => {
     let user = await Users.findById(userId);
 
     if (!user) {
-      res.json({ message: "fail", error: "no exist user" });
+      res.status(406).json({ message: "fail", error: "no exist user" });
   
       return;
     }
@@ -697,7 +704,7 @@ const setToPublic = async (req: Request, res: Response) => {
     // is_public == false: 비공개
     // is_public == undefined: 공개
     if (is_public || is_public == null) {
-      res.json({ message: "fail", error: "user is already public" });
+      res.status(409).json({ message: "fail", error: "user is already public" });
   
       return;
     }
@@ -706,7 +713,7 @@ const setToPublic = async (req: Request, res: Response) => {
 
     res.json({ message: "success" });
   } catch (error) {
-    res.json({ message: "fail", error });
+    res.status(400).json({ message: "fail", error });
   }
 }
 
@@ -719,7 +726,7 @@ const setToPrivate = async (req: Request, res: Response) => {
     let user = await Users.findById(userId);
 
     if (!user) {
-      res.json({ message: "fail", error: "no exist user" });
+      res.status(406).json({ message: "fail", error: "no exist user" });
   
       return;
     }
@@ -728,7 +735,7 @@ const setToPrivate = async (req: Request, res: Response) => {
     // is_public == false: 비공개
     // is_public == undefined: 공개
     if (is_public == false) {
-      res.json({ message: "fail", error: "user is already private" });
+      res.status(409).json({ message: "fail", error: "user is already private" });
   
       return;
     }
@@ -737,7 +744,7 @@ const setToPrivate = async (req: Request, res: Response) => {
 
     res.json({ message: "success" });
   } catch (error) {
-    res.json({ message: "fail", error });
+    res.status(400).json({ message: "fail", error });
   }
 }
 
@@ -750,9 +757,9 @@ const followUser = async (req: Request, res: Response) => {
   const followUserId = req.body.userId;
 
   if (userId == followUserId) {
-    res.json({ message: "fail", error: "cannot follow myself" });
+    res.status(400).json({ message: "fail", error: "cannot follow myself" });
 
-      return;
+    return;
   }
 
   try {
@@ -760,7 +767,7 @@ const followUser = async (req: Request, res: Response) => {
     const followUser = await Users.findById(followUserId);
     
     if (!user || !followUser) {
-      res.json({ message: "fail", error: "no exist user" });
+      res.status(406).json({ message: "fail", error: "no exist user" });
 
       return;
     }
@@ -788,7 +795,7 @@ const followUser = async (req: Request, res: Response) => {
         await Users.findByIdAndUpdate(followUserId, { $set: { follower_list: [userId] } } );
       }
 
-      res.json({ message: "fail", error: "user already follow this user" });
+      res.status(409).json({ message: "fail", error: "user already follow this user" });
 
       return;
     }
@@ -800,7 +807,7 @@ const followUser = async (req: Request, res: Response) => {
         await Users.findByIdAndUpdate(userId, { $set: { follow_list: [followUserId] } } );
       }
 
-      res.json({ message: "fail", error: "user already follow this user" });
+      res.status(409).json({ message: "fail", error: "user already follow this user" });
 
       return;
     }
@@ -810,7 +817,7 @@ const followUser = async (req: Request, res: Response) => {
 
     res.json({ message: "success" });
   } catch (error) {
-    res.json({ message: "fail", error });
+    res.status(400).json({ message: "fail", error });
   }
 }
 
@@ -821,7 +828,7 @@ const unfollowUser = async (req: Request, res: Response) => {
   const followUserId = req.body.userId;
 
   if (userId == followUserId) {
-    res.json({ message: "fail", error: "cannot unfollow myself" });
+    res.status(400).json({ message: "fail", error: "cannot unfollow myself" });
 
       return;
   }
@@ -831,7 +838,7 @@ const unfollowUser = async (req: Request, res: Response) => {
     const followUser = await Users.findById(followUserId);
 
     if (!user || !followUser) {
-      res.json({ message: "fail", error: "no exist user" });
+      res.status(406).json({ message: "fail", error: "no exist user" });
 
       return;
     }
@@ -840,7 +847,7 @@ const unfollowUser = async (req: Request, res: Response) => {
 
     if (!myFollowList || myFollowList.length == 0 || myFollowList.includes(followUserId) == false) {
       // 팔로우 리스트가 비어있거나 팔로우 리스트에 그 유저가 없다면
-      res.json({ message: "fail", error: "user is not following this user" });
+      res.status(409).json({ message: "fail", error: "user is not following this user" });
 
       return;
     }
@@ -860,7 +867,7 @@ const unfollowUser = async (req: Request, res: Response) => {
 
     res.json({ message: "success" });
   } catch (error) {
-    res.json({ message: "fail", error });
+    res.status(400).json({ message: "fail", error });
   }
 }
 
@@ -871,7 +878,7 @@ const givesFollows = async (req: Request, res: Response) => {
     const user = await Users.findById(userId);
 
     if (!user) {
-      res.json({ message: "fail", error: "no exist user" });
+      res.status(406).json({ message: "fail", error: "no exist user" });
 
       return;
     }
@@ -888,9 +895,8 @@ const givesFollows = async (req: Request, res: Response) => {
     }
 
     res.json({ message: "success", follow_list, follower_list });
-
   } catch (error) {
-    res.json({ message: "fail", error });
+    res.status(400).json({ message: "fail", error });
   }
 }
 

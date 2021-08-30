@@ -24,7 +24,7 @@ const postMyBeer = async (req: Request, res: Response) => {
     rate = Math.round(rate);
 
     if (!beerId || !myFeatures || !rate) {
-        res.json({ message: "fail", error: "Either beer or myFeatures or rate doesn't exist." });
+        res.status(400).json({ message: "fail", error: "Either beer or myFeatures or rate doesn't exist." });
 
         return;
     } else if (!location) {
@@ -32,13 +32,13 @@ const postMyBeer = async (req: Request, res: Response) => {
     }
 
     if (rate < 1 || rate > 5) {     // 평점이 1 이상 5 이하인지 확인
-        res.json({ message: "fail", error: "please input rate 1~4" });
+        res.status(400).json({ message: "fail", error: "please input rate 1~4" });
 
         return;
     }
 
     if (review.length > 300) {   // 리뷰가 200 이하인지 확인
-        res.json({ message: "fail", error: "the length of the review must be under 300" });
+        res.status(400).json({ message: "fail", error: "the length of the review must be under 300" });
 
         return;
     }
@@ -51,12 +51,12 @@ const postMyBeer = async (req: Request, res: Response) => {
         const exist: IMyBeer | null = await MyBeer.findOne({ beerId, userId }).lean();
 
         if (exist) {
-            res.json({ message: "fail", error: "the user already made review of this beer" });
+            res.status(409).json({ message: "fail", error: "the user already made review of this beer" });
 
             return;
         }
     } catch (error) {
-        res.json({ message: "fail", error });
+        res.status(400).json({ message: "fail", error });
 
         return;
     }
@@ -72,7 +72,7 @@ const postMyBeer = async (req: Request, res: Response) => {
 
     const beer: IBeer | null = await Beers.findById(_id);
     if (!beer) {
-        res.json({ message: "fail", error: "beer doesn't exist" });
+        res.status(406).json({ message: "fail", error: "beer doesn't exist" });
 
         return;
     }
@@ -105,9 +105,9 @@ const postMyBeer = async (req: Request, res: Response) => {
 
         mybeer = await MyBeer.findOne({ _id: mybeer._id }).populate({path: 'userId', select: 'nickname image'}).lean();
 
-        res.json({ message: "success", mybeer });
+        res.status(201).json({ message: "success", mybeer });
     } catch (error) {
-        res.json({ message: "fail", error });
+        res.status(400).json({ message: "fail", error });
 
         return;
     }
@@ -137,7 +137,7 @@ const getAllMyBeers = async (req: Request, res: Response) => {
         }
         res.json({ message: "success", mybeers });
     } catch (error) {
-        res.json({ message: "fail", error });
+        res.status(400).json({ message: "fail", error });
     }
 };
 
@@ -166,7 +166,7 @@ const getCurrentMyBeers = async (req: Request, res: Response) => {
         res.json({ message: "success", mybeers });
 
     } catch (error) {
-        res.json({ message: "fail", error });
+        res.status(400).json({ message: "fail", error });
     }
     
 };
@@ -179,7 +179,7 @@ const getLengthOfMyBeers = async (req: Request, res: Response) => {
         const user = await Users.findById(userId);
 
         if (!user) {
-            res.json({ message: "fail", error: "no exist user" });
+            res.status(406).json({ message: "fail", error: "no exist user" });
 
             return;
         }
@@ -190,7 +190,7 @@ const getLengthOfMyBeers = async (req: Request, res: Response) => {
 
         res.json({ message: "success", length });
     } catch (error) {
-        res.json({ message: "fail", error });
+        res.status(400).json({ message: "fail", error });
     }
 };
 
@@ -216,7 +216,7 @@ const getUserMyBeers = async (req: Request, res: Response) => {
         let beers!: Array<IMyBeer> ;
 
         if (!userId) {
-            res.status(400).send({ message: "fail", error: "unavailable user Id" });
+            res.status(406).send({ message: "fail", error: "no exist user" });
             return
         }
 
@@ -248,7 +248,7 @@ const getUserMyBeers = async (req: Request, res: Response) => {
         res.json({ message: "success", mybeers });
 
     } catch (error) {
-        res.json({ message: "fail", error });
+        res.status(400).json({ message: "fail", error });
     };                           
 };
 
@@ -266,7 +266,7 @@ const getBeerAllReviews = async (req: Request, res: Response) => {
         }
 
         if (!beer) {
-            res.json({ message: "fail", error: "beer doesn't exist" });
+            res.status(406).json({ message: "fail", error: "beer doesn't exist" });
             return;
         }
 
@@ -284,7 +284,7 @@ const getBeerAllReviews = async (req: Request, res: Response) => {
 
         res.json({ message: "success", mybeers });
     } catch (error) {
-        res.json({ message: "fail", error });
+        res.status(400).json({ message: "fail", error });
 
         return;
     }
@@ -297,13 +297,13 @@ const getMyBeer = async (req: Request, res: Response) => {
         const mybeer = await MyBeer.findOne({ _id: myBeerId }).lean().populate({path: 'userId', select: 'nickname image'}).populate({ path: 'beerId', select: 'image' });
 
         if (!mybeer) {
-            res.json({ message: "fail", error: "no exist mybeer" });
+            res.status(406).json({ message: "fail", error: "no exist mybeer" });
             return;
         }
 
         res.json({ message: "success", mybeer });
     } catch (error) {
-        res.json({ message: "fail", error });
+        res.status(400).json({ message: "fail", error });
     }
 };
 
@@ -318,19 +318,19 @@ const updateMyBeer = async (req: Request, res: Response) => {
         const nickname = res.locals.user.nickname;
 
         if (rate < 1 || rate > 5) {
-            res.json({ message: "fail", error: "please input rate 1~4" });
+            res.status(400).json({ message: "fail", error: "please input rate 1~4" });
     
             return;
         }
 
         if (review.length > 300) {   // 리뷰가 300 이하인지 확인
-            res.json({ message: "fail", error: "the length of the review must be under 300" });
+            res.status(400).json({ message: "fail", error: "the length of the review must be under 300" });
     
             return;
         }
 
         if (!myBeer) {
-            res.json({  message: "fail", error: "wrong mybeer id" });
+            res.status(406).json({  message: "fail", error: "no exist mybeer" });
 
             return;
         }
@@ -345,7 +345,7 @@ const updateMyBeer = async (req: Request, res: Response) => {
         }
 
         if (nickname != "ohsool" && String(myBeer.userId) != String(userId)) {
-            res.json({  message: "fail", error: "not the same user" });
+            res.status(403).json({  message: "fail", error: "not the same user" });
 
             return;
         }
@@ -381,7 +381,7 @@ const updateMyBeer = async (req: Request, res: Response) => {
 
         res.json({ message: "success", myBeerId, myBeer });
     } catch (error) {
-        res.json({ message: "fail", error })
+        res.status(400).json({ message: "fail", error })
     }
 };
 
@@ -395,12 +395,12 @@ const deleteMyBeer = async (req: Request, res: Response) => {
         const nickname = res.locals.user.nickname;
 
         if (nickname != "ohsool" && String(mybeer.userId) != String(userId)) {
-            res.json({ message: "fail", error: "not the same user" });
+            res.status(403).json({ message: "fail", error: "not the same user" });
             return;
         }
 
         if (!mybeer) {
-            res.json({  message: "fail", error: "wrong mybeer id" });
+            res.status(406).json({ message: "fail", error: "no exist mybeer" });
 
             return;
         }
@@ -439,47 +439,56 @@ const deleteMyBeer = async (req: Request, res: Response) => {
 
         await Beers.findOneAndUpdate({ name_korean: beer.name_korean }, { $set: { avgRate: newBeerAvgRate, count: beerCount - 1 } }).lean();
 
-        res.json({ message: "success", userId: res.locals.user._id });
+        res.status(204).json({ message: "success", userId: res.locals.user._id });
     } catch (error) {
-        res.json({ message: "fail", error });
+        res.status(400).json({ message: "fail", error });
     }
 };
 
 // 마이비어 좋아요
 const likeMyBeer = async (req: Request, res: Response) => {
     const { myBeerId } = req.params;
-    const userId = mongoose.Types.ObjectId(res.locals.user._id);
 
-    const isExist = await MyBeer.findOne({ _id: myBeerId, like_array: { $in: [userId] }});
-    if(isExist) {   // 이미 좋아요한 내역이 있으면 함수 종료
-        res.status(400).send({ message: "fail", error: "user already liked this beer" });
-        return
+    try {
+        const userId = mongoose.Types.ObjectId(res.locals.user._id);
+
+        const isExist = await MyBeer.findOne({ _id: myBeerId, like_array: { $in: [userId] }});
+        if(isExist) {   // 이미 좋아요한 내역이 있으면 함수 종료
+            res.status(409).send({ message: "fail", error: "user already liked this beer" });
+            return
+        }
+    
+        const result : IMyBeer = await MyBeer.findOneAndUpdate({_id: myBeerId}, { $push: {like_array: userId}, $inc: {like_count: 1} })
+                                    .lean();
+        res.json({ message: "success", result });
+    } catch (error) {
+        res.status(400).json({ message: "fail", error });
     }
-
-    const result : IMyBeer = await MyBeer.findOneAndUpdate({_id: myBeerId}, { $push: {like_array: userId}, $inc: {like_count: 1} })
-                                .lean();
-    res.json({ message: "success", result });
-
 };
 
 // 마이비어 좋아요 취소
 const unlikeMyBeer = async (req: Request, res: Response) => {
     const { myBeerId } = req.params;
-    const userId = mongoose.Types.ObjectId(res.locals.user._id);
 
-    const isExist = await MyBeer.findOne({ _id: myBeerId, like_array: { $in: [userId] }});
-    if(!isExist) {   // 좋아요한 내역이 없으면 함수 종료
-        res.status(400).send({ message: "fail", error: "user hasn't liked this beer" });
-        return
+    try {
+        const userId = mongoose.Types.ObjectId(res.locals.user._id);
+
+        const isExist = await MyBeer.findOne({ _id: myBeerId, like_array: { $in: [userId] }});
+        if(!isExist) {   // 좋아요한 내역이 없으면 함수 종료
+            res.status(409).send({ message: "fail", error: "user hasn't liked this beer" });
+            
+            return;
+        }
+    
+        const result: IMyBeer = await MyBeer.findOneAndUpdate({_id: myBeerId}, {$pull: {like_array: userId},  $inc: {like_count: -1}}).lean();
+        res.json({ message: "success", result });
+    } catch (error) {
+        res.status(400).json({ message: "fail", error });
     }
-
-    const result: IMyBeer = await MyBeer.findOneAndUpdate({_id: myBeerId}, {$pull: {like_array: userId},  $inc: {like_count: -1}}).lean();
-    res.json({ message: "success", result });
 };
 
 
 function pagination(pageNo:number, arrBeer:Array<IMyBeer> ) {
-
     if (pageNo != 0 && !pageNo) { // 페이지번호가 없을 시 전체 리스트 출력
         return arrBeer;
     }
@@ -499,8 +508,6 @@ function pagination(pageNo:number, arrBeer:Array<IMyBeer> ) {
 
     return res_beers;
 }
-
-
 
 export default {
     postMyBeer,
