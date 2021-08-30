@@ -124,7 +124,7 @@ const getAllMyBeers = async (req: Request, res: Response) => {
 
         const beers: Array<IMyBeer>  = await MyBeer.find({})
                                 .populate({path: 'userId', select: 'nickname image'})
-                                .populate({ path: 'beerId', select: 'image' })
+                                .populate({ path: 'beerId', select: 'image name_korean name_english' })
                                 .sort([[sort, sortOption]])
                                 .lean();
 
