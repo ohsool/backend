@@ -20,6 +20,10 @@ const RecommendationSchema: Schema = new Schema({
     date: {
         type: String,
         required: true
+    },
+    isSolved: {
+        type: Boolean,
+        default: false
     }
 });
 

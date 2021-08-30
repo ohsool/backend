@@ -86,6 +86,7 @@ const joiSchema = joi.object({
     "test"
   ]
 
+// 중복 이메일 확인
 const existEmail = async(req: Request, res: Response) => {
     const { email } = req.body;
     
@@ -110,7 +111,7 @@ const existEmail = async(req: Request, res: Response) => {
         return
       } 
 
-      const { value, error } = emailJoiSchema.validate({ email });
+      const { value, error } = emailJoiSchema.validate({ email });  // joi validation 으로 이메일 형식에 맞는지 확인
 
       if (error) {
         res.status(205).json({ message: "fail", error: "wrong email", error_detail: error.details[0].message });
@@ -124,6 +125,7 @@ const existEmail = async(req: Request, res: Response) => {
     }
 }
 
+// 중복 닉네임 확인
 const existNickname = async(req: Request, res: Response) => {
     const { nickname } = req.body;
 
@@ -140,7 +142,7 @@ const existNickname = async(req: Request, res: Response) => {
     }
 
     try {
-      const existUser = await Users.findOne({ nickname }).lean();
+      const existUser = await Users.findOne({ nickname }).lean();  // joi validation 으로 닉네임 형식에 맞는지 확인
 
       if (existUser) {
         res.status(205).json({ message: "fail", error: "exist nickname" });
@@ -163,6 +165,7 @@ const existNickname = async(req: Request, res: Response) => {
     }
 }
 
+// 회원가입
 const register = async(req: Request, res: Response) => {
     const { email, nickname, password, confirmPassword } = req.body;
     
@@ -181,28 +184,30 @@ const register = async(req: Request, res: Response) => {
 
       const { value, error } = joiSchema.validate({
         email, nickname, password, confirmPassword
-      });
+      });  // joi validation 으로 이메일, 닉네임, 비밀번호 형식에 맞는지 확인
 
       if (!error) {
-          const crypted_password = crypto.createHmac("sha256", password).update(env.pass_secret).digest("hex");
+        // 비밀번호 암호화
+        const crypted_password = crypto.createHmac("sha256", password).update(env.pass_secret).digest("hex");
 
-          await Users.create({ email, nickname, password: crypted_password });
+        await Users.create({ email, nickname, password: crypted_password });
 
-          const mailInfo: IMailInfo = {
-            toEmail: email,     
-            nickname: nickname, 
-            type: 'welcome',   
-          };
+        const mailInfo: IMailInfo = {
+          toEmail: email,     
+          nickname: nickname, 
+          type: 'welcome',   
+        };
 
-          // 성공 메일 보내기
-          mailSender(mailInfo)
+        // 성공 메일 보내기
+        mailSender(mailInfo)
 
-          res.status(201).json({ message: "success" });
+        res.status(201).json({ message: "success" });
       } else {
-          res.status(400).json({ message: "fail", error: error.details[0].message });
+        res.status(400).json({ message: "fail", error: error.details[0].message });
       }
 }
 
+// 로그인
 const login = async(req: Request, res: Response) => {
     let { email, password } = req.body;
 
@@ -212,7 +217,9 @@ const login = async(req: Request, res: Response) => {
       return;
     }
 
+    // 들어온 비밀번호 암호화
     const crypted_password = crypto.createHmac("sha256", password).update(env.pass_secret).digest("hex");
+    
     try {
       const user = await Users.findOne({ email }).lean();
 
@@ -228,12 +235,15 @@ const login = async(req: Request, res: Response) => {
         return;
       }
   
+      // refresh token 발급 (2주)
       const refreshToken = jwt.sign( {}, 
         env.jwt_secret, { 
           expiresIn: '14d', 
           issuer: 'node-avengers' 
         }
       );
+
+      // access token 발급 (1시간)
       const accessToken = jwt.sign({ userId: user._id }, 
         env.jwt_secret, {
           expiresIn: '1h',
@@ -243,9 +253,11 @@ const login = async(req: Request, res: Response) => {
 
       await Users.findOneAndUpdate({ _id: user._id}, {$set: { refreshToken }} ).lean();
 
+      // refresh token 반으로 쪼개서 보내주기
       const refreshToken1 = refreshToken.split(".")[0];
       const refreshToken2 = "." + refreshToken.split(".")[1] + "." + refreshToken.split(".")[2];
 
+      // access token 반으로 쪼개서 보내주기
       const accessToken1 = accessToken.split(".")[0];
       const accessToken2 = "." + accessToken.split(".")[1] + "." + accessToken.split(".")[2];
   
@@ -257,8 +269,9 @@ const login = async(req: Request, res: Response) => {
     }
 }
 
+// 로그아웃
 const logout = async (req: Request, res: Response) => {
-    const userId = res.locals.user._id;
+    const userId = res.locals.user._id;  // auth-middleware에서 가져온 회원 정보
 
     try {
       const user = await Users.findOneAndUpdate({ _id: userId }, { refreshToken: "" } ).lean();
@@ -275,8 +288,9 @@ const logout = async (req: Request, res: Response) => {
     }
 }
 
+// 회원탈퇴
 const signout = async (req: Request, res: Response) => {
-    const userId = res.locals.user._id;
+    const userId = res.locals.user._id;  // auth-middleware에서 가져온 회원 정보
 
     try {
       const user = await Users.findOne({ _id: userId }).lean();
@@ -308,6 +322,7 @@ const signout = async (req: Request, res: Response) => {
     }
 }
 
+// 로그인 되어있는 유저인지 확인
 const checkAuth = async (req: Request, res: Response) => {
     if (!res.locals.user) {
         res.status(403).json({ message: "fail", error: "unidentified user" });
@@ -326,17 +341,10 @@ const checkAuth = async (req: Request, res: Response) => {
         description = "";
       }
 
-      // if (res.locals.accessToken) {
-      //   res.json({ message: "success", userId, nickname, preference, image, accessToken: res.locals.accessToken });
-      // } else if (res.locals.refreshToken) {
-      //   res.json({ message: "success", userId, nickname, preference, image, refreshToken: res.locals.refreshToken });
-      // } else {
-      //   res.json({ message: "success", userId, nickname, preference, image });
-      // }
-
       res.json({ message: "success", userId, nickname, preference, image, email, description });
 }
 
+// 구글 로그인 Callback
 const googleLogin = (req: Request, res: Response, next: NextFunction) => {
     passport.authenticate(
         "google", {
@@ -350,9 +358,11 @@ const googleLogin = (req: Request, res: Response, next: NextFunction) => {
           const accessToken = tokens.split("***")[1];
           const first = tokens.split("***")[2];
 
+          // refresh token 반으로 쪼개서 보내주기
           const refreshToken1 = refreshToken.split(".")[0];
           const refreshToken2 = "." + refreshToken.split(".")[1] + "." + refreshToken.split(".")[2];
 
+          // access token 반으로 쪼개서 보내주기
           const accessToken1 = accessToken.split(".")[0];
           const accessToken2 = "." + accessToken.split(".")[1] + "." + accessToken.split(".")[2];
   
@@ -371,9 +381,11 @@ const kakaoLogin = (req: Request, res: Response, next: NextFunction) => {
   
           const { refreshToken, accessToken, first } = info;
 
+          // refresh token 반으로 쪼개서 보내주기
           const refreshToken1 = refreshToken.split(".")[0];
           const refreshToken2 = "." + refreshToken.split(".")[1] + "." + refreshToken.split(".")[2];
 
+          // access token 반으로 쪼개서 보내주기
           const accessToken1 = accessToken.split(".")[0];
           const accessToken2 = "." + accessToken.split(".")[1] + "." + accessToken.split(".")[2];
   
@@ -443,6 +455,7 @@ const postTest = async (req: Request, res: Response) => {
           isExistUser = true;
         }
         
+        // 몇 명의 유저가 이 타입인지 알려주기
         const preferenceCounts = await BeerCategories.find({}).select("preferenceCount -_id");
         let sum = 0;
 
@@ -460,6 +473,7 @@ const postTest = async (req: Request, res: Response) => {
       }
 }
 
+// 첫 소셜 로그인시에만 닉네임, 이메일이 중복되거나 없을 수 있기 때문에 다시 받기
 const socialUserSet = async (req: Request, res: Response) => {
   const { email, nickname } = req.body;
   const userId = res.locals.user._id;
@@ -492,6 +506,7 @@ const socialUserSet = async (req: Request, res: Response) => {
       return
     } 
 
+    // joi validation으로 email, nickname이 형식에 맞는지 확인
     const { value, error } = emailNicknameJoiSchema.validate({ email, nickname });
 
     if (error) {
@@ -628,6 +643,7 @@ const resetPassword = async (req: Request, res: Response) => {
       return;
     }
 
+    // 새 비밀번호 발급해주기 (암호화)
     const time = new Date();
     let newPassword = String(time.getMilliseconds() + String(time.getDate()) + String(time.getMinutes()) + String(time.getSeconds()));
     newPassword = newPassword.replace("1", "a");
@@ -639,6 +655,7 @@ const resetPassword = async (req: Request, res: Response) => {
 
     await Users.findOneAndUpdate({ _id: user._id }, { $set: { password: cryptedPassword } });
 
+    // 새로 발급된 비밀번호 메일로 보내주기
     const mailInfo: IMailInfo = {
       toEmail: user.email!,
       nickname: user.nickname,
@@ -871,6 +888,7 @@ const unfollowUser = async (req: Request, res: Response) => {
   }
 }
 
+// 특정 유저의 팔로우, 팔로워 리스트 보내주기
 const givesFollows = async (req: Request, res: Response) => {
   const userId = req.params.userId;
 

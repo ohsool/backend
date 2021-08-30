@@ -12,10 +12,6 @@ import { IMyBeer } from '../interfaces/mybeer';
 
 import { constants } from 'node:buffer';
 
-async function calculateRates() {
-
-}
-
 // 도감 업로드하기
 const postMyBeer = async (req: Request, res: Response) => {
     let { myFeatures, location, rate, review } = req.body;
@@ -78,6 +74,8 @@ const postMyBeer = async (req: Request, res: Response) => {
     }
 
     try {
+        // 맥주 카테고리들당 특정 타입의 맥주가 취향인 사람들의 점수를 따로 저장
+        // ex) Lager 취향인 사람들이 Bock 취향의 맥주를 좋아할 확률이 76%
         const myPreference = res.locals.user.preference;
         let mybeer = await MyBeer.create({ beerId, userId, preference: myPreference, myFeatures, date, location, rate, review});
 
@@ -267,6 +265,7 @@ const getBeerAllReviews = async (req: Request, res: Response) => {
 
         if (!beer) {
             res.status(406).json({ message: "fail", error: "beer doesn't exist" });
+
             return;
         }
 
@@ -294,10 +293,13 @@ const getBeerAllReviews = async (req: Request, res: Response) => {
 const getMyBeer = async (req: Request, res: Response) => {
     const { myBeerId } = req.params;
     try {
-        const mybeer = await MyBeer.findOne({ _id: myBeerId }).lean().populate({path: 'userId', select: 'nickname image'}).populate({ path: 'beerId', select: 'image' });
+        const mybeer = await MyBeer.findOne({ _id: myBeerId }).lean()
+            .populate({path: 'userId', select: 'nickname image'})
+            .populate({ path: 'beerId', select: 'image' });
 
         if (!mybeer) {
             res.status(406).json({ message: "fail", error: "no exist mybeer" });
+
             return;
         }
 
@@ -461,12 +463,13 @@ const likeMyBeer = async (req: Request, res: Response) => {
         const userId = mongoose.Types.ObjectId(res.locals.user._id);
 
         const isExist = await MyBeer.findOne({ _id: myBeerId, like_array: { $in: [userId] }});
-        if(isExist) {   // 이미 좋아요한 내역이 있으면 함수 종료
+        if ( isExist ) {   // 이미 좋아요한 내역이 있으면 함수 종료
             res.status(409).send({ message: "fail", error: "user already liked this beer" });
+            
             return
         }
     
-        const result : IMyBeer = await MyBeer.findOneAndUpdate({_id: myBeerId}, { $push: {like_array: userId}, $inc: {like_count: 1} })
+        const result: IMyBeer = await MyBeer.findOneAndUpdate({_id: myBeerId}, { $push: {like_array: userId}, $inc: {like_count: 1} })
                                     .lean();
         res.json({ message: "success", result });
     } catch (error) {
@@ -482,13 +485,15 @@ const unlikeMyBeer = async (req: Request, res: Response) => {
         const userId = mongoose.Types.ObjectId(res.locals.user._id);
 
         const isExist = await MyBeer.findOne({ _id: myBeerId, like_array: { $in: [userId] }});
-        if(!isExist) {   // 좋아요한 내역이 없으면 함수 종료
+        
+        if ( !isExist ) {   // 좋아요한 내역이 없으면 함수 종료
             res.status(409).send({ message: "fail", error: "user hasn't liked this beer" });
             
             return;
         }
     
         const result: IMyBeer = await MyBeer.findOneAndUpdate({_id: myBeerId}, {$pull: {like_array: userId},  $inc: {like_count: -1}}).lean();
+        
         res.json({ message: "success", result });
     } catch (error) {
         res.status(400).json({ message: "fail", error });

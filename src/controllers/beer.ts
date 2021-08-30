@@ -10,6 +10,7 @@ import MyBeers from "../schemas/mybeer";
 import { IBeer, IFeatures } from "../interfaces/beer";
 import { IBeerCategory } from '../interfaces/beerCategory';
 
+// 전체 리스트 출력하기
 const getBeers = async(req: Request, res: Response) => {
     try {
         const beers: IBeer = await Beers.find().lean();
@@ -20,16 +21,10 @@ const getBeers = async(req: Request, res: Response) => {
     }
 }
 
-// http://localhost:5209/api/beer/list/all/page?pageNo=0&sort=degree
+// 페이지별 리스트 출력하기
 const getSomeBeers = async(req: Request, res: Response) => {
     let { pageNo, sort } = req.query;
     let beers: Array<IBeer> = [];
-
-    if ( Number(pageNo) < 0 || (Number(pageNo) * 8 > beers.length) ) {
-        res.status(400).send({ message: "fail", error: "wrong page" });
-
-        return;
-    }
 
     try {
         // later, we should change order of beers with the most famous sort method
@@ -54,6 +49,12 @@ const getSomeBeers = async(req: Request, res: Response) => {
             return;
         }
 
+        if ( Number(pageNo) < 0 || (Number(pageNo) * 8 > beers.length) ) {
+            res.status(400).send({ message: "fail", error: "wrong page" });
+    
+            return;
+        }
+
         const res_beers: Array<IBeer> = [];
 
         for (let i = Number(pageNo) * 8; i < (Number(pageNo) * 8) + 8; i ++) {
@@ -70,6 +71,7 @@ const getSomeBeers = async(req: Request, res: Response) => {
     }
 }
 
+// 맥주 추가하기
 const postBeer = async(req: Request, res: Response) => {
     try {
         const { name_korean, name_english, image, degree, country, isDistant, categoryId, hashtag } = req.body;
@@ -107,6 +109,7 @@ const postBeer = async(req: Request, res: Response) => {
     }
 }
 
+// 맥주 하나 가져오기
 const getBeer = async(req: Request, res: Response) => {
     try {
         const { beerId } = req.params;
@@ -123,6 +126,7 @@ const getBeer = async(req: Request, res: Response) => {
 
 }
 
+// 맥주 한 개 삭제하기
 const deleteBeer = async(req: Request, res: Response) => {
     let { beerId } = req.params;
     const _id = mongoose.Types.ObjectId(beerId);
@@ -142,6 +146,7 @@ const deleteBeer = async(req: Request, res: Response) => {
     }
 }
 
+// 맥주 좋아요
 const likeBeer = async(req: Request, res: Response) => {
     const userId = mongoose.Types.ObjectId(res.locals.user._id);
     const { beerId } = req.params;
@@ -167,6 +172,7 @@ const likeBeer = async(req: Request, res: Response) => {
     }
 }
 
+// 맥주 좋아요 해제
 const unlikeBeer = async(req: Request, res: Response) => {
     const userId = res.locals.user._id;
     const { beerId } = req.params;
@@ -191,7 +197,7 @@ const unlikeBeer = async(req: Request, res: Response) => {
     }
 }
 
-// 현재 유저가 찜한 리스트 가져오기
+// 현재 유저가 좋아요한 리스트 가져오기
 const likedBeer = async(req: Request, res: Response) => {
     try {
         const userId = res.locals.user._id;
@@ -333,6 +339,7 @@ const getBeerByCategory = async (req: Request, res: Response)=> {
     }
 }
 
+// 유저들의 맥주 취향을 데이터베이스에 반영하기 (모든 맥주)
 const getAllFeatures = async (req: Request, res: Response) => {
     const modifiedBeers: Array<IBeer> = [];
 
@@ -384,6 +391,7 @@ const getAllFeatures = async (req: Request, res: Response) => {
     }
 }
 
+// 유저들의 맥주 취향을 데이터베이스에 반영하기 (특정 맥주)
 const getFeatures = async (req: Request, res: Response) => {
     const beerId = req.params.beerId;
 

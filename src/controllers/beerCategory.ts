@@ -8,6 +8,7 @@ import { IBeerCategory } from "../interfaces/beerCategory";
 import { IBeer } from "../interfaces/beer";
 import { IAvgRate } from "../interfaces/beerCategory";
 
+// 모든 맥주 카테고리 가져오기
 const getBeerCategories = async(req: Request, res: Response) => {
     try {
         const beerCategories: Array<IBeerCategory> = await BeerCategories.find().lean();
@@ -18,6 +19,7 @@ const getBeerCategories = async(req: Request, res: Response) => {
     }
 }
 
+// 맥주 카테고리 추가하기
 const postBeerCategory = async(req: Request, res: Response) => {
     try {
         const { name, image, features } = req.body;
@@ -42,6 +44,7 @@ const postBeerCategory = async(req: Request, res: Response) => {
     }
 }
 
+// 특정 맥주 카테고리 가져오기
 const getBeerCategory = async(req: Request, res: Response) => {
     try {
         const { beerCategoryId } = req.params;
@@ -57,6 +60,7 @@ const getBeerCategory = async(req: Request, res: Response) => {
     }
 }
 
+// 취향 테스트 결과 보여주기
 const getTestResult = async(req: Request, res:Response) => {
     const result = req.body.result;
 
@@ -108,6 +112,7 @@ interface IPreferenceCounts {
     Bock: number
 }
  
+// 모든 유저의 맥주 카테고리 취향에 관한 preference count 계산해서 데이터베이스에 저장하기
 const getPreferenceCount = async (req: Request, res: Response) => {
     try {
         const preferences = await Users.find({}).select("preference -_id");

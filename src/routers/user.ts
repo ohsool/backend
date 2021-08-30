@@ -8,37 +8,37 @@ import { secretKeyMiddleware } from "../middlewares/secretkey-middleware";
 
 const userRouter = express.Router();
 
-// exist email?
+// 중복 이메일 확인
 userRouter.post("/email", UserContoller.existEmail);
 
-// exist nickname?
+// 중복 닉네임 확인
 userRouter.post("/nickname", secretKeyMiddleware, UserContoller.existNickname);
 
-// Register
+// 회원가입
 userRouter.post("/", secretKeyMiddleware, UserContoller.register);
 
-// login
+// 로그인
 userRouter.post("/auth", secretKeyMiddleware, UserContoller.login);
 
-// Logout
+// 로그아웃
 userRouter.post("/logout", secretKeyMiddleware, authMiddleware, UserContoller.logout)
 
-// sign out
+// 회원탈퇴
 userRouter.delete("/", secretKeyMiddleware, authMiddleware, UserContoller.signout)
 
-// if the person is logged in
+// 로그인 되어있는 유저인지 확인
 userRouter.get("/me", authMiddleware, UserContoller.checkAuth)
 
-// Google Login
+// 구글 로그인
 userRouter.get("/google", passport.authenticate("google", { scope: ["email", "profile"] }));
  
-// Google Login Callback
+// 구글 로그인 Callback
 userRouter.get("/google/callback", UserContoller.googleLogin);
 
-// kakao login
+// 카카오 로그인
 userRouter.get("/kakao", passport.authenticate("kakao"));
 
-// Kakao Login Callback
+// 카카오 로그인 Callback
 userRouter.get("/kakao/callback", UserContoller.kakaoLogin);
 
 // 현재 유저 preference에 테스트 결과 값 반영 & 클라이언트에게 결과에 대한 정보 돌려주기
