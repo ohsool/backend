@@ -1,4 +1,10 @@
-import express, { Request, Response, NextFunction, Router, response } from "express";
+import express, {
+  Request,
+  Response,
+  NextFunction,
+  Router,
+  response,
+} from "express";
 import https from "https";
 
 import BeerCategoryController from "../controllers/beerCategory";
@@ -11,17 +17,25 @@ const beerCategoryRouter = express.Router();
 beerCategoryRouter.get("/", BeerCategoryController.getBeerCategories);
 
 // 모든 유저의 맥주 카테고리 취향에 관한 preference count 계산해서 데이터베이스에 저장하기
-beerCategoryRouter.get("/preferencecount", BeerCategoryController.getPreferenceCount);
+beerCategoryRouter.get(
+  "/preferencecount",
+  BeerCategoryController.getPreferenceCount
+);
 
 // 맥주 카테고리 추가하기
-beerCategoryRouter.post("/", authMiddleware, BeerCategoryController.postBeerCategory);
+beerCategoryRouter.post(
+  "/",
+  authMiddleware,
+  BeerCategoryController.postBeerCategory
+);
 
 // 특정 맥주 카테고리 가져오기
-beerCategoryRouter.get("/:beerCategoryId", BeerCategoryController.getBeerCategory);
+beerCategoryRouter.get(
+  "/:beerCategoryId",
+  BeerCategoryController.getBeerCategory
+);
 
 // 취향 테스트 결과 보여주기
 beerCategoryRouter.post("/result", BeerCategoryController.getTestResult);
-
-
 
 export { beerCategoryRouter };

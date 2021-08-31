@@ -5,7 +5,7 @@ import { authMiddleware } from "../middlewares/auth-middleware";
 const myBeerRouter = express.Router();
 
 // 도감 업로드하기
-myBeerRouter.post("/:beerId", authMiddleware, myBeerController.postMyBeer); 
+myBeerRouter.post("/:beerId", authMiddleware, myBeerController.postMyBeer);
 
 // 모든 유저의 도감 가져오기
 myBeerRouter.get("/all", myBeerController.getAllMyBeers);
@@ -29,13 +29,24 @@ myBeerRouter.get("/:myBeerId", myBeerController.getMyBeer);
 myBeerRouter.put("/:myBeerId", authMiddleware, myBeerController.updateMyBeer);
 
 // 특정 도감 삭제하기
-myBeerRouter.delete("/:myBeerId", authMiddleware, myBeerController.deleteMyBeer);
+myBeerRouter.delete(
+  "/:myBeerId",
+  authMiddleware,
+  myBeerController.deleteMyBeer
+);
 
 // 도감 좋아요
-myBeerRouter.put("/like/:myBeerId", authMiddleware, myBeerController.likeMyBeer);
+myBeerRouter.put(
+  "/like/:myBeerId",
+  authMiddleware,
+  myBeerController.likeMyBeer
+);
 
 // 도감 좋아요 취소
-myBeerRouter.put("/unlike/:myBeerId", authMiddleware, myBeerController.unlikeMyBeer);
-
+myBeerRouter.put(
+  "/unlike/:myBeerId",
+  authMiddleware,
+  myBeerController.unlikeMyBeer
+);
 
 export { myBeerRouter };
