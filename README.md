@@ -32,8 +32,8 @@ https://ohsool.com/
 2021.07.23 ~ 2021.09.02
 
 <br>
-
 ## 🤸🏻‍♀️팀원 | Team
+
 * **Backend (Node.js)** 
 <br> 이정원, 문진영, 윤송
 * **Frontend (React)** (https://github.com/ohsool/front-end)
@@ -68,29 +68,24 @@ https://ohsool.com/
 
 <br>
 
-## ⚔주요 API 기능 | Main API - [더보기](https://github.com/ohsool/backend/wiki/%EB%A9%94%EC%9D%B8-%EA%B8%B0%EB%8A%A5-API)
-1. 테스트 기반으로 사용자의 맥주 취향 보여주기
-2. 각자 다른 맥주 취향을 가진 사용자들이 남긴 평점을 맥주 종류 별로 평균을 내어 <br> 타 사용자의 취향에 맞는 맥주 추천하기 
-3. 맥주 판매처 제보하기
-4. 맥주 및 해시태그 검색하기
-5. 비밀번호 변경?
+## ⚔주요 API 기능 | Main API 
+
+1. [테스트 기반으로 사용자의 맥주 취향 보여주기](https://github.com/ohsool/backend/wiki/%EB%A9%94%EC%9D%B8-%EA%B8%B0%EB%8A%A5-API#%EC%82%AC%EC%9A%A9%EC%9E%90%EC%9D%98-%EB%A7%A5%EC%A3%BC-%EC%B7%A8%ED%96%A5-%EB%B3%B4%EC%97%AC%EC%A3%BC%EA%B8%B0)
+2. [각자 다른 맥주 취향을 가진 사용자들이 남긴 평점을 맥주 종류 별로 평균을 내어 <br> 타 사용자의 취향에 맞는 맥주 추천하기](https://github.com/ohsool/backend/wiki/%EB%A9%94%EC%9D%B8-%EA%B8%B0%EB%8A%A5-API#%EC%82%AC%EC%9A%A9%EC%9E%90%EC%9D%98-%EC%B7%A8%ED%96%A5%EC%97%90-%EB%A7%9E%EB%8A%94-%EB%A7%A5%EC%A3%BC-%EC%B6%94%EC%B2%9C%ED%95%98%EA%B8%B0)
+3. [맥주 판매처 제보하기](https://github.com/ohsool/backend/wiki/%EB%A9%94%EC%9D%B8-%EA%B8%B0%EB%8A%A5-API#%EB%A7%A5%EC%A3%BC-%ED%8C%90%EB%A7%A4%EC%B2%98-%EC%A0%9C%EB%B3%B4%ED%95%98%EA%B8%B0)
+4. [맥주 및 해시태그 검색하기](https://github.com/ohsool/backend/wiki/%EB%A9%94%EC%9D%B8-%EA%B8%B0%EB%8A%A5-API#%EB%A7%A5%EC%A3%BC-%EB%B0%8F-%ED%95%B4%EC%8B%9C%ED%83%9C%EA%B7%B8-%EA%B2%80%EC%83%89%ED%95%98%EA%B8%B0)
+5. [비밀번호 변경 시 임시 비밀번호 생성](https://github.com/ohsool/backend/wiki/%EB%A9%94%EC%9D%B8-%EA%B8%B0%EB%8A%A5-API#%EB%B9%84%EB%B0%80%EB%B2%88%ED%98%B8-%EC%B0%BE%EA%B8%B0)
+6. 회원가입 및 건의사항 제출 시 이메일 발송
 
 <br>
 
-## 기술적 챌린지 | Troubleshooting
-### 1. secret Key 적용
-* 지정한 클라이언트 도메인외에 외부 사용자가 API URL에 쉽게 접근하지 못하도록 프런트와 백만 알 수 있는 secretKey를 header에 추가
-* 한시간단위로 변경되어야하는 값이 실시간으로 반영될 수 있도록 생각
-* 첫번째 try:
-*  일종에 id 처럼 secertKey를 api 도메인뒤에 추가하여 구분하려 했으나 한시간으로 업데이트되어야하는 key값이 서버가 처음 시작할 때에만 업데이트되고 그 이후부터는 반영이 안됌. 서버를 한시간마다 재시작하여 key값을 업데이트하는 방법이 있지만 사용자로 하여금 안좋은 경험임, so pass
-*  두번째 try:
-*  secretKey 생성하는 기능을 미들웨어로 변경하여 api가 호출될 때마다 실기간 key값이 반영되도록 변경. 단,   백엔드 서버 안에서 이루어져야 하는 callback url에 대해서는 secret key를 검사하지 않음.
- 
+## 🏊🏻‍♂️기술적 챌린지 | Troubleshooting
 
-
-2. 웹 서버 환경에서 Jest 테스트 코드 구동 시 발생하는 timeout 오류
-3. env 파일 & 기타 security 파일 S3와 로드 밸런서 이용해서 가져오기
-4. 무중단 배포
+1. JWT Refreshtoken 적용
+2. [secretKey를 이용하여 프런트 도메인외 다른 유저가 api url에 접근하지 못하도록 설정](https://github.com/ohsool/backend/wiki/%EA%B8%B0%EC%88%A0%EC%A0%81%EC%B1%8C%EB%A6%B0%EC%A7%80-%7C-%ED%8A%B8%EB%9F%AC%EB%B8%94%EC%8A%88%ED%8C%85#1-secret-Key-%EC%A0%81%EC%9A%A9) 
+3. [웹 서버 환경에서 Jest 테스트 코드 구동 시 발생하는 timeout 오류](https://github.com/ohsool/backend/wiki/%EA%B8%B0%EC%88%A0%EC%A0%81%EC%B1%8C%EB%A6%B0%EC%A7%80-%7C-%ED%8A%B8%EB%9F%AC%EB%B8%94%EC%8A%88%ED%8C%85#2-ec2-%ED%99%98%EA%B2%BD%EC%97%90%EC%84%9C-jest-%ED%85%8C%EC%8A%A4%ED%8A%B8-%EC%BD%94%EB%93%9C-%EA%B5%AC%EB%8F%99-%EC%8B%9C-timeout-%EB%B0%9C%EC%83%9D)
+4. Blue/Green를 이용한 무중단 배포
+5. S3와 로드밸런서 블라블라블라
 
 <br>
 
@@ -128,7 +123,6 @@ npm i nodemailer
   ```
   npm install moment --save  
   ```
- ㅛㅕㅛㅕㅕㅕㅕㅕㅕㅕㅕㅕㅕㅕㅕㅕㅕㅕㅕㅕㅕㅕㅕㅕㅕㅕㅕㅕㅕㅕㅕㅕㅕㅕㅕㅕㅕㅕㅕㅕㅕㅕㅕ ㅜ`ㅠㅍㅍㅍㅍㅍㅍㅍㅍㅍㅍㅍㅍㅍㅍㅍㅍ ㅍㅍㅍㅍㅍㅍㅍㅍㅍㅍㅍ     ㅡㅜ  
 </details>
 
 <details>
