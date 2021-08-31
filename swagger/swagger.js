@@ -3,11 +3,11 @@ const swaggerAutogen = require('swagger-autogen')();
 const doc = {
     info: {
       version: '1.0.0',      
-      title: 'OHSOOL; 오늘의 술',        // by default: 'REST API'
-      description: '당신을 위한 오늘의 맥주.',  // by default: ''
+      title: 'OHSOOL; 오늘의 술',       
+      description: '당신을 위한 오늘의 맥주.',  
     },
-    host: 'https://ohsool.shop/',      
-    basePath: '/', 
+    host: 'ohsool.shop',      
+    basePath: '/api', 
     schemes: ['http','https'],  
     consumes: ['application/json'],  
     produces: ['application/json'], 
