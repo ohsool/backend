@@ -1,4 +1,10 @@
-import express, {Request,Response,NextFunction,Router,response,} from "express";
+import express, {
+  Request,
+  Response,
+  NextFunction,
+  Router,
+  response,
+} from "express";
 import Comments from "../schemas/comment";
 import { authMiddleware } from "../middlewares/auth-middleware";
 import mongoose, { Schema, model, mongo } from "mongoose";
@@ -117,18 +123,19 @@ commentRouter.put("/like/:commentId", authMiddleware, async (req, res) => {
     }
 
     const userId = res.locals.user._id;
-    if (comment.like_array.includes(userId)) {  // 중복된 아이디가 좋아요 배열에 있는지 확인
+    if (comment.like_array.includes(userId)) {
+      // 중복된 아이디가 좋아요 배열에 있는지 확인
       res.status(400).send({
         message: "해당 아이디는 이미 좋아요를 눌렀습니다.",
       });
       return;
     }
-    
-    await Comments.updateOne( // 좋아요 배열에 아이디 추가
+
+    await Comments.updateOne(
+      // 좋아요 배열에 아이디 추가
       { _id: commentId },
-      { $push: { like_array: userId } } 
+      { $push: { like_array: userId } }
     );
-   
 
     res.status(200).json({ message: "success" });
   } catch (err) {
@@ -141,45 +148,46 @@ commentRouter.put("/like/:commentId", authMiddleware, async (req, res) => {
 // 댓글 좋아요 취소
 commentRouter.put("/unlike/:commentId", authMiddleware, async (req, res) => {
   try {
-      const { commentId } = req.params;
-      const comment = await Comments.findOne({ _id: commentId });
-      
-      if (!comment) {
-        res.status(400).send({
-          message: "commentId 를 확인해주세요.",
-        });
-        return;
-      }
+    const { commentId } = req.params;
+    const comment = await Comments.findOne({ _id: commentId });
 
-      const userId = res.locals.user._id;
-      if (!comment.like_array.includes(userId)) {  // 중복된 아이디가 좋아요 배열에 있는지 확인
-        res.status(400).send({
-          message: "해당 아이디에 대한 좋아요 정보가 없습니다.",
-        });
-        return;
-      }
+    if (!comment) {
+      res.status(400).send({
+        message: "commentId 를 확인해주세요.",
+      });
+      return;
+    }
 
-      await Comments.updateOne( // 좋아요 배열에서 해당 유저 아이디 제거
-        { _id: commentId },
-        { $pull: { like_array: userId } } 
-      );
-      
+    const userId = res.locals.user._id;
+    if (!comment.like_array.includes(userId)) {
+      // 중복된 아이디가 좋아요 배열에 있는지 확인
+      res.status(400).send({
+        message: "해당 아이디에 대한 좋아요 정보가 없습니다.",
+      });
+      return;
+    }
+
+    await Comments.updateOne(
+      // 좋아요 배열에서 해당 유저 아이디 제거
+      { _id: commentId },
+      { $pull: { like_array: userId } }
+    );
+
     res.status(200).json({ message: "success" });
   } catch (err) {
     res.status(400).send({
       message: `[댓글 좋아요 취소] ${err}`,
     });
   }
-
 });
 
 // 현재 유저가 작성한 댓글 가져오기
 commentRouter.get("/mypage/comments", authMiddleware, async (req, res) => {
   try {
     const userId = res.locals.user._id;
-    const comment = await Comments.find({ userId: userId })
-    
-    res.status(200).json({ result: comment })
+    const comment = await Comments.find({ userId: userId });
+
+    res.status(200).json({ result: comment });
   } catch (err) {
     res.status(400).send({
       message: `[내 댓글 가져오기] ${err}`,
@@ -191,18 +199,19 @@ commentRouter.get("/mypage/comments", authMiddleware, async (req, res) => {
 commentRouter.get("/mypage/tags", authMiddleware, async (req, res) => {
   try {
     const userId = res.locals.user._id;
-    const comments = await Comments.find({})
-    interface commentObj{ [key: string]: any[] }; // db 결과값의 타입을 정의할 수 있는 interface 선언
-    let result:Array<object> = []
-    
-    comments.forEach((comment:commentObj) => {
-      if (comment['tagged_array']?.includes(userId)) {
+    const comments = await Comments.find({});
+    interface commentObj {
+      [key: string]: any[];
+    } // db 결과값의 타입을 정의할 수 있는 interface 선언
+    let result: Array<object> = [];
+
+    comments.forEach((comment: commentObj) => {
+      if (comment["tagged_array"]?.includes(userId)) {
         result.push(comment);
       }
     });
 
     res.status(200).json({ result });
-
   } catch (err) {
     res.status(400).send({
       message: `[태그된 댓글 가져오기] ${err}`,

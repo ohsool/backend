@@ -5,10 +5,10 @@ import { authMiddleware } from "../middlewares/auth-middleware";
 const beerRouter = express.Router();
 
 // 전체 리스트 출력하기
-beerRouter.get("/list/all", BeerController.getBeers);   
+beerRouter.get("/list/all", BeerController.getBeers);
 
 // 페이지별 리스트 출력하기
-beerRouter.get("/list/all/page", BeerController.getSomeBeers);  
+beerRouter.get("/list/all/page", BeerController.getSomeBeers);
 
 // 맥주 추가하기
 beerRouter.post("/list", authMiddleware, BeerController.postBeer);
@@ -29,10 +29,14 @@ beerRouter.put("/unlike/:beerId", authMiddleware, BeerController.unlikeBeer);
 beerRouter.get("/liked", authMiddleware, BeerController.likedBeer);
 
 // 장소 제보하기
-beerRouter.post("/report-location", authMiddleware, BeerController.reportLocation);
- 
+beerRouter.post(
+  "/report-location",
+  authMiddleware,
+  BeerController.reportLocation
+);
+
 // 카테고리별 리스트 출력하기
-beerRouter.get("/categorylist", BeerController.getBeerByCategory); 
+beerRouter.get("/categorylist", BeerController.getBeerByCategory);
 
 // 유저들의 맥주 취향을 데이터베이스에 반영하기 (모든 맥주)
 beerRouter.post("/features/all", BeerController.getAllFeatures);
