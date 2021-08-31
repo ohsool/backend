@@ -6,7 +6,7 @@
 3. [개발기간 | Project Period](#개발기간--Project-Period)
 4. [팀원 | Team](#팀원--Team)
 5. [개발환경 | Development Enviornment](#개발환경--Development-Enviornment)
-6. [주요 API 기능 | Main API]
+6. [주요 API 기능 | Main API](#주요-API-기능--Main-API)
 7. [주요 라이브러리 | Main Library](#주요-라이브러리--Main-Library)
 8. [기타 | etc](#기타--etc)
 <br>
@@ -29,7 +29,7 @@ https://ohsool.com/
 <br>
 
 ## ⌚개발기간 | Project Period
-2021년 07월 23일 ~ 2021년 08월 31일
+2021.07.23 ~ 2021.09.02
 
 <br>
 
@@ -38,8 +38,8 @@ https://ohsool.com/
 <br> 이정원, 문진영, 윤송
 * **Frontend (React)** (https://github.com/ohsool/front-end)
 <br> 원동환, 장정윤
-* **Design (UI/UX)**
-<br> 문지혜, 이근호 [(Figma WireFrame)](https://www.figma.com/file/c2M6Yjvm5IjSAnsrQ41XLv/%ED%95%AD%ED%95%B499_WireFrame?node-id=0%3A1)
+* **Design (UI/UX)** [(Figma WireFrame)](https://www.figma.com/file/c2M6Yjvm5IjSAnsrQ41XLv/%ED%95%AD%ED%95%B499_WireFrame?node-id=0%3A1)
+<br> 문지혜, 이근호 
 
 
 < 팀원소개 노션페이지 링크 놓기 >
@@ -62,18 +62,35 @@ https://ohsool.com/
 
 
 
-* [**ERD (Entity Relationship Diagram)**](https://github.com/ohsool/backend.wiki.git)
-* [**Web Architecture**](https://github.com/ohsool/backend.wiki.git)
-* [**Backend Deploymenmt Enviornment**](https://github.com/ohsool/backend.wiki.git)
+* [**ERD (Entity Relationship Diagram)**](https://github.com/ohsool/backend/wiki/ERD)
+* [**Web Architecture**](https://github.com/ohsool/backend/wiki/Web-Architecture)
+* [**Backend Deploymenmt Enviornment**](https://github.com/ohsool/backend/wiki/Web-Architecture)
 
 <br>
 
-## ⚔주요 API 기능 (위키로 정리하기) | Main API
+## ⚔주요 API 기능 | Main API - [더보기](https://github.com/ohsool/backend/wiki/%EB%A9%94%EC%9D%B8-%EA%B8%B0%EB%8A%A5-API)
 1. 테스트 기반으로 사용자의 맥주 취향 보여주기
-2. 각자 다른 맥주 취향을 가진 사용자들이 남긴 평점을 맥주 종류 별로 평균을 내어 타 사용자의 취향에 맞는 맥주 추천하기 
+2. 각자 다른 맥주 취향을 가진 사용자들이 남긴 평점을 맥주 종류 별로 평균을 내어 <br> 타 사용자의 취향에 맞는 맥주 추천하기 
 3. 맥주 판매처 제보하기
 4. 맥주 및 해시태그 검색하기
 5. 비밀번호 변경?
+
+<br>
+
+## 기술적 챌린지 | Troubleshooting
+### 1. secret Key 적용
+* 지정한 클라이언트 도메인외에 외부 사용자가 API URL에 쉽게 접근하지 못하도록 프런트와 백만 알 수 있는 secretKey를 header에 추가
+* 한시간단위로 변경되어야하는 값이 실시간으로 반영될 수 있도록 생각
+* 첫번째 try:
+*  일종에 id 처럼 secertKey를 api 도메인뒤에 추가하여 구분하려 했으나 한시간으로 업데이트되어야하는 key값이 서버가 처음 시작할 때에만 업데이트되고 그 이후부터는 반영이 안됌. 서버를 한시간마다 재시작하여 key값을 업데이트하는 방법이 있지만 사용자로 하여금 안좋은 경험임, so pass
+*  두번째 try:
+*  secretKey 생성하는 기능을 미들웨어로 변경하여 api가 호출될 때마다 실기간 key값이 반영되도록 변경. 단,   백엔드 서버 안에서 이루어져야 하는 callback url에 대해서는 secret key를 검사하지 않음.
+ 
+
+
+2. 웹 서버 환경에서 Jest 테스트 코드 구동 시 발생하는 timeout 오류
+3. env 파일 & 기타 security 파일 S3와 로드 밸런서 이용해서 가져오기
+4. 무중단 배포
 
 <br>
 
@@ -111,7 +128,7 @@ npm i nodemailer
   ```
   npm install moment --save  
   ```
- 
+ ㅛㅕㅛㅕㅕㅕㅕㅕㅕㅕㅕㅕㅕㅕㅕㅕㅕㅕㅕㅕㅕㅕㅕㅕㅕㅕㅕㅕㅕㅕㅕㅕㅕㅕㅕㅕㅕㅕㅕㅕㅕㅕㅕ ㅜ`ㅠㅍㅍㅍㅍㅍㅍㅍㅍㅍㅍㅍㅍㅍㅍㅍㅍ ㅍㅍㅍㅍㅍㅍㅍㅍㅍㅍㅍ     ㅡㅜ  
 </details>
 
 <details>
@@ -157,18 +174,18 @@ npm i nodemailer
 <details>
 <summary>Git Commit Message Rule</summary>
 
-Format: [ 수정자 ] < type > commit message
- 
-feat : 새로운 기능에 대한 커밋
-fix : 버그 수정에 대한 커밋
-build : 빌드 관련 파일 수정에 대한 커밋
-chore : 그 외 자잘한 수정에 대한 커밋
-ci : CI관련 설정 수정에 대한 커밋
-cd : CD관련 설정 수정에 대한 커밋
-docs : 문서 수정에 대한 커밋
-style : 코드 스타일 혹은 포맷 등에 관한 커밋
-refactor :  코드 리팩토링에 대한 커밋
-test : 테스트 코드 수정에 대한 커밋
+### Format: [ 수정자 ] < type > commit message <
+
+* **feat** : 새로운 기능에 대한 커밋 
+* **fix** : 버그 수정에 대한 커밋 
+* **build** : 빌드 관련 파일 수정에 대한 커밋 
+* **chore** : 그 외 자잘한 수정에 대한 커밋 
+* **ci** : CI관련 설정 수정에 대한 커밋 
+* **cd** : CD관련 설정 수정에 대한 커밋 
+* **docs** : 문서 수정에 대한 커밋 
+* **style** : 코드 스타일 혹은 포맷 등에 관 한 커밋 
+* **refactor** :  코드 리팩토링에 대한 커밋 
+* **test** : 테스트 코드 수정에 대한 커밋 
 
 </details>
  
