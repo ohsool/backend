@@ -6,7 +6,7 @@
 3. [개발기간 | Project Period](#개발기간--Project-Period)
 4. [팀원 | Team](#팀원--Team)
 5. [개발환경 | Development Enviornment](#개발환경--Development-Enviornment)
-6. [주요 API 기능 | Main API]
+6. [주요 API 기능 | Main API](#주요-API-기능--Main-API)
 7. [주요 라이브러리 | Main Library](#주요-라이브러리--Main-Library)
 8. [기타 | etc](#기타--etc)
 <br>
@@ -29,17 +29,18 @@ https://ohsool.com/
 <br>
 
 ## ⌚개발기간 | Project Period
-2021년 07월 23일 ~ 2021년 08월 31일
+2021.07.23 ~ 2021.09.02
 
 <br>
 
 ## 🤸🏻‍♀️팀원 | Team
+
 * **Backend (Node.js)** 
 <br> 이정원, 문진영, 윤송
 * **Frontend (React)** (https://github.com/ohsool/front-end)
 <br> 원동환, 장정윤
-* **Design (UI/UX)**
-<br> 문지혜, 이근호 [(Figma WireFrame)](https://www.figma.com/file/c2M6Yjvm5IjSAnsrQ41XLv/%ED%95%AD%ED%95%B499_WireFrame?node-id=0%3A1)
+* **Design (UI/UX)** [(Figma WireFrame)](https://www.figma.com/file/c2M6Yjvm5IjSAnsrQ41XLv/%ED%95%AD%ED%95%B499_WireFrame?node-id=0%3A1)
+<br> 문지혜, 이근호 
 
 
 < 팀원소개 노션페이지 링크 놓기 >
@@ -64,18 +65,34 @@ https://ohsool.com/
 
 
 
-* [**ERD (Entity Relationship Diagram)**](https://github.com/ohsool/backend.wiki.git)
-* [**Web Architecture**](https://github.com/ohsool/backend.wiki.git)
-* [**Backend Deploymenmt Enviornment**](https://github.com/ohsool/backend.wiki.git)
+* [**ERD (Entity Relationship Diagram)**](https://github.com/ohsool/backend/wiki/ERD)
+* [**Web Architecture**](https://github.com/ohsool/backend/wiki/Web-Architecture)
+* [**Backend Deploymenmt Enviornment**](https://github.com/ohsool/backend/wiki/Web-Architecture)
 
 <br>
 
-## ⚔주요 API 기능 (위키로 정리하기) | Main API
-1. 테스트 기반으로 사용자의 맥주 취향 보여주기
-2. 각자 다른 맥주 취향을 가진 사용자들이 남긴 평점을 맥주 종류 별로 평균을 내어 타 사용자의 취향에 맞는 맥주 추천하기 
-3. 맥주 판매처 제보하기
+## ⚔주요 API 기능 | Main API 
+
+* [더보기](https://github.com/ohsool/backend/wiki/%EB%A9%94%EC%9D%B8-%EA%B8%B0%EB%8A%A5-API)
+
+1. 테스트 기반으로 사용자의 맥주 취향 보여주기]
+2. 각자 다른 맥주 취향을 가진 사용자들이 남긴 평점을 맥주 종류 별로 평균을 내어 <br> 타 사용자의 취향에 맞는 맥주 추천하기]
+3. 맥주 판매처 제보하기]
 4. 맥주 및 해시태그 검색하기
-5. 비밀번호 변경?
+5. 비밀번호 변경 시 임시 비밀번호 생성
+6. 회원가입 및 건의사항 제출 시 이메일 발송
+
+<br>
+
+## 🏊🏻‍♂️기술적 챌린지 | Troubleshooting
+
+* [더보기](https://github.com/ohsool/backend/wiki/%EA%B8%B0%EC%88%A0%EC%A0%81%EC%B1%8C%EB%A6%B0%EC%A7%80-%7C-%ED%8A%B8%EB%9F%AC%EB%B8%94%EC%8A%88%ED%8C%85)
+
+1. JWT Refreshtoken 적용
+2. secretKey를 이용하여 프런트 도메인외 다른 유저가 api url에 접근하지 못하도록 설정 
+3. 웹 서버 환경에서 Jest 테스트 코드 구동 시 발생하는 timeout 오류
+4. Blue/Green를 이용한 무중단 배포
+5. S3와 로드밸런서 블라블라블라
 
 <br>
 
@@ -113,7 +130,6 @@ npm i nodemailer
   ```
   npm install moment --save  
   ```
- 
 </details>
 
 <details>
@@ -159,18 +175,18 @@ npm i nodemailer
 <details>
 <summary>Git Commit Message Rule</summary>
 
-Format: [ 수정자 ] < type > commit message
- 
-feat : 새로운 기능에 대한 커밋
-fix : 버그 수정에 대한 커밋
-build : 빌드 관련 파일 수정에 대한 커밋
-chore : 그 외 자잘한 수정에 대한 커밋
-ci : CI관련 설정 수정에 대한 커밋
-cd : CD관련 설정 수정에 대한 커밋
-docs : 문서 수정에 대한 커밋
-style : 코드 스타일 혹은 포맷 등에 관한 커밋
-refactor :  코드 리팩토링에 대한 커밋
-test : 테스트 코드 수정에 대한 커밋
+### Format: [ 수정자 ] < type > commit message <
+
+* **feat** : 새로운 기능에 대한 커밋 
+* **fix** : 버그 수정에 대한 커밋 
+* **build** : 빌드 관련 파일 수정에 대한 커밋 
+* **chore** : 그 외 자잘한 수정에 대한 커밋 
+* **ci** : CI관련 설정 수정에 대한 커밋 
+* **cd** : CD관련 설정 수정에 대한 커밋 
+* **docs** : 문서 수정에 대한 커밋 
+* **style** : 코드 스타일 혹은 포맷 등에 관 한 커밋 
+* **refactor** :  코드 리팩토링에 대한 커밋 
+* **test** : 테스트 코드 수정에 대한 커밋 
 
 </details>
  

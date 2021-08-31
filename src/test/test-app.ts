@@ -1,26 +1,25 @@
 // importing packages, modules
-import express, {Request, Response, NextFunction} from 'express';
-import bodyParser from 'body-parser';
+import express, { Request, Response, NextFunction } from "express";
+import bodyParser from "body-parser";
 import passport from "passport";
 
 // importing APIs
-import { userRouter } from '../routers/user';
-import { commentRouter } from '../routers/comment';
-import { beerRouter } from '../routers/beer';
-import { beerCategoryRouter } from '../routers/beerCategory';
-import { myBeerRouter } from '../routers/myBeer';
-import { complaintRouter } from '../routers/complaint';
-import { recommendationRouter } from '../routers/recommendation';
-import { searchRouter } from '../routers/search';
-import { googlePassportConfig } from '../routers/passport_google';
-import { kakaoPassportConfig } from '../routers/passport_kakao';
+import { userRouter } from "../routers/user";
+import { commentRouter } from "../routers/comment";
+import { beerRouter } from "../routers/beer";
+import { beerCategoryRouter } from "../routers/beerCategory";
+import { myBeerRouter } from "../routers/myBeer";
+import { complaintRouter } from "../routers/complaint";
+import { recommendationRouter } from "../routers/recommendation";
+import { searchRouter } from "../routers/search";
+import { googlePassportConfig } from "../routers/passport_google";
+import { kakaoPassportConfig } from "../routers/passport_kakao";
 
 // importing DB
-import { connect } from '../schemas';
+import { connect } from "../schemas";
 
 // importing env
 import { env } from "../env";
-
 
 const app = express();
 connect();
@@ -31,7 +30,7 @@ app.use(express.json());
 app.use(bodyParser.json());
 
 // initialize google authenticate
-console.log("passport initializing...")
+console.log("passport initializing...");
 app.use(passport.initialize());
 app.use(passport.session());
 

@@ -5,7 +5,7 @@
     "title": "OHSOOL; 오늘의 술",
     "description": "당신을 위한 오늘의 맥주."
   },
-  "host": "https://ohsool.shop/",
+  "host": "ohsool.shop",
   "basePath": "/api",
   "components": {
     "securitySchemes": {
