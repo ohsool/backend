@@ -35,12 +35,16 @@ https://ohsool.com/
 
 ## 🤸🏻‍♀️팀원 | Team
 
-* **Backend (Node.js)** 
-<br> 이정원, 문진영, 윤송
-* **Frontend (React)** (https://github.com/ohsool/front-end)
-<br> 원동환, 장정윤
-* **Design (UI/UX)** [(Figma WireFrame)](https://www.figma.com/file/c2M6Yjvm5IjSAnsrQ41XLv/%ED%95%AD%ED%95%B499_WireFrame?node-id=0%3A1)
-<br> 문지혜, 이근호 
+#### Backend (Node.js)
+* 이정원 (https://wirehaired-snapper-f57.notion.site/Garden-s-notion-b7b614e91e4a4a2886f440a954c12bc1)
+* 문진영 (https://github.com/moonjinyoung)
+* 윤송 (https://www.notion.so/de0ca536d246408d980fed421e7118bc)
+#### Frontend (React) - [Frontend Github](https://github.com/ohsool/front-end)
+* 원동환 (https://github.com/endol007)
+* 장정윤 (https://velog.io/@jeongyunjang)
+#### Design (UI/UX) - [Figma WireFrame](https://www.figma.com/file/c2M6Yjvm5IjSAnsrQ41XLv/%ED%95%AD%ED%95%B499_WireFrame?node-id=0%3A1)
+* 문지혜 
+* 이근호 
 
 
 < 팀원소개 노션페이지 링크 놓기 >
@@ -75,8 +79,8 @@ https://ohsool.com/
 
 * [더보기](https://github.com/ohsool/backend/wiki/%EB%A9%94%EC%9D%B8-%EA%B8%B0%EB%8A%A5-API)
 
-1. 테스트 기반으로 사용자의 맥주 취향 보여주기]
-2. 각자 다른 맥주 취향을 가진 사용자들이 남긴 평점을 맥주 종류 별로 평균을 내어 <br> 타 사용자의 취향에 맞는 맥주 추천하기]
+1. 테스트 기반으로 사용자의 맥주 취향 보여주기
+2. 각자 다른 맥주 취향을 가진 사용자들이 남긴 평점을 맥주 종류 별로 평균을 내어 <br> 타 사용자의 취향에 맞는 맥주 추천하기
 3. 맥주 판매처 제보하기]
 4. 맥주 및 해시태그 검색하기
 5. 비밀번호 변경 시 임시 비밀번호 생성
@@ -91,8 +95,7 @@ https://ohsool.com/
 1. JWT Refreshtoken 적용
 2. secretKey를 이용하여 프런트 도메인외 다른 유저가 api url에 접근하지 못하도록 설정 
 3. 웹 서버 환경에서 Jest 테스트 코드 구동 시 발생하는 timeout 오류
-4. Blue/Green를 이용한 무중단 배포
-5. S3와 로드밸런서 블라블라블라
+4. API 인터페이스화
 
 <br>
 
@@ -175,7 +178,7 @@ npm i nodemailer
 <details>
 <summary>Git Commit Message Rule</summary>
 
-### Format: [ 수정자 ] < type > commit message <
+### Format: [ 수정자 ] < type > commit message
 
 * **feat** : 새로운 기능에 대한 커밋 
 * **fix** : 버그 수정에 대한 커밋 
