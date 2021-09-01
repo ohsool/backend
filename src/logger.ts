@@ -1,8 +1,6 @@
-import winston, { createLogger, transports, format } from "winston";
-import winstonDaily from "winston-daily-rotate-file";
-
-const logDir = "logs"; // logs 디렉토리 하위에 로그 파일 저장
-const { combine, timestamp, printf } = winston.format;
+import winston, { createLogger, transports, format } from 'winston';
+import WinstonCloudWatch from "winston-cloudwatch";
+const { combine, timestamp, printf, colorize } = winston.format;
 
 interface TransformableInfo {
   level: string;
@@ -27,39 +25,39 @@ const logger = winston.createLogger({
     logFormat
   ),
   transports: [
-    new transports.Console({
-      level: "debug",
-      format: format.combine(
-        format.label({ label: "[my-server]" }),
-        format.timestamp({
-          format: "YYYY-MM-DD HH:mm:ss",
+        new transports.Console({
+            format: format.combine(
+                format.label({ label: '[my-server]' }),
+                format.timestamp({
+                    format: 'YYYY-MM-DD HH:mm:ss'
+                }),
+                format.colorize(),
+                format.printf((info: TransformableInfo) => `${info.timestamp} - ${info.level}: ${info.label} ${info.message}`),
+            )
         }),
-        format.colorize(),
-        format.printf(
-          (info: TransformableInfo) =>
-            `${info.timestamp} - ${info.level}: ${info.label} ${info.message}`
-        )
-      ),
-    }),
-    // info 레벨 로그를 저장할 파일 설정
-    new winstonDaily({
-      level: "info",
-      datePattern: "YYYY-MM-DD",
-      dirname: logDir,
-      filename: `%DATE%.log`,
-      maxFiles: 30, // 30일치 로그 파일 저장
-      zippedArchive: true,
-    }),
-    // error 레벨 로그를 저장할 파일 설정
-    new winstonDaily({
-      level: "error",
-      datePattern: "YYYY-MM-DD",
-      dirname: logDir,
-      filename: `%DATE%.error.log`,
-      maxFiles: 30,
-      zippedArchive: true,
-    }),
-  ],
+    ],
 });
+
+if (process.env.NODE_ENV === 'development') {
+    const cloudwatchConfig = {
+        name: String(process.env.CLOUDWATCH_GROUP_NAME),
+        logGroupName: process.env.CLOUDWATCH_GROUP_NAME,
+        logStreamName: `${process.env.CLOUDWATCH_GROUP_NAME}-${process.env.NODE_ENV}`,
+        awsAccessKeyId: process.env.CLOUDWATCH_ACCESS_KEY,
+        awsSecretKey: process.env.CLOUDWATCH_SECRET_ACCESS_KEY,
+        awsRegion: process.env.CLOUDWATCH_REGION,
+        createLogGroup: true,
+        createLogStream: true,
+    }
+    logger.add(new WinstonCloudWatch(cloudwatchConfig))
+}
+
+
+export class LoggerStream {
+    write(message: string) {
+        logger.info(message.substring(0, message.lastIndexOf('\n')));
+    }
+}
+
 
 export { logger };

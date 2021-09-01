@@ -46,6 +46,7 @@ import { env } from "./env";
 
 // importing logger
 import { logger } from "./logger";
+import morgan from "morgan";
 
 // get secretKeyMiddleware
 import { secretKeyMiddleware } from "./middlewares/secretkey-middleware";
@@ -53,7 +54,7 @@ import { secretKeyMiddleware } from "./middlewares/secretkey-middleware";
 const port = env.port;
 const app = express();
 connect();
-console.log("mongodb connecting success");
+logger.info("mongodb connecting success");
 
 const parseForm = bodyParser.urlencoded({ extended: false });
 
@@ -66,13 +67,14 @@ app.set("views", __dirname + "/views");
 app.set("view engine", "ejs");
 
 // initialize google authenticate
-console.log("passport initializing...");
+logger.info("passport initializing...")
+
 app.use(passport.initialize());
 app.use(passport.session());
 
 googlePassportConfig();
 kakaoPassportConfig();
-console.log("passport initializing done");
+logger.info("passport initializing done");
 
 // setting CORS
 const allowedOrigins = [
@@ -132,14 +134,18 @@ app.get("/", (req, res) => {
 
 import { secretAPIkey } from "./ssl/secretAPI";
 const secretKey = secretAPIkey();
-console.log("secret key now: ", secretKey);
+logger.info(`secret key now:  ${secretKey}`);
 
 app.use(`/api/user`, [userRouter]);
 app.use("/swagger", swaggerUi.serve, swaggerUi.setup(swaggerFile));
 app.use(secretKeyMiddleware);
 app.get("/search", (req, res) => {
-  res.render("index");
+    res.render("index");
 });
+
+import {LoggerStream} from "./logger";
+app.use(morgan( 'combined', {stream : new LoggerStream()})); // morgan 로그 설정
+
 
 // APIs
 // app.use(`/api/user`, [userRouter]);
@@ -155,7 +161,7 @@ app.use(`/api/search`, [searchRouter]);
 app.use(`/api/crawling/beercategory`, [beerCategoryCrawlingRouter]);
 app.use(`/api/crawling/beer`, [beerCrawlingRouter]);
 
-console.log("mode:", env.modeNow);
+logger.info(`mode: ${env.modeNow}`);
 
 if (env.modeNow == "development" || env.modeNow == "production") {
   // on server
