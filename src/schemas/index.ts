@@ -1,8 +1,9 @@
 import mongoose from "mongoose";
 import { env } from "../env";
+import { logger } from "../logger";
 
 let url = "mongodb://localhost:27017/ohsool";
-console.log("DB mode:", env.modeNow);
+logger.info(`DB mode: ${env.modeNow}`);
 
 if (env.modeNow == "development" || env.modeNow == "production") { // on server
   url = env.atlas_url;
@@ -27,10 +28,10 @@ export const connect = () => {
   
   database = mongoose.connection;
   database.once("open", async () => {
-    console.log('Connected to database');
+    logger.info('Connected to database');
   })
   database.on("error", async () => {
-    console.log('Error connecting to database')
+    logger.error('Error connecting to database')
   });
 }
 
@@ -40,5 +41,5 @@ export const disconnect = async () => {
   }
   // await database.close()
   await mongoose.disconnect();
-  console.log('Database disconnected')
+  logger.info('Database disconnected')
 };
