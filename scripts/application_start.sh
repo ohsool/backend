@@ -32,6 +32,9 @@ echo "npm installed"
 npm install -g pm2
 echo "pm2 installed"
 
+# JS Heap 메모리 확장하기
+export NODE_OPTIONS=--max_old_space_size=4096
+
 # typescript를 javascript 로 complie 하기
 npm run build
 
