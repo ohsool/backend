@@ -3,14 +3,14 @@ import WinstonCloudWatch from "winston-cloudwatch";
 const { combine, timestamp, printf, colorize } = winston.format;
 
 interface TransformableInfo {
-    level: string;
-    message: string;
-    [key: string]: any;
+  level: string;
+  message: string;
+  [key: string]: any;
 }
 
 // Define log format
-const logFormat = printf(info => {
-    return `${info.timestamp} ${info.level}: ${info.message}`;
+const logFormat = printf((info) => {
+  return `${info.timestamp} ${info.level}: ${info.message}`;
 });
 
 /*
@@ -18,13 +18,13 @@ const logFormat = printf(info => {
  * error: 0, warn: 1, info: 2, http: 3, verbose: 4, debug: 5, silly: 6
  */
 const logger = winston.createLogger({
-    format: combine(
-        timestamp({
-            format: 'YYYY-MM-DD HH:mm:ss',
-        }),
-        logFormat,
-    ),
-    transports: [
+  format: combine(
+    timestamp({
+      format: "YYYY-MM-DD HH:mm:ss",
+    }),
+    logFormat
+  ),
+  transports: [
         new transports.Console({
             format: format.combine(
                 format.label({ label: '[my-server]' }),
@@ -51,7 +51,7 @@ if (process.env.NODE_ENV === 'development') {
     }
     logger.add(new WinstonCloudWatch(cloudwatchConfig))
 }
-console.log(`${process.env.CLOUDWATCH_GROUP_NAME}-${process.env.NODE_ENV}`)
+
 
 export class LoggerStream {
     write(message: string) {

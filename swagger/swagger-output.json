@@ -5,8 +5,8 @@
     "title": "OHSOOL; 오늘의 술",
     "description": "당신을 위한 오늘의 맥주."
   },
-  "host": "13.125.162.255",
-  "basePath": "/",
+  "host": "ohsool.shop",
+  "basePath": "/api",
   "components": {
     "securitySchemes": {
       "Bearer": {
@@ -16,27 +16,437 @@
       }
     }
   },
-  
   "securityDefinitions": {
     "Bearer": {
       "type": "apiKey",
       "name": "Authorization",
-      "in":"header",
+      "in": "header",
       "description": "Bearer <Token> 을 입력해주세요."
+    },
+    "secretKey": {
+      "type": "apiKey",
+      "name": "secretKey",
+      "in": "header",
+      "description": "secretKey"
     }
   },
-  "tags": [],
+  "security": [{
+    "Bearer": [],
+    "secretKey": []
+  }], 
+  "tags": [
+    {
+      "name": "USER",
+      "description": ""
+    },
+    {
+      "name": "BEER",
+      "description": ""
+    },
+    {
+      "name": "MY BEER",
+      "description": ""
+    },
+    {
+      "name": "BEER CATEGORY",
+      "description": ""
+    },
+    {
+      "name": "SEARCH",
+      "description": ""
+    }
+  ],
   "schemes": [
     "http",
     "https"
   ],
-  "consumes": ["application/json"],
-  "produces": ["application/json"],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
   "paths": {
-    "/api/user": {
+   "/beer/list/all": {
+      "get": {
+        "tags": ["BEER"],
+        "description": "",
+        "parameters": [],
+        "responses": {
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/beer/list/all/page": {
+      "get": {
+        "tags": ["BEER"],
+        "description": "",
+        "parameters": [
+          {
+            "name": "pageNo",
+            "in": "query",
+            "type": "number",
+            "example": 0
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "type": "string",
+            "example": "rate"
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/list": {
       "post": {
-        "tags": ["User"],
-        "description": "회원가입",
+        "tags": ["BEER"],
+        "description": "",
+        "parameters": [
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name_korean": {
+                  "type": "String",
+                  "example": "beer name"
+                },
+                "name_english": {
+                  "type": "String",
+                  "example": "beer name"
+                },
+                "image": {
+                  "type": "String",
+                  "example": "beer image"
+                },
+                "degree": {
+                  "type": "number",
+                  "example": "beer 도수"
+                },
+                "country": {
+                  "type": "string",
+                  "example": "beer 원산지"
+                },
+                "isDistant": {
+                  "type": "boolean",
+                  "example": "true",
+                  "description": "장거리: true, 단거리: false"
+                },
+                "categoryId": {
+                  "type": "mongoose.Types.ObjectId",
+                  "example": "61205555223b033dac9f1fa0"
+                },
+                "hashtag": {
+                  "type": "array",
+                  "example": "[]"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "406": {
+            "description": "Not Acceptable"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "418": {
+            "description": "I'm a teapot"
+          }
+        }
+      }
+    },
+    "/list/{beerId}": {
+      "get": {
+        "tags": ["BEER"],
+        "description": "",
+        "parameters": [
+          {
+            "name": "beerId",
+            "in": "path",
+            "required": true,
+            "type": "mongoose.Types.ObjectId",
+            "example": "61233daac692c84e5cc4d151"
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request"
+          },
+          "406": {
+            "description": "Not Acceptable"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["BEER"],
+        "description": "",
+        "parameters": [
+          {
+            "name": "beerId",
+            "in": "path",
+            "required": true,
+            "type": "mongoose.Types.ObjectId",
+            "example": ""
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "418": {
+            "description": "I'm a teapot"
+          }
+        }
+      }
+    },
+    "/beer/like/{beerId}": {
+      "put": {
+        "tags": ["BEER"],
+        "description": "",
+        "parameters": [
+          {
+            "name": "beerId",
+            "in": "path",
+            "required": true,
+            "type": "mongoose.Types.ObjectId",
+            "example": "61233daac692c84e5cc4d151"
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "418": {
+            "description": "I'm a teapot"
+          }
+        }
+      }
+    },
+    "/beer/unlike/{beerId}": {
+      "put": {
+        "tags": ["BEER"],
+        "description": "",
+        "parameters": [
+          {
+            "name": "beerId",
+            "in": "path",
+            "required": true,
+            "type": "mongoose.Types.ObjectId",
+            "example": "61233daac692c84e5cc4d151"
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "418": {
+            "description": "I'm a teapot"
+          }
+        }
+      }
+    },
+    "/beer/liked": {
+      "get": {
+        "tags": ["BEER"],
+        "description": "",
+        "parameters": [],
+        "responses": {
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "406": {
+            "description": "Not Acceptable"
+          },
+          "418": {
+            "description": "I'm a teapot"
+          }
+        }
+      }
+    },
+    "/beer/report-location": {
+      "post": {
+        "tags": ["BEER"],
+        "description": "",
+        "parameters": [
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "beerId": {
+                  "type": "mongoose.Types.ObjectId",
+                  "example": "61233daac692c84e5cc4d151"
+                },
+                "name": {
+                  "type": "string",
+                  "example": "우리집"
+                },
+                "address": {
+                  "type": "string",
+                  "example": "우리집"
+                },
+                "url": {
+                  "type": "string",
+                  "example": ""
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "406": {
+            "description": "Not Acceptable"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "418": {
+            "description": "I'm a teapot"
+          }
+        }
+      }
+    },
+    "/beer/categorylist": {
+      "get": {
+        "tags": ["BEER"],
+        "description": "",
+        "parameters": [
+          {
+            "name": "categoryId",
+            "in": "query",
+            "type": "mongoose.Types.ObjectId",
+            "example": "61205556223b033dac9f1fa2"
+          },
+          {
+            "name": "pageNo",
+            "in": "query",
+            "type": "number",
+            "example": 0
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "type": "string",
+            "example": "rate"
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request"
+          },
+          "406": {
+            "description": "Not Acceptable"
+          }
+        }
+      }
+    },
+    "/beer/features/all": {
+      "post": {
+        "tags": ["BEER"],
+        "description": "",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/beer/features/{beerId}": {
+      "post": {
+        "tags": ["BEER"],
+        "description": "",
+        "parameters": [
+          {
+            "name": "beerId",
+            "in": "path",
+            "required": true,
+            "type": "mongoose.Types.ObjectId",
+            "example": "61233daac692c84e5cc4d151"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "406": {
+            "description": "Not Acceptable"
+          },
+          "409": {
+            "description": "Conflict"
+          }
+        }
+      }
+    },
+    "/beerCategory/": {
+      "post": {
+        "tags": ["BEER CATEGORY"],
+        "description": "비어 카테고리 등록",
         "parameters": [
           {
             "name": "obj",
@@ -50,15 +460,15 @@
                 },
                 "nickname": {
                   "type": "string",
-                  "example": "test닉네임"
+                  "example": "닉네임"
                 },
                 "password": {
                   "type": "string",
-                  "example": "password123"
+                  "example": "password"
                 },
                 "confirmPassword": {
                   "type": "string",
-                  "example": "password123"
+                  "example": "password"
                 }
               }
             }
@@ -67,27 +477,615 @@
         "responses": {
           "201": {
             "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "409": {
+            "description": "Conflict"
           }
         }
       },
       "delete": {
-        "tags": ["User"],
-        "description": "유저 탈퇴 [로그인 필요]",
-        "security": [{
-          "Bearer": []
-        }],
+        "tags": [],
+        "description": "",
         "parameters": [],
         "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
           "401": {
             "description": "Unauthorized"
+          },
+          "406": {
+            "description": "Not Acceptable"
+          },
+          "418": {
+            "description": "I'm a teapot"
           }
         }
       }
     },
-    "/api/user/auth": {
+    "/beerCategory/preferencecount": {
+      "get": {
+        "tags": ["BEER CATEGORY"],
+        "description": "",
+        "parameters": [],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/beerCategory/{beerCategoryId}": {
+      "get": {
+        "tags": ["BEER CATEGORY"],
+        "description": "",
+        "parameters": [
+          {
+            "name": "beerCategoryId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request"
+          },
+          "406": {
+            "description": "Not Acceptable"
+          }
+        }
+      }
+    },
+    "/beerCategory/result": {
       "post": {
-        "tags": ["User"],
-        "description": "로그인",
+        "tags": ["BEER CATEGORY"],
+        "description": "",
+        "parameters": [
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "406": {
+            "description": "Not Acceptable"
+          }
+        }
+      }
+    },
+    "/myBeer/{beerId}": {
+      "post": {
+        "tags": ["MY BEER"],
+        "description": "",
+        "parameters": [
+          {
+            "name": "beerId",
+            "in": "path",
+            "required": true,
+            "type": "mongoose.Types.ObjectId",
+            "example": "61233daac692c84e5cc4d151"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "myFeatures": {
+                  "type": "array",
+                  "example": {
+                    "bitter": 2, 
+                    "crispy": 4, 
+                    "flavor": 5, 
+                    "sweet": 3, 
+                    "nutty": 5
+                  }
+                },
+                "location": {
+                  "type": "string",
+                  "example": "우리집"
+                },
+                "rate": {
+                  "type": "number",
+                  "example": 3
+                },
+                "review": {
+                  "type": "string",
+                  "example": "마싯따!"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "406": {
+            "description": "Not Acceptable"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "418": {
+            "description": "I'm a teapot"
+          }
+        }
+      }
+    },
+    "/feedback": {
+      "post": {
+        "tags": ["COMPLAINT"],
+        "description": "슬랙으로 불편사항 보내기",
+        "parameters": [
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "complaintId": {
+                  "example": "any"
+                },
+                "feedback": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request"
+          },
+          "406": {
+            "description": "Not Acceptable"
+          }
+        }
+      }
+    },
+    "/myBeer/all": {
+      "get": {
+        "tags": ["MY BEER"],
+        "description": "",
+        "parameters": [
+          {
+            "name": "sort",
+            "in": "query",
+            "type": "string",
+            "example": "rate"
+          },
+          {
+            "name": "pageNo",
+            "in": "query",
+            "type": "number",
+            "example": 0
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/myBeer/my": {
+      "get": {
+        "tags": ["MY BEER"],
+        "description": "",
+        "parameters": [
+          {
+            "name": "sort",
+            "in": "query",
+            "type": "string",
+            "example": "rate"
+          },
+          {
+            "name": "pageNo",
+            "in": "query",
+            "type": "number",
+            "example": 0
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "418": {
+            "description": "I'm a teapot"
+          }
+        }
+      }
+    },
+    "/myBeer/others/{userId}": {
+      "get": {
+        "tags": ["MY BEER"],
+        "description": "",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "type": "mongoose.Types.ObjectId",
+            "example": "610e0d6e25c88b798668a937"
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "type": "string",
+            "description": "rate, like_count, date",
+            "example": "rate"
+          },
+          {
+            "name": "pageNo",
+            "in": "query",
+            "type": "number",
+            "example": 0
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "type": "string",
+            "description": "beer 또는 liked",
+            "example": "beer"
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request"
+          },
+          "406": {
+            "description": "Not Acceptable"
+          }
+        }
+      }
+    },
+    "/myBeer/length/{userId}": {
+      "get": {
+        "tags": ["MY BEER"],
+        "description": "",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "type": "mongoose.Types.ObjectId",
+            "example": "610e0d6e25c88b798668a937"
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request"
+          },
+          "406": {
+            "description": "Not Acceptable"
+          }
+        }
+      }
+    },
+    "/myBeer/beer": {
+      "get": {
+        "tags": ["MY BEER"],
+        "description": "",
+        "parameters": [
+          {
+            "name": "beerId",
+            "in": "query",
+            "type": "mongoose.Types.ObjectId",
+            "example": "61233daac692c84e5cc4d151"
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "type": "string",
+            "description": "rate, like_count, date",
+            "example": "rate"
+          },
+          {
+            "name": "pageNo",
+            "in": "query",
+            "type": "number",
+            "example": 0
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request"
+          },
+          "406": {
+            "description": "Not Acceptable"
+          }
+        }
+      }
+    },
+    "/myBeer/{myBeerId}": {
+      "get": {
+        "tags": ["MY BEER"],
+        "description": "",
+        "parameters": [
+          {
+            "name": "myBeerId",
+            "in": "path",
+            "required": true,
+            "type": "mongoose.Types.ObjectId",
+            "example": "612609dab00c5b2a06257254"
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request"
+          },
+          "406": {
+            "description": "Not Acceptable"
+          }
+        }
+      },
+      "put": {
+        "tags": ["MY BEER"],
+        "description": "",
+        "parameters": [
+          {
+            "name": "myBeerId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "example": "612609dab00c5b2a06257254"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "myFeatures": {
+                  "type": "array",
+                  "example": {
+                    "bitter": 2, 
+                    "crispy": 4, 
+                    "flavor": 5, 
+                    "sweet": 3, 
+                    "nutty": 5
+                  }
+                },
+                "location": {
+                  "type": "string",
+                  "example": "경기"
+                },
+                "rate": {
+                  "type": "number",
+                  "example": 3
+                },
+                "review": {
+                  "type": "string",
+                  "example": "옿키 낫배드"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "406": {
+            "description": "Not Acceptable"
+          },
+          "418": {
+            "description": "I'm a teapot"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["MY BEER"],
+        "description": "맥주도감 삭제!",
+        "parameters": [
+          {
+            "name": "myBeerId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "example": ""
+            
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "406": {
+            "description": "Not Acceptable"
+          },
+          "418": {
+            "description": "I'm a teapot"
+          }
+        }
+      }
+    },
+    "/myBeer/like/{myBeerId}": {
+      "put": {
+        "tags": ["MY BEER"],
+        "description": "맥주도감 좋아요",
+        "parameters": [
+          {
+            "name": "myBeerId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "example": "612609dab00c5b2a06257254"
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "418": {
+            "description": "I'm a teapot"
+          }
+        }
+      }
+    },
+    "/myBeer/unlike/{myBeerId}": {
+      "put": {
+        "tags": ["MY BEER"],
+        "description": "맥주 도감 좋아요 해제",
+        "parameters": [
+          {
+            "name": "myBeerId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "example": "612609dab00c5b2a06257254"
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "418": {
+            "description": "I'm a teapot"
+          }
+        }
+      }
+    },
+    "/feedback/success": {
+      "post": {
+        "tags": [],
+        "description": "",
+        "parameters": [
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "recommendationId": {
+                  "example": "any"
+                },
+                "beerId": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request"
+          },
+          "406": {
+            "description": "Not Acceptable"
+          }
+        }
+      }
+    },
+    "/deep": {
+      "get": {
+        "tags": ["SEARCH"],
+        "description": "검색하기",
+        "parameters": [
+          {
+            "name": "word",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "hashtag",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/hashtag": {
+      "get": {
+        "tags": ["SEARCH"],
+        "description": "해시태그 검색",
+        "parameters": [
+          {
+            "name": "hashtag",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/email": {
+      "post": {
+        "tags": [],
+        "description": "",
         "parameters": [
           {
             "name": "obj",
@@ -96,78 +1094,26 @@
               "type": "object",
               "properties": {
                 "email": {
-                  "type": "string",
-                  "example": "test@test.com"
-                },
-                "password": {
-                  "type": "string",
-                  "example": "password123"
+                  "example": "any"
                 }
               }
             }
           }
         ],
         "responses": {
-          "401": {
-            "description": "Unauthorized"
+          "205": {
+            "description": "Reset Content"
+          },
+          "400": {
+            "description": "Bad Request"
           }
         }
       }
     },
-    "/api/user/me": {
-      "get": {
-        "tags": ["User"],
-        "description": "로그인 성공 확인 [로그인 필요]",
-        "security": [{
-          "Bearer": []
-        }],
-        "parameters": [],
-        "responses": {
-          "401": {
-            "description": "Unauthorized"
-          }
-        }
-      }
-    },
-    "/google": {
-      "get": {
-        "tags": ["User"],
-        "description": "구글 로그인",
-        "parameters": [],
-        "responses": {}
-      }
-    },
-    "/google/callback": {
-      "get": {
-        "tags": ["User"],
-        "description": "구글 로그인",
-        "parameters": [],
-        "responses": {}
-      }
-    },
-    "/kakao": {
-      "get": {
-        "tags": ["User"],
-        "description": "카카오 로그인",
-        "parameters": [],
-        "responses": {}
-      }
-    },
-    "/kakao/callback": {
-      "get": {
-        "tags": ["User"],
-        "description": "카카오 로그인",
-        "parameters": [],
-        "responses": {}
-      }
-    },
-    "/api/mybeer": {
+    "/nickname": {
       "post": {
-        "tags": ["My Beer"],
-        "description": "myBeer(리뷰) 작성하기 [로그인 필요]",
-        "security": [{
-          "Bearer": []
-        }],
+        "tags": [],
+        "description": "",
         "parameters": [
           {
             "name": "obj",
@@ -175,192 +1121,272 @@
             "schema": {
               "type": "object",
               "properties": {
-                "beer": {
-                  "type": "string",
-                  "example": "..."
-                },
-                "myFeatures": {
-                  "type": "Object",
-                  "description": "시음 노트",
-                  "example": {
-                      "bitter": 1,
-                      "crispy": 1,
-                      "flavor": 1,
-                      "sweet": 1,
-                      "nutty": 1
-                   }
-                },
-                "location": {
-                  "type": "string",
-                  "example": "GS 편의점 신림점"
-                },
-                "rate": {
-                  "type": "number",
-                  "example": 3
-                },
-                "review": {
-                  "type": "string",
-                  "example": "테스트 리뷰"
+                "nickname": {
+                  "example": "any"
                 }
               }
             }
           }
         ],
-        "responses": {}
-      },
-      "get": {
-        "tags": ["My Beer"],
-        "description": "특정 인덱스의 myBeer(리뷰) 가져오기 [로그인 필요]",
-        "security": [{
-          "Bearer": []
-        }],
-        "parameters": [
-          {
-            "name": "myBeerId",
-            "in": "path",
-            "description": "myBeer 인덱스",
-            "required": true,
-            "type": "objectId"
-          }
-        ],
         "responses": {
-          "401": {
-            "description": "Unauthorized"
-          }
-        }
-      }, 
-      "delete": {
-        "tags": ["My Beer"],
-        "description": "특정 인덱스의 myBeer 삭제하기 [로그인 필요]",
-        "security": [{
-          "Bearer": []
-        }],
-        "parameters": [
-          {
-            "name": "myBeerId",
-            "in": "path",
-            "description": "myBeer 인덱스",
-            "required": true,
-            "type": "objectId"
-          }
-        ],
-        "responses": {
+          "205": {
+            "description": "Reset Content"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
           "401": {
             "description": "Unauthorized"
           }
         }
       },
       "put": {
-        "tags": ["My Beer"],
-        "description": "특정 인덱스의 myBeer(리뷰) 수정하기 [로그인 필요]",
-        "security": [{
-          "Bearer": []
-        }],
+        "tags": [],
+        "description": "",
         "parameters": [
           {
-            "name": "myBeerId",
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "nickname": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "205": {
+            "description": "Reset Content"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "418": {
+            "description": "I'm a teapot"
+          }
+        }
+      }
+    },
+    "/auth": {
+      "post": {
+        "tags": [],
+        "description": "",
+        "parameters": [
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "example": "any"
+                },
+                "password": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "205": {
+            "description": "Reset Content"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/logout": {
+      "post": {
+        "tags": [],
+        "description": "",
+        "parameters": [],
+        "responses": {
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "406": {
+            "description": "Not Acceptable"
+          },
+          "418": {
+            "description": "I'm a teapot"
+          }
+        }
+      }
+    },
+    "/me": {
+      "get": {
+        "tags": [],
+        "description": "",
+        "parameters": [],
+        "responses": {
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "418": {
+            "description": "I'm a teapot"
+          }
+        }
+      }
+    },
+    "/google": {
+      "get": {
+        "tags": [],
+        "description": "",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/google/callback": {
+      "get": {
+        "tags": [],
+        "description": "",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/kakao": {
+      "get": {
+        "tags": [],
+        "description": "",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/kakao/callback": {
+      "get": {
+        "tags": [],
+        "description": "",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/test": {
+      "post": {
+        "tags": [],
+        "description": "",
+        "parameters": [
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "userId": {
+                  "example": "any"
+                },
+                "result": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "406": {
+            "description": "Not Acceptable"
+          }
+        }
+      }
+    },
+    "/socialuser": {
+      "post": {
+        "tags": [],
+        "description": "",
+        "parameters": [
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "example": "any"
+                },
+                "nickname": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "205": {
+            "description": "Reset Content"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "418": {
+            "description": "I'm a teapot"
+          }
+        }
+      }
+    },
+    "/user-info/{userId}": {
+      "get": {
+        "tags": [],
+        "description": "",
+        "parameters": [
+          {
+            "name": "userId",
             "in": "path",
-            "description": "myBeer 인덱스",
             "required": true,
             "type": "string"
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request"
           },
-          {
-            "name": "obj",
-            "in": "body",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "beer": {
-                  "type": "string",
-                  "example": "..."
-                },
-                "myFeatures": {
-                  "type": "Object",
-                  "description": "시음 노트",
-                  "example": {
-                      "bitter": 1,
-                      "crispy": 1,
-                      "flavor": 1,
-                      "sweet": 1,
-                      "nutty": 1
-                   }
-                },
-                "location": {
-                  "type": "string",
-                  "example": "GS 편의점 신림점"
-                },
-                "rate": {
-                  "type": "number",
-                  "example": 3
-                },
-                "review": {
-                  "type": "string",
-                  "example": "테스트 리뷰"
-                }
-              }
-            }
-          }
-        ],
-        "responses": {
           "401": {
             "description": "Unauthorized"
+          },
+          "409": {
+            "description": "Conflict"
           }
         }
       }
     },
-    "/api/myBeer/all": {
-      "get": {
-        "tags": ["My Beer"],
-        "description": "전체 맥주 리뷰 가져오기 [로그인 필요]",
-        "security": [{
-          "Bearer": []
-        }],
-        "parameters": [],
-        "responses": {
-          "401": {
-            "description": "Unauthorized"
-          }
-        }
-      }
-    },
-    "/api/myBeer/my": {
-      "get": {
-        "tags": ["My Beer"],
-        "description": "현재 유저가 작성한 맥주 리뷰 가져오기 [로그인 필요]",
-        "security": [{
-          "Bearer": []
-        }],
-        "parameters": [],
-        "responses": {
-          "401": {
-            "description": "Unauthorized"
-          }
-        }
-      }
-    },
-    "/api/myBeer/review": {
-      "get": {
-        "tags": ["My Beer"],
-        "description": "특정 맥주의 전체 리뷰 확인하기",
-        "parameters": [
-          {
-            "name": "beer",
-            "in": "path",
-            "description": "맥주 상품의 인덱스",
-            "required": true,
-            "type": "objectId"
-          }
-        ],
-        "responses": {}
-      }
-    },
-    "/api/beer": {
-      "post": {
-        "tags": ["Beer"],
-        "description": "맥주 작성하기 [관리자 사용]",
-        "security": [{
-          "Bearer": []
-        }],
+    "/description": {
+      "put": {
+        "tags": [],
+        "description": "",
         "parameters": [
           {
             "name": "obj",
@@ -368,198 +1394,242 @@
             "schema": {
               "type": "object",
               "properties": {
-                "name_korean": {
-                  "type": "string",
-                  "example": "곰표 맥주"
-                },
-                "name_english": {
-                  "type": "string",
-                  "example": "Gompyo"
-                },
-                "image": {
-                  "type": "string",
-                  "example": "..."
-                },
-                "degree": {
-                  "type": "number",
-                  "description": "맥주 도수",
-                  "example": 5
-                },
-                "categoryId": {
-                  "type": "objectId",
-                  "description": "맥주 카테고리 인덱스",
-                  "example": "..."
-                },
-                "hashtag": {
-                  "type": "array",
-                  "example": ["달달함","대한민국"]
-                },
-                "features": {
-                  "type": "object",
-                  "description": "맥주 특징",
-                  "example": {
-                    "bitter": 1,
-                    "crispy": 1,
-                    "flavor": 1,
-                    "sweet": 1,
-                    "nutty": 1
-                  }
-                }
-              }
-            }
-          }
-        ],
-        "responses": {
-          "400": {
-            "description": "Bad Request"
-          }
-        }
-      },
-      "get": {
-        "tags": ["Beer"],
-        "description": "맥주 가져오기",
-        "parameters": [
-          {
-            "name": "beerId",
-            "in": "path",
-            "description": "전체 갖고올 시 Param 값 X ,특정 맥주 가져올 때만 param O",
-            "type": "objectId"
-          }
-        ],
-        "responses": {
-          "400": {
-            "description": "Bad Request"
-          }
-        }
-      },
-      "delete": {
-        "tags": ["Beer"],
-        "description": "맥주 삭제하기 [관리자 사용]",
-        "security": [{
-          "Bearer": []
-        }],
-        "parameters": [
-          {
-            "name": "beerId",
-            "in": "path",
-            "required": true,
-            "type": "objectId"
-          }
-        ],
-        "responses": {
-          "400": {
-            "description": "Bad Request"
-          }
-        }
-      }
-    },
-    "/api/beerCategory": {
-      "post": {
-        "tags": ["Beer Category"],
-        "description": "맥주 카테고리 작성하기 [관리자 사용]",
-        "security": [{
-          "Bearer": []
-        }],
-        "parameters": [
-          {
-            "name": "obj",
-            "in": "body",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "name": {
-                  "type": "string",
-                  "example": "IPA"
-                },
-                "image": {
-                  "type": "string",
-                  "example": "..."
-                },
-                "features": {
-                  "type": "object",
-                  "example": "..."
-                }
-              }
-            }
-          }
-        ],
-        "responses": {
-          "400": {
-            "description": "Bad Request"
-          }
-        }
-      },
-      "get": {
-        "tags": ["Beer Category"],
-        "description": "맥주 카테고리 가져오기",
-        "parameters": [
-          {
-            "name": "beerCategoryId",
-            "in": "path",
-            "description": "전체 갖고올 시 Param 값 X ,특정 카테고리 가져올 때만 param O",
-            "type": "objectId"
-          }
-        ],
-        "responses": {
-          "400": {
-            "description": "Bad Request"
-          }
-        }
-      }
-    },
-    "/api/recommendation": {
-      "post": {
-        "tags": ["Slack"],
-        "description": "사용자의 맥주 추천 [로그인 필요]",
-        "security": [{
-          "Bearer": []
-        }],
-        "parameters": [
-          {
-            "name": "obj",
-            "in": "body",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "beer": {
-                  "type": "string",
-                  "example": "추천하는 맥주 아름"
-                },
                 "description": {
-                  "type": "string",
-                  "example": "맥주 설명"
-                },
-                "location": {
-                  "type": "string",
-                  "example": "맥주 판매처"
+                  "example": "any"
                 }
               }
             }
           }
         ],
-        "responses": {}
-      }
-    },
-    "/api/complaint": {
-      "post": {
-        "tags": ["Slack"],
-        "description": "사용자 건의 [로그인 필요]",
-        "security": [{
-          "Bearer": []
-        }],
-        "properties": [
-        {
-          "title": {
-            "type": "string",
-            "example": "개선"
+        "responses": {
+          "400": {
+            "description": "Bad Request"
           },
-          "description": {
-            "type": "string",
-            "example": "개선 내용"
+          "401": {
+            "description": "Unauthorized"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "418": {
+            "description": "I'm a teapot"
           }
         }
-      ],
-        "responses": {}
+      }
+    },
+    "/password/reset": {
+      "put": {
+        "tags": [],
+        "description": "",
+        "parameters": [
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "406": {
+            "description": "Not Acceptable"
+          }
+        }
+      }
+    },
+    "/password": {
+      "put": {
+        "tags": [],
+        "description": "",
+        "parameters": [
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "password": {
+                  "example": "any"
+                },
+                "new_password": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "406": {
+            "description": "Not Acceptable"
+          },
+          "418": {
+            "description": "I'm a teapot"
+          }
+        }
+      }
+    },
+    "/public/public": {
+      "put": {
+        "tags": [],
+        "description": "",
+        "parameters": [],
+        "responses": {
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "406": {
+            "description": "Not Acceptable"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "418": {
+            "description": "I'm a teapot"
+          }
+        }
+      }
+    },
+    "/public/private": {
+      "put": {
+        "tags": [],
+        "description": "",
+        "parameters": [],
+        "responses": {
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "406": {
+            "description": "Not Acceptable"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "418": {
+            "description": "I'm a teapot"
+          }
+        }
+      }
+    },
+    "/follow/follow": {
+      "put": {
+        "tags": [],
+        "description": "",
+        "parameters": [
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "userId": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "406": {
+            "description": "Not Acceptable"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "418": {
+            "description": "I'm a teapot"
+          }
+        }
+      }
+    },
+    "/follow/unfollow": {
+      "put": {
+        "tags": [],
+        "description": "",
+        "parameters": [
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "userId": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "406": {
+            "description": "Not Acceptable"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "418": {
+            "description": "I'm a teapot"
+          }
+        }
+      }
+    },
+    "/follow/followers/{userId}": {
+      "get": {
+        "tags": [],
+        "description": "",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "406": {
+            "description": "Not Acceptable"
+          }
+        }
       }
     }
   },

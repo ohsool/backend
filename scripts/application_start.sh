@@ -13,6 +13,9 @@ aws s3 sync s3://ohsool-security/ssl/ /home/ec2-user/ohsool/src/ssl
 aws s3 sync s3://ohsool-security/ssl/ /home/ec2-user/ohsool/dist/ssl
 aws s3 sync s3://ohsool-security/config/ /home/ec2-user/ohsool/config
 
+# html 
+aws s3 sync s3://ohsool-security/emailHtml/ /home/ec2-user/ohsool/dist/email
+
 # EC2 작업 파일로 이동
 cd /home/ec2-user/ohsool
 
