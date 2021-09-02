@@ -52,7 +52,7 @@ const postMyBeer = async (req: Request, res: Response) => {
   }
 
   const userId = res.locals.user._id;
-  const date = moment().format("YYYY-MM-DD hh:mm A");
+  const date = moment().format("YYYY-MM-DD HH:mm");
 
   try {
     // if the user already write review of this beer, reject it
