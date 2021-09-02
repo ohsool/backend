@@ -140,6 +140,7 @@ const postMyBeer = async (req: Request, res: Response) => {
 
     mybeer = await MyBeer.findOne({ _id: mybeer._id })
       .populate({ path: "userId", select: "nickname image" })
+      .populate({ path: "beerId", select: "name_korean name_english image" })
       .lean();
 
     res.status(201).json({ message: "success", mybeer });
