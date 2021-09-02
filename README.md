@@ -37,15 +37,15 @@ https://ohsool.com/
 
 ## 🤸🏻‍♀️팀원 | Team
 
-#### [About Team](https://well-astronaut-b13.notion.site/team-OHSOOL-844e5fefc1d14df2b97f8b1cda4fb3ed)
+### [✨About Team Ohsool✨](https://well-astronaut-b13.notion.site/team-OHSOOL-844e5fefc1d14df2b97f8b1cda4fb3ed)
 
 #### Backend (Node.js)
-* 이정원 (https://wirehaired-snapper-f57.notion.site/Garden-s-notion-b7b614e91e4a4a2886f440a954c12bc1)
-* 문진영 (https://github.com/moonjinyoung)
-* 윤송 (https://www.notion.so/de0ca536d246408d980fed421e7118bc)
+* 이정원 
+* 문진영
+* 윤송
 #### Frontend (React) - [Frontend Github](https://github.com/ohsool/front-end)
-* 원동환 (https://github.com/endol007)
-* 장정윤 (https://velog.io/@jeongyunjang)
+* 원동환
+* 장정윤 
 #### Design (UI/UX) - [Figma WireFrame](https://www.figma.com/file/c2M6Yjvm5IjSAnsrQ41XLv/%ED%95%AD%ED%95%B499_WireFrame?node-id=0%3A1)
 * 문지혜 
 * 이근호 
@@ -73,7 +73,7 @@ https://ohsool.com/
 
 * [**ERD (Entity Relationship Diagram)**](https://github.com/ohsool/backend/wiki/ERD)
 * [**Web Architecture**](https://github.com/ohsool/backend/wiki/Web-Architecture)
-* [**Backend Deploymenmt Enviornment**](https://github.com/ohsool/backend/wiki/Web-Architecture)
+* [**Backend Deploymenmt Enviornment**](https://github.com/ohsool/backend/wiki/Deployment-Environment)
 
 <br>
 
