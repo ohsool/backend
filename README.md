@@ -69,7 +69,33 @@ https://ohsool.com/
 |**Storage** | AWS S3  |
 |**Tools** | VSCode, Git, Github, Slack, Notion  |
 
+<br><br>
 
+| 기술스택   | Appliance                   | Version |
+|------------|-----------------------------|---------|
+| Express    | Node.JS                     | 4.17.1  |
+| Typescript | 전체 코드 타입스크립트 적용 | 5.0.1   |
+| Mongoose   | 변동성 많은 DB. NoSQL 적용  | 5.13.3  |
+| HTTPS      | 웹사이트 데이터 보안화	   | 
+| CI/CD ||
+CORS|	Request resource 제한|	2.8.5
+Swagger	|API 문서화	|4.1.6
+Prettier	|코드 포맷팅	|2.3.2|
+Passport|	구글, 카카오 소셜 로그인|	0.4.1
+slack/web-api|	맥주 추천, 불편 사항 → 슬랙|	6.3.0
+env|	보안 토큰, 키 관련 보안화	
+Jest|	테스트코드 작성	|27.0.6
+supertest	|테스트코드 작성|	6.1.4
+JWT(BEARER)|	사용자 인증, Bearer 토큰	|8.5.1
+Joi|	회원 검증과정|	17.4.1
+moment|	시간 일관화	|2.29.1
+winston|	서버 log 저장	|3.3.3
+helmet|	HTTPS 헤더 보안 세팅	|4.6.0
+korean-regexp|	맥주 이름 검색시 한국어 정규식|	1.0.9
+bcrypt|	비밀번호 암호화|	5.0.1
+compression|	값 전달시 압축	|1.7.4
+nodemailer|	사용자에게 메일 전달|	6.6.3
+<br><br>
 
 * [**ERD (Entity Relationship Diagram)**](https://github.com/ohsool/backend/wiki/ERD)
 * [**Web Architecture**](https://github.com/ohsool/backend/wiki/Web-Architecture)
