@@ -18,7 +18,9 @@
 * 국내에 존재하는 맥주들을 한곳에 모아 개인의 취향을 바탕으로 맥주를 추천해주는 서비스
 * 맥주에 대한 평점 및 시음 노트가 포함된 도감을 작성할 수 있으며 다른 유저의 도감도 같이 확인할 수 있다.
 
-<img src="https://user-images.githubusercontent.com/52440784/131280246-9b2e7aa9-e25c-4d42-9b94-b34fee3838d7.jpg" width=90% />
+<br>
+
+<img src="https://user-images.githubusercontent.com/52440784/131717465-c5d354b3-6531-41b7-82ea-b88c215437bc.png" width=100% />
 <img src="https://user-images.githubusercontent.com/52440784/131280256-2fce6eba-fe50-4b96-b418-c7647225dfe9.jpg" width=60% />
 
 <br>
@@ -35,6 +37,8 @@ https://ohsool.com/
 
 ## 🤸🏻‍♀️팀원 | Team
 
+#### [About Team](https://well-astronaut-b13.notion.site/team-OHSOOL-844e5fefc1d14df2b97f8b1cda4fb3ed)
+
 #### Backend (Node.js)
 * 이정원 (https://wirehaired-snapper-f57.notion.site/Garden-s-notion-b7b614e91e4a4a2886f440a954c12bc1)
 * 문진영 (https://github.com/moonjinyoung)
@@ -46,8 +50,6 @@ https://ohsool.com/
 * 문지혜 
 * 이근호 
 
-
-< 팀원소개 노션페이지 링크 놓기 >
 
 <br>
 
@@ -77,11 +79,11 @@ https://ohsool.com/
 
 ## ⚔주요 API 기능 | Main API 
 
-* [더보기](https://github.com/ohsool/backend/wiki/%EB%A9%94%EC%9D%B8-%EA%B8%B0%EB%8A%A5-API)
+* [View details](https://github.com/ohsool/backend/wiki/%EB%A9%94%EC%9D%B8-%EA%B8%B0%EB%8A%A5-API)
 
 1. 테스트 기반으로 사용자의 맥주 취향 보여주기
 2. 각자 다른 맥주 취향을 가진 사용자들이 남긴 평점을 맥주 종류 별로 평균을 내어 <br> 타 사용자의 취향에 맞는 맥주 추천하기
-3. 맥주 판매처 제보하기]
+3. 맥주 판매처 제보하기
 4. 맥주 및 해시태그 검색하기
 5. 비밀번호 변경 시 임시 비밀번호 생성
 6. 회원가입 및 건의사항 제출 시 이메일 발송
@@ -90,12 +92,12 @@ https://ohsool.com/
 
 ## 🏊🏻‍♂️기술적 챌린지 | Troubleshooting
 
-* [더보기](https://github.com/ohsool/backend/wiki/%EA%B8%B0%EC%88%A0%EC%A0%81%EC%B1%8C%EB%A6%B0%EC%A7%80-%7C-%ED%8A%B8%EB%9F%AC%EB%B8%94%EC%8A%88%ED%8C%85)
+* [View details](https://github.com/ohsool/backend/wiki/%EA%B8%B0%EC%88%A0%EC%A0%81%EC%B1%8C%EB%A6%B0%EC%A7%80-%7C-%ED%8A%B8%EB%9F%AC%EB%B8%94%EC%8A%88%ED%8C%85)
 
 1. JWT Refreshtoken 적용
 2. secretKey를 이용하여 프런트 도메인외 다른 유저가 api url에 접근하지 못하도록 설정 
 3. 웹 서버 환경에서 Jest 테스트 코드 구동 시 발생하는 timeout 오류
-4. API 인터페이스화
+4. 타입스크립트 자료형을 이용한 API 인터페이스
 
 <br>
 
