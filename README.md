@@ -7,7 +7,7 @@
 4. [팀원 | Team](#팀원--Team)
 5. [개발환경 | Development Enviornment](#개발환경--Development-Enviornment)
 6. [주요 API 기능 | Main API](#주요-API-기능--Main-API)
-7. [주요 라이브러리 | Main Library](#주요-라이브러리--Main-Library)
+7. [라이브러리 | Library](#라이브러리--Library)
 8. [기타 | etc](#기타--etc)
 <br>
 
@@ -69,21 +69,31 @@ https://ohsool.com/
 |**Storage** | AWS S3  |
 |**Tools** | VSCode, Git, Github, Slack, Notion  |
 
-<br><br>
+<br>
+
+* [**ERD (Entity Relationship Diagram)**](https://github.com/ohsool/backend/wiki/ERD)
+* [**Web Architecture**](https://github.com/ohsool/backend/wiki/Web-Architecture)
+* [**Backend Deploymenmt Enviornment**](https://github.com/ohsool/backend/wiki/Deployment-Environment)
+
+<br>
+
+## 🎨라이브러리 | Library
+
+* [View details](https://github.com/ohsool/backend/wiki/%EB%9D%BC%EC%9D%B4%EB%B8%8C%EB%9F%AC%EB%A6%AC-%EA%B8%B0%EB%B3%B8-%EC%84%A4%EC%B9%98)
 
 | 기술스택   | Appliance                   | Version |
-|------------|-----------------------------|---------|
+|:------------:|:-----------------------------:|:---------:|
 | Express    | Node.JS                     | 4.17.1  |
 | Typescript | 전체 코드 타입스크립트 적용 | 5.0.1   |
 | Mongoose   | 변동성 많은 DB. NoSQL 적용  | 5.13.3  |
 | HTTPS      | 웹사이트 데이터 보안화	   | 
-| CI/CD ||
+| AWS Codepipeline, CodeDeploy | CI/CD |
 CORS|	Request resource 제한|	2.8.5
 Swagger	|API 문서화	|4.1.6
 Prettier	|코드 포맷팅	|2.3.2|
 Passport|	구글, 카카오 소셜 로그인|	0.4.1
 slack/web-api|	맥주 추천, 불편 사항 → 슬랙|	6.3.0
-env|	보안 토큰, 키 관련 보안화	
+dotenv|	보안 토큰, 키 관련 보안화	 | 10.0.0
 Jest|	테스트코드 작성	|27.0.6
 supertest	|테스트코드 작성|	6.1.4
 JWT(BEARER)|	사용자 인증, Bearer 토큰	|8.5.1
@@ -95,11 +105,7 @@ korean-regexp|	맥주 이름 검색시 한국어 정규식|	1.0.9
 bcrypt|	비밀번호 암호화|	5.0.1
 compression|	값 전달시 압축	|1.7.4
 nodemailer|	사용자에게 메일 전달|	6.6.3
-<br><br>
 
-* [**ERD (Entity Relationship Diagram)**](https://github.com/ohsool/backend/wiki/ERD)
-* [**Web Architecture**](https://github.com/ohsool/backend/wiki/Web-Architecture)
-* [**Backend Deploymenmt Enviornment**](https://github.com/ohsool/backend/wiki/Deployment-Environment)
 
 <br>
 
@@ -124,80 +130,6 @@ nodemailer|	사용자에게 메일 전달|	6.6.3
 2. secretKey를 이용하여 프런트 도메인외 다른 유저가 api url에 접근하지 못하도록 설정 
 3. 웹 서버 환경에서 Jest 테스트 코드 구동 시 발생하는 timeout 오류
 4. 타입스크립트 자료형을 이용한 API 인터페이스
-
-<br>
-
-## 🎨주요 라이브러리 | Main Library
-<details>
-<summary> jsonwebtoken </summary>
-<br>
-</details>
-
-<details>
-<summary> passport </summary>
-<br>
-</details>
-
-<details>
-<summary> nodemailer </summary>
-
-> npm i --save-dev @types/nodemailer<br>
-npm i nodemailer
-<br>
-</details>
-
-<details>
-<summary> mongoose </summary>
-<br>
-</details>
-
-<details>
-<summary> dotenv </summary>
-<br>
-</details> 
-<details>
-<summary> moment </summary>
- 
-  ```
-  npm install moment --save  
-  ```
-</details>
-
-<details>
-<summary> swagger </summary>
-
-* npm 설치 
- 
-  ```
-  npm install swagger-ui-express -D<br>
-  npm install swagger-autogen -D<br>
-  npm install @types/swagger-ui-express -D
-  ```
-
-
-<br>
-
-* app.ts 기본 설정 
-    ```
-    // importing swagger 
-    import swaggerUi from 'swagger-ui-express';
-    const swaggerFile =  require('../swagger/swagger-output.json')
-    app.use('/swagger', swaggerUi.serve, swaggerUi.setup(swaggerFile))
-    ```
-<br>
-
-* 폴더 구조 
-    ```
-    ├── swagger
-    │   ├── swagger-output.json
-    │   └── swagger.js
-    ```
-<br>
-
-* 참고 <br>
-    https://charming-kyu.tistory.com/11
-
-</details>
 
 <br>
 
