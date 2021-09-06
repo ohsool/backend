@@ -70,7 +70,7 @@
    "/beer/list/all": {
       "get": {
         "tags": ["BEER"],
-        "description": "",
+        "description": "전체 맥주 리스트 가져오기",
         "parameters": [],
         "responses": {
           "400": {
@@ -82,7 +82,7 @@
     "/beer/list/all/page": {
       "get": {
         "tags": ["BEER"],
-        "description": "",
+        "description": "맥주 페이지별 리스트 출력하기",
         "parameters": [
           {
             "name": "pageNo",
@@ -107,7 +107,7 @@
     "/list": {
       "post": {
         "tags": ["BEER"],
-        "description": "",
+        "description": "맥주 추가하기",
         "parameters": [
           {
             "name": "obj",
@@ -180,7 +180,7 @@
     "/list/{beerId}": {
       "get": {
         "tags": ["BEER"],
-        "description": "",
+        "description": "특정 맥주 상세보기",
         "parameters": [
           {
             "name": "beerId",
@@ -201,7 +201,7 @@
       },
       "delete": {
         "tags": ["BEER"],
-        "description": "",
+        "description": "특정 맥주 삭제하기",
         "parameters": [
           {
             "name": "beerId",
@@ -233,7 +233,7 @@
     "/beer/like/{beerId}": {
       "put": {
         "tags": ["BEER"],
-        "description": "",
+        "description": "특정 맥주 좋아요",
         "parameters": [
           {
             "name": "beerId",
@@ -262,7 +262,7 @@
     "/beer/unlike/{beerId}": {
       "put": {
         "tags": ["BEER"],
-        "description": "",
+        "description": "특정 맥주 좋아요 취소",
         "parameters": [
           {
             "name": "beerId",
@@ -646,7 +646,7 @@
         }
       }
     },
-    "/feedback": {
+    "/complaint/feedback": {
       "post": {
         "tags": ["COMPLAINT"],
         "description": "슬랙으로 불편사항 보내기",
@@ -1010,9 +1010,9 @@
         }
       }
     },
-    "/feedback/success": {
+    "/recommendation/feedback/success": {
       "post": {
-        "tags": [],
+        "tags": ["RECOMMENDATION"],
         "description": "",
         "parameters": [
           {
@@ -1041,7 +1041,7 @@
         }
       }
     },
-    "/deep": {
+    "/search/deep": {
       "get": {
         "tags": ["SEARCH"],
         "description": "검색하기",
@@ -1064,7 +1064,7 @@
         }
       }
     },
-    "/hashtag": {
+    "/search/hashtag": {
       "get": {
         "tags": ["SEARCH"],
         "description": "해시태그 검색",
@@ -1082,9 +1082,9 @@
         }
       }
     },
-    "/email": {
+    "/user/email": {
       "post": {
-        "tags": [],
+        "tags": ["USER"],
         "description": "",
         "parameters": [
           {
@@ -1094,7 +1094,8 @@
               "type": "object",
               "properties": {
                 "email": {
-                  "example": "any"
+                  "type": "string",
+                  "example": "ohsool.info@gmail.com"
                 }
               }
             }
@@ -1110,10 +1111,10 @@
         }
       }
     },
-    "/nickname": {
+    "/user/nickname": {
       "post": {
-        "tags": [],
-        "description": "",
+        "tags": ["USER"],
+        "description": "중복 닉네임 확인",
         "parameters": [
           {
             "name": "obj",
@@ -1122,7 +1123,8 @@
               "type": "object",
               "properties": {
                 "nickname": {
-                  "example": "any"
+                  "type": "string",
+                  "example": "admin"
                 }
               }
             }
@@ -1141,8 +1143,8 @@
         }
       },
       "put": {
-        "tags": [],
-        "description": "",
+        "tags": ["USER"],
+        "description": "닉네임 변경",
         "parameters": [
           {
             "name": "obj",
@@ -1151,7 +1153,8 @@
               "type": "object",
               "properties": {
                 "nickname": {
-                  "example": "any"
+                  "type": "string",
+                  "example": "변경된 닉네임"
                 }
               }
             }
@@ -1176,10 +1179,10 @@
         }
       }
     },
-    "/auth": {
+    "/user/auth": {
       "post": {
-        "tags": [],
-        "description": "",
+        "tags": ["USER"],
+        "description": "로그인",
         "parameters": [
           {
             "name": "obj",
@@ -1188,10 +1191,12 @@
               "type": "object",
               "properties": {
                 "email": {
-                  "example": "any"
+                  "type": "string",
+                  "example": "example@gnail.com"
                 },
                 "password": {
-                  "example": "any"
+                  "type": "string",
+                  "example": "testPassword"
                 }
               }
             }
@@ -1210,10 +1215,10 @@
         }
       }
     },
-    "/logout": {
+    "/user/logout": {
       "post": {
-        "tags": [],
-        "description": "",
+        "tags": ["USER"],
+        "description": "로그아웃",
         "parameters": [],
         "responses": {
           "400": {
@@ -1231,10 +1236,10 @@
         }
       }
     },
-    "/me": {
+    "/user/me": {
       "get": {
-        "tags": [],
-        "description": "",
+        "tags": ["USER"],
+        "description": "유저의 로그인 유무 확인",
         "parameters": [],
         "responses": {
           "401": {
@@ -1249,42 +1254,42 @@
         }
       }
     },
-    "/google": {
+    "/user/google": {
       "get": {
-        "tags": [],
-        "description": "",
+        "tags": ["USER"],
+        "description": "구글 로그인",
         "parameters": [],
         "responses": {}
       }
     },
-    "/google/callback": {
+    "/user/google/callback": {
       "get": {
-        "tags": [],
-        "description": "",
+        "tags": ["USER"],
+        "description": "구글 로그인",
         "parameters": [],
         "responses": {}
       }
     },
-    "/kakao": {
+    "/user/kakao": {
       "get": {
-        "tags": [],
-        "description": "",
+        "tags": ["USER"],
+        "description": "카카오 로그인",
         "parameters": [],
         "responses": {}
       }
     },
-    "/kakao/callback": {
+    "/user/kakao/callback": {
       "get": {
-        "tags": [],
-        "description": "",
+        "tags": ["USER"],
+        "description": "카카오 로그인",
         "parameters": [],
         "responses": {}
       }
     },
-    "/test": {
+    "/user/test": {
       "post": {
-        "tags": [],
-        "description": "",
+        "tags": ["USER"],
+        "description": "현재 유저 preference에 테스트 결과 값 반영 & 클라이언트에게 결과에 대한 정보 돌려주기",
         "parameters": [
           {
             "name": "obj",
@@ -1293,10 +1298,12 @@
               "type": "object",
               "properties": {
                 "userId": {
+                  "type": "mongoose.Types.ObjectId",
                   "example": "any"
                 },
                 "result": {
-                  "example": "any"
+                  "type": "string",
+                  "example": "lager"
                 }
               }
             }
@@ -1318,10 +1325,10 @@
         }
       }
     },
-    "/socialuser": {
+    "/user/socialuser": {
       "post": {
-        "tags": [],
-        "description": "",
+        "tags": ["USER"],
+        "description": "첫 소셜 로그인 시 닉네임, 이메일이 중복될 수 있으므로 새로 받기",
         "parameters": [
           {
             "name": "obj",
@@ -1330,10 +1337,12 @@
               "type": "object",
               "properties": {
                 "email": {
-                  "example": "any"
+                  "type": "string",
+                  "example": "중복되지않는 이메일"
                 },
                 "nickname": {
-                  "example": "any"
+                  "type": "string",
+                  "example": "중복되지 않는 닉네임"
                 }
               }
             }
@@ -1358,16 +1367,16 @@
         }
       }
     },
-    "/user-info/{userId}": {
+    "/user/user-info/{userId}": {
       "get": {
-        "tags": [],
-        "description": "",
+        "tags": ["USER"],
+        "description": "유저 정보 가져오기",
         "parameters": [
           {
             "name": "userId",
             "in": "path",
-            "required": true,
-            "type": "string"
+            "type": "mongoose.Types.ObjectId",
+            "required": true
           }
         ],
         "responses": {
@@ -1383,10 +1392,10 @@
         }
       }
     },
-    "/description": {
+    "/user/description": {
       "put": {
-        "tags": [],
-        "description": "",
+        "tags": ["USER"],
+        "description": "상태명 변경",
         "parameters": [
           {
             "name": "obj",
@@ -1395,6 +1404,7 @@
               "type": "object",
               "properties": {
                 "description": {
+                  "type": "string",
                   "example": "any"
                 }
               }
@@ -1417,10 +1427,10 @@
         }
       }
     },
-    "/password/reset": {
+    "/user/password/reset": {
       "put": {
-        "tags": [],
-        "description": "",
+        "tags": ["USER"],
+        "description": "비밀번호 초기화",
         "parameters": [
           {
             "name": "obj",
@@ -1429,6 +1439,7 @@
               "type": "object",
               "properties": {
                 "email": {
+                  "type":"string",
                   "example": "any"
                 }
               }
@@ -1448,10 +1459,10 @@
         }
       }
     },
-    "/password": {
+    "/user/password": {
       "put": {
-        "tags": [],
-        "description": "",
+        "tags": ["USER"],
+        "description": "비밀번호 변경",
         "parameters": [
           {
             "name": "obj",
@@ -1460,10 +1471,12 @@
               "type": "object",
               "properties": {
                 "password": {
-                  "example": "any"
+                  "type": "string",
+                  "example": "beforePW"
                 },
                 "new_password": {
-                  "example": "any"
+                  "type": "string",
+                  "example": "afterPW"
                 }
               }
             }
@@ -1485,10 +1498,10 @@
         }
       }
     },
-    "/public/public": {
+    "/user/public/public": {
       "put": {
-        "tags": [],
-        "description": "",
+        "tags": ["USER"],
+        "description": "맥주도감 공개로 설정",
         "parameters": [],
         "responses": {
           "400": {
@@ -1509,10 +1522,10 @@
         }
       }
     },
-    "/public/private": {
+    "/user/public/private": {
       "put": {
-        "tags": [],
-        "description": "",
+        "tags": ["USER"],
+        "description": "맥주도감 비공개로 변경",
         "parameters": [],
         "responses": {
           "400": {
@@ -1533,10 +1546,10 @@
         }
       }
     },
-    "/follow/follow": {
+    "/user/follow/follow": {
       "put": {
-        "tags": [],
-        "description": "",
+        "tags": ["USER"],
+        "description": "특정 유저 팔로우하기",
         "parameters": [
           {
             "name": "obj",
@@ -1545,7 +1558,8 @@
               "type": "object",
               "properties": {
                 "userId": {
-                  "example": "any"
+                  "example": "any",
+                  "type": "mongoose.Types.ObjectId"
                 }
               }
             }
@@ -1570,10 +1584,10 @@
         }
       }
     },
-    "/follow/unfollow": {
+    "/user/follow/unfollow": {
       "put": {
-        "tags": [],
-        "description": "",
+        "tags": ["USER"],
+        "description": "특정 유저 팔로우 취소",
         "parameters": [
           {
             "name": "obj",
@@ -1582,7 +1596,8 @@
               "type": "object",
               "properties": {
                 "userId": {
-                  "example": "any"
+                  "example": "any",
+                  "type": "mongoose.Types.ObjectId"
                 }
               }
             }
@@ -1607,16 +1622,16 @@
         }
       }
     },
-    "/follow/followers/{userId}": {
+    "/user/follow/followers/{userId}": {
       "get": {
-        "tags": [],
-        "description": "",
+        "tags": ["USER"],
+        "description": "특정 유저의 팔로우, 팔로워 리스트 보여주기",
         "parameters": [
           {
             "name": "userId",
             "in": "path",
             "required": true,
-            "type": "string"
+            "type": "mongoose.Types.ObjectId"
           }
         ],
         "responses": {
