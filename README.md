@@ -26,7 +26,7 @@
 <br>
 
 ## 🌎웹사이트 | Webstie
-https://ohsool.com/
+~~https://ohsool.com/~~ (서버 닫아떠요..😢)
 
 <br>
 
